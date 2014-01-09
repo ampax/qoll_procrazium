@@ -23,6 +23,7 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 
 Following dependencies to be added for development -
 
+'''
 16.	Mrt add observatory
 17.	Mrt add highcharts
 18.	Mrt add bootstrap-3
@@ -37,6 +38,36 @@ Following dependencies to be added for development -
 27.	Mrt add inspector
 28.	Mrt add chartjs
 29. npm install -g phantomjs
+'''
 
 Start a new instance of mongodb for running laika tests
+'''
 30.mongod --smallfiles --noprealloc --nojournal
+'''
+
+Checking code into github - 
+Initialize for git checkin
+git init
+
+Add all the files
+git add --all
+git status
+
+Push the files for commit
+git commit -m "Checking first version of the code into organization"
+git status
+
+Add the remote origin for push
+git remote -v
+git remote add origin https://github.com/ampax/qoll_procrazium.git
+git remote -v
+
+Create the branch develop and check it out to switch to develop- 
+git branch develop
+git status
+git checkout develop
+git status
+
+Push the code to branch develop
+git push origin develop
+history
