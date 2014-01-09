@@ -1,0 +1,44 @@
+<template name="qolls">
+  <div class="row row-offcanvas row-offcanvas-right">
+
+    <div class="col-8 col-sm-8 table-responsive">
+      <h2>All Qolls</h2>
+     <p class="lead">
+        <table id="printQolls" class="table table-stripped table-condensed table-hover">
+          <tbody>
+          {{#each allQolls}}
+            <tr class="">
+               <td class="qoll-text">{{qollText}}</td>
+               <td>
+                {{#if iif_yesno qollType}}
+                  {{> yesno}}
+                {{/if}}
+                {{#if iif_yesnomaybe qollType}}
+                  {{> yesnomaybe}}
+                {{/if}}
+                {{#if iif_likedislike qollType}}
+                  {{> likedislike}}
+                {{/if}}
+                {{#if iif_likedislikeindiff qollType}}
+                  {{> likedislikeindiff}}
+                {{/if}}
+                {{#if iif_default qollType}}
+                  {{> default}}
+                {{/if}}
+                <!--span id="{{_id}}">{{{ iif qollType this}}}</span-->
+               </td>
+            </tr>
+           {{/each}}
+          </tbody>
+        </table>
+      </p>
+    </div>
+
+    <div class="col-4 col-sm-4 centered">
+      <!--<div class="charts"></div>-->
+      <canvas id="charts" width="200" height="200"></canvas>
+      <div class="chartStats" id="chartStats"></div>
+    </div>
+
+  </div>
+</template>

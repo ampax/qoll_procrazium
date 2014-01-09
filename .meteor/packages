@@ -1,0 +1,29 @@
+# Meteor packages used by this project, one per line.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+standard-app-packages
+preserve-inputs
+observatory
+highcharts
+accounts-ui
+accounts-password
+accounts-facebook
+google
+facebook
+oauth
+accounts-github
+iron-router
+bootstrap-3
+font-awesome
+HTML5-History-API
+observatory-apollo
+observatory-galileo
+page-js-ie-support
+inspector
+chartjs
+accounts-google
+accounts-twitter
+accounts-weibo
+accounts-meetup

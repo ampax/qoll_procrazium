@@ -1,0 +1,11 @@
+{
+  "packages": {
+    "observatory": {},
+    "highcharts": {},
+    "iron-router": {},
+    "bootstrap-3": {},
+    "font-awesome": {},
+    "inspector": {},
+    "chartjs": {}
+  }
+}

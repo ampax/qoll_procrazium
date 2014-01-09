@@ -1,0 +1,79 @@
+<template name="header">
+<nav class="navbar navbar-default" role="navigation">
+  <div class="navbar navbar-fixed-top" role="navigation">
+    <!--div class="navbar-inner"-->
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle Navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <!--a class="navbar-brand" href="dashboard">Q-Icon</a-->
+          <a class="navbar-brand " style='padding: 0px;' href="dashboard"><img src="/img/icon3.png" class="img-circle" style="height: 50px;padding: 4px;border: 1px solid #dddddd;padding-top:0px imp;"  alt="some_text"></a>
+        </div>
+        <div class="collapse navbar-collapse">
+        	<ul class="nav navbar-nav nav-pull-left fa-ul">
+            <li class="active"><a class="brand" href="dashboard"><i class="fa fa-home fa-fw icon-cog"></i>Qoll</a></li>
+            <li class=""><a href="newqoll"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Add</a></li>
+            <!--li><a href="search"><i class="fa fa-search fa-fw icon-cog"></i>Search</a></li-->
+        	  <!--li class="active"><a class="brand" href="dashboard"><span class"fornav">Qoll</span></a></li>
+        	  <li><a href="newqoll"><span class="fornav"><i class="glyphicon-plus-sign"></i></span>Plus</a></li>
+        	  <li><a href="search"><span class="fornav"><i class="glyphicon-search"></i></span></a></li-->
+        	</ul>
+        	<ul class="nav navbar-nav pull-right">
+        	  {{#if currentUser}}
+        	    {{> user_loggedin}}
+        	  {{else}}
+        	    {{> user_loggedout}}
+        	  {{/if}}
+        	</ul>
+        </div>
+      </div>
+    <!--/div-->
+  </div>
+</nav>
+</template>
+
+<template name="user_loggedin">
+  {{#if loggingIn}}
+    <li><a>Logging in...</a></li>
+  {{else}}
+    <li>
+      <img class="img-rounded" style="height: 32px; margin-top: 4px;" src="{{currentUser.profile.avatar_url}}"/>
+    </li>
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        {{currentUser.profile.name}}
+        <b class="caret"></b>
+      </a>
+      <ul class="dropdown-menu">
+        <li><a>Account Settings</a></li>
+        <li class="divider"></li>
+        <li><a id="logout">Logout</a></li>
+      </ul>
+    </li>
+  {{/if}}
+</template>
+
+<template name="user_loggedout">
+  <!--li class="dropdown">
+    <li>Login with</li>
+    <ul class="dropdown-menu login-menu">
+      <li><a id="login">Github</a></li>
+      <li><a id="login_fb">Facebook</a></li>
+      <li><a id="login_go">Google</a></li>
+    </ul>
+  </li-->
+  <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Login With<b class="caret"></b></a>
+    <ul class="dropdown-menu">
+      <!--li><a id="login">Login with Github</a></li-->
+      <li><a id="login_gh" class="btn-danger"><i class="fa fa-github fa-fw"></i>Github</a></li>
+      <li><a id="login_fb" class="btn-primary"><i class="fa fa-facebook fa-fw"></i>Facebook</a></li>
+      <!--li><a id="login_go">Google</a></li>
+      <li><a id="login_wb">Weibo</a></li-->
+    </ul>
+  </li>
+</template>

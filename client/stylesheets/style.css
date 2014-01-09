@@ -1,0 +1,138 @@
+.icon-cog1 {
+    color: black;
+}
+
+A:hover {
+ COLOR: green /*The color of the mouseover or 'hover' link*/
+}
+
+
+.centered {
+    margin: 0 auto;
+}
+
+
+.qoll-text {
+	width: 83%;
+}
+
+.centered {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+
+/**div.container
+{
+    background-color:#aaa;
+}**/
+div.add-qoll-bkgrnd, div.add-qoll-chart-bkgrnd {
+    background-color:#eee;
+    border: 0px solid #888;
+    border-radius:3px;
+}
+
+.center1 {
+    text-align: center;
+}
+
+.pclass {
+	color: orange;
+    font-family: arial;
+	text-align: center;
+}
+
+#para1 {
+    color: blue;
+    text-align: center;
+}
+
+hr.sienna {
+    color: sienna;
+}
+
+/** START: All p style styles-here **/
+
+p.center {
+    text-align: center;
+}
+
+p.pull-left {
+    margin-left: 200px;
+}
+
+p.newStyleClassP {
+    font-family: Verdana, Arial, Helvetica, , sans-serif;
+    font-weight: bold;
+    color: red;
+    text-decoration: underline;
+}
+
+.newStyleClass {
+    font-family: Verdana, Arial, Helvetica, , sans-serif;
+    font-weight: bold;
+    color: red;
+    text-decoration: underline;
+    font-size: 12pt;
+}
+
+/** END: All p style styles-here **/
+
+/** START: global style class for h1 **/
+.newGlobalClass-h1 {
+    font-family: Garamond, 'Times New Roman', sans-serif;
+    font-size: 200%
+}
+/** END: global style class for h1 **/
+
+/** START: style class for div **/
+div.divClass1 {
+    background: rgb(204, 204, 255);
+    padding: 0.5em;
+    border: 1px solid #000000;
+}
+/** END: style class for h1 **/
+
+
+/** START: style class for a **/
+a.aClass1:link {
+    color: rgb(0, 0, 153);
+}
+
+a.aClass1:visited {
+    color: rgb(153, 0, 153);
+}
+
+a.aClass1:hover {
+    color: rgb(0, 96, 255);
+}
+
+a.aClass1:active {
+    color: rgb(255, 0, 102);
+}
+/** START: style class for div **/
+
+body {
+    background-image: '/img/icon3.png';
+    background-color: #E4DADA;
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+h3.class1 {
+    color: red;
+    text-align: left;
+    font-size: 8pt;
+}
+
+h3.class2 {
+    text-align: right;
+    font-size: 20pt;
+}
+
+
+
+
+

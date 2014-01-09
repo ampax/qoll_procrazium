@@ -1,0 +1,53 @@
+<template name="addQoll">
+	<div class="row row-offcanvas row-offcanvas-right">
+		<div class="col-8 col-xs-8 border-box">
+			<textarea rows="3" class="input-xxlarge" name="qollText" id="qollText" placeholder="Post a qoll..."></textarea>
+		</div>
+		<div class="col-1 col-xs-2">
+			<!-- Split button -->
+			<select class="form-control input-sm" id="qollType">
+				<option value="-1">Select Qoll Type</option>
+				{{#each allQollTypes}}
+					<option value="{{_id}}">{{qollTypeDis}}</option>
+				{{/each}}
+			</select> 
+		</div>
+		<div class="col-1 col-xs-2">
+			<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
+			<a href="#" class="btn btn-default add-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">Qoll</a>
+		</div>
+	</div>
+</template>
+
+<template name="addQoll_1">
+	<div class="row">
+		<div class="col-md-6 col-xs-10 border-box">
+			<h2>New Qoll - </h2>
+			<div class="row">
+				<div class="col-md-6 col-xs-10 border-box centered">
+					{{#each allQollTypes}}
+						<button type="button" class="btn btn-default" value="{{_id}}">{{qollTypeDis}}</button>
+					{{/each}}
+					<button type="button" class="btn btn-default">Q+</button>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6 col-xs-10 border-box">
+					<textarea class="form-control" rows="3" name="qollText" id="qollText" placeholder="Post a qoll..."></textarea>
+				</div>
+			</div>
+			<br>
+			<div class="row">
+				<div class="col-md-6 col-xs-10 border-box centered">
+					<a href="#" class="btn btn-default add-qoll {{#unless currentUser}}disabled{{/unless}}" style="height: 50px;padding: 0px;border: 0px solid #dddddd;padding-top:0px imp;">
+						<img src="/img/icon3.png" alt="Add qoll" class="img-rounded" style="height: 50px;padding: 4px;border: 1px solid #dddddd;padding-top:0px imp;">
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6 col-xs-10 border-box" style="background-color: #fff;">
+			This is the chart side
+		</div>
+	</div>
+</template>
