@@ -1,5 +1,11 @@
-Tool list to kick start development:
+Developer's guide to tools & basic commands - 
+=============================================
 
+Tool list to kick start development:
+------------------------------------
+
+
+```
 0.1 npm install -g mongodb
 
 1.	Google Chrome
@@ -18,12 +24,12 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 13.	Install xcode - http://guide.macports.org/chunked/installing.xcode.html#installing.xcode.mavericks 
 14.	Event Hooks – mrt add event-hooks
 15.	Meteorite – sudo npm install –g meteorite <<Used to install and run meteor app using atmosphere packages>>
-
+```
 
 
 Following dependencies to be added for development -
 
-'''
+```
 16.	Mrt add observatory
 17.	Mrt add highcharts
 18.	Mrt add bootstrap-3
@@ -38,14 +44,15 @@ Following dependencies to be added for development -
 27.	Mrt add inspector
 28.	Mrt add chartjs
 29. npm install -g phantomjs
-'''
+```
 
 Start a new instance of mongodb for running laika tests
-'''
+```
 30.mongod --smallfiles --noprealloc --nojournal
-'''
+```
 
-Checking code into github - 
+**Checking code into github - **
+```
 Initialize for git checkin
 git init
 
@@ -71,3 +78,4 @@ git status
 Push the code to branch develop
 git push origin develop
 history
+```
