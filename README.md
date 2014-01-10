@@ -43,12 +43,18 @@ Following dependencies to be added for development -
 26.	Npm install –g node-inspector
 27.	Mrt add inspector
 28.	Mrt add chartjs
-29. npm install -g phantomjs
 ```
 
-Start a new instance of mongodb for running laika tests
+Installing laika - 
+Install xcode from itunes and then follow the following steps - 
 ```
-30.mongod --smallfiles --noprealloc --nojournal
+sudo xcodebuild -license
+sudo npm install -g phantomjs
+sudo npm install -g laika
+
+Start a new instance of mongodb for running laika tests
+mongod --smallfiles --noprealloc --nojournal
+Note: if you have not installed mongodb - sudo npm install mongodb
 ```
 
 **Checking code into github - **
