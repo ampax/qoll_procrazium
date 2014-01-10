@@ -1,29 +1,35 @@
-Developer's guide to tools & basic commands - 
+Qoll API & Developer's notes - 
 =============================================
 
-Tool list to kick start development:
+
+
+
+
+API & Package Structure:
+------------------------------------
+
+
+Important tools and plugins:
 ------------------------------------
 
 
 ```
-0.1 npm install -g mongodb
-
-1.	Google Chrome
-2.	Google Chrome Plugin – Resize Window pwd
-3.	Robomongo – robomongo.org
+- npm install -g mongodb
+-	Google Chrome
+-	Google Chrome Plugin – Resize Window pwd
+-	Robomongo – robomongo.org
 http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-developers-in-mac-os-x-mountain-lion 
-4.	Madeye.io sudo npm install –g madeye
-5.	Screenhero.com
-6.	WebStorm from Jetbrains
-7.	Dev http client - https://chrome.google.com/webstore/detail/dev-http-client/aejoelaoggembcahagimdiliamlcdmfm 
-8.	REST Client - https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm/ 
-9.	Firebug debugger/chrome debugger
-10.	Node Inspector - https://github.com/node-inspector/node-inspector sudo npm install -g node-inspector
-11.	Node Inspector - http://howtonode.org/debugging-with-node-inspector
-12.	Meteor JSHINTRC sudo npm install –g jshint
-13.	Install xcode - http://guide.macports.org/chunked/installing.xcode.html#installing.xcode.mavericks 
-14.	Event Hooks – mrt add event-hooks
-15.	Meteorite – sudo npm install –g meteorite <<Used to install and run meteor app using atmosphere packages>>
+-	Madeye.io sudo npm install –g madeye
+-	Screenhero.com
+-	WebStorm from Jetbrains - *this is paid so wait till we buy a corporate license*
+-	Dev http client - https://chrome.google.com/webstore/detail/dev-http-client/aejoelaoggembcahagimdiliamlcdmfm 
+-	REST Client - https://chrome.google.com/webstore/detail/postman-rest-client/fdmmgilgnpjigdojojpjoooidkmcomcm/ 
+-	Firebug debugger/chrome debugger
+-	Node Inspector - https://github.com/node-inspector/node-inspector sudo npm install -g node-inspector
+-	Node Inspector - http://howtonode.org/debugging-with-node-inspector
+-	Meteor JSHINTRC sudo npm install –g jshint
+-	Event Hooks – mrt add event-hooks
+-	Meteorite – sudo npm install –g meteorite <<Used to install and run meteor app using atmosphere packages>>
 ```
 
 
@@ -54,7 +60,7 @@ sudo npm install -g laika
 
 Start a new instance of mongodb for running laika tests
 mongod --smallfiles --noprealloc --nojournal
-Note: if you have not installed mongodb - sudo npm install mongodb
+*Note: if you have not installed mongodb - sudo npm install mongodb*
 ```
 
 **Checking code into github - **
