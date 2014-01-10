@@ -7,6 +7,23 @@ Qoll API & Developer's notes -
 
 API & Package Structure:
 ------------------------------------
+We are following the standard package structure for this project -
+```
+qoll----
+		|
+		 ---client
+		|
+		 ---lib
+		|
+		 ---server
+		|
+		 ---public
+		|
+		 ---client
+		|
+		 ---tests
+
+```
 
 
 Important tools, plugins, and commands:
