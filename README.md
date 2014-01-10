@@ -22,18 +22,18 @@ qoll----
 		 ---lib
 		|
 		 ---server
-		 			|
-		 			 ---config
-		 			|
-		 			 ---db
-		 			|
-		 			 ---lib
-		 			|
-		 			 ---publish
+		| 			|
+		| 			 ---config
+		| 			|
+		| 			 ---db
+		| 			|
+		| 			 ---lib
+		| 			|
+		| 			 ---publish
 		|
 		 ---public
-		 			|
-		 			 ---img
+		| 			|
+		| 			 ---img
 		|
 		 ---tests
 
