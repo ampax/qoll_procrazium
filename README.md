@@ -55,8 +55,9 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 -	Mrt add chartjs
 ```
 
-- Installing laika - 
-Install xcode from itunes and then follow the following steps - 
+
+
+- Installing laika (Install xcode from itunes and then follow the following steps) - 
 ```
 -  sudo xcodebuild -license
 -  sudo npm install -g phantomjs
@@ -65,6 +66,8 @@ Start a new instance of mongodb for running laika tests
 -  mongod --smallfiles --noprealloc --nojournal
 Note: if you have not installed mongodb - sudo npm install mongodb
 ```
+
+
 
 - Checking code into github -
 ```
