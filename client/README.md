@@ -24,7 +24,7 @@ client--
 		 ---index.js
 ```
 
-- lib - All the client side code which will be commonly referred to by views will be kept in client/lib. 
+> lib - All the client side code which will be commonly referred to by views will be kept in client/lib. 
 
 - client/lib/accounts package keeps login calls for different providers - facebook, git, google, twitter, etcetera. New account verification/validation calls will be further added to this package. 
 
