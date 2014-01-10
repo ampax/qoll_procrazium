@@ -123,3 +123,11 @@ Push the code to branch develop
 -  git push origin develop
 -  history
 ```
+
+
+Additional resources
+---------------------
+
+Learn how to write better mark-down (.md/README.md) files - [daringfireball]
+
+[daringfireball]: http://daringfireball.net/projects/markdown/syntax "Write Better Markdown"
