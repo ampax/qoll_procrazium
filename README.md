@@ -9,9 +9,11 @@ API & Package Structure:
 ------------------------------------
 
 
-Important tools and plugins:
+Important tools, plugins, and commands:
 ------------------------------------
 
+
+- Install following tools/plugins on your machine so that you have some basic and advanced tools to start developing - 
 
 ```
 - npm install -g mongodb
@@ -33,33 +35,34 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 ```
 
 
-Following dependencies to be added for development -
+
+- Following dependencies to be added for development (check .meteor/package to be accurate here) -
 
 ```
-16.	Mrt add observatory
-17.	Mrt add highcharts
-18.	Mrt add bootstrap-3
-19.	Mrt add accounts-ui
-20.	Mrt add accounts-password
-21.	Mrt add accounts-facebook
-22.	Meteor add google
-23.	Meteor add facebook
-24.	Meteor add oauth
-25.	Mrt add iron-router
-26.	Npm install –g node-inspector
-27.	Mrt add inspector
-28.	Mrt add chartjs
+-	Mrt add observatory
+-	Mrt add highcharts
+-	Mrt add bootstrap-3
+-	Mrt add accounts-ui
+-	Mrt add accounts-password
+-	Mrt add accounts-facebook
+-	Meteor add google
+-	Meteor add facebook
+-	Meteor add oauth
+-	Mrt add iron-router
+-	Npm install –g node-inspector
+-	Mrt add inspector
+-	Mrt add chartjs
 ```
 
-Installing laika - 
+- Installing laika - 
 Install xcode from itunes and then follow the following steps - 
 ```
-sudo xcodebuild -license
-sudo npm install -g phantomjs
-sudo npm install -g laika
+	sudo xcodebuild -license
+	sudo npm install -g phantomjs
+	sudo npm install -g laika
 
 Start a new instance of mongodb for running laika tests
-mongod --smallfiles --noprealloc --nojournal
+	mongod --smallfiles --noprealloc --nojournal
 *Note: if you have not installed mongodb - sudo npm install mongodb*
 ```
 
