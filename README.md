@@ -12,14 +12,28 @@ We are following the standard package structure for this project -
 qoll----
 		|
 		 ---client
+		 		   |
+		 		    ---lib
+		 		   |
+		 		    ---stylesheets
+		 		   |
+		 		    ---views
 		|
 		 ---lib
 		|
 		 ---server
+		 			|
+		 			 ---config
+		 			|
+		 			 ---db
+		 			|
+		 			 ---lib
+		 			|
+		 			 ---publish
 		|
 		 ---public
-		|
-		 ---client
+		 			|
+		 			 ---img
 		|
 		 ---tests
 
