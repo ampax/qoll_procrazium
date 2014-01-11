@@ -39,6 +39,9 @@ qoll----
 ```
 
 
+
+
+
 ##Important tools, plugins, and commands:##
 
 
@@ -63,27 +66,6 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 -	Event Hooks – mrt add event-hooks
 -	Meteorite – sudo npm install –g meteorite <<Used to install and run meteor app using atmosphere packages>>
 ```
-
-
-
-####Following dependencies to be added for development (check .meteor/package to be accurate here) -####
-
-```
--	Mrt add observatory
--	Mrt add highcharts
--	Mrt add bootstrap-3
--	Mrt add accounts-ui
--	Mrt add accounts-password
--	Mrt add accounts-facebook
--	Meteor add google
--	Meteor add facebook
--	Meteor add oauth
--	Mrt add iron-router
--	Npm install –g node-inspector
--	Mrt add inspector
--	Mrt add chartjs
-```
-
 
 
 ####Installing laika (Install xcode from itunes and then follow the following steps) - ####
