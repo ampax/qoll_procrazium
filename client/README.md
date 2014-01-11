@@ -1,6 +1,7 @@
 #Client package -#
 
 ##Package information - ##
+-----------------------------
 
 The client package hosts everything that runs on client and that will be exposed to the client. Any code that exposes security concerns must not be put in this package. Read further to understand where that code will go.
 
