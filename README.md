@@ -1,13 +1,12 @@
-Qoll API & Developer's notes - 
-=============================================
+#Qoll API & Developer's notes - #
 
 
 
 
 
-API & Package Structure:
+##API & Package Structure:##
 ------------------------------------
-We are following the standard package structure for this project -
+####We are following the standard package structure for this project -####
 ```
 qoll----
 		|
@@ -40,11 +39,10 @@ qoll----
 ```
 
 
-Important tools, plugins, and commands:
-------------------------------------
+##Important tools, plugins, and commands:##
 
 
-- Install following tools/plugins on your machine so that you have some basic and advanced tools to start developing - 
+####Install following tools/plugins on your machine so that you have some basic and advanced tools to start developing - ####
 
 ```
 - npm install -g mongodb
@@ -68,7 +66,7 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 
 
 
-- Following dependencies to be added for development (check .meteor/package to be accurate here) -
+####Following dependencies to be added for development (check .meteor/package to be accurate here) -####
 
 ```
 -	Mrt add observatory
@@ -88,7 +86,7 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 
 
 
-- Installing laika (Install xcode from itunes and then follow the following steps) - 
+####Installing laika (Install xcode from itunes and then follow the following steps) - ####
 ```
 -  sudo xcodebuild -license
 -  sudo npm install -g phantomjs
@@ -100,7 +98,7 @@ Note: if you have not installed mongodb - sudo npm install mongodb
 
 
 
-- Checking code into github -
+####Checking code into github -####
 ```
 Initialize for git checkin
 -  git init
@@ -125,8 +123,7 @@ Push the code to branch develop
 ```
 
 
-Additional resources
----------------------
+##Additional resources##
 
 Learn how to write better mark-down (.md/README.md) files - [daringfireball]
 
