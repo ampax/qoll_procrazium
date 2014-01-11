@@ -58,4 +58,5 @@ package keeps meteor specific code on which the client side models depend. Curre
 		});
 	});
 
-######stylesheets - ######if you want qoll to load .css or .less styles for models, put those in this package. stylesheets put in this package are loaded before the views are loaded. This will ensure that the styles are rendered on the pages properly.
+######stylesheets - ######
+if you want qoll to load .css or .less styles for models, put those in this package. stylesheets put in this package are loaded before the views are loaded. This will ensure that the styles are rendered on the pages properly.
