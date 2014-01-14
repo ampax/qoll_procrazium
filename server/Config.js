@@ -10,7 +10,7 @@ Meteor.startup(function(){
 		initWithGitDev();
 		initWithFacebookDev();
 		initWithGoogleDev();
-	} else if(SITE_URL === 'http://qpoll.meteor.com/'){
+	} else if(SITE_URL === 'http://qoll.io/'){
 		//Initialize localhost for login with github
 		initWithGitServer();
 		initWithFacebookServer();
