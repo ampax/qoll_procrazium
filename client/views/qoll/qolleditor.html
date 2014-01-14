@@ -1,0 +1,45 @@
+<template name="qolleditor">
+<div class="editor-wrapper">
+<input class="title" type="text" placeholder="Title ...">
+<div class="editor-toolbar">
+	<!--a class="toolbar-buttons fa fa-bold" href="#" data-toggle="tooltip" title="Add new qoll"></a-->
+	<a class="toolbar-buttons glyphicon glyphicon-pencil" href="#" data-toggle="tooltip" title="Add new qoll"></a>
+	<!--a class="toolbar-buttons fa fa-italic" href="#" data-toggle="tooltip" title="Insert itallic"></a-->
+	<a class="toolbar-buttons glyphicon glyphicon-italic" href="#" data-toggle="tooltip" title="Insert itallic"></a>
+	<i class="separator">|</i>
+	<a class="toolbar-buttons fa fa-quote-left" href="#" data-toggle="tooltip" title="Add code block"></a>
+	<!--a class="toolbar-buttons fa fa-list-ol" href="#" data-toggle="tooltip" title="Add code block"></a-->
+	<a class="toolbar-buttons glyphicon glyphicon-list" href="#" data-toggle="tooltip" title="Add code block"></a>
+	<i class="separator">|</i>
+	<!--a class="toolbar-buttons fa fa-clock-o" href="#" data-toggle="tooltip" title="Time to expire"></a-->
+	<a class="toolbar-buttons glyphicon glyphicon-time" href="#" data-toggle="tooltip" title="Time to expire"></a>
+	<a class="toolbar-buttons fa fa-lock" href="#" data-toggle="tooltip" title="Answer once"></a>
+	<!--a class="toolbar-buttons preview-qoll pull-right fa fa-eye" data-toggle="tooltip" title="Preview"></a-->
+	<a class="toolbar-buttons write-qoll pull-right glyphicon glyphicon-eye-open" data-toggle="tooltip" title="Preview"></a>
+	<a class="toolbar-buttons preview-qoll pull-right glyphicon glyphicon-eye-close" data-toggle="tooltip" title="Write"></a>
+	<i class="separator pull-right">|</i>
+	<a class="toolbar-buttons pull-right glyphicon glyphicon-send" href="#" data-toggle="tooltip" title="Send and store"></a>
+	<a class="toolbar-buttons pull-right fa fa-save" href="#" data-toggle="tooltip" title="Store and send later"></a>
+	
+</div>
+<div class="editor-writer">
+<textarea class="editor" placeholder="Qoll Content Here ...">
+</textarea>
+</div>
+<div class="editor-preview is-invisible">
+{{#markdown}}
+#This is a header  
+
+This is a paragraph
+{{/markdown}}
+</div>
+</template>
+
+<!--script type="text/javascript">
+jQuery(document).ready(function(){
+	jQuery('.preview-qoll').click(function(){
+		$(".editor-writer").addClass("is-invisible");
+		jQuery(".editor-writer").removeClass("is-invisible");
+	});
+});
+</script-->
