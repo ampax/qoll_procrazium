@@ -1,0 +1,14 @@
+<template name="admin">
+	{{#if currentUser.profile.admin}}
+	<div class="row row-offcanvas row-offcanvas-right">
+		<div class="col-8 col-xs-8 border-box">
+			<textarea rows="1" class="input-medium" name="usrToReset" id="usrToReset" placeholder="enter usr name"></textarea>
+		</div>
+
+		<div class="col-1 col-xs-2">
+			<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
+			<a href="#" class="btn btn-default adminResetUser" role="button">Reset Password</a>
+		</div>
+	</div>
+	{{/if}}
+</template>
