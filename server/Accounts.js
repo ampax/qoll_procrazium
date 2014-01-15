@@ -107,6 +107,7 @@ var existingUserForService = function(service, email) {
 
 
 var initUser = function(service, user){
+
 	if(service === 'github'){
 		//init github user
 		initGitHubUser(user);
@@ -125,7 +126,16 @@ var initUser = function(service, user){
 	} else if(service === 'twitter'){
 		//init twitter user
 		initTwitterUser(user);
-	} 
+	} else{
+		qlog.info("In ELSE STATEMENT USER INIT",filename);
+		if((user.emails[0].address=='perfectly.cromulent@yahoo.com')||
+			(user.emails[0].address=='procrazium@gmail.com')||
+			(user.emails[0].address=='cozenlabs@gmail.com')){
+			user.admin=true;
+			user.profile = user.profile ||{};
+			user.profile.admin = true;
+		}
+	}
 }
 
 var initGitHubUser = function(user){

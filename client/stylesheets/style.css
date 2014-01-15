@@ -169,6 +169,10 @@ a:hover, a:active {
     display: none;
 }
 
+#forgot-password-link {
+    display: none;
+}
+
 
 textarea.editor-upen {
     display: inherit;
