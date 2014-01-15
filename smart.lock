@@ -14,7 +14,7 @@
       "observatory": {
         "git": "https://github.com/jhoxray/observatory.git",
         "tag": "v0.3.21",
-        "commit": "3d6b436af0a70b784d0f9ec4709907c77bd4fd63"
+        "commit": "3d6b436af0a70b784d0f9eåc4709907c77bd4fd63"
       },
       "highcharts": {
         "git": "https://github.com/mikeschaekermann/meteor-highcharts.git",

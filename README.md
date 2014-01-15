@@ -65,6 +65,7 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 -	Meteor JSHINTRC sudo npm install –g jshint
 -	Event Hooks – mrt add event-hooks
 -	Meteorite – sudo npm install –g meteorite <<Used to install and run meteor app using atmosphere packages>>
+-   meteor add jquery
 ```
 
 

@@ -2,10 +2,10 @@
     color: black;
 }
 
+/**
 A:hover {
  COLOR: green /*The color of the mouseover or 'hover' link*/
-}
-
+/**}**/
 
 .centered {
     margin: 0 auto;
@@ -114,12 +114,12 @@ a.aClass1:active {
 }
 /** START: style class for div **/
 
-body {
+/**body {
     background-image: '/img/icon3.png';
     background-color: #E4DADA;
     margin-left: 5%;
     margin-right: 5%;
-}
+}**/
 
 h3.class1 {
     color: red;
@@ -133,6 +133,10 @@ h3.class2 {
 }
 
 
+.is-visible {
+    visibility: visible;
+    display: none;
+}
 
 #forgot-password-link {
     display: none;

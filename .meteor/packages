@@ -21,3 +21,5 @@ observatory-galileo
 page-js-ie-support
 inspector
 chartjs
+showdown
+jquery

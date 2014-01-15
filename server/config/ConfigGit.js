@@ -23,7 +23,7 @@ initWithGitServer = function(){
 	//qoll.meteor.com
 	Accounts.loginServiceConfiguration.insert({
 		service : "github",
-		    clientId : "6d3de54b922896239fa5",
-		    secret : "fbc202312b2752d0654a00b35ef00452cd5b725f"
+		    clientId : "22cfa428403295b14eed",
+		    secret : "9a5be2e70eb320f6473f726f1c821cad622fcea5"
 	});
 }
