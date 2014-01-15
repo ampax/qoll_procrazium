@@ -10,13 +10,15 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
         var handle = Qoll.find().observe({
           added: function(doc, idx) {
             Qoll.find({}, {sort:{'submittedOn':-1}, reactive:true}).forEach(function(item){
-              var qtype = QollTypeStandard.findOne({_id : item.qollType});
+              //var qtype = QollTypeStandard.findOne({_id : item.qollType});
               var q = {
+                qollTitle : item.qollTitle,
                 qollText : item.qollText,
+                qollTypes : item.qollTypes,
                 submittedOn : item.submittedOn,
                 submittedBy : item.submittedBy,
                 submittedTo : item.submittedTo,
-                qollType : qtype.qollType,
+                //qollType : qtype.qollType,
                 _id : item._id
               };
               self.added('all-qolls', item._id, q);

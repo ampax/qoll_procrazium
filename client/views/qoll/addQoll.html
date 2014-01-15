@@ -1,53 +1,51 @@
 <template name="addQoll">
-	<div class="row row-offcanvas row-offcanvas-right">
-		<div class="col-8 col-xs-8 border-box">
-			<textarea rows="3" class="input-xxlarge" name="qollText" id="qollText" placeholder="Post a qoll..."></textarea>
-		</div>
-		<div class="col-1 col-xs-2">
-			<!-- Split button -->
-			<select class="form-control input-sm" id="qollType">
-				<option value="-1">Select Qoll Type</option>
-				{{#each allQollTypes}}
-					<option value="{{_id}}">{{qollTypeDis}}</option>
-				{{/each}}
-			</select> 
-		</div>
-		<div class="col-1 col-xs-2">
-			<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
-			<a href="#" class="btn btn-default add-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">Qoll</a>
-		</div>
-	</div>
-</template>
+	<div class="content">
+		<div class="qoll-toolbar">
+			<h4>Add a qoll -<h4>
+		</div><p><p><p>
+		<input type="text" class="qoll-title qoll-type-option" id="qolltitle" placeholder="Qoll Title Here ..."><p>
+		<div class="editor-writer">
+			<textarea class="editor-upen editor-writer" name="qollText" id="qollText" placeholder="Qoll Content Here ..."></textarea>
+		</div><p>
 
-<template name="addQoll_1">
-	<div class="row">
-		<div class="col-md-6 col-xs-10 border-box">
-			<h2>New Qoll - </h2>
-			<div class="row">
-				<div class="col-md-6 col-xs-10 border-box centered">
-					{{#each allQollTypes}}
-						<button type="button" class="btn btn-default" value="{{_id}}">{{qollTypeDis}}</button>
-					{{/each}}
-					<button type="button" class="btn btn-default">Q+</button>
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-md-6 col-xs-10 border-box">
-					<textarea class="form-control" rows="3" name="qollText" id="qollText" placeholder="Post a qoll..."></textarea>
-				</div>
-			</div>
-			<br>
-			<div class="row">
-				<div class="col-md-6 col-xs-10 border-box centered">
-					<a href="#" class="btn btn-default add-qoll {{#unless currentUser}}disabled{{/unless}}" style="height: 50px;padding: 0px;border: 0px solid #dddddd;padding-top:0px imp;">
-						<img src="/img/icon3.png" alt="Add qoll" class="img-rounded" style="height: 50px;padding: 4px;border: 1px solid #dddddd;padding-top:0px imp;">
-					</a>
-				</div>
-			</div>
+		<div class="input-group div-qoll-types">
+	  		<input type="text" class="qoll-type-option" id="qolltypeoption" placeholder="Qoll options ...">
+	  		<span class="input-group-addon add-option">+Option</span>
 		</div>
-		<div class="col-md-6 col-xs-10 border-box" style="background-color: #fff;">
-			This is the chart side
+
+		<p><p>
+
+		<div class="panel panel-default panel-qoll-type-list">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">Options for the qoll</h3>
+		  </div>
+		  <div class="panel-body">
+		  	<!--div class="qoll-type-panel">Panel content 1</div>
+		  	<div class="qoll-type-panel">Panel content 2</div>
+		  	<div class="qoll-type-panel">Panel content 3</div-->
+		  	<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
+		  </div>
 		</div>
+
 	</div>
+
+
+	<!--div class="row">
+		<div class="col-12 col-xs-12 border-box">
+			<textarea rows="3" class="input-xxlarge editor-writer" name="qollText" id="qollText" placeholder="Post a qoll..."></textarea>
+		</di
+	</div-->
+
+	<div class="col-1 col-xs-2">
+			
+	</div>
+	<div class="col-2 col-xs-4">
+		<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
+		<a href="#" class="btn btn-primary add-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+			<i class="glyphicon glyphicon-save"></i>Store Qoll</a>
+		<a href="#" class="btn btn-primary add-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+			<i class="glyphicon glyphicon-send"></i>Send Qoll</a>
+	</div>
+
+	
 </template>

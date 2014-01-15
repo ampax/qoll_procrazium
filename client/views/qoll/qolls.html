@@ -1,14 +1,17 @@
 <template name="qolls">
+  <p>&nbsp;</p><p>&nbsp;</p>
   <div class="row row-offcanvas row-offcanvas-right">
 
     <div class="col-8 col-sm-8 table-responsive">
-      <h2>All Qolls</h2>
-     <p class="lead">
+      <div class="qoll-toolbar">
+        <h4>All qolls -<h4>
+      </div>
+      <p class="lead">
         <table id="printQolls" class="table table-stripped table-condensed table-hover">
           <tbody>
           {{#each allQolls}}
             <tr class="">
-               <td class="qoll-text">{{qollText}}</td>
+               <td class="qoll-text">{{qollTitle}}</td>
                <td>
                 {{#if iif_yesno qollType}}
                   {{> yesno}}

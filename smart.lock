@@ -14,7 +14,7 @@
       "observatory": {
         "git": "https://github.com/jhoxray/observatory.git",
         "tag": "v0.3.21",
-        "commit": "3d6b436af0a70b784d0f9eåc4709907c77bd4fd63"
+        "commit": "3d6b436af0a70b784d0f9ec4709907c77bd4fd63"
       },
       "highcharts": {
         "git": "https://github.com/mikeschaekermann/meteor-highcharts.git",
@@ -23,8 +23,8 @@
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.6.1",
-        "commit": "4e1ee0581d68bff422a915dacb0bd30eae10fe08"
+        "tag": "v0.6.2",
+        "commit": "ce56e58b45624dce992490f3a1c10f10d3948bae"
       },
       "bootstrap-3": {
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
@@ -38,8 +38,8 @@
       },
       "inspector": {
         "git": "https://github.com/broth-eu/meteor-inspector.git",
-        "tag": "v0.2.0",
-        "commit": "940b2d1059b20cf5cba0b755ea9aa88c7d53cbf9"
+        "tag": "v0.2.2",
+        "commit": "d3e5e4a760133f8d97b6457befc6e8ea1b42a010"
       },
       "chartjs": {
         "git": "https://github.com/donskifarrell/meteor-chartjs.git",
@@ -50,11 +50,6 @@
         "git": "https://github.com/superstringsoftware/observatory-apollo.git",
         "tag": "v0.3.2",
         "commit": "f704848187a4da2bd179864ae80a1f73a3fd22a6"
-      },
-      "npm": {
-        "git": "https://github.com/arunoda/meteor-npm.git",
-        "tag": "v0.2.6",
-        "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
       },
       "observatory-galileo": {
         "git": "https://github.com/superstringsoftware/observatory-galileo.git",

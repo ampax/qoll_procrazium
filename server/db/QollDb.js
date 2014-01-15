@@ -17,4 +17,19 @@ Meteor.methods({
             
             return qollId;
         },
+
+        addQoll: function(qollTitle, qollText, qollTypes){
+            qlog.info("Add qoll: " + qollTitle, filename);
+            var qollId = Qoll.insert({
+                    'qollTitle' : qollTitle,
+                    'qollText' : qollText,
+                    'qollTypes' : qollTypes,
+                    'submittedOn' : new Date(),
+                    'submittedBy' : Meteor.userId(),
+                    'submittedByEmail' : getCurrentEmail,
+                    'submittedTo' : []
+                });
+            
+            return qollId;
+        },
 });
