@@ -9,11 +9,9 @@ observatory
 highcharts
 accounts-ui
 accounts-password
-accounts-facebook
 google
 facebook
 oauth
-accounts-github
 iron-router
 bootstrap-3
 font-awesome
@@ -23,7 +21,3 @@ observatory-galileo
 page-js-ie-support
 inspector
 chartjs
-accounts-google
-accounts-twitter
-accounts-weibo
-accounts-meetup

@@ -17,17 +17,18 @@
         	<ul class="nav navbar-nav nav-pull-left fa-ul">
             <li class="active"><a class="brand" href="dashboard"><i class="fa fa-home fa-fw icon-cog"></i>Qoll</a></li>
             <li class=""><a href="newqoll"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Add</a></li>
+            {{#if currentUser.profile.admin}}
+            <li class=""><a href="admin"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Admin</a></li>
+            {{/if}}
             <!--li><a href="search"><i class="fa fa-search fa-fw icon-cog"></i>Search</a></li-->
         	  <!--li class="active"><a class="brand" href="dashboard"><span class"fornav">Qoll</span></a></li>
         	  <li><a href="newqoll"><span class="fornav"><i class="glyphicon-plus-sign"></i></span>Plus</a></li>
         	  <li><a href="search"><span class="fornav"><i class="glyphicon-search"></i></span></a></li-->
         	</ul>
+          
         	<ul class="nav navbar-nav pull-right">
-        	  {{#if currentUser}}
-        	    {{> user_loggedin}}
-        	  {{else}}
-        	    {{> user_loggedout}}
-        	  {{/if}}
+            {{loginButtons align="right"}}
+
         	</ul>
         </div>
       </div>
