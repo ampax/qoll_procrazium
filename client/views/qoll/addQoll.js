@@ -21,34 +21,6 @@ Template.addQoll.events({
     'click .store-qoll': function(event){
         processQoll('store', event);
     },
-
-
-
-
-
-    'click .add-qoll1': function(event){
-        event.preventDefault();
-        var qoll = $("#qollText").val();
-        var qollType = $("#qollType").val();
-        qlog.info("Printing qollType: " + qollType);
-
-        if(qollType == "-1") {
-        	//set this to default yes/no
-        	var def = StdQollTypes.find({'qollType' : 'yes,no'}).fetch();
-        	qollType = def._id;
-        }
-
-        Meteor.call("addQoll", qoll, qollType, function(error, qollId){
-            qlog.info("Added qoll with id: " + qollId, filename);
-        });
-
-        qlog.info("Added qoll: " + qoll, filename);                                                                                                                           
-        $("#qollText").val("");
-    },
-    'click .qoll-type': function(event){
-    	event.preventDefault();
-    	qlog.info('Selected qoll-type: ' + $('#qoll-type').val());
-    }
 });
 
 
@@ -90,8 +62,7 @@ var processQoll = function(act, event) {
 
     //$("#qolltitle").val('');
     $("#qollText").val('');
-    $('#qolltype-panel').html('');
-    $('#email-panel').html('');
+    $('.panel-body div').html('');
     if(qollText) {
         qlog.info('to send to database: ' + qollText + ', ' + qollTypes + ', ' + emails, filename);
         Meteor.call("addQoll", act, qollText, qollTypes, emails, function(error, qollId){
