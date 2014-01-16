@@ -6,6 +6,8 @@
     "bootstrap-3": {},
     "font-awesome": {},
     "inspector": {},
-    "chartjs": {}
+    "chartjs": {},
+    "HTML5-History-API" :{},
+    "page-js-ie-support":{}
   }
 }

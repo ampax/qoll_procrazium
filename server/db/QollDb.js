@@ -5,7 +5,7 @@ Qoll = new Meteor.Collection("QOLL");
 /** Database insert method for qolls  **/
 Meteor.methods({
         addQoll: function(qollText, qollType){
-            qlog.info("Add qoll: " + qollText, filename);
+            qlog.info("BAD Add qoll: " + qollText, filename);
             var qollId = Qoll.insert({
                     'qollText' : qollText,
                     'submittedOn' : new Date(),
@@ -19,7 +19,7 @@ Meteor.methods({
         },
 
         addQoll: function(action, qollText, qollTypes, emails){
-            qlog.info("Add qoll: " +qollText, filename);
+            qlog.info("GOOD Add qoll: " +qollText, filename);
             var qollId = Qoll.insert({
                     'action' : action,
                     'qollText' : qollText,

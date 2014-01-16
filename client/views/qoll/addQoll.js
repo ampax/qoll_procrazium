@@ -32,7 +32,7 @@ Template.addQoll.rendered = function() {
         var option = $("#qolltypeoption").val();
         qlog.info("Adding new option: "+option, filename);
 
-        jQuery('#qolloptions').append("<div class='qoll-panel' id='qolltype-panel'>"+option+"</div>");
+        jQuery('#qolloptions').append("<div class='qollentry-panel qoll-panel' id='qolltype-panel'>"+option+"</div>");
         $("#qolltypeoption").val('');
     });
 
@@ -40,7 +40,7 @@ Template.addQoll.rendered = function() {
         var email = $("#qollsendto").val();
         qlog.info("Adding new email: "+email, filename);
 
-        jQuery('#sendtoemails').append("<div class='qoll-panel' id='email-panel'>"+email+"</div>");
+        jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
         $("#qollsendto").val('');
     });
 }
@@ -49,24 +49,27 @@ var processQoll = function(act, event) {
     var qollText = $("#qollText").val();
     qlog.info('Submitting the qols here==>> qollText: ' + qollText, filename);
     var qollTypes = new Array();
-    $('#qolltype-panel').each(function(){
+    $('.qollentry-panel').each(function(){
         qlog.info('found option: ' + $(this).html());
         qollTypes.push($(this).html());
     });
 
     var emails = new Array();
-    $('#email-panel').each(function(){
+    $('.email-panel').each(function(){
         qlog.info('found email: ' + $(this).html());
         emails.push($(this).html());
     });
 
     //$("#qolltitle").val('');
-    $("#qollText").val('');
-    $('.panel-body div').html('');
+
+
+
     if(qollText) {
         qlog.info('to send to database: ' + qollText + ', ' + qollTypes + ', ' + emails, filename);
         Meteor.call("addQoll", act, qollText, qollTypes, emails, function(error, qollId){
             qlog.info("Added qoll with id: " + qollId, filename);
         });
     }
+    $('.qoll-panel').remove();
+    
 }
