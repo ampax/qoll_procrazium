@@ -18,16 +18,16 @@ Meteor.methods({
             return qollId;
         },
 
-        addQoll: function(qollTitle, qollText, qollTypes){
-            qlog.info("Add qoll: " + qollTitle, filename);
+        addQoll: function(action, qollText, qollTypes, emails){
+            qlog.info("Add qoll: " +qollText, filename);
             var qollId = Qoll.insert({
-                    'qollTitle' : qollTitle,
+                    'action' : action,
                     'qollText' : qollText,
                     'qollTypes' : qollTypes,
                     'submittedOn' : new Date(),
                     'submittedBy' : Meteor.userId(),
                     'submittedByEmail' : getCurrentEmail,
-                    'submittedTo' : []
+                    'submittedTo' : emails
                 });
             
             return qollId;

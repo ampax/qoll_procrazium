@@ -2,29 +2,48 @@
 	<div class="content">
 		<div class="qoll-toolbar">
 			<h4>Add a qoll -<h4>
-		</div><p><p><p>
-		<input type="text" class="qoll-title qoll-type-option" id="qolltitle" placeholder="Qoll Title Here ..."><p>
+		</div><p></p>
+		<!--input type="text" class="qoll-title qoll-type-option" id="qolltitle" placeholder="Qoll Title Here ..."><p-->
 		<div class="editor-writer">
 			<textarea class="editor-upen editor-writer" name="qollText" id="qollText" placeholder="Qoll Content Here ..."></textarea>
-		</div><p>
+		</div><p></p>
 
-		<div class="input-group div-qoll-types">
-	  		<input type="text" class="qoll-type-option" id="qolltypeoption" placeholder="Qoll options ...">
-	  		<span class="input-group-addon add-option">+Option</span>
+
+		<div class="options-and-users">
+
+			<div class="input-group div-qoll-types pull-left">
+		  		<input type="text" class="qoll-type-option" id="qolltypeoption" placeholder="Qoll options ..."/>
+		  		<span class="input-group-addon add-option">+Option</span>
+			</div>
+
+			<div class="input-group div-qoll-types pull-right">
+		  		<input type="text" class="qoll-type-option" id="qollsendto" placeholder="Type addresses ..."/>
+		  		<span class="input-group-addon send-to">+Send to</span>
+			</div>
+
 		</div>
+		<p></p><p>&nbsp;</p>
+		<div class="options-and-users">
 
-		<p><p>
+			<div class="panel panel-default panel-qoll-type-list pull-left" id="options">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Options for the qoll</h3>
+			  </div>
+			  <div class="panel-body" id="qolloptions">
+			  	<!--div class="qoll-type-panel">Panel content 1</div-->
+			  	<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
+			  </div>
+			</div>
 
-		<div class="panel panel-default panel-qoll-type-list">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">Options for the qoll</h3>
-		  </div>
-		  <div class="panel-body">
-		  	<!--div class="qoll-type-panel">Panel content 1</div>
-		  	<div class="qoll-type-panel">Panel content 2</div>
-		  	<div class="qoll-type-panel">Panel content 3</div-->
-		  	<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
-		  </div>
+			<div class="panel panel-default panel-qoll-type-list pull-right" id="groups">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Send qolls to</h3>
+			  </div>
+			  <div class="panel-body" id="sendtoemails">
+			  	<!--div class="qoll-type-panel">Panel content 1</div-->
+			  	<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
+			  </div>
+			</div>
 		</div>
 
 	</div>
@@ -36,16 +55,18 @@
 		</di
 	</div-->
 
-	<div class="col-1 col-xs-2">
+	<!--div class="col-1 col-xs-2">
 			
 	</div>
-	<div class="col-2 col-xs-4">
+	<div class="col-2 col-xs-4"-->
+	<span >
 		<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
-		<a href="#" class="btn btn-primary add-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+		<a href="#" class="btn btn-primary store-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
 			<i class="glyphicon glyphicon-save"></i>Store Qoll</a>
-		<a href="#" class="btn btn-primary add-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+		<a href="#" class="btn btn-primary send-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
 			<i class="glyphicon glyphicon-send"></i>Send Qoll</a>
-	</div>
+	</span>
+
 
 	
 </template>

@@ -173,6 +173,15 @@ a:hover, a:active {
     display: none;
 }
 
+div.content {
+    width: 100%;
+}
+
+div.options-and-users {
+    width: 100%;
+    padding: 2px
+}
+
 
 textarea.editor-upen {
     display: inherit;
@@ -186,17 +195,20 @@ textarea.editor-upen {
 }
 
 div.div-qoll-types {
-    width: 50%;
+    width: 49%;
+    vertical-align: top;
 }
 
 div.panel-qoll-type-list {
-    width: 50%;
+    width: 49%;
+    height: 100px;
+    overflow: scroll;
 }
 
-div.qoll-type-panel {
-    width: 100%;
+div.qoll-panel {
+    width: 98%;
 }
-.qoll-type-panel:nth-child(odd) {background: #FAF6E8;}
+.qoll-panel:nth-child(odd) {background: #FAF6E8;}
 
 input.qoll-title {
     width: 100%;
@@ -282,4 +294,17 @@ span.input-group-addon:hover {
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: #bdc3c7;
+}
+
+
+span.qoll-toolbar-plain {
+    position: relative;
+    display: block;
+    line-height: 1.5 !important;
+    /**line-height: 40px;**/
+    /*background-color: #F0F0F0;*/
+    /**margin: 2px;**/
+    border: none;
+    width: 100%;
+    text-align: center;
 }

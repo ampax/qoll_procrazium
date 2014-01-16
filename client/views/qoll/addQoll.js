@@ -15,25 +15,11 @@ Template.addQoll.helpers({
 });
 
 Template.addQoll.events({
-    'click .add-qoll': function(event){
-        var qollTitle = $("#qolltitle").val();
-        var qollText = $("#qollText").val();
-        qlog.info('Submitting the qols here==>> qollTitle: ' + qollTitle + ', qollText: ' + qollText, filename);
-        var qollTypes = new Array();
-        $('.qoll-type-panel').each(function(){
-            qlog.info('found option: ' + $(this).html());
-            qollTypes.push($(this).html());
-        });
-
-        $("#qolltitle").val('');
-        $("#qollText").val('');
-        $('.panel-body div').html('');
-        if(qollTitle) {
-            qlog.info('to send to database: ' + qollTitle + ', ' + qollText + ', ' + qollTypes, filename);
-            Meteor.call("addQoll", qollTitle, qollText, qollTypes, function(error, qollId){
-                qlog.info("Added qoll with id: " + qollId, filename);
-            });
-        }
+    'click .send-qoll': function(event){
+        processQoll('send', event);
+    },
+    'click .store-qoll': function(event){
+        processQoll('store', event);
     },
 
 
@@ -74,12 +60,42 @@ Template.addQoll.rendered = function() {
         var option = $("#qolltypeoption").val();
         qlog.info("Adding new option: "+option, filename);
 
-        jQuery('.panel-body').append("<div class='qoll-type-panel'>"+option+"</div>");
+        jQuery('#qolloptions').append("<div class='qoll-panel' id='qolltype-panel'>"+option+"</div>");
         $("#qolltypeoption").val('');
-        //alert('clicked');
-        //jQuery(".editor-writer").addClass("is-invisible");
-        //jQuery(".preview-qoll").addClass("is-invisible");
-        //jQuery(".editor-preview").removeClass("is-invisible");
-        //jQuery(".write-qoll").removeClass("is-invisible");
     });
+
+    jQuery('.send-to').click(function(){
+        var email = $("#qollsendto").val();
+        qlog.info("Adding new email: "+email, filename);
+
+        jQuery('#sendtoemails').append("<div class='qoll-panel' id='email-panel'>"+email+"</div>");
+        $("#qollsendto").val('');
+    });
+}
+
+var processQoll = function(act, event) {
+    var qollText = $("#qollText").val();
+    qlog.info('Submitting the qols here==>> qollText: ' + qollText, filename);
+    var qollTypes = new Array();
+    $('#qolltype-panel').each(function(){
+        qlog.info('found option: ' + $(this).html());
+        qollTypes.push($(this).html());
+    });
+
+    var emails = new Array();
+    $('#email-panel').each(function(){
+        qlog.info('found email: ' + $(this).html());
+        emails.push($(this).html());
+    });
+
+    //$("#qolltitle").val('');
+    $("#qollText").val('');
+    $('#qolltype-panel').html('');
+    $('#email-panel').html('');
+    if(qollText) {
+        qlog.info('to send to database: ' + qollText + ', ' + qollTypes + ', ' + emails, filename);
+        Meteor.call("addQoll", act, qollText, qollTypes, emails, function(error, qollId){
+            qlog.info("Added qoll with id: " + qollId, filename);
+        });
+    }
 }
