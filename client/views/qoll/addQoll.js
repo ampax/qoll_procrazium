@@ -30,6 +30,9 @@ Template.addQoll.rendered = function() {
     qlog.info('clicked on addQoll', filename);
     jQuery('.add-option').click(function(){
         var option = $("#qolltypeoption").val();
+        if(!option) {
+            return;/** Qoll without qolls .. aaargh **/
+        }
         qlog.info("Adding new option: "+option, filename);
 
         jQuery('#qolloptions').append("<div class='qollentry-panel qoll-panel' id='qolltype-panel'>"+option+"</div>");
@@ -38,6 +41,9 @@ Template.addQoll.rendered = function() {
 
     jQuery('.send-to').click(function(){
         var email = $("#qollsendto").val();
+        if(!email) {
+            return;/** wtf no email ... get out of here **/
+        }
         qlog.info("Adding new email: "+email, filename);
 
         jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
@@ -45,7 +51,7 @@ Template.addQoll.rendered = function() {
     });
 }
 
-var processQoll = function(act, event) {
+processQoll = function(act, event) {
     var qollText = $("#qollText").val();
     qlog.info('Submitting the qols here==>> qollText: ' + qollText, filename);
     var qollTypes = new Array();
@@ -60,16 +66,22 @@ var processQoll = function(act, event) {
         emails.push($(this).html());
     });
 
-    //$("#qolltitle").val('');
-
-
-
-    if(qollText) {
+    if(!preCheckFailed(qollText, qollTypes)) {
         qlog.info('to send to database: ' + qollText + ', ' + qollTypes + ', ' + emails, filename);
         Meteor.call("addQoll", act, qollText, qollTypes, emails, function(error, qollId){
             qlog.info("Added qoll with id: " + qollId, filename);
         });
+        $('.qoll-panel').remove();
+        $("#qollText").val('');
+    } else {
+        qlog.info('Pre check failed, returning', filename);
+        return;
     }
-    $('.qoll-panel').remove();
     
+    
+}
+
+preCheckFailed = function(qollText, qollTypes) {
+    if(!qollText || qollTypes.length == 0) return true;
+    return false;
 }
