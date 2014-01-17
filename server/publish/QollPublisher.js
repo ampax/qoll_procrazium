@@ -20,6 +20,11 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	          added: function(doc, idx) {
 	            Qoll.find({'submittedBy':this.userId}, {sort:{'submittedOn':-1}, reactive:true}).forEach(function(item){
 	              //var qtype = QollTypeStandard.findOne({_id : item.qollType});
+	            /*   var qregs = QollRegister.find({qollId : item._id}).fetch();
+	               for (ix = 0; ix < qregs.length; ++ix) {
+						qregs[i].// count by type etc here 
+					}
+			*/
 	              var q = {
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
@@ -28,7 +33,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                submittedBy : item.submittedBy,
 	                submittedTo : item.submittedTo,
 	                action :item.action,
-	                //qollType : qtype.qollType,
+	                qollTypes : item.qollTypes,
 	                viewContext: "createUsr",
 	                
 	                _id : item._id
@@ -56,7 +61,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                submittedBy : item.submittedBy,
 	                submittedTo : item.submittedTo,
 	                action :item.action,
-	                //qollType : qtype.qollType,
+	                qollTypes : item.qollTypes,
 	                viewContext: "recieveUsr",
 	                
 	                _id : item._id
@@ -87,12 +92,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
                 submittedTo : item.submittedTo,
                 action :item.action,
                 viewContext: "publicQolls",
-                //qollType : qtype.qollType,
+                qollTypes : item.qollTypes,
                 _id : item._id
               };
               self.added('all-qolls', item._id, q);
               //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(qtype));
-              qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
+              //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
             });
           },
           /**removed: function(item) {

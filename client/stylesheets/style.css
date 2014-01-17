@@ -37,7 +37,9 @@ div.add-qoll-bkgrnd, div.add-qoll-chart-bkgrnd {
 .center1 {
     text-align: center;
 }
-
+.indent-littlebit{
+padding-left: 1em; 
+}
 .pclass {
 	color: orange;
     font-family: arial;
