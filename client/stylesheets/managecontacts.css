@@ -1,0 +1,13 @@
+div.div-addgroup {
+    width: 49%;
+    vertical-align: top;
+}
+
+.email-group-panel:nth-child(odd) {background: #FAF6E8;}
+
+
+input.create-group {
+    /**color: #FFFFFF !important;**/
+    background-color: #FFFFCC !important;
+
+}

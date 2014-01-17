@@ -201,6 +201,10 @@ div.div-qoll-types {
 
 div.panel-qoll-type-list {
     width: 49%;
+    
+}
+
+div.panel-body {
     height: 100px;
     overflow: scroll;
 }
@@ -273,7 +277,7 @@ input.qoll-type-option {
     word-spacing: 0px;
 }
 
-span.input-group-addon:hover {
+span.input-group-addon-klik:hover {
     background-color: #606060;
     color: white;
 }
