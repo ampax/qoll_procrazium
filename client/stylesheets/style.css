@@ -62,7 +62,7 @@ p.center {
 }
 
 p.pull-left {
-    margin-left: 200px;
+    /**margin-left: 200px;**/
 }
 
 p.newStyleClassP {
@@ -149,17 +149,20 @@ body {
 }
 
 a {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 a:link, a:visited {
     /**/
+    color: rgb(0, 0, 153);
+    text-decoration: none !important;
 }
 
 a:hover, a:active {
     /**/
+    color: rgb(0, 96, 255);
+    text-decoration: none !important;
 }
-
 
 .is-visible {
     visibility: visible;
