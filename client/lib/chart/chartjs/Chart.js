@@ -18,68 +18,22 @@ var colors = {
 };
 var QollStats = new Meteor.Collection("qoll-stats-by-id");
 
-chartStats = function(id, ctx){
+chartStats = function(qoll, ctx){
 
-    var stats;
-    //Deps.flush();
-    var comp = Deps.autorun(function(){
-        ReactiveDataSource.depend('qollstat' + id);
-
-
-        qlog.info('Generating chart for qoll-id: ' + id);
-        Meteor.subscribe('QOLL_DETAILS_BY_ID', id, function(){
-            qlog.info('QOLL_DETAILS_BY_ID subscription complete', filename);
-        });
-        var h = Meteor.subscribe('QOLL_STATS_BY_ID', id, function(){
-            qlog.info('QOLL_STATS_BY_ID subscription complete', filename);
-        });
-        if(h.ready()) {
-            stats = QollStats.find({qollId : id}, {reactive:true});
-
-            /**stats.observe({
-                added: function(doc){
-                    qlog.info('Added document: ' + doc, filename);
-                },
-                changed: function(doc){
-                    qlog.info('Changed the document: ' + doc, filename);
-                }
-            });**/
-
-            //qlog.info("found the qoll-stat for id: " + JSON.stringify(stats.find({_id : id})));
-            //qlog.info("Found stats in autorun: " + JSON.stringify(stats) + ', length: ' + stats.length, filename);
-            qlog.info('Printing the item ---->>>> ' + JSON.stringify(stats.collection.docs[id].data), filename);
-            var statsStr = ' ';
-            var count = 1;
-            var data = new Array();
-            _.each(stats.collection.docs[id].data, function(val, item) {
-                qlog.info('Printing the item ---->>>> ' + item + ':' + val, filename);
-                if(item != '_id') {
-                    count += 1;
-                    statsStr += item+':'+val + ' ';
-                    data.push({'value' : val, 'color' : colors['color'+count], 'label' : item, 'labelColor' : 'black'});
-                }
-            });
-            //new Chart(ctx).Doughnut(data);
-            $('div.chartStats').text(statsStr);
-            DoughnutChart(data, ctx);
-            //var ctx = $("#charts").get(0).getContext("2d");
-            qlog.info('Printing data: ' + data, filename);
-            return statsStr;
-        }
-    });
-
-    //var stats = QollStats.find({qollId : id}, {reactive:true});
-    //qlog.info("Found stats: " + JSON.stringify(stats) + ', length: ' + stats.length, filename);
-
-    /**for(item in stats){
-        qlog.info('item--------------->: ' + JSON.stringify(item));
-    }
-
-    stats.forEach(function(item){
-        qlog.info('item--------------->>>>: ' + JSON.stringify(item));
-    });**/
-
-    //qlog.info('Generating chart for qoll-id: ' + id + ', stats: ' + JSON.stringify(stats));
-
-    return 'Generating chart for qoll-id: ' + id + ', stats: ' + JSON.stringify(stats);
+    var statsStr ='', data=[],count=0;
+	qlog.info('CHARTING qoll --------->>>>>'+qoll._id,filename);
+	var ix = 0;
+	for (var nm in qoll.stats) {
+		if (qoll.stats.hasOwnProperty(nm)) {
+			statsStr += nm+':'+ qoll.stats[nm] + ' ';
+			ix=count%9+1;
+            data.push({'value' : qoll.stats[nm], 'color' : colors['color'+ix], 'label' : nm, 'labelColor' : 'black'});
+            count++;
+		}
+	}
+	qlog.info('CHARTING qoll step2--------->>>>>'+qoll._id,filename);
+	$('div.chartStats').text(statsStr);
+    DoughnutChart(data, ctx);
+	qlog.info('CHARTING qoll step3--------->>>>>'+qoll._id,filename);
+    return 'Generating chart for qoll-id: ' + qoll._id;
 }

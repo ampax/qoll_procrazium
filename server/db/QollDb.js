@@ -21,16 +21,26 @@ Meteor.methods({
         addQoll: function(action, qollText, qollTypes, emails){
             qlog.info("GOOD Add qoll: " +qollText, filename);
             var newQtype = {};
+            var i =0, actualmails=[],actualgroups=[];
+            
+            for (i=0;i<(emails||[]).length ; i++){
+				if(emails[i].indexOf('@')>-1){
+					actualmails.push(emails[i]);
+				}else{
+					actualgroups.push(emails[i]);
+				}
+			}
             var stats = qollTypes.map(function (qtype){newQtype[qtype]=0;});
             var qollId = Qoll.insert({
                     'action' : action,
                     'qollText' : qollText,
                     'qollTypes' : qollTypes,
                     'stats': newQtype,
+                    'submittedToGroup' : actualgroups,
                     'submittedOn' : new Date(),
                     'submittedBy' : Meteor.userId(),
                     'submittedByEmail' : getCurrentEmail,
-                    'submittedTo' : emails
+                    'submittedTo' : actualmails
                 });
             
             return qollId;

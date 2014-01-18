@@ -89,6 +89,34 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	            qlog.info('Removed item with id: ' + item._id);
 	          }**/
 	        });
+	        var allUserGroups = [];
+	        (user.groups||[]).map(function (grpEntry){
+				allUserGroups.push(grpEntry.groupName);
+				});
+	        var handle = Qoll.find({'submittedToGroup':{$in : allUserGroups}}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+	          added: function(item, idx) {
+	              var q = {
+	                qollTitle : item.qollTitle,
+	                qollText : item.qollText,
+	                qollTypes : item.qollTypes,
+	                submittedOn : item.submittedOn,
+	                submittedBy : item.submittedBy,
+	                submittedTo : item.submittedTo,
+	                action :item.action,
+	                qollTypes : item.qollTypes,
+	                viewContext: "recieveUsr",
+	                
+	                _id : item._id
+	              };
+	              self.added('all-qolls', item._id, q);
+	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
+
+	          }
+	          /**removed: function(item) {
+	            self.removed('all-qolls', item._id);
+	            qlog.info('Removed item with id: ' + item._id);
+	          }**/
+	        });	        
 		}
 	    // here we proceed with publishing qolls to group that one is member of
 		}
