@@ -164,6 +164,26 @@ a:hover, a:active {
     text-decoration: none !important;
 }
 
+/** START: Glyph icon colors **/
+i.blue:before {
+    color: blue;
+}
+i.blue:hover {
+    color: green;
+}
+
+i.green:before {
+    color: green;
+}
+
+i.red:before {
+    color: red;
+}
+i.red:hover {
+    color: green;
+}
+/** END: Glyph icon colors **/
+
 .is-visible {
     visibility: visible;
     display: none;
