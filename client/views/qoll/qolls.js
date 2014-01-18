@@ -3,6 +3,66 @@ var filename = "client/views/qoll/qolls.js";
 var AllQolls = new Meteor.Collection("all-qolls");
 var QollDetails = new Meteor.Collection("qoll-details-by-id");
 
+Handlebars.registerHelper('include', function(options) {
+    var context = {},
+        mergeContext = function(obj) {
+            for(var k in obj)context[k]=obj[k];
+        };
+    mergeContext(this);
+    mergeContext(options.hash);
+    return options.fn(context);
+});
+
+
+Handlebars.registerHelper('eachport', function(context, options) {
+  var fn = options.fn, inverse = options.inverse;
+  var i = 0, ret = "", data;
+
+  if (options.data) {
+    data = Handlebars.createFrame(options.data);
+  }
+
+  if(context && typeof context === 'object') {
+    if(context instanceof Array){
+      for(var j = context.length; i<j; i++) {
+        if (data) { data.index = i; }
+
+        if (typeof (context[i]) == 'object') {
+            context[i]['_iter_ix'] = i;
+            ret = ret + fn(context[i], { data: data });
+        } else { // make an object and add the index property
+            item = {
+                _iter_v: context[i], // TODO: make the name of the item configurable
+                _iter_ix: i
+            };
+            ret = ret + fn(item, { data: data });
+        }
+       
+      }
+    } else {
+      for(var key in context) {
+        if(context.hasOwnProperty(key)) {
+          if(data) {
+            data.key = key;
+            data.index = i;
+             context[key]._iter_ix=i;
+          }
+          ret = ret + fn(context[key], {data: data});
+          i++;
+        }
+      }
+    }
+  }
+
+  if(i === 0){
+    ret = inverse(this);
+  }
+
+  return ret;
+});
+
+
+
 Template.qolls.helpers({
     allQolls: function(event){
         qlog.debug("Getting all the qolls ......", filename);                                                                                                                
@@ -10,6 +70,7 @@ Template.qolls.helpers({
         qlog.info("Found qoll: " + JSON.stringify(q.fetch()), filename);
         return q;
     },
+    
     iif: function(qollType){
         //qlog.info("Getting all the qollslkjhadkhaskf ......", filename);
         //qlog.info('iif(qollType):  ' + qollType, filename);
@@ -69,7 +130,23 @@ Template.qolls.events({
             ReactiveDataSource.refresh('qollstat'+ qollId);
         }
     },
-
+	'click li': function(event){
+		event.preventDefault();
+		
+		var qollId = this.parent._id;
+		var qoll = this.parent;
+		var answerIndex = event.target.id;
+		var answerVal = this._iter_v;
+		
+		qlog.info('youclicked: ' +this._iter_v, filename);   
+		qlog.info('youclickedon: ' +event, filename);  
+		qlog.info('youclickedid: ' +qollId, filename);
+		qlog.info('the aindex ='+answerIndex,filename);
+	    Meteor.call('registerQollCustom', qollId, answerVal,answerIndex, function(err, qollRegId){
+                qlog.info('Registered qoll with id: ' + qollRegId+ answerVal+' err '+err, filename);
+            });
+		ReactiveDataSource.refresh('qollstat'+ qollId);
+		},
     'click a.no': function(event){
         event.preventDefault();
         if(Meteor.userId()){

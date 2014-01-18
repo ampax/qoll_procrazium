@@ -15,33 +15,18 @@
 				   <ul class="list-group">
 					   <li href="#" class="list-group-item active">{{qollText}}</li>
 				   <ul class="list-group indent-littlebit">
-					    {{#each qollTypes}}
-					<li href="#" class="list-group-item">{{this}}</li>
-{{/each}}
+					   {{#eachport qollTypes}}
+					   {{#include parent=.. }}
+					    
+					<li  href="#" id= "{{_iter_ix}}"  class="list-group-item">{{_iter_v}}</li>
+						{{/include}}
+						{{/eachport}}
+			
 				</ul>
 				</ul>
 				   </td>
                
 
-               <td>
-                {{#if iif_yesno qollType}}
-                  {{> yesno}}
-                {{/if}}
-                {{#if iif_yesnomaybe qollType}}
-                  {{> yesnomaybe}}
-                {{/if}}
-                {{#if iif_likedislike qollType}}
-                  {{> likedislike}}
-                {{/if}}
-                {{#if iif_likedislikeindiff qollType}}
-                  {{> likedislikeindiff}}
-                {{/if}}
-                {{#if iif_default qollType}}
-                  {{> default}}
-                {{/if}}
-                <!--span id="{{_id}}">{{{ iif qollType this}}}</span-->
-                
-               </td>
             </tr>
            {{/each}}
           </tbody>
