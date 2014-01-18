@@ -93,7 +93,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	        (user.groups||[]).map(function (grpEntry){
 				allUserGroups.push(grpEntry.groupName);
 				});
-	        var handle = Qoll.find({'submittedToGroup':{$in : allUserGroups}}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+	        var handle = Qoll.find({'submittedToGroup':{$in : allUserGroups},'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
 	          added: function(item, idx) {
 	              var q = {
 	                qollTitle : item.qollTitle,
