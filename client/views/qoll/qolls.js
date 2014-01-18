@@ -70,7 +70,9 @@ Template.qolls.helpers({
         qlog.info("Found qoll: " + JSON.stringify(q.fetch()), filename);
         return q;
     },
-    
+    value_at:function (obj,val){
+		return obj?obj[val]:obj;
+		},
     iif: function(qollType){
         //qlog.info("Getting all the qollslkjhadkhaskf ......", filename);
         //qlog.info('iif(qollType):  ' + qollType, filename);

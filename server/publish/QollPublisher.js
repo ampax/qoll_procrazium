@@ -15,16 +15,11 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 			var user= ufound[0];
 			qlog.info('MY  USER --------->>>>>'+user);
 			qlog.info('MY  USER --------->>>>>'+user.emails);
-			//var user is the same info as would be given in Meteor.user();
-			var handle = Qoll.find().observe({
-	          added: function(doc, idx) {
-	            Qoll.find({'submittedBy':this.userId}, {sort:{'submittedOn':-1}, reactive:true}).forEach(function(item){
-	              //var qtype = QollTypeStandard.findOne({_id : item.qollType});
-	            /*   var qregs = QollRegister.find({qollId : item._id}).fetch();
-	               for (ix = 0; ix < qregs.length; ++ix) {
-						qregs[i].// count by type etc here 
-					}
-			*/
+			
+			
+			var handle = Qoll.find({'submittedBy':this.userId}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+	          added: function(item, idx) {
+				  
 	              var q = {
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
@@ -34,25 +29,44 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                submittedTo : item.submittedTo,
 	                action :item.action,
 	                qollTypes : item.qollTypes,
+	                stats: item.stats,
 	                viewContext: "createUsr",
 	                
 	                _id : item._id
 	              };
 	              self.added('all-qolls', item._id, q);
-	              //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(qtype));
-	              //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
-	            });
+	              qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+
 	          },
+	          changed: function(item, idx) {
+				  
+	            
+	              var q = {
+	                qollTitle : item.qollTitle,
+	                qollText : item.qollText,
+	                qollTypes : item.qollTypes,
+	                submittedOn : item.submittedOn,
+	                submittedBy : item.submittedBy,
+	                submittedTo : item.submittedTo,
+	                action :item.action,
+	                qollTypes : item.qollTypes,
+	                stats: item.stats,
+	                viewContext: "createUsr",
+	                
+	                _id : item._id
+	              };
+	              self.changed('all-qolls', item._id, q);
+	              qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+
+	          }
 	          /**removed: function(item) {
 	            self.removed('all-qolls', item._id);
 	            qlog.info('Removed item with id: ' + item._id);
 	          }**/
 	        });
 	        
-	        var handle = Qoll.find().observe({
-	          added: function(doc, idx) {
-	            Qoll.find({'submittedTo':user.emails[0].address,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).forEach(function(item){
-	              //var qtype = QollTypeStandard.findOne({_id : item.qollType});
+	        var handle = Qoll.find({'submittedTo':user.emails[0].address,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+	          added: function(item, idx) {
 	              var q = {
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
@@ -67,10 +81,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                _id : item._id
 	              };
 	              self.added('all-qolls', item._id, q);
-	              //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(qtype));
-	              //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
-	            });
-	          },
+	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
+
+	          }
 	          /**removed: function(item) {
 	            self.removed('all-qolls', item._id);
 	            qlog.info('Removed item with id: ' + item._id);
@@ -79,10 +92,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 		}
 	    // here we proceed with publishing qolls to group that one is member of
 		}
-		var handle = Qoll.find().observe({
-          added: function(doc, idx) {
-            Qoll.find({'submittedTo':'','action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).forEach(function(item){
-              //var qtype = QollTypeStandard.findOne({_id : item.qollType});
+		var handle = Qoll.find({'submittedTo':'','action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+          added: function(item, idx) {
               var q = {
                 qollTitle : item.qollTitle,
                 qollText : item.qollText,
@@ -96,10 +107,11 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
                 _id : item._id
               };
               self.added('all-qolls', item._id, q);
+              qlog.info('Adding another PUBLIC RECIEVED qoll --------->>>>>'+item._id,filename);
               //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(qtype));
               //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
-            });
-          },
+            
+          }
           /**removed: function(item) {
             self.removed('all-qolls', item._id);
             qlog.info('Removed item with id: ' + item._id);
