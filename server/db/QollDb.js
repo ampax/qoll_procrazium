@@ -20,10 +20,13 @@ Meteor.methods({
 
         addQoll: function(action, qollText, qollTypes, emails){
             qlog.info("GOOD Add qoll: " +qollText, filename);
+            var newQtype = {};
+            var stats = qollTypes.map(function (qtype){newQtype[qtype]=0;});
             var qollId = Qoll.insert({
                     'action' : action,
                     'qollText' : qollText,
                     'qollTypes' : qollTypes,
+                    'stats': newQtype,
                     'submittedOn' : new Date(),
                     'submittedBy' : Meteor.userId(),
                     'submittedByEmail' : getCurrentEmail,
