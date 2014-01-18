@@ -1,0 +1,51 @@
+
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+#Q {
+    color: #D10609;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-size: 48px;
+}
+#o {
+    color: #1CEC4D;
+    font-family: "Blackoak Std", Verdana;
+    font-size: 24px;
+}
+#ll {
+    color: #5973ED;
+    font-family: Verdana;
+    font-size: 40px;
+}
+#motto {
+    color: #05274F;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-weight: bold;
+    font-size: 24px;
+}
+h1 {
+  text-align:center;
+}
+
+#intro {
+      color: #05274F;
+  text-align:center;
+}
+#intro_line1 {
+
+    font-family: Verdana;   
+    font-size: 20px;
+}
+#intro_line2 {
+
+    font-family: Verdana;   
+    font-size: 22px;
+}
+#intro_line3 {
+    color: #D10609;
+    font-family: Verdana;   
+        font-weight: bold;
+    font-size: 24px;
+}
