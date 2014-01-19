@@ -73,6 +73,15 @@ Template.qolls.helpers({
     value_at:function (obj,val){
 		return obj?obj[val]:obj;
 		},
+	if_createusr: function (){
+		return (this.viewContext =='createUsr');
+	},
+	if_stored: function (){
+		return (this.action =='store');
+	},
+	if_send: function (){
+		return (this.action =='send');
+	},
     iif: function(qollType){
         //qlog.info("Getting all the qollslkjhadkhaskf ......", filename);
         //qlog.info('iif(qollType):  ' + qollType, filename);
@@ -149,6 +158,22 @@ Template.qolls.events({
             });
 		ReactiveDataSource.refresh('qollstat'+ qollId);
 		},
+	'click .send-qoll-btn': function(event){
+		event.preventDefault();
+		var qollId = this._id;
+		qlog.info('youclicked to send: ' +qollId, filename);  
+		Meteor.call('modifyQollId', qollId, 'send', function(err, qollRegId){
+                qlog.info('SENT qoll with id: ' + qollRegId+' err '+err, filename);
+            });
+	},
+	'click .lock-qoll-btn': function(event){
+		event.preventDefault();
+		var qollId = this._id;
+		qlog.info('youclicked to LOCK: ' +qollId, filename);  
+		Meteor.call('modifyQollId', qollId,'lock', function(err, qollRegId){
+                qlog.info('LOCKED qoll with id: ' + qollRegId+' err '+err, filename);
+            });
+	},
     'click a.no': function(event){
         event.preventDefault();
         if(Meteor.userId()){

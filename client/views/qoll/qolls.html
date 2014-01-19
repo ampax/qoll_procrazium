@@ -23,8 +23,14 @@
             				   <ul class="list-group">
             					  <li href="#" class="list-group-item active">
                           <span class="">{{qollText}}</span>
-                          <span class="pull-right send-qoll"><i class="glyphicon glyphicon-send blue"></i></span>
-                          <span class="pull-right lock-qoll"><i class="glyphicon glyphicon-lock red"></i></span>
+                          {{#if if_createusr}}
+              							{{#if if_stored}}
+              							<span class="pull-right send-qoll-btn"><i class="glyphicon glyphicon-send blue"></i></span>
+              							{{/if}}
+              							{{#if if_send}}
+              								<span class="pull-right lock-qoll-btn"><i class="glyphicon glyphicon-lock red"></i></span>
+              							{{/if}}
+                          {{/if}}
                         </li>
 
                         <div class="container">
@@ -48,6 +54,7 @@
                           <canvas id="charts" width="50" height="50"></canvas>
                           <div class="chartStats" id="chartStats"></div>
                         </div>
+
             				</ul>
       				   </td>
                      
@@ -57,12 +64,6 @@
                 </tbody>
               </table>
             </p>
-          </div>
-
-          <div class="col-4 col-sm-4 centered">
-            <!--<div class="charts"></div>-->
-            <canvas id="charts" width="200" height="200"></canvas>
-            <div class="chartStats" id="chartStats"></div>
           </div>
 
         <!-- /div -->
@@ -80,4 +81,5 @@
       </div>
     </div>
 
+  </div>
 </template>

@@ -45,4 +45,26 @@ Meteor.methods({
             
             return qollId;
         },
+        modifyQollId: function (qollId, newAction){
+			var userId= Meteor.userId();
+			if(userId) {
+				var ufound = Meteor.users.find({"_id":this.userId}).fetch();
+				if (ufound.length>0){
+					var user= ufound[0];
+					//step 1.1 verify qoll's group/user is valid for this user
+					var qollFound = Qoll.find({'_id':qollId}).fetch()[0];
+					var canModify =false;
+					qlog.info('checking '+ user.emails[0].address, filename);
+					if(qollFound.submittedBy === userId){
+						canModify =true;
+					}
+					Qoll.update({'_id':qollId}, {$set:{action :  newAction,submittedOn : new Date()}});
+				}
+		
+			}
+		}
+        
+        
+        
+        
 });

@@ -30,6 +30,7 @@ Meteor.methods({
 			return qollRegId;
 	},
 		registerQollCustom: function(qollId, qollTypeVal,qollTypeIx){
+			var userId= Meteor.userId();
             qlog.info('In register custom qoll: ' + qollId + ', ' + qollTypeVal + ', Meteor.userId ' + Meteor.userId(), filename);
             var existQollReg = QollRegister.find({qollId: qollId, submittedBy: userId}).fetch();
             qlog.debug(existQollReg, filename);
