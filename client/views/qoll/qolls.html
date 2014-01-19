@@ -12,7 +12,8 @@
         <div class="tab-pane active" id="Primary">
         <div class="row row-offcanvas row-offcanvas-right">
 
-          <div class="col-8 col-sm-8 table-responsive">
+
+          <div class="col-md-12 col-xs-12 table-responsive" id="primary-tab">
             <p class="lead">
               <table id="printQolls" class="table table-stripped table-condensed table-hover">
                 <tbody>
@@ -41,6 +42,12 @@
             					 
             					</li>
 
+            </tr>
+           {{/each}}
+          </tbody>
+        </table>
+      </p>
+    </div>
 
             						{{/include}}
             						{{/eachport}}
@@ -78,4 +85,5 @@
       </div>
     </div>
 
+  </div>
 </template>

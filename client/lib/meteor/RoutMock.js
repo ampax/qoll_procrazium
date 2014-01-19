@@ -4,8 +4,13 @@ Router.map(function(){
 	this.route('mock1', {
 		template: 'mock1',
 		path: '/mock1',
+		waitOn: function(){
+			//add waiton for qolls from server to handle the latency for user here
+			Meteor.subscribe('All_QOLL_PUBLISHER');
+		},
 		before: [function(){
 			qlog.info('Routing mock1', filename);
+			Meteor.subscribe('All_QOLL_PUBLISHER');
 		}, function(){
 		}],
 		after: function(){

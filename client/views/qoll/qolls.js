@@ -215,3 +215,10 @@ Template.qolls.events({
         return;
     }
 });
+
+Template.qolls.rendered = function(){
+    qlog.info('Running post rendered code', filename);
+
+    jQuery(".selector" ).tabs({ active: 1 });
+    //jQuery(".selector" ).tabs({ "Primary", "active", 1 });
+}
