@@ -1,3 +1,14 @@
+/** START: Core body and html style **/
+
+div.navbar-fixed-bottom {
+  position: absolute;
+  bottom: 0;
+  min-height: 10px !important;
+  border-width: 0px !important;
+}
+
+/** END: Core body and html style **/
+
 .icon-cog1 {
     color: black;
 }
@@ -12,9 +23,9 @@ A:hover {
 }
 
 
-.qoll-text {
+/**.qoll-text {
 	width: 83%;
-}
+}**/
 
 .centered {
     display: block;
@@ -135,6 +146,30 @@ h3.class2 {
 }
 **/
 
+#side {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    bottom: 0;
+    width: 10%;
+    background-color: #eee;
+    overflow: auto;
+}
+
+div#tabs {
+    width: 100% !important;
+}
+
+#content {
+    position: absolute;
+    top: 90px;
+    left: 10%;
+    bottom: 0;
+    right: 0;
+    width: 85% !important;
+    overflow: auto;
+}
+
 body {
     color: #000305;
     /*font-size: 100%;Base font size is 14px*/
@@ -144,7 +179,7 @@ body {
 
 .body {
     margin: 0 auto;
-    width: 80%;
+    /**width: 80%;**/
     clear: both;
 }
 
@@ -154,13 +189,13 @@ a {
 
 a:link, a:visited {
     /**/
-    color: rgb(0, 0, 153);
+    /**color: rgb(0, 0, 153);**/
     text-decoration: none !important;
 }
 
 a:hover, a:active {
     /**/
-    color: rgb(0, 96, 255);
+    /*8color: rgb(0, 96, 255);**/
     text-decoration: none !important;
 }
 
@@ -204,9 +239,9 @@ span.qoll-badge {
     display: none;
 }
 
-div.content {
+/**div.content {
     width: 100%;
-}
+}**/
 
 div.options-and-users {
     width: 100%;
@@ -244,9 +279,10 @@ div#primary-tab {
     overflow: scroll !important;
 }
 
-div.qoll-panel {
+/**div.qoll-panel {
     width: 98%;
-}
+}**/
+
 .qoll-panel:nth-child(odd) {background: #FAF6E8;}
 
 input.qoll-title {
@@ -317,6 +353,14 @@ span.input-group-addon-klik:hover {
     color: white;
 }
 
+a.qoll-plus {
+    width: 100%;
+}
+
+a.group-plus {
+    width: 100%;
+}
+
 
 .qoll-toolbar {
     position: relative;
@@ -353,3 +397,7 @@ span.qoll-toolbar-plain {
     overflow: hidden !important;
     padding: 5px 5px !important;
 }
+
+
+
+/****/

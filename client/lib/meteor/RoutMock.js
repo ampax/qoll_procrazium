@@ -9,8 +9,14 @@ Router.map(function(){
 			Meteor.subscribe('All_QOLL_PUBLISHER');
 		},
 		before: [function(){
+			Session.set('template', 'qolls');
 			qlog.info('Routing mock1', filename);
 			Meteor.subscribe('All_QOLL_PUBLISHER');
+
+			Deps.autorun(function(){
+				Meteor.subscribe('mock1', Session.get('template'));
+			});
+
 		}, function(){
 		}],
 		after: function(){

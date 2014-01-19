@@ -37,7 +37,7 @@ Template.managecontacts.events({
 
 /** jQuery functionality will come here **/
 Template.managecontacts.rendered = function() {
-    qlog.info('clicked on add-email', filename);
+    qlog.info('Loaded managecontacts', filename);
     jQuery('.add-email').click(function(){
         var email = $("#addemail").val();
         qlog.info("Adding new email to the group: "+email, filename);

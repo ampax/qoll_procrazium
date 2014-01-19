@@ -27,7 +27,7 @@ Template.addQoll.events({
 
 /** jQuery functionality will come here **/
 Template.addQoll.rendered = function() {
-    qlog.info('clicked on addQoll', filename);
+    qlog.info('Loaded addQoll', filename);
     jQuery('.add-option').click(function(){
         var option = $("#qolltypeoption").val();
         if(!option) {
