@@ -1,49 +1,81 @@
 <template name="qolls">
-  <p>&nbsp;</p><p>&nbsp;</p>
-  <div class="row row-offcanvas row-offcanvas-right">
+    <div id="tabs">
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs">
+        <li><a href="#Primary" data-toggle="tab">Primary</a></li>
+        <li><a href="#Social" data-toggle="tab">Social</a></li>
+        <li><a href="#Professional" data-toggle="tab">Professional</a></li>
+        <li><a href="#Explore" data-toggle="tab">Explore</a></li>
+      </ul>
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <div class="tab-pane active" id="Primary">
+        <div class="row row-offcanvas row-offcanvas-right">
 
-    <div class="col-8 col-sm-8 table-responsive">
-      <div class="qoll-toolbar">
-        <h4>All qolls -<h4>
+          <div class="col-8 col-sm-8 table-responsive">
+            <p class="lead">
+              <table id="printQolls" class="table table-stripped table-condensed table-hover">
+                <tbody>
+                {{#each allQolls}}
+                  <tr class="">
+                     <td class="qoll-text">
+            				   <ul class="list-group">
+            					  <li href="#" class="list-group-item active">
+                          <span class="">{{qollText}}</span>
+                          {{#if if_createusr}}
+							{{#if if_stored}}
+							<span class="pull-right send-qoll-btn"><i class="glyphicon glyphicon-send blue"></i></span>
+							{{/if}}
+							{{#if if_send}}
+								<span class="pull-right lock-qoll-btn"><i class="glyphicon glyphicon-lock red"></i></span>
+							{{/if}}
+                          {{/if}}
+                        </li>
+            				   <ul class="list-group indent-littlebit">
+            					   {{#eachport qollTypes}}
+            					   {{#include parent=.. }}
+            					    
+            					<li  href="#"  class="list-group-item qoll-response-val">{{_iter_v}}
+            										
+            					   <span class="badge pull-right">{{value_at ../../stats _iter_v}}</span>
+            					 
+            					</li>
+
+
+            						{{/include}}
+            						{{/eachport}}
+            			
+            				  </ul>
+            				</ul>
+      				   </td>
+                     
+
+                  </tr>
+                 {{/each}}
+                </tbody>
+              </table>
+            </p>
+          </div>
+
+          <div class="col-4 col-sm-4 centered">
+            <!--<div class="charts"></div>-->
+            <canvas id="charts" width="200" height="200"></canvas>
+            <div class="chartStats" id="chartStats"></div>
+          </div>
+
+        </div>
+
+        </div>
+        <div class="tab-pane" id="Social">
+          Social qolls here ...
+        </div>
+        <div class="tab-pane" id="Professional">
+          Professional qolls here ...
+        </div>
+        <div class="tab-pane" id="Explore">
+          Explore qolls here ...
+        </div>
       </div>
-      <p class="lead">
-        <table id="printQolls" class="table table-stripped table-condensed table-hover">
-          <tbody>
-          {{#each allQolls}}
-            <tr class="">
-               <td class="qoll-text">
-				   <ul class="list-group">
-					   <li href="#" class="list-group-item active">{{qollText}}</li>
-				   <ul class="list-group indent-littlebit">
-					   {{#eachport qollTypes}}
-					   {{#include parent=.. }}
-					    
-					<li  href="#"  class="list-group-item qoll-response-val">{{_iter_v}}
-										
-					 <span class="badge pull-right">{{value_at ../../stats _iter_v}}</span>
-					 
-					</li>
-
-						{{/include}}
-						{{/eachport}}
-			
-				</ul>
-				</ul>
-				   </td>
-               
-
-            </tr>
-           {{/each}}
-          </tbody>
-        </table>
-      </p>
     </div>
 
-    <div class="col-4 col-sm-4 centered">
-      <!--<div class="charts"></div>-->
-      <canvas id="charts" width="200" height="200"></canvas>
-      <div class="chartStats" id="chartStats"></div>
-    </div>
-
-  </div>
 </template>

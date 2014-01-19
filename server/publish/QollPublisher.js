@@ -83,11 +83,11 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	              self.added('all-qolls', item._id, q);
 	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
-	          }
-	          /**removed: function(item) {
+	          },
+	          removed: function(item) {
 	            self.removed('all-qolls', item._id);
 	            qlog.info('Removed item with id: ' + item._id);
-	          }**/
+	          }
 	        });
 	        var allUserGroups = [];
 	        (user.groups||[]).map(function (grpEntry){
@@ -111,11 +111,11 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	              self.added('all-qolls', item._id, q);
 	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
-	          }
-	          /**removed: function(item) {
+	          },
+	          removed: function(item) {
 	            self.removed('all-qolls', item._id);
 	            qlog.info('Removed item with id: ' + item._id);
-	          }**/
+	          }
 	        });	        
 		}
 	    // here we proceed with publishing qolls to group that one is member of
