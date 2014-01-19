@@ -132,19 +132,19 @@ Template.qolls.events({
             ReactiveDataSource.refresh('qollstat'+ qollId);
         }
     },
-	'click li': function(event){
+	'click li.qoll-response-val': function(event){
 		event.preventDefault();
 		
 		var qollId = this.parent._id;
 		var qoll = this.parent;
-		var answerIndex = event.target.id;
+		var answerIndex =0;//event.target.id;
 		var answerVal = this._iter_v;
 		
 		qlog.info('youclicked: ' +this._iter_v, filename);   
 		qlog.info('youclickedon: ' +event, filename);  
 		qlog.info('youclickedid: ' +qollId, filename);
 		qlog.info('the aindex ='+answerIndex,filename);
-	    Meteor.call('registerQollCustom', qollId, answerVal,answerIndex, function(err, qollRegId){
+	    Meteor.call('registerQollCustom', qollId, answerVal,0, function(err, qollRegId){
                 qlog.info('Registered qoll with id: ' + qollRegId+ answerVal+' err '+err, filename);
             });
 		ReactiveDataSource.refresh('qollstat'+ qollId);
@@ -182,8 +182,8 @@ Template.qolls.events({
 
         var ctx = $("#charts").get(0).getContext("2d");
 
-        qlog.info('Generating chart now', filename);
-        var str = chartStats(this._id,ctx);
+        qlog.info('******************Generating chart now', filename);
+        var str = chartStats(this,ctx);
         //LineChart(this._id, ctx);
         //PieChart(this._id, ctx);
         //DoughnutChart(this._id, ctx);

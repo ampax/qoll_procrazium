@@ -54,13 +54,16 @@ Meteor.methods({
 						canans=true;
 						qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
 					}
-					
+					//loopout:
 					for (var i = 0; i < (user.groups||[]).length; i++) {
-						if(qollFound.submittedToGroup.indexOf(user.groups[i])>-1){
-							canans=true;
-							qlog.info('In register custom qoll: can publish '+ user.groups[i], filename);
+						if ((qollFound.submittedToGroup||[]).indexOf(user.groups[i].groupName) >-1){
 					
-						}
+								canans=true;
+								//break loopout;
+								
+							}
+						
+						
 					}
 					if(canans){
 						//ansCount[qollFound.qollTypes.ind1exOf(qollTypeVal)]= ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]?ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]+1:1;
@@ -76,7 +79,7 @@ Meteor.methods({
 								qlog.info('subt one to '+ "stats."+existQollReg[0].qollTypeVal, filename);
 							}else{
 								statsFilter["stats."+ qollTypeVal ] = 0;
-								//qlog.info('no change to '+ "stats."+ qollTypeVal, filename);
+								qlog.info('no change to '+ "stats."+ qollTypeVal, filename);
 								}
 							QollRegister.update({_id : existQollReg[0]._id}, { $set: {qollTypeVal : qollTypeVal,'submittedOn' : new Date()}});
 							Qoll.update({_id:qollId},{ $inc: statsFilter } );//hopefully atomic so thread safe

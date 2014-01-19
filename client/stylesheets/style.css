@@ -182,6 +182,12 @@ i.red:before {
 i.red:hover {
     color: green;
 }
+
+span.qoll-badge {
+    float: left !important; 
+    white-space: nowrap !important;
+    background-color: #0044cc !important;
+}
 /** END: Glyph icon colors **/
 
 .is-visible {
@@ -232,6 +238,10 @@ div.panel-qoll-type-list {
 div.panel-body {
     height: 100px;
     overflow: scroll;
+}
+
+div#primary-tab { 
+    overflow: scroll !important;
 }
 
 div.qoll-panel {
@@ -336,4 +346,10 @@ span.qoll-toolbar-plain {
     border: none;
     width: 100%;
     text-align: center;
+}
+
+
+.list-group-item {
+    overflow: hidden !important;
+    padding: 5px 5px !important;
 }

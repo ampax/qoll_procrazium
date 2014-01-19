@@ -10,13 +10,19 @@
       "inspector": {},
       "chartjs": {},
       "HTML5-History-API": {},
-      "page-js-ie-support": {}
+      "page-js-ie-support": {},
+      "jquery-ui": {}
     },
     "packages": {
       "observatory": {
         "git": "https://github.com/jhoxray/observatory.git",
         "tag": "v0.3.21",
         "commit": "3d6b436af0a70b784d0f9ec4709907c77bd4fd63"
+      },
+      "highcharts": {
+        "git": "https://github.com/mikeschaekermann/meteor-highcharts.git",
+        "tag": "v0.1.0",
+        "commit": "eca115ee55e1cc083e389171717760dbaa727534"
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
@@ -52,6 +58,11 @@
         "git": "https://github.com/tmeasday/meteor-page-js-ie-support.git",
         "tag": "v1.3.5",
         "commit": "b99ed8380aefd10b2afc8f18d9eed4dd0d8ea9cb"
+      },
+      "jquery-ui": {
+        "git": "https://github.com/TimHeckel/meteor-jquery-ui.git",
+        "tag": "v1.9.2",
+        "commit": "c437d45edcf1367df8d5ffa8bad2867758030bd2"
       },
       "observatory-apollo": {
         "git": "https://github.com/superstringsoftware/observatory-apollo.git",
