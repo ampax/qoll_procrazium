@@ -16,9 +16,11 @@ Template.addQoll.helpers({
 
 Template.addQoll.events({
     'click .send-qoll': function(event){
+        event.preventDefault();
         processQoll('send', event);
     },
     'click .store-qoll': function(event){
+        event.preventDefault();
         processQoll('store', event);
     },
 });
