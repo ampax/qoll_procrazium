@@ -1,5 +1,19 @@
 <template name="dashboard">
-	<div class="container">
-			{{> qolls}}
+<div class="container">
+	<div class="row">
+
+		<div class="col-lg-12 col-md-12 col-xs-12 content1" id="content">	  
+    		{{#if iif_qolls}}
+    			{{> qolls}}
+    		{{/if}}
+    		{{#if iif_managecontacts}}
+    			{{> managecontacts}}
+    		{{/if}}
+    		{{#if iif_addQoll}}
+    			{{> addQoll}}
+    		{{/if}}
+		</div>
+
 	</div>
+</div>
 </template>

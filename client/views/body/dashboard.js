@@ -1,6 +1,6 @@
-var filename="client/views/mockups/mock1.js";
+var filename="client/views/body/dashboard.js";
 
-Template.mock1.helpers({
+Template.dashboard.helpers({
 	load_template: function(){
 		qlog.info('Loading the template: ' + Session.get('template'), filename);
 		var t = Spark.render(Template[Session.get("template")]);
@@ -30,7 +30,7 @@ Template.mock1.helpers({
     },
 });
 
-Template.mock1.dynamic_template = function(){
+Template.dashboard.dynamic_template = function(){
 	return Meteor.render(function(){
 		qlog.info("Rendering the new template: " + Session.get("template"), filename);
 		var t = Template[Session.get("template")];
@@ -39,7 +39,7 @@ Template.mock1.dynamic_template = function(){
 };
 
 
-Template.mock1.events({
+Template.dashboard.events({
 	'click .qoll-plus' : function(event){
 		event.preventDefault();
 		qlog.info('Clicked qoll-plus', filename);
@@ -63,6 +63,8 @@ Template.mock1.events({
 });
 
 
-Deps.autorun(function(){
+Template.dashboard.rendered = function(){
+    qlog.info('Running post rendered code', filename);
 
-});
+    //$('body').removeClass('bg1');
+}

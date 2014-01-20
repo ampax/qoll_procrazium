@@ -147,7 +147,7 @@ Template.qolls.events({
             ReactiveDataSource.refresh('qollstat'+ qollId);
         }
     },
-	'click li.qoll-response-val': function(event){
+	'click .qoll-response-val': function(event){
 		event.preventDefault();
 		
 		var qollId = this.parent._id;
@@ -160,8 +160,8 @@ Template.qolls.events({
 		qlog.info('youclickedid: ' +qollId, filename);
 		qlog.info('the aindex ='+answerIndex,filename);
 	    Meteor.call('registerQollCustom', qollId, answerVal,0, function(err, qollRegId){
-                qlog.info('Registered qoll with id: ' + qollRegId+ answerVal+' err '+err, filename);
-            });
+            qlog.info('Registered qoll with id: ' + qollRegId+ answerVal+' err '+err, filename);
+        });
 		ReactiveDataSource.refresh('qollstat'+ qollId);
 		},
 	'click .send-qoll-btn': function(event){
@@ -228,4 +228,18 @@ Template.qolls.rendered = function(){
 
     jQuery(".selector" ).tabs({ active: 1 });
     //jQuery(".selector" ).tabs({ "Primary", "active", 1 });
+
+
+    $("i.lock-btn").hover(
+       function () {
+        $(this).toggleClass('red');
+       }
+     );
+
+    $("i.lock-btn").click(function() {
+        //$("#ccc").slideDown('fast').show();
+        $(this).removeClass('orange').addClass('red');
+    });
+
+    //$('body').addClass('bg1');
 }

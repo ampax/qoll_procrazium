@@ -200,6 +200,10 @@ a:hover, a:active {
 }
 
 /** START: Glyph icon colors **/
+i.orange:before {
+    color: orange;
+}
+
 i.blue:before {
     color: blue;
 }
@@ -217,6 +221,7 @@ i.red:before {
 i.red:hover {
     color: green;
 }
+
 
 span.qoll-badge {
     float: left !important; 
@@ -369,14 +374,14 @@ a.group-plus {
     /**line-height: 40px;**/
     background-color: #F0F0F0;
     /**margin: 2px;**/
-    border-top: solid;
-    border-top-width: 1px;
-    border-top-style: solid;
-    border-top-color: #bdc3c7;
-    border-bottom: solid;
+    border: solid;
+    border-width: 1px;
+    border-style: solid;
+    border-color: #bdc3c7;
+    /**border-bottom: solid;
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    border-bottom-color: #bdc3c7;
+    border-bottom-color: #bdc3c7;**/
 }
 
 
@@ -396,6 +401,12 @@ span.qoll-toolbar-plain {
 .list-group-item {
     overflow: hidden !important;
     padding: 5px 5px !important;
+}
+
+.chartStats {
+    text-decoration: underline;
+    font-style: italic;
+    font-weight: bold;
 }
 
 

@@ -1,0 +1,91 @@
+/* Move down content because we have a fixed navbar that is 50px tall */
+
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+  /*background: url(https://s3.amazonaws.com/media.jetstrap.com/gzcwkVMBRKCdh44kdIn0_qoll_topfull.png) no-repeat center center fixed;
+  background-size: cover;
+  margin:0px;*/
+}
+
+.bg1 {
+  /**background: url(https://s3.amazonaws.com/media.jetstrap.com/gzcwkVMBRKCdh44kdIn0_qoll_topfull.png) no-repeat center center fixed;
+  background-size: cover;**/
+  margin:0px;
+  padding-top: 50px;
+  padding-bottom: 5px;
+
+  background: url(/img/brand_name_banner.png) no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+
+#Q, #Qbody {
+    color: #D10609;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-size: 48px;
+}
+#Q {
+  font-size:48px;
+  font-weight: bold;
+}
+#o {
+    color: #1CEC4D;
+    font-family: "Blackoak Std", Verdana;
+    font-size: 24px;
+}
+#ll {
+    color: #5973ED;
+    font-family: Verdana;
+    font-size: 40px;
+}
+#aps {
+    color: #FFFF00;
+    font-family: "Blackoak Std", Verdana;
+    font-size: 56px;
+}
+#motto {
+    color: #05274F;
+    font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;
+    font-weight: bold;
+    font-size: 28px;
+}
+#qoll {
+margin-top:40px;
+}
+h1 {
+  text-align:center;
+}
+#page-header { 
+  margin-top: 70px;
+}
+#footer {
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    background: transparent !important;
+}
+#footcontent {
+    text-align: center;
+    /**width: 50%;**/
+    margin: 0 auto;
+}
+#signbtn {
+    margin-top:15px ;
+    }
+#bs-navbar-collapse-1 ul li a:hover {
+   background:#369;
+   color:#fff;
+}
+#bs-navbar-collapse-1 ul li a.active,
+#bs-navbar-collapse-1 ul li a.active:hover {
+   color:#fff;
+   background:#000;
+   font-weight:bold;
+}
+#login-buttons {
+    margin-top:15px ;
+}

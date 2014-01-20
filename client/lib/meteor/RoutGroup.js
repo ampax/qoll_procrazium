@@ -2,8 +2,8 @@ var filename = 'client/lib/meteor/RoutGroup.js';
 
 Router.map(function(){
 	this.route('managecontacts', {
-		template: 'managecontacts',
-		path: '/managecontacts',
+		template: 'newgroup',
+		path: '/newgroup',
 		waitOn: function(){
 			
 		},

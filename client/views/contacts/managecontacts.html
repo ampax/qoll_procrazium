@@ -1,22 +1,22 @@
 <template name="managecontacts">
 	<div class="content">
 		<div class="qoll-toolbar">
-			<h4>Manage contacts -<h4>
+			<h4>Manage Contacts<h4>
 		</div><p></p>
 
 		<div class="input-group div-addgroup">
-		  <span class="input-group-addon">@User</span>
-		  <input type="text" class="form-control create-group" placeholder="Enter to put contacts in a group ...">
+		  <span class="input-group-addon">@Qoll</span>
+		  <input type="text" class="form-control create-group" placeholder="Enter Group Name ...">
 		</div><p></p>
 
 		<div class="input-group div-qoll-types">
-	  		<input type="text" class="qoll-type-option" id="addemail" placeholder="Email address ..."/>
+	  		<input type="text" class="qoll-type-option" id="addemail" placeholder="Enter Email ..."/>
 	  		<span class="input-group-addon input-group-addon-klik add-email">+Email</span>
 		</div><p></p>
 
 		<div class="panel panel-default panel-qoll-type-list" id="">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">Add emails to group -</h3>
+		    <h3 class="panel-title">Emails in the Group</h3>
 		  </div>
 		  <div class="panel-body" id="addedemails">
 		  	<!--div class="qoll-type-panel">Panel content 1</div-->
@@ -31,6 +31,7 @@
 		<a href="#" class="btn btn-primary create-group {{#unless currentUser}}disabled{{/unless}}" role="button">
 			<i class="glyphicon glyphicon-check"></i>Create Group</a>
 	</span>
+
 
 
 	

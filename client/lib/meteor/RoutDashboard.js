@@ -1,7 +1,7 @@
-var filename='client/lib/meteor/RoutAddQoll.js';
+var filename='client/lib/meteor/RoutDashboard.js';
 Router.map(function(){
 	this.route('dashboard', {
-		template: 'dashboard',
+		template: 'qolls',
 		path: '/dashboard',
 		waitOn: function(){
 			//add waiton for qolls from server to handle the latency for user here

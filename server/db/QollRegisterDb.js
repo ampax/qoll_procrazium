@@ -103,7 +103,7 @@ Meteor.methods({
 					
 				}
 			}
-            qlog.info('OUTOF register custom qoll', filename);
+            qlog.info('OUTOF register custom qoll' +qollRegId, filename);
 			return qollRegId;
 	}
 	

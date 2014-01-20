@@ -1,0 +1,40 @@
+<template name="header_awesome">
+  <!-- nav class="navbar navbar-default navbar-inverse " role="navigation" -->
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <!--div class="navbar-inner"-->
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar-collapse-1">
+            <span class="sr-only">Toggle Navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="# "><span id="Q">Q</span><span id="aps">:</span></a>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+            <!-- li class="active"><a class="brand" href="dashboard"><i class="fa fa-home fa-fw icon-cog"></i>Qoll</a></li -->
+            <li><a href="home"><span class="glyphicon glyphicon-home"></span></a></li>
+            {{#if currentUser}}
+            <li><a href="dashboard"><span class="glyphicon glyphicon-list"></span></a></li>
+            <li><a href="newqoll"><span class="glyphicon glyphicon-send"></span></a></li>
+            <li><a href="newgroup"><span class="glyphicon glyphicon-wrench"></span></a></li>
+            {{/if}}
+            <!-- li><a href="#about "><span class="glyphicon glyphicon-question-sign"></span></a></li>
+            <li><a href="#contact "><span class="glyphicon glyphicon-envelope"></span></a></li -->
+            <li>{{loginButtons align="right"}}</li>
+            
+            
+            <!-- li class=""><a href="newqoll"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Add</a></li>
+            <li class=""><a href="managecontacts"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Groups</a></li -->
+            {{#if currentUser.profile.admin}}
+            <li class=""><a href="admin"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Admin</a></li>
+            {{/if}}
+          </ul>
+        </div>
+      </div>
+    <!--/div-->
+  </div>
+<!-- /nav -->
+</template>
