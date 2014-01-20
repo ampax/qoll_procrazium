@@ -51,6 +51,8 @@ Template.addQoll.rendered = function() {
         jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
         $("#qollsendto").val('');
     });
+
+    $('body').removeClass('bg1');
 }
 
 processQoll = function(act, event) {

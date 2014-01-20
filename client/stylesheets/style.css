@@ -200,6 +200,14 @@ a:hover, a:active {
 }
 
 /** START: Glyph icon colors **/
+.bg-orange {
+    background-color: orange;
+}
+
+.orange {
+    color: orange;
+}
+
 i.orange:before {
     color: orange;
 }
@@ -401,6 +409,10 @@ span.qoll-toolbar-plain {
 .list-group-item {
     overflow: hidden !important;
     padding: 5px 5px !important;
+}
+
+.qoll-response-val:hover {
+    background-color: orange;
 }
 
 .chartStats {

@@ -45,4 +45,6 @@ Template.managecontacts.rendered = function() {
         jQuery('#addedemails').append("<div class='email-group-panel' id='emailtogrouppanel'>"+email+"</div>");
         $("#addemail").val('');
     });
+
+    $('body').removeClass('bg1');
 }
