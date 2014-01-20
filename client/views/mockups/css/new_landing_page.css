@@ -36,6 +36,12 @@ div#page-header {
   background-size: cover !important;
   /**overflow-y: hidden !important;**/
 }
+
+.loginButtons{
+     width: 200px;
+     background-color: cyan;
+}
+
 /**div.container {
   height: 100% !important;
 }**/

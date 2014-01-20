@@ -105,6 +105,6 @@ Meteor.methods({
 			}
             qlog.info('OUTOF register custom qoll' +qollRegId, filename);
 			return qollRegId;
-	}
+	},
 	
 });

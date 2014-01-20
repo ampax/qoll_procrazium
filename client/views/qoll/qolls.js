@@ -72,7 +72,7 @@ Template.qolls.helpers({
     },
     value_at:function (obj,val){
 		return obj?obj[val]:obj;
-		},
+	},
 	if_createusr: function (){
 		return (this.viewContext =='createUsr');
 	},
