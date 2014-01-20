@@ -14,15 +14,7 @@ HEADER {
     height: 64px;
     background-color: #ddd;
 }
-#side {
-    position: absolute;
-    top: 60px;
-    left: 0;
-    bottom: 0;
-    width: 10%;
-    background-color: #eee;
-    overflow: auto;
-}
+
 #Q {
     color: #D10609;
     font-family: Baskerville, "Palatino Linotype", Palatino, "Century Schoolbook L", "Times New Roman", serif;

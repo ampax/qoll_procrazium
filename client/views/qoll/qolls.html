@@ -30,6 +30,7 @@
               							{{#if if_send}}
               								<span class="pull-right lock-qoll-btn"><i class="glyphicon glyphicon-lock red"></i></span>
               							{{/if}}
+                            <span class="pull-right render-chart-btn"><i class="glyphicon glyphicon-stats green"></i></span>
                           {{/if}}
                         </li>
 
@@ -41,7 +42,9 @@
                   					   {{#eachport qollTypes}}
                   					   {{#include parent=.. }}
                   					    
-                      					<li  href="#" id= "{{_iter_ix}}"  class="list-group-item">{{_iter_v}}
+                      					<li  href="#" id= "{{_iter_ix}}"  class="list-group-item qoll-response-val">
+                                  <span class="badge pull-left {{qoll_abbr_class _iter_ix}}">{{qoll_type_abbr _iter_ix}}</span>
+                                  &nbsp;{{_iter_v}}
                       					   <span class="badge pull-right">{{value_at ../../stats _iter_v}}</span>
                       					</li>
 
@@ -51,8 +54,8 @@
                 				  </ul>
                         </div>
                         <div class="col-lg-4 col-md-4 col-xs-4">
-                          <canvas id="charts" width="50" height="50"></canvas>
-                          <div class="chartStats" id="chartStats"></div>
+                          <canvas id="charts{{_id}}" width="50" height="50"></canvas>
+                          <div class="chartStats{{_id}}" id="chartStats{{_id}}"></div>
                         </div>
 
             				</ul>

@@ -119,6 +119,12 @@ Template.qolls.helpers({
         //qlog.info('iif_default(qollType): ' + qollType, filename);
         if(qollType != 'yesno' && qollType != 'yesnomaybe' && qollType != 'likedislike' && qollType != 'likedislikeindiff')
             return 'default';
+    },
+    qoll_type_abbr: function(idx) {
+        return alphabetical[idx];
+    },
+    qoll_abbr_class: function(idx) {
+        return "class_"+idx;
     }
 });
 
@@ -196,7 +202,7 @@ Template.qolls.events({
         }
     },
 
-    'click .qoll-text': function(event) {
+    'click .render-chart-btn': function(event) {
         event.preventDefault();
         qlog.info('clicked to fetch stats for qoll with id: ' + this._id, filename);
         //var handle = QollStats.find(this._id);
@@ -204,11 +210,12 @@ Template.qolls.events({
         //qlog.info('Recieved qlog register data: ' + this._id + ', value: ' + $("div.charts").html(), filename);
         //$("#chart").highcharts(handle);
         //$("#charts").html(chartStats(this._id));
+        var chart_id = "#charts"+this._id;
+        var ctx = $(chart_id).get(0).getContext("2d");
+        qlog.info("Clicked on chart: charts" + this._id, filename);
 
-        var ctx = $("#charts").get(0).getContext("2d");
-
-        qlog.info('******************Generating chart now', filename);
-        var str = chartStats(this,ctx);
+        qlog.info('******************Generating chart now at location: ' + chart_id, filename);
+        var str = chartStats(this,ctx,"div.chartStats"+this._id);
         //LineChart(this._id, ctx);
         //PieChart(this._id, ctx);
         //DoughnutChart(this._id, ctx);
