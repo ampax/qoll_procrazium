@@ -34,8 +34,10 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                
 	                _id : item._id
 	              };
+	              var valtypehandle = QollRegister.find({'qollId' : item._id, 'submittedBy' : this.userId},{}).fetch();
+	              if(valtypehandle) qlog.info("Found valtypehandle ----> " + JSON.stringify(valtypehandle) + " qollId: " + item._id, filename);
 	              self.added('all-qolls', item._id, q);
-	              qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          changed: function(item, idx) {
@@ -55,8 +57,10 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                
 	                _id : item._id
 	              };
+	              var valtypehandle = QollRegister.find({'qollId' : item._id, 'submittedBy':this.userId},{});
+	              if(valtypehandle != undefined) qlog.info("Found valtypehandle ----> " + valtypehandle + " qollId: " + item._id, filename);
 	              self.changed('all-qolls', item._id, q);
-	              qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
 	          }
 	          /**removed: function(item) {
@@ -80,8 +84,10 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                
 	                _id : item._id
 	              };
+	              var valtypehandle = QollRegister.find({'qollId' : item._id, 'submittedBy':this.userId},{});
+	              if(valtypehandle != undefined) qlog.info("Found valtypehandle ----> " + valtypehandle + " qollId: " + item._id, filename);
 	              self.added('all-qolls', item._id, q);
-	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          removed: function(item) {
@@ -108,8 +114,10 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                
 	                _id : item._id
 	              };
+	              var valtypehandle = QollRegister.find({'qollId' : item._id, 'submittedBy':this.userId},{});
+	              if(valtypehandle != undefined) qlog.info("Found valtypehandle ----> " + valtypehandle + " qollId: " + item._id, filename);
 	              self.added('all-qolls', item._id, q);
-	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          removed: function(item) {
@@ -134,8 +142,10 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
                 qollTypes : item.qollTypes,
                 _id : item._id
               };
+              var valtypehandle = QollRegister.find({'qollId' : item._id, 'submittedBy':this.userId},{});
+	          if(valtypehandle != undefined) qlog.info("Found valtypehandle ----> " + valtypehandle + " qollId: " + item._id, filename);
               self.added('all-qolls', item._id, q);
-              qlog.info('Adding another PUBLIC RECIEVED qoll --------->>>>>'+item._id,filename);
+              //qlog.info('Adding another PUBLIC RECIEVED qoll --------->>>>>'+item._id,filename);
               //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(qtype));
               //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
             

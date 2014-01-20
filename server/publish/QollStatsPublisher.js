@@ -1,5 +1,37 @@
 var filename = 'server/publish/QollStatsPublisher.js';
 
+Meteor.publish("USR_QOLL_TYPE_VAL", function(qid){
+  var self = this;
+  var uuid = Meteor.uuid();
+  var initializing = true;
+  
+  qlog.info('In USR_QOLL_TYPE_VAL for: ' + qid, filename);
+
+  var handle = QollRegister.find({qollId : qid, 'submittedBy':this.userId}).observe({
+    added: function(doc, idx){
+      qlog.info('item added qoll type val---------------: ' + JSON.stringify(doc));
+      if(!initializing)
+        self.added("usr-qoll-type-val", doc._id, doc);
+    },
+    removed: function(doc){
+      self.removed("usr-qoll-type-val", doc._id);
+    },
+    changed: function(doc, idx){
+      qlog.info('changed qoll type-val for item-------------: ' + JSON.stringify(doc));
+      self.changed('usr-qoll-type-val', doc._id, doc);
+    }
+  });
+
+  qlog.info('Done initializing the publisher: USR_QOLL_TYPE_VAL, uuid: ' + uuid, filename);
+  initializing = false;
+  self.ready();
+  //self.flush();
+
+  self.onStop(function(){
+    handle.stop();
+  });
+});
+
 Meteor.publish("QOLL_DETAILS_BY_ID", function(qid){
   var self = this;
   var uuid = Meteor.uuid();
