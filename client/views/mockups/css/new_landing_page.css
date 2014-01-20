@@ -11,16 +11,34 @@ body {
 .bg1 {
   /**background: url(https://s3.amazonaws.com/media.jetstrap.com/gzcwkVMBRKCdh44kdIn0_qoll_topfull.png) no-repeat center center fixed;
   background-size: cover;**/
-  margin:0px;
-  padding-top: 50px;
-  padding-bottom: 5px;
+  margin-top:10px !important;
+  margin-bottom:470px !important;
+  overflow:  hidden !important;
+  /**padding-top: 50px !important;
+  padding-bottom: 5px !important;**/
 
   background: url(/img/brand_name_banner.png) no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
+  -webkit-background-size: cover !important;
+  -moz-background-size: cover !important;
+  -o-background-size: cover !important;
+  background-size: cover !important;
 }
+
+div#page-header {
+  position: fixed !important;
+  /**margin-top: -1px !important;
+  margin-bottom: 10px !important;
+  
+  margin-right: 0px !important;**/
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0px !important;
+  background-size: cover !important;
+  overflow-y: hidden !important;
+}
+/**div.container {
+  height: 100% !important;
+}**/
 
 
 #Q, #Qbody {
@@ -59,9 +77,9 @@ margin-top:40px;
 h1 {
   text-align:center;
 }
-#page-header { 
+/**#page-header { 
   margin-top: 70px;
-}
+}**/
 #footer {
     position: absolute;
     bottom: 0px;
