@@ -7,5 +7,6 @@ Template.brand_name.rendered = function(){
     //$('body').css('backgroundImage','url(https://s3.amazonaws.com/media.jetstrap.com/gzcwkVMBRKCdh44kdIn0_qoll_topfull.png) no-repeat center center fixed');
 
     //$(".brand_name div").css("background-image", $(this).attr("src"));
-    $('#page-header div').addClass('bg1');
+    //$('#page-header div').addClass('bg1');
+    $('body').addClass('bg1');
 }

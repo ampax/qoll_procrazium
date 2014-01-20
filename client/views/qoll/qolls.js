@@ -72,7 +72,7 @@ Template.qolls.helpers({
     },
     value_at:function (obj,val){
 		return obj?obj[val]:obj;
-		},
+	},
 	if_createusr: function (){
 		return (this.viewContext =='createUsr');
 	},
@@ -149,7 +149,22 @@ Template.qolls.events({
     },
 	'click .qoll-response-val': function(event){
 		event.preventDefault();
-		
+        //jQuery(this).removeClass('orange');
+        var chk=$(event.target);
+        if(chk.hasClass('qoll-response-val')) {
+            chk.siblings().removeClass('bg-orange');
+            chk.addClass('bg-orange');
+        }
+        chk=$(event.target).parent();
+        if(chk.hasClass('qoll-response-val')) {
+            chk.siblings().removeClass('bg-orange');
+            chk.addClass('bg-orange');
+        }
+        chk=$(event.target).parent().parent();
+        if(chk.hasClass('qoll-response-val')) {
+            chk.siblings().removeClass('bg-orange');
+            chk.addClass('bg-orange');
+        }
 		var qollId = this.parent._id;
 		var qoll = this.parent;
 		var answerIndex =0;//event.target.id;
@@ -163,6 +178,8 @@ Template.qolls.events({
             qlog.info('Registered qoll with id: ' + qollRegId+ answerVal+' err '+err, filename);
         });
 		ReactiveDataSource.refresh('qollstat'+ qollId);
+
+        $(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
 		},
 	'click .send-qoll-btn': function(event){
 		event.preventDefault();
@@ -242,4 +259,5 @@ Template.qolls.rendered = function(){
     });
 
     //$('body').addClass('bg1');
+    $('body').removeClass('bg1');
 }

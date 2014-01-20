@@ -9,6 +9,7 @@
     "chartjs": {},
     "HTML5-History-API": {},
     "page-js-ie-support": {},
-    "jquery-ui": {}
+    "jquery-ui": {},
+    "accounts-ui-bootstrap-3": {}
   }
 }

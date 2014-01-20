@@ -35,7 +35,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                _id : item._id
 	              };
 	              self.added('all-qolls', item._id, q);
-	              qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          changed: function(item, idx) {
@@ -56,7 +56,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                _id : item._id
 	              };
 	              self.changed('all-qolls', item._id, q);
-	              qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
 	          }
 	          /**removed: function(item) {
@@ -81,7 +81,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                _id : item._id
 	              };
 	              self.added('all-qolls', item._id, q);
-	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          removed: function(item) {
@@ -109,7 +109,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	                _id : item._id
 	              };
 	              self.added('all-qolls', item._id, q);
-	              qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
+	              //qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          removed: function(item) {
@@ -135,7 +135,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
                 _id : item._id
               };
               self.added('all-qolls', item._id, q);
-              qlog.info('Adding another PUBLIC RECIEVED qoll --------->>>>>'+item._id,filename);
+              //qlog.info('Adding another PUBLIC RECIEVED qoll --------->>>>>'+item._id,filename);
               //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(qtype));
               //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
             
