@@ -20,8 +20,8 @@
     
       {{#eachport qollTypes}}
       {{#include parent=.. }}
-      <div class="col-md-10 col-xs-10 list-group-item">
-        <div class="col-md-8 col-xs-8 indent-littlebit qoll-response-val" id= "{{_iter_ix}}">
+      <div class="col-md-10 col-xs-10 list-group-item  qoll-response-val">
+        <div class="col-md-8 col-xs-8 indent-littlebit" id="{{_iter_ix}}">
            <span class="badge pull-left {{qoll_abbr_class _iter_ix}}">{{qoll_type_abbr _iter_ix}}</span>
             &nbsp;{{_iter_v}}
         </div>
