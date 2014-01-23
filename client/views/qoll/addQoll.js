@@ -46,9 +46,14 @@ Template.addQoll.rendered = function() {
         if(!email) {
             return;/** wtf no email ... get out of here **/
         }
-        qlog.info("Adding new email: "+email, filename);
+         $.each(jQuery('#sendtoemails').split(/;|,/),function (ix,email){
+        	email=$.trim(email);
+        	qlog.info("Adding new email: "+email, filename);
+        	jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
+        });
+        
 
-        jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
+        
         $("#qollsendto").val('');
     });
 
