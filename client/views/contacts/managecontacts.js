@@ -41,10 +41,12 @@ Template.managecontacts.rendered = function() {
     jQuery('.add-email').click(function(){
         $.each($("#addemail").val().split(/;|,/),function (ix,email){
         	email=$.trim(email);
-        	qlog.info("Adding new email to the group: "+email, filename);
+        	if (email.length>0){
+        		qlog.info("Adding new email to the group: "+email, filename);
         	
 
-        	jQuery('#addedemails').append("<div class='email-group-panel' id='emailtogrouppanel'>"+email+"</div>");
+        		jQuery('#addedemails').append("<div class='email-group-panel' id='emailtogrouppanel'>"+email+"</div>");
+        	}
         });
         $("#addemail").val('');
     });
