@@ -42,13 +42,18 @@ Template.addQoll.rendered = function() {
     });
 
     jQuery('.send-to').click(function(){
-        var email = $("#qollsendto").val();
-        if(!email) {
+        var emailin = $("#qollsendto").val();
+        if(!emailin) {
             return;/** wtf no email ... get out of here **/
         }
-        qlog.info("Adding new email: "+email, filename);
-
-        jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
+         $.each(emailin.split(/;|,/),function (ix,email){
+        	email=$.trim(email);
+        	if(email.length>0){
+        		qlog.info("Adding new email: "+email, filename);
+        		jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
+        	}
+        });
+        
         $("#qollsendto").val('');
     });
 

@@ -1,4 +1,5 @@
 var filename = 'server/db/UserDb.js';
+QollGroups = new Meteor.Collection("QOLL_GROUPS");
 
 Meteor.methods({
 	currentUserName: function(){
@@ -15,16 +16,24 @@ Meteor.methods({
         qlog.info("Getting avatar for: " + Meteor.userId(), filename);
         return Meteor.users.find({_id : Meteor.userId()}).profile.avatar_url;
     },
-    updateUserGroup: function(groupName, userEmails) {
-        userEmails.map(function(userEmail){
-            //qlog.info('Updating the user for groups: *' + userEmail + '*, groupName: ' + groupName, filename);
-            //Mongo Query: - db.users.find({'emails.address': {$regex:'abc',$options:'i'}});
-            //var user = Users.findOne({'emails.address': {$regex:userEmail,$options:'i'}});
-            updateUserGroupWithEmail(groupName, userEmail);
-        });
+    
+	updateUserGroup: function(groupName, userEmails) {
+		var gpId = QollGroups.insert({
+			'groupName' : groupName,
+			'userEmails' : userEmails,
+			'submittedOn' : new Date(),
+			'submittedBy' : Meteor.userId()
+		});
+		userEmails.map(function(userEmail) {
+			//qlog.info('Updating the user for groups: *' + userEmail + '*, groupName: ' + groupName, filename);
+			//Mongo Query: - db.users.find({'emails.address': {$regex:'abc',$options:'i'}});
+			//var user = Users.findOne({'emails.address': {$regex:userEmail,$options:'i'}});
+			updateUserGroupWithEmail(groupName, userEmail);
+		});
 
-        updateUserGroupsCreated(groupName);
-    }
+		updateUserGroupsCreated(groupName);
+	}
+
 });
 
 

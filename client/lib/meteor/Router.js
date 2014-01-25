@@ -15,6 +15,15 @@ var active_brand_nav = function(){
 	});
 };
 
+checkSessionAndSendToHome = function() {
+	qlog.info('Sending user to home', filename);
+	if(!Meteor.userId) {
+		qlog.info('Sending user to home', filename);
+		this.redirect('/')
+		//Router.url('/');
+	}
+}
+
 Router.configure({
 	layout : 'layout',
 	loadingTemplate : 'loading',

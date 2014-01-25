@@ -39,10 +39,15 @@ Template.managecontacts.events({
 Template.managecontacts.rendered = function() {
     qlog.info('Loaded managecontacts', filename);
     jQuery('.add-email').click(function(){
-        var email = $("#addemail").val();
-        qlog.info("Adding new email to the group: "+email, filename);
+        $.each($("#addemail").val().split(/;|,/),function (ix,email){
+        	email=$.trim(email);
+        	if (email.length>0){
+        		qlog.info("Adding new email to the group: "+email, filename);
+        	
 
-        jQuery('#addedemails').append("<div class='email-group-panel' id='emailtogrouppanel'>"+email+"</div>");
+        		jQuery('#addedemails').append("<div class='email-group-panel' id='emailtogrouppanel'>"+email+"</div>");
+        	}
+        });
         $("#addemail").val('');
     });
 
