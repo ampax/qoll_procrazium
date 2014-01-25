@@ -66,7 +66,11 @@ jQuery('.qoll-grp-select').click(function(){
         	email=$.trim(email);
         	if(email.length>0){
         		qlog.info("Adding new email: "+email, filename);
-        		jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>");
+        		jQuery('#sendtoemails').append($("<div class='email-panel qoll-panel' id='email-panel'>"+email+"</div>").append(
+        			$("<i class='fa fa-times pull-right'></i>").click(function(){
+        					qlog.info("clicked: "+$(this).parent().text(), filename);
+							$(this).closest('div').remove();
+        			})));
         	}
         });
         
