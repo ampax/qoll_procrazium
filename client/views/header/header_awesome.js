@@ -1,4 +1,12 @@
 Template.header_awesome.rendered = function()
 {
-    //Accounts._loginButtonsSession.set('dropdownVisible', true);
+ // Close bootstrap's dropdown menu after clicking
+    $('.collapse-onclick').each(function() {
+        $(this).on("click", function () {
+            var $obj = $($(this).parents('.in')[0]);
+            $obj.animate({'height': '1px'}, function() {
+                $obj.removeClass('in').addClass('collapse');
+            });
+        });
+    });
 };
