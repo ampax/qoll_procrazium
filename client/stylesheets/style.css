@@ -422,5 +422,16 @@ span.qoll-toolbar-plain {
 }
 
 
+.ios-enabled
+{
+    cursor: pointer;
+}
+
+/* stop the glowing blue shadow */
+.ios-enabled .add-on .form-control:focus {
+    box-shadow:none;
+    -webkit-box-shadow:none; 
+    border-color:#cccccc; 
+}
 
 /****/
