@@ -1,17 +1,24 @@
 var filename="client/views/qoll/addQoll.js";
 
-var StdQollTypes = new Meteor.Collection("standard-qoll-types");
-var CstQollTypes = new Meteor.Collection("custom-qoll-types");
+//var StdQollTypes = new Meteor.Collection("standard-qoll-types");
+//var CstQollTypes = new Meteor.Collection("custom-qoll-types");
+var QollGps = new Meteor.Collection("qoll-groups");
 
 Template.addQoll.helpers({
     allQollTypes: function(event){
         qlog.info('Getting the qoll-types standard + custom');
-        var std = StdQollTypes.find().fetch();
-        var cst = CstQollTypes.find().fetch();
+        //var std = StdQollTypes.find().fetch();
+        //var cst = CstQollTypes.find().fetch();
         //qlog.info('standard qtypes: ' + JSON.stringify(std), filename);
-        var qtypes = _.union(std, cst);// std.concat(cst).unique();
+        //var qtypes = _.union(std, cst);// std.concat(cst).unique();
         return qtypes;
     },
+     qollGroups: function(event){
+        qlog.debug("Getting all the qoll gps ......", filename);                                                                                                                
+        var q = QollGps.find({}, { reactive:true});
+        qlog.info("Found qollGP: " + JSON.stringify(q.fetch()), filename);
+        return q;
+    }
 });
 
 Template.addQoll.events({
@@ -30,6 +37,7 @@ Template.addQoll.events({
 /** jQuery functionality will come here **/
 Template.addQoll.rendered = function() {
     qlog.info('Loaded addQoll', filename);
+    //qoll-group-list
     jQuery('.add-option').click(function(){
         var option = $("#qolltypeoption").val();
         if(!option) {
@@ -40,7 +48,15 @@ Template.addQoll.rendered = function() {
         jQuery('#qolloptions').append("<div class='qollentry-panel qoll-panel' id='qolltype-panel'>"+option+"</div>");
         $("#qolltypeoption").val('');
     });
-
+jQuery('.qoll-grp-select').click(function(){
+	var selectedgp = $(this).text();
+	selectedgp = $.trim(selectedgp);
+	qlog.info("Selected Group: "+selectedgp, filename);
+	if(!selectedgp) {
+       return;/** wtf no email ... get out of here **/
+    }
+	jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+selectedgp+"</div>");
+});
     jQuery('.send-to').click(function(){
         var emailin = $("#qollsendto").val();
         if(!emailin) {
