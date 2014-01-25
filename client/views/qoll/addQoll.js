@@ -53,9 +53,13 @@ jQuery('.qoll-grp-select').click(function(){
 	selectedgp = $.trim(selectedgp);
 	qlog.info("Selected Group: "+selectedgp, filename);
 	if(!selectedgp) {
-       return;/** wtf no email ... get out of here **/
+       return;/** wtf no group ... get out of here **/
     }
-	jQuery('#sendtoemails').append("<div class='email-panel qoll-panel' id='email-panel'>"+selectedgp+"</div>");
+	jQuery('#sendtoemails').append($("<div class='email-panel qoll-panel' id='email-panel'>"+selectedgp+"</div>").append(
+        			$("<i class='fa fa-times pull-right'></i>").click(function(){
+        					qlog.info("clicked: "+$(this).parent().text(), filename);
+							$(this).closest('div').remove();
+        			})));
 });
     jQuery('.send-to').click(function(){
         var emailin = $("#qollsendto").val();
