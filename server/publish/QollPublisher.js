@@ -16,7 +16,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 			qlog.info('MY  USER --------->>>>>'+user);
 			qlog.info('MY  USER --------->>>>>'+user.emails);
 			
-			
+			//submitted by this user
 			var handle = Qoll.find({'submittedBy':this.userId}, {sort:{'submittedOn':-1}, reactive:true}).observe({
 	          added: function(item, idx) {
 				  
@@ -64,15 +64,20 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	            qlog.info('Removed item with id: ' + item._id);
 	          }**/
 	        });
-	        
+	        //send to me
 	        var handle = Qoll.find({'submittedTo':user.emails[0].address,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
 	          added: function(item, idx) {
+	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
+	          	  var sentby ='';
+				  if (usentby.length>0)
+				 	sentby= ufound[0].emails[0].address;
 	              var q = {
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
 	                qollTypes : item.qollTypes,
 	                submittedOn : item.submittedOn,
 	                submittedBy : item.submittedBy,
+	                sendingUser : sentby,
 	                submittedTo : item.submittedTo,
 	                action :item.action,
 	                qollTypes : item.qollTypes,
@@ -95,12 +100,17 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 				});
 	        var handle = Qoll.find({'submittedToGroup':{$in : allUserGroups},'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
 	          added: function(item, idx) {
+	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
+	          	  var sentby ='';
+				  if (usentby.length>0)
+				 	sentby= ufound[0].emails[0].address;
 	              var q = {
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
 	                qollTypes : item.qollTypes,
 	                submittedOn : item.submittedOn,
 	                submittedBy : item.submittedBy,
+	                sendingUser : sentby,
 	                submittedTo : item.submittedTo,
 	                action :item.action,
 	                qollTypes : item.qollTypes,

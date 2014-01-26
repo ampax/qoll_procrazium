@@ -16,6 +16,9 @@
           {{/if}}
           <span class="pull-right render-chart-btn"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
         {{/if}}
+        {{#unless if_createusr}}
+        	<span class="badge pull-right">{{sendingUser}}</span>
+        {{/unless}}
       </div>
     </div>
     
