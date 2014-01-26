@@ -3,6 +3,7 @@
 <div class="container" id="qoll-container-id">
   <div class="row">
     {{#each allQolls}}
+    <div>
     <div class="col-md-12 col-xs-12 list-group-item">
       <div class="col-md-10 col-xs-10">{{qollText}}</div>
       <div class="col-md-2 col-xs-2">
@@ -37,7 +38,7 @@
         <canvas id="charts{{_id}}" width="50" height="50"></canvas>
         <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
       </div>
-
+</div>
     {{/each}}
   </div>
 </div>

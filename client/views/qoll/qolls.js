@@ -151,19 +151,27 @@ Template.qolls.events({
 		event.preventDefault();
         //jQuery(this).removeClass('orange');
         var chk=$(event.target);
+        var foundorange=false;
         if(chk.hasClass('qoll-response-val')) {
             chk.siblings().removeClass('bg-orange');
             chk.addClass('bg-orange');
+            foundorange=true;
         }
+        if(!foundorange){
         chk=$(event.target).parent();
         if(chk.hasClass('qoll-response-val')) {
             chk.siblings().removeClass('bg-orange');
             chk.addClass('bg-orange');
         }
+        foundorange=true;
+        }
+        if(!foundorange){
         chk=$(event.target).parent().parent();
         if(chk.hasClass('qoll-response-val')) {
             chk.siblings().removeClass('bg-orange');
             chk.addClass('bg-orange');
+        }
+        foundorange=true;
         }
 		var qollId = this.parent._id;
 		var qoll = this.parent;
