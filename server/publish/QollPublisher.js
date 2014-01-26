@@ -70,7 +70,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
 	          	  var sentby ='';
 				  if (usentby.length>0)
-				 	sentby= ufound[0].emails[0].address;
+				 	sentby= usentby[0].emails[0].address;
 	              var q = {
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
@@ -103,7 +103,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
 	          	  var sentby ='';
 				  if (usentby.length>0)
-				 	sentby= ufound[0].emails[0].address;
+				 	sentby= usentby[0].emails[0].address;
 	              var q = {
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
