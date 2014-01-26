@@ -11,7 +11,7 @@ Meteor.methods({
                     'submittedOn' : new Date(),
                     'submittedBy' : Meteor.userId(),
                     'submittedByEmail' : getCurrentEmail,
-                    'submittedTo' : ['priyankasharma181@gmail.com','kaushik.amit@gmail.com'],
+                    'submittedTo' : [],
                     'qollType' : qollType
                 });
             
@@ -62,7 +62,32 @@ Meteor.methods({
 				}
 		
 			}
-		}
+		},
+        updateQoll: function(qollText, qollTypes, emails, qollId){
+            var userId= Meteor.userId();
+            var i =0, actualmails=[],actualgroups=[];
+            
+            for (i=0;i<(emails||[]).length ; i++){
+                if(emails[i].indexOf('@')>-1){
+                    actualmails.push(emails[i]);
+                }else{
+                    actualgroups.push(emails[i]);
+                }
+            }
+
+            if(userId && qollId) {
+                Qoll.update({'_id':qollId}, 
+                    {$set:
+                        {qollText:qollText, 
+                            qollTypes: qollTypes, 
+                            submittedTo : actualmails,
+                            updatedOn : new Date()
+                        }
+                    });
+                qlog.info('Qoll updated with id: ' + qollId, filename);
+                return qollId;
+            }
+        },
         
         
         
