@@ -1,6 +1,6 @@
 {
     "name": "Qoll"
-  , "version": "0.1.4"
+  , "version": "0.1.4.1"
   , "engines": {
       "node": "0.10.22"
   }
