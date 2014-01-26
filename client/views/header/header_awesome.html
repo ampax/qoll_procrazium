@@ -13,7 +13,7 @@
           <a class="navbar-brand" href="# "><img src="/img/QollBrand.png"></a>
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-          <ul class="nav navbar-nav">
+          <ul class="nav navbar-nav collapse-onclick">
             <!-- li class="active"><a class="brand" href="dashboard"><i class="fa fa-home fa-fw icon-cog"></i>Qoll</a></li -->
             <li><a href="home"><span class="glyphicon glyphicon-home"></span></a></li>
             {{#if currentUser}}
@@ -32,7 +32,6 @@
             <li class=""><a href="admin"><i class="fa fa-cogs"></i>Admin</a></li>
             {{/if}}
           </ul>
-
           
             <ul class="nav navbar-nav navbar-right">
               {{ loginButtons }} <!-- here -->

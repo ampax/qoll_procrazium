@@ -6,10 +6,12 @@ Router.map(function(){
 		path: '/newqoll',
 		waitOn: function(){
 			Meteor.subscribe('OPEN_QOLL_PUBLISHER');
+			Meteor.subscribe('QOLL_GROUP_PUBLISHER');
 		},
 		before: [function(){
 			qlog.info('Subscribing to OPEN_QOLL_PUBLISHER ...', filename);
 			Meteor.subscribe('OPEN_QOLL_PUBLISHER');
+			Meteor.subscribe('QOLL_GROUP_PUBLISHER');
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();

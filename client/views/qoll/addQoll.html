@@ -17,11 +17,23 @@
 			</div>
 
 			<div class="input-group div-qoll-types pull-right">
-		  		<input type="text" class="qoll-type-option" id="qollsendto" placeholder="Type Group/Email(s) eg user12345@qoll.io;user54321@qoll.io,user4567@qoll.io"/>
-		  		<span class="input-group-addon input-group-addon-klik send-to ios-enabled">+Send to</span>
-			</div>
-
+		  		<input type="text" class="qoll-type-option" id="qollsendto" placeholder="Enter Email(s) user12345@qoll.io;user54321@qoll.io,user4567@qoll.io"/>
+		  		<span class="input-group-addon input-group-addon-klik send-to ios-enabled">+Email</span>
+		  		<div class ="btn-group">
+		  		 <button type="button" class="btn btn-default dropdown-toggle ios-enabled" data-toggle="dropdown">+Select Groups<span class="caret"></span>
+  </button> 
+  
+  <ul class="dropdown-menu qoll-group-list" role="menu">
+  	 {{#each qollGroups}}
+  	<li class= "qoll-grp-select"><a href="#">{{this.name}}</a></li>
+  	{{/each}}
+  </ul>
+		  				
+</div>
 		</div>
+	
+			
+			</div>
 		<p></p><p>&nbsp;</p>
 		<div class="options-and-users">
 
