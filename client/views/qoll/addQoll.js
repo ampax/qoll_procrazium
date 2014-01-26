@@ -95,8 +95,8 @@ processQoll = function(act, event) {
 
     var emails = new Array();
     $('.email-panel').each(function(){
-        qlog.info('found email: ' + $(this).html());
-        emails.push($(this).html());
+        qlog.info('found email: ' + $(this).text());
+        emails.push($(this).text());
     });
 
     if(!preCheckFailed(qollText, qollTypes)) {
