@@ -155,3 +155,73 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
                 handle.stop();
         });
 }); 
+
+
+
+
+/**
+* This method publishes all the qolls for the user which are still open for edit.
+* Further variants for this section can be - clone an active or deactivated qoll 
+* to create new qolls or reopen a qoll for public
+**/
+Meteor.publish('OPEN_QOLL_PUBLISHER', function(){
+	//Get all the qolls created by this user which are still open for edit
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	if(this.userId) {
+		var handle = Qoll.find({'submittedBy':this.userId, action : {$in :["store"]}}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+          added: function(item, idx) {
+			  
+              var q = {
+                qollTitle : item.qollTitle,
+                qollText : item.qollText,
+                qollTypes : item.qollTypes,
+                submittedOn : item.submittedOn,
+                submittedBy : item.submittedBy,
+                submittedTo : item.submittedTo,
+                action :item.action,
+                qollTypes : item.qollTypes,
+                stats: item.stats,
+                viewContext: "createUsr",
+                
+                _id : item._id
+              };
+              self.added('all-open-qolls', item._id, q);
+              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+
+          },
+          changed: function(item, idx) {
+			  
+            
+	          var q = {
+	            qollTitle : item.qollTitle,
+	            qollText : item.qollText,
+	            qollTypes : item.qollTypes,
+	            submittedOn : item.submittedOn,
+	            submittedBy : item.submittedBy,
+	            submittedTo : item.submittedTo,
+	            action :item.action,
+	            qollTypes : item.qollTypes,
+	            stats: item.stats,
+	            viewContext: "createUsr",
+	            
+	            _id : item._id
+	          };
+	          self.changed('all-open-qolls', item._id, q);
+	          //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
+
+          },
+          removed: function(item) {
+            self.removed('all-open-qolls', item._id);
+            qlog.info('Removed item with id: ' + item._id);
+          }
+        });
+
+		self.ready();
+		self.onStop(function(){
+			qlog.info('Stopping the OPEN_QOLL_PUBLISHER publisher: ' + this.userId, filename);
+            handle.stop();
+        });
+	}
+});

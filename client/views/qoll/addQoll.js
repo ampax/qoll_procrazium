@@ -23,6 +23,15 @@ Template.addQoll.events({
         event.preventDefault();
         processQoll('store', event);
     },
+    'click .discard-qoll': function(event){
+        qlog.info('Cancelling the changes', filename);
+        event.preventDefault();
+        $("div#update-section").addClass('is-invisible');
+        $("div#insert-section").removeClass('is-invisible');
+        $('.qoll-panel').remove();
+        $("#qollText").val('');
+        $("div#update_qoll_id").val('')
+    },
 });
 
 
@@ -61,6 +70,13 @@ Template.addQoll.rendered = function() {
 }
 
 processQoll = function(act, event) {
+    var _id = $("div#update_qoll_id").val();
+    if(_id) {
+        qlog.info('Updating with id --------> ' + _id, filename);
+    } else {
+        qlog.info('Will insert a new qoll', filename);
+    }
+
     var qollText = $("#qollText").val();
     qlog.info('Submitting the qols here==>> qollText: ' + qollText, filename);
     var qollTypes = new Array();
@@ -77,11 +93,21 @@ processQoll = function(act, event) {
 
     if(!preCheckFailed(qollText, qollTypes)) {
         qlog.info('to send to database: ' + qollText + ', ' + qollTypes + ', ' + emails, filename);
-        Meteor.call("addQoll", act, qollText, qollTypes, emails, function(error, qollId){
-            qlog.info("Added qoll with id: " + qollId, filename);
-        });
+        if(!_id) {
+            Meteor.call("addQoll", act, qollText, qollTypes, emails, function(error, qollId){
+                qlog.info("Added qoll with id: " + qollId, filename);
+            });
+        } else {
+            //send an update here
+            Meteor.call("updateQoll", qollText, qollTypes, emails, _id, function(error, qollId){
+                qlog.info("Added qoll with id: " + qollId, filename);
+            });
+            $("div#update-section").addClass('is-invisible');
+            $("div#insert-section").removeClass('is-invisible');
+        }
         $('.qoll-panel').remove();
         $("#qollText").val('');
+        $("div#update_qoll_id").val('')
     } else {
         qlog.info('Pre check failed, returning', filename);
         return;

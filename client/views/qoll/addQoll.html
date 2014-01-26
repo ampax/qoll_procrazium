@@ -46,6 +46,8 @@
 			</div>
 		</div>
 
+		<div class="is-invisible" id="update_qoll_id"></div>
+
 	</div>
 
 
@@ -61,12 +63,18 @@
 	<div class="col-2 col-xs-4"-->
 	<span >
 		<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
-		<a href="#" class="btn btn-primary store-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
-			<i class="glyphicon glyphicon-save"></i>Store Qoll</a>
-		<a href="#" class="btn btn-primary send-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
-			<i class="glyphicon glyphicon-send"></i>Send Qoll</a>
+		<div class="" id="insert-section">
+			<a href="#" class="btn btn-primary store-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-save"></i>Store</a>
+			<a href="#" class="btn btn-primary send-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-send"></i>Send</a>
+		</div>
+
+		<div class="is-invisible" id="update-section">
+			<a href="#" class="btn btn-primary store-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-open"></i>Update</a>
+			<a href="#" class="btn btn-danger discard-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-remove"></i>Cancel</a>
+		</div>
 	</span>
-
-
-	
 </template>
