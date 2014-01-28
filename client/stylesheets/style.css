@@ -449,3 +449,11 @@ span.qoll-toolbar-plain {
     -webkit-box-shadow:none; 
     border-color:#cccccc; 
 }
+
+.sender-badge{
+	
+	width:100%; 
+white-space: nowrap; 
+overflow: hidden;
+text-overflow: ellipsis; 
+}
