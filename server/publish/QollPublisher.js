@@ -94,11 +94,13 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	            qlog.info('Removed item with id: ' + item._id);
 	          }
 	        });
+	        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
 	        var allUserGroups = [];
-	        (user.groups||[]).map(function (grpEntry){
-				allUserGroups.push(grpEntry.groupName);
+	        gpsraw.forEach(function (grpEntry){
+				allUserGroups.push({'submittedToGroup':grpEntry.groupName,'submittedBy':grpEntry.submittedBy});
 				});
-	        var handle = Qoll.find({'submittedToGroup':{$in : allUserGroups},'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+			
+	        var handle = Qoll.find({'$or' :allUserGroups,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
 	          added: function(item, idx) {
 	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
 	          	  var sentby ='';

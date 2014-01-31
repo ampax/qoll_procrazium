@@ -16,11 +16,11 @@ Meteor.publish('QOLL_GROUP_PUBLISHER', function(){
 			qlog.info('MY  USER --------->>>>>'+user.groupsCreated);
 			qlog.info('MY  USER --------->>>>>'+user.groupsCreated);
 			
-			
+			var gpsraw= QollGroups.find({'userEmails':user.emails[0].address},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
 	        var allUserGroups = [];
-	        (user.groupsCreated||[]).map(function (grpEntry){
-				allUserGroups.push(grpEntry);
-				self.added('qoll-groups', grpEntry, {name:grpEntry});
+	        gpsraw.forEach(function (grpEntry){
+				allUserGroups.push(grpEntry.groupName);
+				self.added('qoll-groups', grpEntry, {name:grpEntry.groupName});
 				});
 	              
 		}
