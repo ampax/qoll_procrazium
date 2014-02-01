@@ -49,37 +49,34 @@ Meteor.methods({
 				//		qlog.info('qoll  USERID --------->>>>>'+qollFound.submittedTo[i], filename);
 				//		}
 				
-				
-				
-					if(qollFound.submittedTo.indexOf(user.emails[0].address)>-1){
-						canans=true;
-						qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
-					}
-					//loopout:
-					for (var i = 0; i < (user.groups||[]).length; i++) {
-						if ((qollFound.submittedToGroup||[]).indexOf(user.groups[i].groupName) >-1){
-					
-								canans=true;
-								//break loopout;
-								
-							}
-						
-						
-					}
+			if(qollFound.submittedToGroup.length>0){		        
+	        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address,'submittedBy':qollFound.submittedBy,'groupName':{$in:qollFound.submittedToGroup}},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
+			qlog.info('Custom one two three ' + user.emails[0].address + ', ' + qollFound.submittedBy + ', ' + Meteor.userId(), filename);
+	        var allUserGroups = [];
+	        gpsraw.forEach(function (grpEntry){
+				canans=true;
+				});
+			}
+			if(qollFound.submittedTo.indexOf(user.emails[0].address)>-1)
+			{
+				canans=true;
+				qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
+			}	
 					if(canans){
 						//ansCount[qollFound.qollTypes.ind1exOf(qollTypeVal)]= ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]?ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]+1:1;
 						var statsFilter ={};
-						statsFilter["stats."+ qollTypeVal +""] = 1;
+						var qolltypkey = qollTypeVal.replace(/\./g,"_");
+						statsFilter["stats."+ qolltypkey +""] = 1;
 						
-						qlog.info('adding one to '+ "stats."+ qollTypeVal, filename);
+						qlog.info('adding one to '+ "stats."+ qolltypkey, filename);
 						if(existQollReg.length > 0){
-							if("stats."+ qollTypeVal !="stats."+existQollReg[0].qollTypeVal){
+							if("stats."+ qolltypkey !="stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") ){
 								
-								statsFilter["stats."+existQollReg[0].qollTypeVal ] = -1;
+								statsFilter["stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") ] = -1;
 								
-								qlog.info('subt one to '+ "stats."+existQollReg[0].qollTypeVal, filename);
+								qlog.info('subt one to '+ "stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") , filename);
 							}else{
-								statsFilter["stats."+ qollTypeVal ] = 0;
+								statsFilter["stats."+ qolltypkey ] = 0;
 								qlog.info('no change to '+ "stats."+ qollTypeVal, filename);
 								}
 							QollRegister.update({_id : existQollReg[0]._id}, { $set: {qollTypeVal : qollTypeVal,'submittedOn' : new Date()}});
