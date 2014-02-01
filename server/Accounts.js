@@ -1,6 +1,6 @@
 var filename = 'server/Accounts.js';
 
-/**AccountsDummy.onCreateUser(function(options, user){
+/**Accounts.onCreateUser(function(options, user){
 	qlog.info('Printing the user information: ' + JSON.stringify(user), filename);
 	qlog.info('Printing the options information: ' + JSON.stringify(options), filename);
 	qlog.info('Printing the services: ' + JSON.stringify(user.services), filename);
@@ -70,7 +70,7 @@ var filename = 'server/Accounts.js';
 	    //
 	    //	Remove the existing record - CHECK WHY DO WE NEED THIS LOGIC HERE
 	    //	Can we just update the existing record and 
-	    
+
 	    Meteor.users.remove({_id: existingUser._id});
     }
 });
