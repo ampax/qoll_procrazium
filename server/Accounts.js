@@ -1,79 +1,80 @@
 var filename = 'server/Accounts.js';
 
-Accounts.onCreateUser(function(options, user){
+/**Accounts.onCreateUser(function(options, user){
 	qlog.info('Printing the user information: ' + JSON.stringify(user), filename);
 	qlog.info('Printing the options information: ' + JSON.stringify(options), filename);
 	qlog.info('Printing the services: ' + JSON.stringify(user.services), filename);
 
     if (user.services) {
-    	/** Get the service and email from the user object returned by the service **/
+    	// Get the service and email from the user object returned by the service 
 	    var service = _.keys(user.services)[0];
 	    var email = user.services[service].email;
-	    /** Set the profile from options **/
+	    // Set the profile from options 
     	if (options.profile) {
 	        user.services[service].profile = options.profile
 	    }
 	    qlog.info('Service: ' + service + ', email: ' + email);
 
-	    /** Set the email from user object returned by the service **/
+	    // Set the email from user object returned by the service 
 	    if (!email) {
 	        if (user.emails) {
 	            email = user.emails.address;
 	        }
 	    }
 
-	    /** Still no email, try the options **/
+	    // Still no email, try the options 
 	    if (!email) {
 	        email = options.email;
 	    }
 
-	    /** At this point, return since the user can not be mapped with no email **/
+	    // At this point, return since the user can not be mapped with no email 
 	    if (!email) {
 	        return user;
 	    }
 
-	    /**
-	    	Past this point, initialize the user with further information
-	    	See if any existing user has this email address
-	    	If there is no existing-user
-	    **/
-	    /** see if any existing user has this email address, otherwise create new **/
+	    
+	    //	Past this point, initialize the user with further information
+	    //	See if any existing user has this email address
+	    //	If there is no existing-user
+	    
+	    // see if any existing user has this email address, otherwise create new 
 	    var existingUser = Meteor.users.findOne({'emails.address': email});
 	    if(!existingUser) {
-	        /** if User exists else if user does not exist **/
+	        // if User exists else if user does not exist 
 	        if(!userDoesntExist(email)) {
-	        	/** The user does not exist in the DB yet, initialize it with some more info and return it **/
+	        	// The user does not exist in the DB yet, initialize it with some more info and return it
 	        	initUser(service, user);
 	        	return user;
 	        } else {
-	        	/** Find existing server for the service and email-id the user is trying to login with **/
+	        	// Find existing server for the service and email-id the user is trying to login with
 	        	existingUser = existingUserForService(service, email);
 	        	if(existingUser) {
 	        		if(user.emails) {
-	        			/** User is signing in by emails, set it to user emails **/
+	        			// User is signing in by emails, set it to user emails 
 	        			existingUser.emails = user.emails;
 	        		}
 	        	}
 	        }
 	    }
 
-	    /** Precaution, these will exist from accounts-password if used **/
+	    // Precaution, these will exist from accounts-password if used 
 	    if (!existingUser.services) {
 	        existingUser.services = { resume: { loginTokens: [] }};
 	    }
-	    /** Copy across the new service info **/
+	    // Copy across the new service info 
 	    existingUser.services[service] = user.services[service];
 	    existingUser.services.resume.loginTokens.push(
 	        user.services.resume.loginTokens[0]
 	    );
 
-	    /** 
-	    	Remove the existing record - CHECK WHY DO WE NEED THIS LOGIC HERE
-	    	Can we just update the existing record and 
-	     **/
+	    //
+	    //	Remove the existing record - CHECK WHY DO WE NEED THIS LOGIC HERE
+	    //	Can we just update the existing record and 
+
 	    Meteor.users.remove({_id: existingUser._id});
     }
 });
+**/
 
 
 /** Find whether user with the email-id exists or not **/
