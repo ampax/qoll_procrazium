@@ -13,7 +13,7 @@ Router.map(function(){
 			//Meteor.subscribe('all-qolls').wait();
 			qlog.info('Subscribing to All_QOLL_PUBLISHER/QOLL_STATS_BY_ID/USR_QOLL_TYPE_VAL ...', filename);
 			Meteor.subscribe('All_QOLL_PUBLISHER');
-			//Meteor.subscribe('USR_QOLL_TYPE_VAL');
+			Meteor.subscribe('QOLL_REG_PUBLISHER');
 			//Meteor.subscribe('QOLL_STATS_BY_ID', 'Jk8zMvBt4Wbd58tXA');//passing a dummy id to subscribe to the publish
 		}, function(){
 			//active_nav();
