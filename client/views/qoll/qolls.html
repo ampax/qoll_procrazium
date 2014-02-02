@@ -4,7 +4,7 @@
   <div class="row">
     {{#each allQolls}}
     <div>
-    <div class="col-md-12 col-xs-12 list-group-item">
+    <div class="col-md-12 col-xs-12 list-group-item" id='{{_id}}'>
       <div class="col-md-10 col-xs-10">{{qollText}}</div>
       <div class="col-md-2 col-xs-2">
         {{#if if_createusr}}
@@ -14,10 +14,14 @@
           {{#if if_send}}
             <span class="pull-right lock-qoll-btn"><i class="glyphicon glyphicon-off orange lock-btn ios-enabled"></i></span>
           {{/if}}
+          {{#if if_lock}}
+            <span class="pull-right resend-qoll-btn"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
+          {{/if}}          
           <span class="pull-right render-chart-btn"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
+          <span class="pull-right archive-qoll-btn"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
         {{/if}}
         {{#unless if_createusr}}
-        	<span class="badge pull-right">{{sendingUser}}</span>
+        	<span class="badge pull-right sender-badge">{{sendingUser}}</span>
         {{/unless}}
       </div>
     </div>

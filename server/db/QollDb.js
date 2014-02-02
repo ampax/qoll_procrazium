@@ -30,7 +30,7 @@ Meteor.methods({
 					actualgroups.push(emails[i]);
 				}
 			}
-            var stats = qollTypes.map(function (qtype){newQtype[qtype]=0;});
+            var stats = qollTypes.map(function (qtype){newQtype[qtype.replace(/\./g,"_")]=0;});
             var qollId = Qoll.insert({
                     'action' : action,
                     'qollText' : qollText,

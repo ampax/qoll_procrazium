@@ -17,7 +17,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 			qlog.info('MY  USER --------->>>>>'+user.emails);
 			
 			//submitted by this user
-			var handle = Qoll.find({'submittedBy':this.userId}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+			var handle = Qoll.find({'submittedBy':this.userId,'action':{$ne:'archive'}}, {sort:{'submittedOn':-1}, reactive:true}).observe({
 	          added: function(item, idx) {
 				  
 	              var q = {
@@ -58,11 +58,11 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	              self.changed('all-qolls', item._id, q);
 	              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
-	          }
-	          /**removed: function(item) {
+	          },
+	          removed: function(item) {
 	            self.removed('all-qolls', item._id);
 	            qlog.info('Removed item with id: ' + item._id);
-	          }**/
+	          }
 	        });
 	        //send to me
 	        var handle = Qoll.find({'submittedTo':user.emails[0].address,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
@@ -94,11 +94,13 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	            qlog.info('Removed item with id: ' + item._id);
 	          }
 	        });
+	        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
 	        var allUserGroups = [];
-	        (user.groups||[]).map(function (grpEntry){
-				allUserGroups.push(grpEntry.groupName);
+	        gpsraw.forEach(function (grpEntry){
+				allUserGroups.push({'submittedToGroup':grpEntry.groupName,'submittedBy':grpEntry.submittedBy});
 				});
-	        var handle = Qoll.find({'submittedToGroup':{$in : allUserGroups},'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+			if (allUserGroups.length>0){
+	        var handle = Qoll.find({'$or' :allUserGroups,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
 	          added: function(item, idx) {
 	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
 	          	  var sentby ='';
@@ -126,7 +128,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	            self.removed('all-qolls', item._id);
 	            qlog.info('Removed item with id: ' + item._id);
 	          }
-	        });	        
+	        });
+	        }	        
 		}
 	    // here we proceed with publishing qolls to group that one is member of
 		}
