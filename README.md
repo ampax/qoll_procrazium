@@ -103,6 +103,9 @@ Create the branch develop and check it out to switch to develop-
 Push the code to branch develop
 -  git push origin develop
 -  history
+Revert back to commit version
+- git reset --hard <old-commit-id>
+- git push -f
 ```
 
 
