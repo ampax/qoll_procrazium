@@ -22,7 +22,9 @@ A:hover {
     margin: 0 auto;
 }
 
-
+#navbrand {
+    margin:3px;
+}
 /**.qoll-text {
 	width: 83%;
 }**/
@@ -268,10 +270,10 @@ div.options-and-users {
 
 textarea.editor-upen {
     display: inherit;
-    height: 150px;
+    height: 85px;
     width: auto;
     position: relative;
-    overflow: hidden;
+    overflow: scroll;
     width: 100%;
     resize: none;
     border-color: #bdc3c7;
@@ -288,7 +290,7 @@ div.panel-qoll-type-list {
 }
 
 div.panel-body {
-    height: 100px;
+    height: 60px;
     overflow: scroll;
 }
 
