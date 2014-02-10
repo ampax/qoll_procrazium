@@ -8,6 +8,7 @@
       <div class="col-md-10 col-xs-10">{{qollText}}</div>
       <div class="col-md-2 col-xs-2">
         {{#if if_createusr}}
+        	<span class="badge lesstoggle">{{totals}}</span>
           {{#if if_stored}}
           <span class="pull-right send-qoll-btn"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
           {{/if}}
@@ -34,7 +35,7 @@
             &nbsp;{{_iter_v}}
         </div>
         <div class="col-md-2 col-xs-2">
-            <span class="badge pull-right">{{value_at ../../stats _iter_v}}</span>
+            <span class="badge pull-right fulltoggle">{{value_at ../../stats _iter_v}}</span>
         </div>
       </div>
       {{/include}}
@@ -50,4 +51,10 @@
   </div>
 </div>
 </p> 
+</template>
+<template name="contextbtns">
+	            {{#if if_inbox}}
+            	<li><button type="button" class="btn btn-default information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">full</span></button></li>
+            {{/if}}
+	
 </template>

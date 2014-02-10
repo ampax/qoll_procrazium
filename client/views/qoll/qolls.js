@@ -354,4 +354,46 @@ Template.qolls.rendered = function(){
 
     //$('body').addClass('bg1');
     $('body').removeClass('bg1');
-}
+};
+
+Template.contextbtns.helpers({
+		if_inbox:function(){
+			var curpath=  Router && Router.current() && Router.current().path;
+			if (curpath=="/dashboard")
+				return true;
+		}
+	}
+);
+
+
+
+Template.contextbtns.events({
+ 
+    'click .information-toggle': function(event){
+        event.preventDefault();
+
+            qlog.info('changing'+$('.information-toggle-txt').text());
+            var oldtext=$('.information-toggle-txt').text();
+            
+            if(oldtext=="less"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-down").addClass("glyphicon-volume-up");
+            	$('.information-toggle-txt').text("full");
+            	$('.fulltoggle').show();
+            	$('.lesstoggle').show();
+            }
+            if(oldtext=="none"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-off").addClass("glyphicon-volume-down");
+            	$('.information-toggle-txt').text("less");
+            	$('.fulltoggle').hide();
+            	$('.lesstoggle').show();
+            }
+            if(oldtext=="full"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-up").addClass("glyphicon-volume-off");
+            	$('.information-toggle-txt').text("none");
+            	$('.fulltoggle').hide();
+            	$('.lesstoggle').hide();            	
+            }
+          
+     }
+    }
+  );
