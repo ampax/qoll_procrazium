@@ -37,7 +37,7 @@ Template.addQoll.events({
         $("div#insert-section").removeClass('is-invisible');
         $('.qoll-panel').remove();
         $("#qollText").val('');
-        $("div#update_qoll_id").val('')
+        $("div#update_qoll_id").val('');
     },
 });
 

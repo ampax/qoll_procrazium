@@ -1,7 +1,8 @@
 var filename = "client/views/qoll/qolls.js";
 
 var AllQolls = new Meteor.Collection("all-qolls");
-var QollDetails = new Meteor.Collection("qoll-details-by-id");
+//var QollDetails = new Meteor.Collection("qoll-details-by-id");
+var QollRegist = new Meteor.Collection("qoll-regs");
 
 Handlebars.registerHelper('include', function(options) {
     var context = {},
@@ -61,6 +62,60 @@ Handlebars.registerHelper('eachport', function(context, options) {
   return ret;
 });
 
+$.fn.outertxtonly = function( ) {
+    var str = '';
+	
+    this.contents().each(function() {
+        if (this.nodeType == 3) {
+            str += this.textContent || this.innerText || '';
+        }
+    });
+
+    return str;
+};
+
+
+//Meteor.autosubscribe(function () {
+
+   QollRegist.find({}, {reactive:true}).observe({added:function(v){
+   	 qlog.debug("Getting qoll regs ......", filename);   
+ //alert("gotqoll reg");
+   	var qollId = v.qollId;
+   	var qollTypeVal = v.qollTypeVal;
+   	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
+   			var myouttxt = $.trim($(elem).find('.indent-littlebit').outertxtonly()) ;
+   			qlog.info("a ......"+ myouttxt  +" *"+$.trim(qollTypeVal), filename);
+    		if(myouttxt== $.trim(qollTypeVal)){
+    			
+    			$(elem).addClass('bg-orange');
+    			
+    		}else{
+    			
+    			$(elem).removeClass('bg-orange');
+    		}
+    	});
+   } ,
+   changed:function(v,vold){
+   	 qlog.debug("Getting qoll regs ......", filename);   
+ //alert("gotqoll reg");
+   	var qollId = v.qollId;
+   	var qollTypeVal = v.qollTypeVal;
+   	//$( '#'+qollId).siblings('.qoll-response-val').addClass('bg-orange');/*each(function(elem){
+      	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
+   			var myouttxt = $.trim($(elem).find('.indent-littlebit').outertxtonly()) ;
+   			qlog.info("a ......"+myouttxt  +" *"+$.trim(qollTypeVal), filename);
+    		if(myouttxt== $.trim(qollTypeVal)){
+    			
+    			$(elem).addClass('bg-orange');
+    			
+    		}else{
+    			
+    			$(elem).removeClass('bg-orange');
+    		}
+    	});
+   }
+ });
+//});
 
 
 Template.qolls.helpers({
@@ -71,7 +126,7 @@ Template.qolls.helpers({
         return q;
     },
     value_at:function (obj,val){
-		return obj?obj[val]:obj;
+		return obj?obj[val.replace(/\./g,"_")]:obj;
 	},
 	if_createusr: function (){
 		return (this.viewContext =='createUsr');
@@ -81,6 +136,9 @@ Template.qolls.helpers({
 	},
 	if_send: function (){
 		return (this.action =='send');
+	},
+	if_lock: function (){
+		return (this.action =='lock');
 	},
     iif: function(qollType){
         //qlog.info("Getting all the qollslkjhadkhaskf ......", filename);
@@ -153,23 +211,23 @@ Template.qolls.events({
         var chk=$(event.target);
         var foundorange=false;
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+          //  chk.siblings().removeClass('bg-orange');
+          //  chk.addClass('bg-orange');
             foundorange=true;
         }
         if(!foundorange){
         chk=$(event.target).parent();
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+          //  chk.siblings().removeClass('bg-orange');
+          //  chk.addClass('bg-orange');
         }
         foundorange=true;
         }
         if(!foundorange){
         chk=$(event.target).parent().parent();
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+         //   chk.siblings().removeClass('bg-orange');
+         //   chk.addClass('bg-orange');
         }
         foundorange=true;
         }
@@ -183,7 +241,7 @@ Template.qolls.events({
 		qlog.info('youclickedid: ' +qollId, filename);
 		qlog.info('the aindex ='+answerIndex,filename);
 	    Meteor.call('registerQollCustom', qollId, answerVal,0, function(err, qollRegId){
-            qlog.info('Registered qoll with id: ' + qollRegId+ answerVal+' err '+err, filename);
+            qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
         });
 		ReactiveDataSource.refresh('qollstat'+ qollId);
 
@@ -204,6 +262,34 @@ Template.qolls.events({
 		Meteor.call('modifyQollId', qollId,'lock', function(err, qollRegId){
                 qlog.info('LOCKED qoll with id: ' + qollRegId+' err '+err, filename);
             });
+	},
+	'click .resend-qoll-btn': function(event){
+		event.preventDefault();
+		var qollId = this._id;
+		var choice=confirm("Resend this qoll?");
+		if(choice){
+			//qlog.info('youclicked to archiveyes: ' +qollId, filename);
+			Meteor.call('modifyQollId', qollId,'send', function(err, qollRegId){
+                qlog.info('sent qoll with id: ' + qollRegId+' err '+err, filename);
+            });			
+		}else{
+			//qlog.info('youclicked to no: ' +qollId, filename);
+		}
+	},	
+	'click .archive-qoll-btn': function(event){
+		event.preventDefault();
+		var qollId = this._id;
+
+		var choice=confirm("Archive this qoll?");
+		if(choice){
+			//qlog.info('youclicked to archiveyes: ' +qollId, filename);
+			Meteor.call('modifyQollId', qollId,'archive', function(err, qollRegId){
+                qlog.info('archived qoll with id: ' + qollRegId+' err '+err, filename);
+            });			
+		}else{
+			//qlog.info('youclicked to no: ' +qollId, filename);
+		}
+		
 	},
     'click a.no': function(event){
         event.preventDefault();
@@ -268,4 +354,46 @@ Template.qolls.rendered = function(){
 
     //$('body').addClass('bg1');
     $('body').removeClass('bg1');
-}
+};
+
+Template.contextbtns.helpers({
+		if_inbox:function(){
+			var curpath=  Router && Router.current() && Router.current().path;
+			if (curpath=="/dashboard")
+				return true;
+		}
+	}
+);
+
+
+
+Template.contextbtns.events({
+ 
+    'click .information-toggle': function(event){
+        event.preventDefault();
+
+            qlog.info('changing'+$('.information-toggle-txt').text());
+            var oldtext=$('.information-toggle-txt').text();
+            
+            if(oldtext=="less"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-down").addClass("glyphicon-volume-up");
+            	$('.information-toggle-txt').text("full");
+            	$('.fulltoggle').show();
+            	$('.lesstoggle').show();
+            }
+            if(oldtext=="none"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-off").addClass("glyphicon-volume-down");
+            	$('.information-toggle-txt').text("less");
+            	$('.fulltoggle').hide();
+            	$('.lesstoggle').show();
+            }
+            if(oldtext=="full"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-up").addClass("glyphicon-volume-off");
+            	$('.information-toggle-txt').text("none");
+            	$('.fulltoggle').hide();
+            	$('.lesstoggle').hide();            	
+            }
+          
+     }
+    }
+  );

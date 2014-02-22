@@ -1,0 +1,21 @@
+<template name="toolbar">
+	<div class="editor-toolbar">
+
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addqoll" href="#" title="Ctrl+Q">  Qoll </a></span>
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addopti" href="#" title="Ctrl+O">  Opt </a></span>
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addcode" href="#" title="Ctrl+C">  Code </a></span>
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addbloc" href="#" title="Ctrl+>">  Block </a></span>
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addltxi" href="#" title="Ctrl+I">  {{#mathjax}}$LaTeX^I${{/mathjax}} </a></span>
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addltxb" href="#" title="Ctrl+L">  {{#mathjax}}$LaTeX^B${{/mathjax}} </a></span>
+
+
+		<span class="toolbar-buttons toolbar-buttons-right"><a class="toolbar-buttons-link storqoll" href="#" title="Ctrl+S">  Store </a></span>
+
+	</div>
+</template>
+
+<template name="tagger">
+	<div class="editor-writer">
+		<textarea class="editor" placeholder="tags separated by spaces ..."></textarea>
+	</div>
+</template>

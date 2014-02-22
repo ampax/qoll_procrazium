@@ -4,17 +4,22 @@
   <div class="row">
     {{#each allQolls}}
     <div>
-    <div class="col-md-12 col-xs-12 list-group-item">
-      <div class="col-md-10 col-xs-10">{{qollText}}</div>
+    <div class="col-md-12 col-xs-12 list-group-item" id='{{_id}}'>
+      <div class="col-md-10 col-xs-10">{{#mathjax}}{{{qollText}}}{{/mathjax}}</div>
       <div class="col-md-2 col-xs-2">
         {{#if if_createusr}}
+        	<span class="badge lesstoggle">{{totals}}</span>
           {{#if if_stored}}
           <span class="pull-right send-qoll-btn"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
           {{/if}}
           {{#if if_send}}
             <span class="pull-right lock-qoll-btn"><i class="glyphicon glyphicon-off orange lock-btn ios-enabled"></i></span>
           {{/if}}
+          {{#if if_lock}}
+            <span class="pull-right resend-qoll-btn"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
+          {{/if}}          
           <span class="pull-right render-chart-btn"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
+          <span class="pull-right archive-qoll-btn"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
         {{/if}}
         {{#unless if_createusr}}
         	<span class="badge pull-right sender-badge">{{sendingUser}}</span>
@@ -27,10 +32,10 @@
       <div class="col-md-10 col-xs-10 list-group-item  qoll-response-val ios-enabled">
         <div class="col-md-8 col-xs-8 indent-littlebit" id="{{_iter_ix}}">
            <span class="badge pull-left {{qoll_abbr_class _iter_ix}}">{{qoll_type_abbr _iter_ix}}</span>
-            &nbsp;{{_iter_v}}
+            &nbsp;{{{_iter_v}}}
         </div>
         <div class="col-md-2 col-xs-2">
-            <span class="badge pull-right">{{value_at ../../stats _iter_v}}</span>
+            <span class="badge pull-right fulltoggle">{{value_at ../../stats _iter_v}}</span>
         </div>
       </div>
       {{/include}}
@@ -46,5 +51,10 @@
   </div>
 </div>
 </p> 
-        
+</template>
+<template name="contextbtns">
+	            {{#if if_inbox}}
+            	<li><button type="button" class="btn btn-default information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">full</span></button></li>
+            {{/if}}
+	
 </template>

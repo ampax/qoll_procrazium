@@ -20,4 +20,21 @@ Router.map(function(){
 			//TODO
 		}
 	});
+
+	this.route('qolleditor_adv', {
+		template: 'qolleditor_adv',
+		path: '/qolleditor_adv',
+		waitOn: function(){
+
+		},
+		before: [function(){
+			qlog.info('Before for qoll-editor ...', filename);
+		}, function(){
+			//this is next in line to the first subscribe function
+			//active_nav();
+		}],
+		after: function(){
+			//TODO
+		}
+	});
 });

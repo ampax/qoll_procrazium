@@ -10,7 +10,12 @@
 /bootstrap-3
 /font-awesome
 /inspector
-/npm
+/
 /chartjs
 /jquery-ui
 /accounts-ui-bootstrap-3
+/ace-embed
+/mathjax
+/module-loader
+/easy-search
+/autocompletion
