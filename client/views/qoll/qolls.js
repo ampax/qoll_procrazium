@@ -125,10 +125,19 @@ Template.qolls.helpers({
         qlog.info("Found qoll: " + JSON.stringify(q.fetch()), filename);
         return q;
     },
+    get_totals:function(){
+    	if(Session.get('info_pref')=='full' || Session.get('info_pref')=='less'){
+    		return this['totals'];
+    	}
+    },
     value_at:function (obj,val){
-		return obj?obj[val.replace(/\./g,"_")]:obj;
+    	if(Session.get('info_pref')=='full')
+			return obj?obj[val.replace(/\./g,"_")]:obj;
 	},
 	if_createusr: function (){
+		if(this.viewContext=='createUsr'){
+			Session.set('hasCreated',true);
+		}
 		return (this.viewContext =='createUsr');
 	},
 	if_stored: function (){
@@ -359,11 +368,18 @@ Template.qolls.rendered = function(){
 Template.contextbtns.helpers({
 		if_inbox:function(){
 			var curpath=  Router && Router.current() && Router.current().path;
-			if (curpath=="/dashboard")
+			if (curpath=="/dashboard" && Session.get("hasCreated"))
 				return true;
+		},
+		info_pref:function(){
+			if(!Session.get('info_pref')){
+				Session.set('info_pref', 'full');
+			}
+			return Session.get('info_pref');
 		}
 	}
 );
+
 
 
 
@@ -372,24 +388,27 @@ Template.contextbtns.events({
     'click .information-toggle': function(event){
         event.preventDefault();
 
-            qlog.info('changing'+$('.information-toggle-txt').text());
-            var oldtext=$('.information-toggle-txt').text();
+            qlog.info('changing');
+            var oldtext=Session.get('info_pref');
             
             if(oldtext=="less"){
             	$('.information-toggle-txt').removeClass("glyphicon-volume-down").addClass("glyphicon-volume-up");
             	$('.information-toggle-txt').text("full");
+            	Session.set('info_pref','full');
             	$('.fulltoggle').show();
             	$('.lesstoggle').show();
             }
             if(oldtext=="none"){
             	$('.information-toggle-txt').removeClass("glyphicon-volume-off").addClass("glyphicon-volume-down");
             	$('.information-toggle-txt').text("less");
+            	Session.set('info_pref','less');
             	$('.fulltoggle').hide();
             	$('.lesstoggle').show();
             }
             if(oldtext=="full"){
             	$('.information-toggle-txt').removeClass("glyphicon-volume-up").addClass("glyphicon-volume-off");
             	$('.information-toggle-txt').text("none");
+            	Session.set('info_pref','none');
             	$('.fulltoggle').hide();
             	$('.lesstoggle').hide();            	
             }

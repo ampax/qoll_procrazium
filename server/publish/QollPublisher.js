@@ -77,7 +77,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 	          }
 	        });
 	        //send to me
-	        var handle = Qoll.find({'submittedTo':user.emails[0].address,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+	        var handle = Qoll.find({'submittedTo':user.emails[0].address,'action':'send'}, {sort:{'submittedOn':-1},
+	        fields: {stats: 0}, reactive:true}).observe({
 	          added: function(item, idx) {
 	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
 	          	  var sentby ='';
@@ -113,7 +114,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 				allUserGroups.push({'submittedToGroup':grpEntry.groupName,'submittedBy':grpEntry.submittedBy});
 				});
 			if (allUserGroups.length>0){
-	        var handle = Qoll.find({'$or' :allUserGroups,'action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+	        var handle = Qoll.find({'$or' :allUserGroups,'action':'send'}, {sort:{'submittedOn':-1},
+	        fields: {stats: 0}, reactive:true}).observe({
 	          added: function(item, idx) {
 	          	  var usentby = Meteor.users.find({"_id":item.submittedBy}).fetch();
 	          	  var sentby ='';
@@ -147,7 +149,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(){
 		}
 	    // here we proceed with publishing qolls to group that no one is member of
 		}
-		var handle = Qoll.find({'submittedTo':'','action':'send'}, {sort:{'submittedOn':-1}, reactive:true}).observe({
+		var handle = Qoll.find({'submittedTo':'','action':'send'}, {sort:{'submittedOn':-1}, 
+		fields: {stats: 0},reactive:true}).observe({
           added: function(item, idx) {
               var q = {
                 qollTitle : item.qollTitle,
