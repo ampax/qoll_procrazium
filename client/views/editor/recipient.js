@@ -5,8 +5,8 @@ var Recipients = new Meteor.Collection("recipients");
 Template.recipient.rendered = function() {
 	qlog.info("Initializing autocomplete ... ", filename);
 	Meteor.subscribe('RECIPIENTS_PUBLISHER');
-	AutoCompletion.init("input#recipient_search");
-	AutoCompletion.enableLogging = true;
+	QollAutoComplete.init("input#recipient_search");
+	QollAutoComplete.enableLogging = true;
 };
 
 Template.recipient.events({
@@ -14,12 +14,14 @@ Template.recipient.events({
   	qlog.info('Printing the inputted value: ' + jQuery("input#recipient_search" ).val(), filename);
   	qlog.info("Printing all the recips: " + JSON.stringify(Recipients.find({})), filename);
 
-    AutoCompletion.autocomplete({
+    QollAutoComplete.autocomplete({
       element: 'input#recipient_search',       // DOM identifier for the element
       collection: Recipients,              // MeteorJS collection object (published object)
       field: 'groupName',                    // Document field name to search for
       limit: 0,                         // Max number of elements to show
-      sort: { groupName: 1 }});              // Sort object to filter results with
+      sort: { groupName: 1 },
+      mode: 'multi'
+    });              // Sort object to filter results with
       //filter: { 'gender': 'female' }}); // Additional filtering
   }, 
 });
