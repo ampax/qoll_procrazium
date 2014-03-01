@@ -11,8 +11,8 @@ Template.recipient.rendered = function() {
 
 Template.recipient.events({
   'keyup .recipient': function () {
-  	qlog.info('Printing the inputted value: ' + jQuery("input#recipient_search" ).val(), filename);
-  	qlog.info("Printing all the recips: " + JSON.stringify(Recipients.find({})), filename);
+  	//qlog.info('Printing the inputted value: ' + jQuery("input#recipient_search" ).val(), filename);
+  	//qlog.info("Printing all the recips: " + JSON.stringify(Recipients.find({})), filename);
 
     QollAutoComplete.autocomplete({
       element: 'input#recipient_search',       // DOM identifier for the element
@@ -20,7 +20,8 @@ Template.recipient.events({
       field: 'groupName',                    // Document field name to search for
       limit: 0,                         // Max number of elements to show
       sort: { groupName: 1 },
-      mode: 'multi'
+      mode: 'multi',
+      delimiter: ';'
     });              // Sort object to filter results with
       //filter: { 'gender': 'female' }}); // Additional filtering
   }, 
