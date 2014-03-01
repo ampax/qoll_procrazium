@@ -44,10 +44,6 @@ QollAutoComplete.autocomplete = function (config) {
   var qstr = $(config['element']).val();
   qstr = qstr.replace(/\s/g,"");
 
-  if(qstr == ""){
-    return false;
-  }
-
   if(config['mode'] === 'mono' || config['mode'] == undefined) {
     qlog.info("Procesisng for mono", filename);
   } else if(config['mode'] === 'multi') {
@@ -79,9 +75,12 @@ QollAutoComplete.autocomplete = function (config) {
   logObj(filter);
 
   // Find all results
-  results = config['collection'].find(query, filter).fetch();
-  log('DEBUG', 'Results object: ');
-  logObj(results);
+  results = {};
+  if( qstr != "" ) {
+    results = config['collection'].find(query, filter).fetch();
+    log('DEBUG', 'Results object: ');
+    logObj(results);
+  }
 
   // Get the name parameter from the results
   autocompleteResults = []
@@ -94,7 +93,8 @@ QollAutoComplete.autocomplete = function (config) {
   $(config['element']).autocomplete({ 
     //This is fired when user inputs some text to find more items from collections
     source: function(request, response) {
-      response(autocompleteResults);
+      if( qstr != "")
+        response(autocompleteResults);
       //response( $.ui.autocomplete.filter(autocompleteResults, extractLast( request.term ) ) );
     },
     focus : function() {
