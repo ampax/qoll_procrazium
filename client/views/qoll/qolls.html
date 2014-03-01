@@ -10,7 +10,7 @@
 
       <div class="col-md-2 col-xs-2">
         {{#if if_createusr}}
-        	<span class="badge lesstoggle">{{totals}}</span>
+        	<span class="badge lesstoggle">{{get_totals}}</span>
           {{#if if_stored}}
           <span class="pull-right send-qoll-btn"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
           {{/if}}
@@ -56,7 +56,7 @@
 </template>
 <template name="contextbtns">
 	            {{#if if_inbox}}
-            	<li><button type="button" class="btn btn-default information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">full</span></button></li>
+            	<li><button type="button" class="btn btn-link information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">{{info_pref}}</span></button></li>
             {{/if}}
 	
 </template>
