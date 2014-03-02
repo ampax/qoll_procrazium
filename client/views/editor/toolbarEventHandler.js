@@ -25,12 +25,14 @@ Template.toolbar.events({
   },'click .storqoll': function(){
     console.log("Store qoll at this event aljkhdflakjsd ...");
     var editor = ace.edit("aceEditor");
-    parseAndAddQoll(editor);
+    var recips = jQuery("input#recipient_search").val();
+    parseAndAddQoll(editor, recips);
   }, 
 });
 
 
-var parseAndAddQoll = function(editor) {
+var parseAndAddQoll = function(editor, recips) {
+  qlog.info("Recips list is: " + recips, filename);
   //parsing and saving the qolls now
   var qollMasterContent = editor.getValue();
 
