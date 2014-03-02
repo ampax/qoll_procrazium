@@ -34,11 +34,18 @@ Template.toolbar.events({
 var parseAndAddQoll = function(editor, recips) {
   qlog.info("Recips list is: " + recips, filename);
   //parsing and saving the qolls now
+  var emailsandgroups=[];
+  $.each(recips.split(/;|,/),function (ix,email){
+        	email=$.trim(email);
+        	if(email.length>0){
+        		emailsandgroups.push(email);
+        	}
+        });  
   var qollMasterContent = editor.getValue();
-
+  
   qollMasterContent = editor.getValue(); // or session.getValue
 
-  Meteor.call("addQollMaster", qollMasterContent, function(error, qollMasterId){
+  Meteor.call("addQollMaster", qollMasterContent,emailsandgroups, function(error, qollMasterId){
       qlog.info("Added qoll-master-content with id: " + qollMasterId, filename);
   });
   

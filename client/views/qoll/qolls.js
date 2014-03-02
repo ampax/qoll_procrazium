@@ -252,7 +252,7 @@ Template.qolls.events({
 	    Meteor.call('registerQollCustom', qollId, answerVal,0, function(err, qollRegId){
             qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
         });
-		ReactiveDataSource.refresh('qollstat'+ qollId);
+		//ReactiveDataSource.refresh('qollstat'+ qollId);
 
         $(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
 		},

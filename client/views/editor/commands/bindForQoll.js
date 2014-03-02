@@ -25,7 +25,7 @@ bindToolBarForQoll = function(editor) {
 	// Calculate total number of lines
 	var len = editor.session.getLength();
 	console.log("Total number of lines in the editor: " + len);
-}
+};
 
 
 bindToolBarForOption = function(editor) {
@@ -34,4 +34,4 @@ bindToolBarForOption = function(editor) {
 	editor.navigateLineEnd();
 	editor.insert("\n");
 	editor.insert("- ");
-}
+};
