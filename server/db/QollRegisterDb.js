@@ -65,21 +65,21 @@ Meteor.methods({
 					if(canans){
 						//ansCount[qollFound.qollTypes.ind1exOf(qollTypeVal)]= ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]?ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]+1:1;
 						var statsFilter ={};
-						var qolltypkey = qollTypeVal.replace(/\./g,"_");
+						var qolltypkey = qollTypeIx;//qollTypeVal.replace(/\./g,"_");
 						statsFilter["stats."+ qolltypkey +""] = 1;
 						
 						qlog.info('adding one to '+ "stats."+ qolltypkey, filename);
 						if(existQollReg.length > 0){
-							if("stats."+ qolltypkey !="stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") ){
+							if("stats."+ qolltypkey !="stats."+existQollReg[0].qollTypeIndex ){
 								
-								statsFilter["stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") ] = -1;
+								statsFilter["stats."+existQollReg[0].qollTypeIndex] = -1;
 								
-								qlog.info('subt one to '+ "stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") , filename);
+								qlog.info('subt one to '+ "stats."+existQollReg[0].qollTypeIndex , filename);
 							}else{
 								statsFilter["stats."+ qolltypkey ] = 0;
-								qlog.info('no change to '+ "stats."+ qollTypeVal, filename);
+								qlog.info('no change to '+ "stats."+ qolltypkey, filename);
 								}
-							QollRegister.update({_id : existQollReg[0]._id}, { $set: {qollTypeVal : qollTypeVal,'submittedOn' : new Date()}});
+							QollRegister.update({_id : existQollReg[0]._id}, { $set: {qollTypeVal : qollTypeVal,qollTypeIndex:qollTypeIx ,'submittedOn' : new Date()}});
 							Qoll.update({_id:qollId},{ $inc: statsFilter } );//hopefully atomic so thread safe
 							return existQollReg[0]._id;
 						} else {

@@ -76,16 +76,17 @@ $.fn.outertxtonly = function( ) {
 
 
 //Meteor.autosubscribe(function () {
-
+Template.qolls.created= function(){
    QollRegist.find({}, {reactive:true}).observe({added:function(v){
    	 qlog.debug("Getting qoll regs ......", filename);   
  //alert("gotqoll reg");
    	var qollId = v.qollId;
    	var qollTypeVal = v.qollTypeVal;
+   	var qollTypeIx = v.qollTypeIndex;
    	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
-   			var myouttxt = $.trim($(elem).find('.indent-littlebit').outertxtonly()) ;
-   			qlog.info("a ......"+ myouttxt  +" *"+$.trim(qollTypeVal), filename);
-    		if(myouttxt== $.trim(qollTypeVal)){
+   			var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
+   			qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
+    		if(myouttxt== qollTypeIx){
     			
     			$(elem).addClass('bg-orange');
     			
@@ -100,11 +101,11 @@ $.fn.outertxtonly = function( ) {
  //alert("gotqoll reg");
    	var qollId = v.qollId;
    	var qollTypeVal = v.qollTypeVal;
-   	//$( '#'+qollId).siblings('.qoll-response-val').addClass('bg-orange');/*each(function(elem){
-      	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
-   			var myouttxt = $.trim($(elem).find('.indent-littlebit').outertxtonly()) ;
-   			qlog.info("a ......"+myouttxt  +" *"+$.trim(qollTypeVal), filename);
-    		if(myouttxt== $.trim(qollTypeVal)){
+   	var qollTypeIx = v.qollTypeIndex;
+   	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
+   			var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
+   			qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
+    		if(myouttxt== qollTypeIx){
     			
     			$(elem).addClass('bg-orange');
     			
@@ -115,6 +116,7 @@ $.fn.outertxtonly = function( ) {
     	});
    }
  });
+};
 //});
 
 
@@ -132,7 +134,7 @@ Template.qolls.helpers({
     },
     value_at:function (obj,val){
     	if(Session.get('info_pref')=='full')
-			return obj?obj[val.replace(/\./g,"_")]:obj;
+			return obj?obj[val]:obj;
 	},
 	if_createusr: function (){
 		if(this.viewContext=='createUsr'){
@@ -192,6 +194,15 @@ Template.qolls.helpers({
     },
     qoll_abbr_class: function(idx) {
         return "class_"+idx;
+    },
+    check_orange: function(qollid,qollTypeIx){
+    	qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    	var retval ='';
+    	QollRegist.find({qollId:qollid,qollTypeIndex:qollTypeIx},{reactive:false}).forEach(function (v){
+    		qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    		retval = 'bg-orange';
+    	});
+    	return retval;
     }
 });
 
@@ -220,36 +231,36 @@ Template.qolls.events({
         var chk=$(event.target);
         var foundorange=false;
         if(chk.hasClass('qoll-response-val')) {
-          //  chk.siblings().removeClass('bg-orange');
-          //  chk.addClass('bg-orange');
+            chk.siblings().removeClass('bg-orange');
+            chk.addClass('bg-orange');
             foundorange=true;
         }
         if(!foundorange){
         chk=$(event.target).parent();
         if(chk.hasClass('qoll-response-val')) {
-          //  chk.siblings().removeClass('bg-orange');
-          //  chk.addClass('bg-orange');
+            chk.siblings().removeClass('bg-orange');
+            chk.addClass('bg-orange');
         }
         foundorange=true;
         }
         if(!foundorange){
         chk=$(event.target).parent().parent();
         if(chk.hasClass('qoll-response-val')) {
-         //   chk.siblings().removeClass('bg-orange');
-         //   chk.addClass('bg-orange');
+            chk.siblings().removeClass('bg-orange');
+            chk.addClass('bg-orange');
         }
         foundorange=true;
         }
 		var qollId = this.parent._id;
 		var qoll = this.parent;
-		var answerIndex =0;//event.target.id;
+		var answerIndex =this._iter_ix;
 		var answerVal = this._iter_v;
 		
 		qlog.info('youclicked: ' +this._iter_v, filename);   
 		qlog.info('youclickedon: ' +event, filename);  
 		qlog.info('youclickedid: ' +qollId, filename);
 		qlog.info('the aindex ='+answerIndex,filename);
-	    Meteor.call('registerQollCustom', qollId, answerVal,0, function(err, qollRegId){
+	    Meteor.call('registerQollCustom', qollId, answerVal,answerIndex, function(err, qollRegId){
             qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
         });
 		//ReactiveDataSource.refresh('qollstat'+ qollId);
