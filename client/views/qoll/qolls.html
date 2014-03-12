@@ -39,7 +39,15 @@
         <div class="col-md-2 col-xs-2">
             <span class="badge pull-right fulltoggle">{{value_at ../../stats _iter_ix}}</span>
         </div>
+        {{#with  value_at ../../answers _iter_ix}}
+        <div class="col-md-12 col-xs-12  list-group-item-info">
+            
+            Answered By:	{{comma_seperate this}}
+           
+        </div>
+         {{/with}}
       </div>
+
       {{/include}}
       {{/eachport}}
     
