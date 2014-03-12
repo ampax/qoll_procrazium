@@ -236,16 +236,25 @@ Template.qolls.events({
         //jQuery(this).removeClass('orange');
         var chk=$(event.target);
         var foundorange=false;
+
+        if(chk.hasClass('border-selected')) {
+            chk.removeClass('border-selected');
+        }
+        else
+        {
+            chk.addClass('border-selected');
+        }
+
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+            //chk.siblings().removeClass('bg-orange');
+            //chk.addClass('bg-orange');
             foundorange=true;
         }
         if(!foundorange){
         chk=$(event.target).parent();
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+            //chk.siblings().removeClass('bg-orange');
+            //chk.addClass('bg-orange');
         }
         foundorange=true;
         }
