@@ -245,13 +245,13 @@ span.qoll-badge {
 /** END: Glyph icon colors **/
 
 .is-visible {
-    visibility: visible;
-    display: none;
+    visibility: visible !important;
+    display: none !important;
 }
 
 .is-invisible {
-    visibility: hidden;
-    display: none;
+    visibility: hidden !important;
+    display: none !important;
 }
 
 #forgot-password-link {

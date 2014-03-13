@@ -17,11 +17,12 @@ downtown = function(data, option, escape_mathjax){
 	option.renderer = renderer;
 	//qlog.info(marked('I am using __markdown__.'), filename);
 	data = marked(data, { renderer: renderer });
-	qlog.info('data is: ' + data, filename);
+	//qlog.info('data is: ' + data, filename);
 	data = data.replace(/{inline}/g,"&#36;");
 	data = data.replace(/{\/inline}/g,"&#36;");
 	data = data.replace(/{block}/g,"&#36;&#36;");
 	data = data.replace(/{\/block}/g,"&#36;&#36;");
+
 	return data;
 
 };
@@ -34,3 +35,9 @@ var escape_mathjax = function(data){
 	data = data.replace("{/block}","$$");
 	return data;//return escaped data
 };
+
+Meteor.methods({
+    downtown : function(data, option, escape_mathjax){
+        return downtown(data, option, escape_mathjax);
+    },
+});
