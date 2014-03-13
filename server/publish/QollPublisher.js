@@ -18,21 +18,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 		return ret;
 		};
 		var register_emails={}; //to cache emails for usr ids
-        qlog.info('Fetching all the qolls in desc order of creation; uuid: ' + uuid, filename);
-        //db.QOLL.find({'submittedTo':'usr3322@qoll','action':'send'})
-        if(this.userId) {//first publish specialized qolls to this user
-			qlog.info('MY  USERID --------->>>>>'+this.userId);
-			var ufound = Meteor.users.find({"_id":this.userId}).fetch();
-			if (ufound.length>0){
-			var user= ufound[0];
-			qlog.info('MY  USER --------->>>>>'+user);
-			qlog.info('MY  USER --------->>>>>'+user.emails);
-			
-			//submitted by this user
-			var handle = Qoll.find({'submittedBy':this.userId,'action':{$ne:'archive'}}, {sort:{'submittedOn':-1}, reactive:true, limit:lim}).observe({
-	          added: function(item, idx) {
-	          	lim -=1;
-				  var existQollRegs = QollRegister.find({qollId: item._id},
+		var fetch_answers = function(item){
+							  var existQollRegs = QollRegister.find({qollId: item._id},
 				  	{reactive:false}).fetch();
 				  var answers; answers = [];
 				  for (var i=0;i<item.qollTypes.length;i++)
@@ -58,6 +45,23 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 				  	}
 				  	
 				  }
+				  return answers;
+
+		};
+        qlog.info('Fetching all the qolls in desc order of creation; uuid: ' + uuid, filename);
+        //db.QOLL.find({'submittedTo':'usr3322@qoll','action':'send'})
+        if(this.userId) {//first publish specialized qolls to this user
+			qlog.info('MY  USERID --------->>>>>'+this.userId);
+			var ufound = Meteor.users.find({"_id":this.userId}).fetch();
+			if (ufound.length>0){
+			var user= ufound[0];
+			qlog.info('MY  USER --------->>>>>'+user);
+			qlog.info('MY  USER --------->>>>>'+user.emails);
+			
+			//submitted by this user
+			var handle = Qoll.find({'submittedBy':this.userId,'action':{$ne:'archive'}}, {sort:{'submittedOn':-1}, reactive:true, limit:lim}).observe({
+	          added: function(item, idx) {
+	          	lim -=1;
 				  
 	              var q = {
 	                qollTitle : item.qollTitle,
@@ -68,7 +72,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 	                submittedTo : item.submittedTo,
 	                action :item.action,
 	                stats: item.stats,
-	                answers: answers,
+	                answers: fetch_answers(item),
 	                totals:sumstats(item.stats),
 	                viewContext: "createUsr",
 	                
@@ -90,6 +94,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 	                submittedTo : item.submittedTo,
 	                action :item.action,
 	                stats: item.stats,
+	                answers: fetch_answers(item),
 	                totals:sumstats(item.stats),
 	                viewContext: "createUsr",
 	                
