@@ -134,7 +134,10 @@ Template.qolls.helpers({
     },
     value_at:function (obj,val){
     	if(Session.get('info_pref')=='full')
+    	{
+    		//qlog.info("LOOKUP VALUE AT "+ JSON.stringify(obj) , filename);
 			return obj?obj[val]:obj;
+		}
 	},
 	if_createusr: function (){
 		if(this.viewContext=='createUsr'){
@@ -196,13 +199,16 @@ Template.qolls.helpers({
         return "class_"+idx;
     },
     check_orange: function(qollid,qollTypeIx){
-    	qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    	//qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
     	var retval ='';
     	QollRegist.find({qollId:qollid,qollTypeIndex:qollTypeIx},{reactive:false}).forEach(function (v){
-    		qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    		//qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
     		retval = 'bg-orange';
     	});
     	return retval;
+    },
+    comma_seperate: function (thelist){
+    	return thelist.join();
     }
 });
 
@@ -230,16 +236,25 @@ Template.qolls.events({
         //jQuery(this).removeClass('orange');
         var chk=$(event.target);
         var foundorange=false;
+
+        if(chk.hasClass('border-selected')) {
+            chk.removeClass('border-selected');
+        }
+        else
+        {
+            chk.addClass('border-selected');
+        }
+
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+            //chk.siblings().removeClass('bg-orange');
+            //chk.addClass('bg-orange');
             foundorange=true;
         }
         if(!foundorange){
         chk=$(event.target).parent();
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+            //chk.siblings().removeClass('bg-orange');
+            //chk.addClass('bg-orange');
         }
         foundorange=true;
         }
@@ -384,7 +399,7 @@ Template.contextbtns.helpers({
 		},
 		info_pref:function(){
 			if(!Session.get('info_pref')){
-				Session.set('info_pref', 'full');
+				Session.set('info_pref', 'less');
 			}
 			return Session.get('info_pref');
 		}

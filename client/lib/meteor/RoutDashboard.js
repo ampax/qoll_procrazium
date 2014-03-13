@@ -5,7 +5,7 @@ Router.map(function(){
 		path: '/dashboard',
 		waitOn: function(){
 			//add waiton for qolls from server to handle the latency for user here
-			return [Meteor.subscribe('All_QOLL_PUBLISHER'),
+			return [Meteor.subscribe('All_QOLL_PUBLISHER',{limit:3}),
 			Meteor.subscribe('QOLL_REG_PUBLISHER')];
 		},
 		before: [function(){
