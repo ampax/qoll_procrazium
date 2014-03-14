@@ -1,6 +1,6 @@
 var filename = "client/views/qoll/qolls.js";
 
-var AllQolls = new Meteor.Collection("all-qolls");
+AllQolls = new Meteor.Collection("all-qolls");
 //var QollDetails = new Meteor.Collection("qoll-details-by-id");
 var QollRegist = new Meteor.Collection("qoll-regs");
 
@@ -123,9 +123,9 @@ Template.qolls.created= function(){
 Template.qolls.helpers({
     allQolls: function(event){
         qlog.debug("Getting all the qolls ......", filename);                                                                                                                
-        var q = AllQolls.find({}, {sort:{'submittedOn':-1}, reactive:true});
-        qlog.info("Found qoll: " + JSON.stringify(q.fetch()), filename);
-        return q;
+        this.qollList.rewind();
+        return this.qollList.fetch();
+      
     },
     get_totals:function(){
     	if(Session.get('info_pref')=='full' || Session.get('info_pref')=='less'){
@@ -134,7 +134,10 @@ Template.qolls.helpers({
     },
     value_at:function (obj,val){
     	if(Session.get('info_pref')=='full')
+    	{
+    		//qlog.info("LOOKUP VALUE AT "+ JSON.stringify(obj) , filename);
 			return obj?obj[val]:obj;
+		}
 	},
 	if_createusr: function (){
 		if(this.viewContext=='createUsr'){
@@ -196,13 +199,16 @@ Template.qolls.helpers({
         return "class_"+idx;
     },
     check_orange: function(qollid,qollTypeIx){
-    	qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    	//qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
     	var retval ='';
     	QollRegist.find({qollId:qollid,qollTypeIndex:qollTypeIx},{reactive:false}).forEach(function (v){
-    		qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    		//qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
     		retval = 'bg-orange';
     	});
     	return retval;
+    },
+    comma_seperate: function (thelist){
+    	return thelist.join();
     }
 });
 
@@ -230,16 +236,25 @@ Template.qolls.events({
         //jQuery(this).removeClass('orange');
         var chk=$(event.target);
         var foundorange=false;
+
+        if(chk.hasClass('border-selected')) {
+            chk.removeClass('border-selected');
+        }
+        else
+        {
+            chk.addClass('border-selected');
+        }
+
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+            //chk.siblings().removeClass('bg-orange');
+            //chk.addClass('bg-orange');
             foundorange=true;
         }
         if(!foundorange){
         chk=$(event.target).parent();
         if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+            //chk.siblings().removeClass('bg-orange');
+            //chk.addClass('bg-orange');
         }
         foundorange=true;
         }
@@ -379,7 +394,7 @@ Template.qolls.rendered = function(){
 Template.contextbtns.helpers({
 		if_inbox:function(){
 			var curpath=  Router && Router.current() && Router.current().path;
-			if (curpath=="/dashboard" && Session.get("hasCreated"))
+			if ((curpath||'').indexOf( "/dashboard")==0 && Session.get("hasCreated"))
 				return true;
 		},
 		info_pref:function(){
