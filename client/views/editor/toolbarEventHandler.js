@@ -31,16 +31,6 @@ Template.toolbar.events({
     storeEditorContents(editor, recips);
   },'click .previewqoll': function(event){
     event.preventDefault();
-    var prvimg=$(event.target);
-    if(prvimg.hasClass('glyphicon-eye-open')) {
-      prvimg.removeClass('glyphicon-eye-close');
-      prvimg.addClass('glyphicon-eye-open');
-    }
-    else
-    {
-      prvimg.removeClass('glyphicon-eye-open');
-      prvimg.addClass('glyphicon-eye-close');
-    }
 
     var editor = ace.edit("aceEditor");
     var parsed_qoll;
