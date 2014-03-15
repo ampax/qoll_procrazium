@@ -235,6 +235,13 @@ Template.qolls.events({
 		event.preventDefault();
         //jQuery(this).removeClass('orange');
         var chk=$(event.target);
+
+        //Remove border for the other selected elements. In case, we have multi selection enabled, this 
+        //will be made optional
+        $(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem){
+            $(this).removeClass('border-selected');
+        });
+
         var foundorange=false;
 
         if(chk.hasClass('border-selected')) {
@@ -251,32 +258,37 @@ Template.qolls.events({
             foundorange=true;
         }
         if(!foundorange){
-        chk=$(event.target).parent();
-        if(chk.hasClass('qoll-response-val')) {
-            //chk.siblings().removeClass('bg-orange');
-            //chk.addClass('bg-orange');
-        }
-        foundorange=true;
+            chk=$(event.target).parent();
+            if(chk.hasClass('qoll-response-val')) {
+                //chk.siblings().removeClass('bg-orange');
+                //chk.addClass('bg-orange');
+            }
+            foundorange=true;
         }
         if(!foundorange){
-        chk=$(event.target).parent().parent();
-        if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
+            chk=$(event.target).parent().parent();
+            if(chk.hasClass('qoll-response-val')) {
+                chk.siblings().removeClass('bg-orange');
+                chk.addClass('bg-orange');
+            }
+            foundorange=true;
         }
-        foundorange=true;
-        }
-		var qollId = this.parent._id;
+
+        var qollId = this.parent._id;
 		var qoll = this.parent;
 		var answerIndex =this._iter_ix;
 		var answerVal = this._iter_v;
 		
-		qlog.info('youclicked: ' +this._iter_v, filename);   
-		qlog.info('youclickedon: ' +event, filename);  
+		qlog.info('youclicked: ' +this._iter_v, filename);
+		qlog.info('youclickedon: ' +event, filename);
 		qlog.info('youclickedid: ' +qollId, filename);
 		qlog.info('the aindex ='+answerIndex,filename);
 	    Meteor.call('registerQollCustom', qollId, answerVal,answerIndex, function(err, qollRegId){
-            qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
+            if(err) {
+                qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
+            } else {
+                qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
+            }
         });
 		//ReactiveDataSource.refresh('qollstat'+ qollId);
 
