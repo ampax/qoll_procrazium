@@ -11,9 +11,15 @@ Template.aceEditor.events({
     }
 
     /** Add a new option/answer **/
-    if((event.keyCode == 65 || event.keyCode == 79) && event.ctrlKey) {
-      console.log("Control-A/O clicked ... adding a new option/answer to the editor now");
+    if(event.keyCode == 79 && event.ctrlKey) {
+      console.log("Control-O clicked ... adding a new option/answer to the editor now");
       bindToolBarForOption(editor);
+    }
+
+    /** Add a new option/answer **/
+    if(event.keyCode == 65 && event.ctrlKey) {
+      console.log("Control-A clicked ... adding a new option/answer to the editor now");
+      bindToolBarForQollAnswer(editor);
     }
 
     /** Add a new LaTeX expression - In-Line **/

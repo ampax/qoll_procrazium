@@ -29,33 +29,51 @@ Template.toolbar.events({
     var recips = jQuery("input#recipient_search").val();
 
     storeEditorContents(editor, recips);
-  },'click .previewqoll': function(){
-    console.log("Preview qoll at this event ...");
+  },'click .previewqoll': function(event){
+    event.preventDefault();
+    var prvimg=$(event.target);
+    if(prvimg.hasClass('glyphicon-eye-open')) {
+      prvimg.removeClass('glyphicon-eye-close');
+      prvimg.addClass('glyphicon-eye-open');
+    }
+    else
+    {
+      prvimg.removeClass('glyphicon-eye-open');
+      prvimg.addClass('glyphicon-eye-close');
+    }
+
     var editor = ace.edit("aceEditor");
-    var qoll_editor_content = editor.getValue();
-    Meteor.call('downtown', qoll_editor_content, downtowm_default, function(err, val){
+    var parsed_qoll;
+    Meteor.call('parse_downtown', editor.getValue(), downtowm_default, function(err, val){
       qlog.info("Rec data from server: " + val, filename);
       if(err) {
-        qoll_editor_content = "Error occured while converting qoll-contents. Please try again.";
+        parsed_qoll = "Error occured while converting qoll-contents. Please try again: " + err;
+        previewQoll(parsed_qoll);
       } else {
-        qoll_editor_content = val;
+        parsed_qoll = val;
+      previewQoll(preparePreviewHtml(parsed_qoll));
       }
-      //previewQoll(qoll_editor_content);
     });
     
     if(jQuery("#aceEditor").hasClass("is-invisible")) {
       qlog.info("Showing ace editor ...", filename);
       jQuery("#aceEditor").removeClass("is-invisible");
       jQuery("#aceEditor_Preview").addClass("is-invisible");
+      jQuery('a.previewqoll > i').addClass("glyphicon-eye-open");
+      jQuery('a.previewqoll > i').removeClass("glyphicon-eye-close");
     } else {
       qlog.info("Hiding ace editor ...", filename);
       jQuery("#aceEditor").addClass("is-invisible");
       jQuery("#aceEditor_Preview").removeClass("is-invisible")
+      jQuery('a.previewqoll > i').removeClass("glyphicon-eye-open");
+      jQuery('a.previewqoll > i').addClass("glyphicon-eye-close");
       
     }
     
   },'click .checkqoll': function(){
     console.log("Check correct item in qoll at this event ...");
+    var editor = ace.edit("aceEditor");
+    bindToolBarForQollAnswer(editor);
   },
 });
 
@@ -100,6 +118,25 @@ var storeEditorContents = function(editor, recips) {
 };
 
 var previewQoll = function(val) {
-  qlog.info("Preview the qoll content: " + val, filename);
   $("div#aceEditor_Preview").html(val);
-}
+};
+
+var preparePreviewHtml = function (qolls){
+  var html = '';
+  qolls.map(function(qoll) {
+    html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll'>";
+    html += qoll['qoll'];
+    html +="</div>";
+    var types = qoll['types'];
+    var idx = 0;
+    types.map(function(t){
+      html += "<div class='col-md-12 col-xs-12 list-group-item'>";
+      html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
+      html += t;
+      html += "</div>";
+      html += '<p>';
+      idx=idx+1;
+    });
+  });
+  return html;
+};

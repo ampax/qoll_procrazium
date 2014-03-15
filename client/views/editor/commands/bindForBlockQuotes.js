@@ -7,5 +7,5 @@ bindForBlockQuotes = function(editor) {
 	//editor.insert("\n");
 	//editor.navigateUp(1);
 	editor.insert("\n> ");
-
+	editor.focus();
 }

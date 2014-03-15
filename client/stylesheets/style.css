@@ -110,44 +110,6 @@ div.divClass1 {
 }
 /** END: style class for h1 **/
 
-
-/** START: style class for a 
-a.aClass1:link {
-    color: rgb(0, 0, 153);
-}
-
-a.aClass1:visited {
-    color: rgb(153, 0, 153);
-}
-
-a.aClass1:hover {
-    color: rgb(0, 96, 255);
-}
-
-a.aClass1:active {
-    color: rgb(255, 0, 102);
-}
-/** START: style class for div **/
-
-/**body {
-    background-image: '/img/icon3.png';
-    background-color: #E4DADA;
-    margin-left: 5%;
-    margin-right: 5%;
-}
-
-h3.class1 {
-    color: red;
-    text-align: left;
-    font-size: 8pt;
-}
-
-h3.class2 {
-    text-align: right;
-    font-size: 20pt;
-}
-**/
-
 #side {
     position: absolute;
     top: 60px;
@@ -202,6 +164,10 @@ a:hover, a:active {
 }
 
 /** START: Glyph icon colors **/
+.bg-qoll {
+    background-color: #F0F0F0;
+}
+
 .bg-orange {
     background-color: orange;
 }

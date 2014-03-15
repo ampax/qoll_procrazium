@@ -37,7 +37,25 @@ var escape_mathjax = function(data){
 };
 
 Meteor.methods({
-    downtown : function(data, option, escape_mathjax){
+    downtown : function(data, option, escape_mathjax) {
         return downtown(data, option, escape_mathjax);
+    },
+    parse_downtown : function(data, option, escape_mathjax) {
+    	var parsed_qolls = new Array();
+    	var qolls = data.split(/\#Qoll\s/);
+        qolls = qolls.slice(1);
+        qolls.map(function(q){
+            var qs = q.split(/\n-\s/);
+            var qoll = qs[0];
+            qoll = downtown(qoll, downtowm_default);
+
+            var types = new Array();
+            qs.slice(1).map(function(type){
+                type = downtown(type, downtowm_default);
+                types.push(type);
+            });
+            parsed_qolls.push({'qoll':qoll, 'types' : types});
+        });
+        return parsed_qolls;
     },
 });

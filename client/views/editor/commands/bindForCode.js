@@ -10,5 +10,5 @@ bindForCode = function(editor) {
 	editor.navigateUp(2);
 	editor.insert("```");
 	editor.navigateDown(1);
-
+	editor.focus();
 }
