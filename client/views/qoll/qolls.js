@@ -1,6 +1,6 @@
 var filename = "client/views/qoll/qolls.js";
 
-var AllQolls = new Meteor.Collection("all-qolls");
+AllQolls = new Meteor.Collection("all-qolls");
 //var QollDetails = new Meteor.Collection("qoll-details-by-id");
 var QollRegist = new Meteor.Collection("qoll-regs");
 
@@ -123,9 +123,9 @@ Template.qolls.created= function(){
 Template.qolls.helpers({
     allQolls: function(event){
         qlog.debug("Getting all the qolls ......", filename);                                                                                                                
-        var q = AllQolls.find({}, {sort:{'submittedOn':-1}, reactive:true});
-        qlog.info("Found qoll: " + JSON.stringify(q.fetch()), filename);
-        return q;
+        this.qollList.rewind();
+        return this.qollList.fetch();
+      
     },
     get_totals:function(){
     	if(Session.get('info_pref')=='full' || Session.get('info_pref')=='less'){
@@ -394,12 +394,12 @@ Template.qolls.rendered = function(){
 Template.contextbtns.helpers({
 		if_inbox:function(){
 			var curpath=  Router && Router.current() && Router.current().path;
-			if (curpath=="/dashboard" && Session.get("hasCreated"))
+			if ((curpath||'').indexOf( "/dashboard")==0 && Session.get("hasCreated"))
 				return true;
 		},
 		info_pref:function(){
 			if(!Session.get('info_pref')){
-				Session.set('info_pref', 'less');
+				Session.set('info_pref', 'full');
 			}
 			return Session.get('info_pref');
 		}
