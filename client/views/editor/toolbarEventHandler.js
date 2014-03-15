@@ -70,6 +70,17 @@ Template.toolbar.events({
 
 /** Manage various events for storing the qoll contents **/
 var storeEditorContents = function(editor, recips) {
+  
+  if($.trim(recips) === '') {
+    var err_target = jQuery(".toolbar-error-msg");
+    err_target.html('Add recipients to save the qoll please ...');
+    err_target.fadeOut( 6400, function(){
+      err_target.html('');
+      err_target.removeAttr("style");
+    });
+    return;
+  }
+
   var editor_content = editor.getValue();
   var target = jQuery(".toolbar-storqoll");
   var store_html = target.html();

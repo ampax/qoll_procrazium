@@ -176,6 +176,10 @@ a:hover, a:active {
     color: orange;
 }
 
+.red {
+    color: red;
+}
+
 i.orange:before {
     color: orange;
 }
