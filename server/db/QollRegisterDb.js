@@ -33,23 +33,20 @@ Meteor.methods({
 					var qollFound = Qoll.find({'_id':qollId}).fetch()[0];
 					var canans =false;
 					qlog.info('checking '+ user.emails[0].address, filename);
-				//	for (var i=0;i<(qollFound.submittedTo||[]).length;i++){
-				//		qlog.info('qoll  USERID --------->>>>>'+qollFound.submittedTo[i], filename);
-				//		}
 				
-			if(qollFound.submittedToGroup.length>0){		        
-	        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address,'submittedBy':qollFound.submittedBy,'groupName':{$in:qollFound.submittedToGroup}},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
-			qlog.info('Custom one two three ' + user.emails[0].address + ', ' + qollFound.submittedBy + ', ' + Meteor.userId(), filename);
-	        var allUserGroups = [];
-	        gpsraw.forEach(function (grpEntry){
-				canans=true;
-				});
-			}
-			if(qollFound.submittedTo.indexOf(user.emails[0].address)>-1)
-			{
-				canans=true;
-				qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
-			}	
+					if(qollFound.submittedToGroup.length>0){
+			        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address,'submittedBy':qollFound.submittedBy,'groupName':{$in:qollFound.submittedToGroup}},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
+					qlog.info('Custom one two three ' + user.emails[0].address + ', ' + qollFound.submittedBy + ', ' + Meteor.userId(), filename);
+			        var allUserGroups = [];
+			        gpsraw.forEach(function (grpEntry){
+						canans=true;
+						});
+					}
+					if(qollFound.submittedTo.indexOf(user.emails[0].address)>-1)
+					{
+						canans=true;
+						qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
+					}	
 					if(canans){
 						//ansCount[qollFound.qollTypes.ind1exOf(qollTypeVal)]= ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]?ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]+1:1;
 						var statsFilter ={};
@@ -88,7 +85,7 @@ Meteor.methods({
 					
 				}
 			}
-            qlog.info('OUTOF register custom qoll' +qollRegId, filename);
+            qlog.info('OUTOF register custom qoll: ' +qollRegId + ' canans: ' + canans, filename);
 			return qollRegId;
 	},
 	
