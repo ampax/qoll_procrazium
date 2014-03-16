@@ -108,6 +108,28 @@ Revert back to commit version
 - git push -f
 ```
 
+####Repair mongodb if you get an error while connecting in local
+```
+sudo rm /var/lib/mongodb/mongod.lock
+sudo mongod --dbpath /var/lib/mongodb/ --repair
+sudo mongod --dbpath /var/lib/mongodb/ --journal
+
+Run "vim /etc/mongodb.conf" and chech "dbpath=/data/db". You should have this setup.
+Run mongo to start the console and run some commands to check the application status.
+```
+Sample mongodb-conf file
+```
+fork = true
+bind_ip = 127.0.0.1
+port = 27017
+quiet = true
+dbpath = /var/lib/mongodb
+logpath = /var/log/mongodb/mongod.log
+logappend = true
+journal = true
+```
+
+
 ####Adding npm/marked to the project
 Add npm to the project to add marked to the project [meteor-npm], [complete-npm-integration]
 ```

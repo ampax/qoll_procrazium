@@ -100,17 +100,18 @@ Meteor.methods({
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-    addQollMaster : function(qollText,emailsandgroups){
+    addQollMaster : function(qollText,emailsandgroups, action){
         qlog.info('Inserting into qoll master', filename);
         var qollMasterId = QollMaster.insert({
             'qollText' : qollText,
             'submittedOn' : new Date(),
             'updatedOn' : new Date(),
             'submittedBy' : Meteor.userId(),
-            'submittedByEmail' : getCurrentEmail
+            'submittedByEmail' : getCurrentEmail,
+
         });
 
-        addQollsForMaster(qollText, qollMasterId, emailsandgroups);
+        addQollsForMaster(qollText, qollMasterId, emailsandgroups, action);
 
         return qollMasterId;
     },
@@ -118,7 +119,7 @@ Meteor.methods({
 
 
 /** Helper method for storing qolls for master-qoll-id **/
-var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups) {
+var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, action) {
         var qollId = new Array();
         var qolls = qollMaster.split(/\#Qoll\s/);
         qolls = qolls.slice(1);
@@ -134,7 +135,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups) {
                 types.push(type);
             });
             qlog.info('qoll: ' + qoll + ", types: " + types, filename);
-			var qid=Meteor.call('addQoll','store', qoll, types, qollRawId, qollMasterId, emailsandgroups);
+			var qid=Meteor.call('addQoll', action, qoll, types, qollRawId, qollMasterId, emailsandgroups);
      
                 qollId.push(qid);
             });

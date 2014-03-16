@@ -22,13 +22,18 @@ Template.toolbar.events({
     bindForBlockQuotes(editor);
   },'click .sendqoll': function(){
     console.log("Send qoll at this event ...");
+    var editor = ace.edit("aceEditor");
+    var qoll_editor_content = editor.getValue();
+    var recips = jQuery("input#recipient_search").val();
+
+    storeEditorContents(editor, recips, "send");
   },'click .storqoll': function(){
     console.log("Store qoll at this event ...");
     var editor = ace.edit("aceEditor");
     var qoll_editor_content = editor.getValue();
     var recips = jQuery("input#recipient_search").val();
 
-    storeEditorContents(editor, recips);
+    storeEditorContents(editor, recips, "store");
   },'click .previewqoll': function(event){
     event.preventDefault();
 
@@ -69,7 +74,7 @@ Template.toolbar.events({
 
 
 /** Manage various events for storing the qoll contents **/
-var storeEditorContents = function(editor, recips) {
+var storeEditorContents = function(editor, recips, action) {
   
   if($.trim(recips) === '') {
     var err_target = jQuery(".toolbar-error-msg");
@@ -94,7 +99,7 @@ var storeEditorContents = function(editor, recips) {
     }
   });
 
-  Meteor.call("addQollMaster", editor_content, emailsandgroups, function(error, qollMasterId){
+  Meteor.call("addQollMaster", editor_content, emailsandgroups, action, function(error, qollMasterId){
     if(error) {
       qlog.info('Error occured storing the master qoll. Please try again.', filename);
       target.html("Failed, try again...");
@@ -106,6 +111,7 @@ var storeEditorContents = function(editor, recips) {
       qlog.info("Added qoll-master-content with id: " + qollMasterId, filename);
       target.html("Qoll Saved...");
       editor.setValue('', 1);
+      jQuery("input#recipient_search").val('');
       target.fadeOut( 2400, function(){
         //setTimeout(function(){
           target.html(store_html);
