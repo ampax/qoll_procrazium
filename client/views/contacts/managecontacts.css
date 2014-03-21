@@ -1,0 +1,13 @@
+.friends {
+	display: inherit;
+	height: 2.5em;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	resize: none;
+	border-color: #bdc3c7;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	vertical-align: middle;
+}

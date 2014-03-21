@@ -6,11 +6,7 @@
 standard-app-packages
 preserve-inputs
 observatory
-highcharts
 accounts-password
-google
-facebook
-oauth
 iron-router
 bootstrap-3
 font-awesome
@@ -20,7 +16,13 @@ observatory-galileo
 page-js-ie-support
 inspector
 chartjs
-showdown
 jquery
 jquery-ui
 accounts-ui-bootstrap-3
+npm
+mathjax
+facebook
+oauth
+google
+ace-embed
+autocompletion

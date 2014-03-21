@@ -108,9 +108,47 @@ Revert back to commit version
 - git push -f
 ```
 
+####Repair mongodb if you get an error while connecting in local
+```
+sudo rm /var/lib/mongodb/mongod.lock
+sudo mongod --dbpath /var/lib/mongodb/ --repair
+sudo mongod --dbpath /var/lib/mongodb/ --journal
+
+Run "vim /etc/mongodb.conf" and chech "dbpath=/data/db". You should have this setup.
+Run mongo to start the console and run some commands to check the application status.
+```
+Sample mongodb-conf file
+```
+fork = true
+bind_ip = 127.0.0.1
+port = 27017
+quiet = true
+dbpath = /var/lib/mongodb
+logpath = /var/log/mongodb/mongod.log
+logappend = true
+journal = true
+```
+
+
+####Adding npm/marked to the project
+Add npm to the project to add marked to the project [meteor-npm], [complete-npm-integration]
+```
+mrt add npm
+npm install -g meteor-npm #single time operation
+meteor-npm #type inside your project
+
+Now edit root/packages.json <<Not package.json>> file and add the following - 
+"marked": "0.3.1" 
+```
+
+Now you can start adding server side code for mark-down processing. If you add client-side processing, it
+will not work. Search for downtown handlebar template to get an idea.
+
 
 ##Additional resources##
 
 Learn how to write better mark-down (.md/README.md) files - [daringfireball]
 
 [daringfireball]: http://daringfireball.net/projects/markdown/syntax "Write Better Markdown"
+[meteor-npm]: https://github.com/arunoda/meteor-npm "Add npm to meteor"
+[complete-npm-integration]: http://meteorhacks.com/complete-npm-integration-for-meteor.html "Complete Npm Integration"

@@ -1,3 +1,4 @@
+var filename = "client/views/header/header_awesome.js";
 Template.header_awesome.rendered = function()
 {
  // Close bootstrap's dropdown menu after clicking
@@ -10,3 +11,4 @@ Template.header_awesome.rendered = function()
         });
     });
 };
+

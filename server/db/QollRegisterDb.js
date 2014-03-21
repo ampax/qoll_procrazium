@@ -6,18 +6,6 @@ Meteor.methods({
             qlog.info('In register qoll: ' + qollId + ', ' + qollTypeVal + ', Meteor.userId ' + Meteor.userId(), filename);
             var existQollReg = QollRegister.find({qollId: qollId, submittedBy: userId}).fetch();
             qlog.debug(existQollReg, filename);
-            /**if(existQollReg.length > 0){
-				QollRegister.update({_id : existQollReg[0]._id}, { $set: {qollTypeVal : qollTypeVal}});
-				return existQollReg[0]._id;
-	        } else {
-				var qollRegId = QollRegister.insert({
-					'qollId' : qollId,
-					'qollTypeVal' : qollTypeVal,
-					'submittedOn' : new Date(),
-					'submittedBy' : Meteor.userId()
-		            });
-				return qollRegId;
-		    }**/
 
 		    var qollRegId = QollRegister.insert({
 				'qollId' : qollId,
@@ -45,41 +33,38 @@ Meteor.methods({
 					var qollFound = Qoll.find({'_id':qollId}).fetch()[0];
 					var canans =false;
 					qlog.info('checking '+ user.emails[0].address, filename);
-				//	for (var i=0;i<(qollFound.submittedTo||[]).length;i++){
-				//		qlog.info('qoll  USERID --------->>>>>'+qollFound.submittedTo[i], filename);
-				//		}
 				
-			if(qollFound.submittedToGroup.length>0){		        
-	        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address,'submittedBy':qollFound.submittedBy,'groupName':{$in:qollFound.submittedToGroup}},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
-			qlog.info('Custom one two three ' + user.emails[0].address + ', ' + qollFound.submittedBy + ', ' + Meteor.userId(), filename);
-	        var allUserGroups = [];
-	        gpsraw.forEach(function (grpEntry){
-				canans=true;
-				});
-			}
-			if(qollFound.submittedTo.indexOf(user.emails[0].address)>-1)
-			{
-				canans=true;
-				qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
-			}	
+					if(qollFound.submittedToGroup.length>0){
+			        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address,'submittedBy':qollFound.submittedBy,'groupName':{$in:qollFound.submittedToGroup}},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
+					qlog.info('Custom one two three ' + user.emails[0].address + ', ' + qollFound.submittedBy + ', ' + Meteor.userId(), filename);
+			        var allUserGroups = [];
+			        gpsraw.forEach(function (grpEntry){
+						canans=true;
+						});
+					}
+					if(qollFound.submittedTo.indexOf(user.emails[0].address)>-1)
+					{
+						canans=true;
+						qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
+					}	
 					if(canans){
 						//ansCount[qollFound.qollTypes.ind1exOf(qollTypeVal)]= ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]?ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]+1:1;
 						var statsFilter ={};
-						var qolltypkey = qollTypeVal.replace(/\./g,"_");
+						var qolltypkey = qollTypeIx;//qollTypeVal.replace(/\./g,"_");
 						statsFilter["stats."+ qolltypkey +""] = 1;
 						
 						qlog.info('adding one to '+ "stats."+ qolltypkey, filename);
 						if(existQollReg.length > 0){
-							if("stats."+ qolltypkey !="stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") ){
+							if("stats."+ qolltypkey !="stats."+existQollReg[0].qollTypeIndex ){
 								
-								statsFilter["stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") ] = -1;
+								statsFilter["stats."+existQollReg[0].qollTypeIndex] = -1;
 								
-								qlog.info('subt one to '+ "stats."+existQollReg[0].qollTypeVal.replace(/\./g,"_") , filename);
+								qlog.info('subt one to '+ "stats."+existQollReg[0].qollTypeIndex , filename);
 							}else{
 								statsFilter["stats."+ qolltypkey ] = 0;
-								qlog.info('no change to '+ "stats."+ qollTypeVal, filename);
+								qlog.info('no change to '+ "stats."+ qolltypkey, filename);
 								}
-							QollRegister.update({_id : existQollReg[0]._id}, { $set: {qollTypeVal : qollTypeVal,'submittedOn' : new Date()}});
+							QollRegister.update({_id : existQollReg[0]._id}, { $set: {qollTypeVal : qollTypeVal,qollTypeIndex:qollTypeIx ,'submittedOn' : new Date()}});
 							Qoll.update({_id:qollId},{ $inc: statsFilter } );//hopefully atomic so thread safe
 							return existQollReg[0]._id;
 						} else {
@@ -100,7 +85,7 @@ Meteor.methods({
 					
 				}
 			}
-            qlog.info('OUTOF register custom qoll' +qollRegId, filename);
+            qlog.info('OUTOF register custom qoll: ' +qollRegId + ' canans: ' + canans, filename);
 			return qollRegId;
 	},
 	
