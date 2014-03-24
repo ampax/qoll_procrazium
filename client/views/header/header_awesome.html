@@ -21,9 +21,9 @@
             <!-- li class="active"><a class="brand" href="dashboard"><i class="fa fa-home fa-fw icon-cog"></i>Qoll</a></li -->
             <li><a href="home"><span class="glyphicon glyphicon-home"> Home</span></a></li>
             {{#if currentUser}}
-            <li><a href="dashboard"><span class="glyphicon glyphicon-list"> Inbox</span></a></li>
-            <li><a href="qolleditor_adv"><span class="glyphicon glyphicon-send"> Create Qoll</span></a></li>
-            <li><a href="newgroup"><span class="fa fa-users"> Create Group </span></a></li>
+            <li><a href="/dashboard"><span class="glyphicon glyphicon-list"> Inbox</span></a></li>
+            <li><a href="/qolleditor_adv"><span class="glyphicon glyphicon-send"> Create Qoll</span></a></li>
+            <li><a href="/newgroup"><span class="fa fa-users"> Create Group </span></a></li>
             
             {{/if}}
 
@@ -37,7 +37,7 @@
             <!-- li class=""><a href="newqoll"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Add</a></li>
             <li class=""><a href="managecontacts"><i class="fa fa-plus-circle fa-fw icon-cog"></i>Groups</a></li -->
             {{#if currentUser.profile.admin}}
-            <li class=""><a href="admin"><i class="fa fa-cogs"></i> Admin</a></li>
+            <li class=""><a href="/admin"><i class="fa fa-cogs"></i> Admin</a></li>
             {{/if}}
           </ul>
           
