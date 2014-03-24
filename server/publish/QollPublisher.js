@@ -19,44 +19,39 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 		};
 		var register_emails={}; //to cache emails for usr ids
 		var fetch_answers = function(item){
-							  var existQollRegs = QollRegister.find({qollId: item._id},
-				  	{reactive:false}).fetch();
-				  var answers; answers = [];
-				  for (var i=0;i<item.qollTypes.length;i++)
-					{
-						answers[i] =[];
-					}
-					
-				  for (var i = 0 ; i<existQollRegs.length;i++)
-				  {
-				  	var thisReg; thisReg = existQollRegs[i];
-				  	
-				  	if(register_emails.hasOwnProperty( thisReg.submittedBy)){
-				  		thisReg['responder_email'] = register_emails[thisReg.submittedBy];
-				  		answers[thisReg.qollTypeIndex].push(thisReg['responder_email']);
-				  	}else{
-				  		var reguser = Meteor.users.find({"_id":thisReg.submittedBy}).fetch();
-				  		qlog.info('REG  USER --------->>>>>'+JSON.stringify(reguser[0].emails[0].address));
-				  		if(reguser && reguser[0] && reguser[0].emails && reguser[0].emails[0].address){
-				  			register_emails[thisReg.submittedBy]= reguser[0].emails[0].address;
-				  			thisReg['responder_email'] = register_emails[thisReg.submittedBy];
-				  			answers[thisReg.qollTypeIndex].push(thisReg['responder_email']);
-				  		}
-				  	}
-				  	
-				  }
-				  return answers;
+			var existQollRegs = QollRegister.find({qollId: item._id}, {reactive:false}).fetch();
+			var answers; answers = [];
+			for (var i=0;i<item.qollTypes.length;i++)
+			{
+				answers[i] =[];
+			}
+			
+			for (var i = 0 ; i<existQollRegs.length;i++)
+		 	{
+			  	var thisReg; thisReg = existQollRegs[i];
+			  	
+			  	if(register_emails.hasOwnProperty( thisReg.submittedBy)){
+			  		thisReg['responder_email'] = register_emails[thisReg.submittedBy];
+			  		answers[thisReg.qollTypeIndex].push(thisReg['responder_email']);
+			  	}else{
+			  		var reguser = Meteor.users.find({"_id":thisReg.submittedBy}).fetch();
+			  		qlog.info('REG  USER --------->>>>>'+JSON.stringify(reguser[0].emails[0].address));
+			  		if(reguser && reguser[0] && reguser[0].emails && reguser[0].emails[0].address){
+			  			register_emails[thisReg.submittedBy]= reguser[0].emails[0].address;
+			  			thisReg['responder_email'] = register_emails[thisReg.submittedBy];
+			  			answers[thisReg.qollTypeIndex].push(thisReg['responder_email']);
+			  		}
+			  	}
+		  	
+			}
+		  return answers;
 
 		};
         qlog.info('Fetching all the qolls in desc order of creation; uuid: ' + uuid, filename);
-        //db.QOLL.find({'submittedTo':'usr3322@qoll','action':'send'})
         if(this.userId) {//first publish specialized qolls to this user
-			qlog.info('MY  USERID --------->>>>>'+this.userId);
 			var ufound = Meteor.users.find({"_id":this.userId}).fetch();
 			if (ufound.length>0){
 			var user= ufound[0];
-			qlog.info('MY  USER --------->>>>>'+user);
-			qlog.info('MY  USER --------->>>>>'+user.emails);
 			
 			//submitted by this user
 			var handle = Qoll.find({'submittedBy':this.userId,'action':{$ne:'archive'}}, {sort:{'submittedOn':-1}, reactive:true, limit:lim}).observe({
@@ -67,19 +62,32 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
 	                qollTypes : item.qollTypes,
+	                qollTypesX : item.qollTypesX,
 	                submittedOn : item.submittedOn,
 	                submittedBy : item.submittedBy,
 	                submittedTo : item.submittedTo,
 	                action :item.action,
+	                enableEdit: item.action === 'store',
 	                stats: item.stats,
 	                answers: fetch_answers(item),
 	                totals:sumstats(item.stats),
 	                viewContext: "createUsr",
 	                
-	                _id : item._id
+	                _id : item._id,
+	            	qollRawId: item.qollRawId
 	              };
+
+	              //get qoll registers
+	              Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, qollTypeReg){
+		                if(err) {
+		                	qlog.error('Error happened while getting registers' + err, filename);
+		                } else {
+		                	qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
+		                	if(qollTypeReg!=undefined) q.qollTypeReg = qollTypeReg;
+		                }
+		            });
+
 	              self.added('all-qolls', item._id, q);
-	              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          changed: function(item, idx) {
@@ -89,19 +97,32 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 	                qollTitle : item.qollTitle,
 	                qollText : item.qollText,
 	                qollTypes : item.qollTypes,
+	                qollTypesX : item.qollTypesX,
 	                submittedOn : item.submittedOn,
 	                submittedBy : item.submittedBy,
 	                submittedTo : item.submittedTo,
 	                action :item.action,
+	                enableEdit: item.action === 'store',
 	                stats: item.stats,
 	                answers: fetch_answers(item),
 	                totals:sumstats(item.stats),
 	                viewContext: "createUsr",
 	                
-	                _id : item._id
+	                _id : item._id,
+	            	qollRawId: item.qollRawId
 	              };
+
+	              //get qoll registers
+	              Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, qollTypeReg){
+		                if(err) {
+		                	qlog.error('Error happened while getting registers' + err, filename);
+		                } else {
+		                	qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
+		                	if(qollTypeReg!=undefined) q.qollTypeReg = qollTypeReg;
+		                }
+		            });
+
 	              self.changed('all-qolls', item._id, q);
-	              //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
 	          },
 	          removed: function(item) {
@@ -133,6 +154,17 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 	                
 	                _id : item._id
 	              };
+
+	              //get qoll registers
+	              Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg){
+		                if(err) {
+		                	qlog.error('Error happened while getting registers' + err, filename);
+		                } else {
+		                	qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
+		                	if(qollTypeReg!=undefined) q.qollTypeReg = qollTypeReg;
+		                }
+		            });
+
 	              self.added('all-qolls', item._id, q);
 	              //qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
@@ -171,6 +203,17 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
 	                
 	                _id : item._id
 	              };
+
+	              //get qoll registers
+	              Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg){
+		                if(err) {
+		                	qlog.error('Error happened while getting registers' + err, filename);
+		                } else {
+		                	qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
+		                	if(qollTypeReg!=undefined) q.qollTypeReg = qollTypeReg;
+		                }
+		            });
+
 	              self.added('all-qolls', item._id, q);
 	              //qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
 
@@ -201,16 +244,20 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions ){
                 viewContext: "publicQolls",
                 _id : item._id
               };
+
+          	//get qoll registers
+              Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg){
+	                if(err) {
+	                	qlog.error('Error happened while getting registers' + err, filename);
+	                } else {
+	                	qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
+	                	if(qollTypeReg!=undefined) q.qollTypeReg = qollTypeReg;
+	                }
+	            });
+
               self.added('all-qolls', item._id, q);
-              //qlog.info('Adding another PUBLIC RECIEVED qoll --------->>>>>'+item._id,filename);
-              //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(qtype));
-              //qlog.info('Adding another qoll --------->>>>>'+JSON.stringify(q));
             
           }
-          /**removed: function(item) {
-            self.removed('all-qolls', item._id);
-            qlog.info('Removed item with id: ' + item._id);
-          }**/
         });
 		//finally publish all public qolls
         qlog.info('Done initializing the publisher: All_QOLL_PUBLISHER, uuid: ' + uuid, filename);
@@ -265,6 +312,17 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function(){
                 
                 _id : item._id
               };
+
+              //get qoll registers
+              Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg){
+	                if(err) {
+	                	qlog.error('Error happened while getting registers' + err, filename);
+	                } else {
+	                	qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
+	                	if(qollTypeReg!=undefined) q.qollTypeReg = qollTypeReg;
+	                }
+	            });
+
               self.added('all-open-qolls', item._id, q);
               //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 
@@ -286,6 +344,17 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function(){
 	            
 	            _id : item._id
 	          };
+
+	          //get qoll registers
+              Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg){
+	                if(err) {
+	                	qlog.error('Error happened while getting registers' + err, filename);
+	                } else {
+	                	qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
+	                	if(qollTypeReg!=undefined) q.qollTypeReg = qollTypeReg;
+	                }
+	            });
+              
 	          self.changed('all-open-qolls', item._id, q);
 	          //qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
 

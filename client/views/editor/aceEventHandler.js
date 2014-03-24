@@ -1,6 +1,6 @@
 Template.aceEditor.events({
   'keydown' : function(event) {
-    console.log("the keycode is: " + event.keyCode );
+    //console.log("the keycode is: " + event.keyCode );
 
     var editor = ace.edit("aceEditor");
 

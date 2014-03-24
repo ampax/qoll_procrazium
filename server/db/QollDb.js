@@ -22,7 +22,7 @@ Meteor.methods({
             return qollId;
         },
 
-        addQoll: function(action, qollText, qollTypes, qollRawId, qollMasterId, emails){
+        addQoll: function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails){
             qlog.info("GOOD Add qoll: " +qollText, filename);
             var newQtype = {};
             var i =0, actualmails=[],actualgroups=[];
@@ -39,7 +39,9 @@ Meteor.methods({
             var qollId = Qoll.insert({
                     'action' : action,
                     'qollText' : qollText,
+                    'isMultiple' : isMultiple,
                     'qollTypes' : qollTypes,
+                    'qollTypesX' : qollTypesX,
                     'stats': newQtype,
                     'submittedToGroup' : actualgroups,
                     'submittedOn' : new Date(),
@@ -120,22 +122,42 @@ Meteor.methods({
 
 /** Helper method for storing qolls for master-qoll-id **/
 var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, action) {
+        var regExAnser = /^(a)\s+/;
+        var regExNoAnser = /^\s+/;
         var qollId = new Array();
         var qolls = qollMaster.split(/\#Qoll\s/);
         qolls = qolls.slice(1);
         qolls.map(function(q){
             var qollRawId = addQollRaw(q, qollMasterId);
-            var qs = q.split(/\n-\s/);
+            var qs = q.split(/\n-/);
             var qoll = qs[0];
             qoll = downtown(qoll, downtowm_default);
 
+            var count =0;
             var types = new Array();
+            var typesX = new Array();
+            var isMultiple = false;
             qs.slice(1).map(function(type){
-                type = downtown(type, downtowm_default);
+                var x = {};
+                type = type.trim();
+                if(type.indexOf('(a) ') == 0) {
+                    type = type.replace('(a) ', '');
+                    type = downtown(type, downtowm_default);
+                    x.type = type;
+                    x.isCorrect = 1;
+                    count++;
+                } else {
+                    type = downtown(type, downtowm_default);
+                    x.type = type;
+                    x.isCorrect = 0;
+                }
+
                 types.push(type);
+                typesX.push(x);
             });
+            if(count > 1) isMultiple = true;
             qlog.info('qoll: ' + qoll + ", types: " + types, filename);
-			var qid=Meteor.call('addQoll', action, qoll, types, qollRawId, qollMasterId, emailsandgroups);
+			var qid=Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups);
      
                 qollId.push(qid);
             });
