@@ -12,6 +12,8 @@
     "accounts-ui-bootstrap-3": {},
     "ace-embed": {},
     "mathjax": {},
-    "autocompletion": {}
+    "autocompletion": {},
+    "wow": {},
+    "animate-css": {},
   }
 }

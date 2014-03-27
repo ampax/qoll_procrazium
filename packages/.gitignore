@@ -10,7 +10,6 @@
 /bootstrap-3
 /font-awesome
 /inspector
-/
 /chartjs
 /jquery-ui
 /accounts-ui-bootstrap-3
@@ -20,3 +19,7 @@
 /easy-search
 /autocompletion
 /spin
+/wow
+/template-animation-helper
+/animate-css
+

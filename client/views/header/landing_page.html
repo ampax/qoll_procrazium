@@ -1,0 +1,229 @@
+<template name="landing_page">
+  <div id="page">
+    <div class="site-navbar navbar navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="home"><img src="img/QollBrandGrey.png" alt="Logo"></a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right collapse-onclick">
+            <li class="active"><a href="#main">Home</a></li>
+            <li><a href="#about">Concept</a></li>
+            <li><a href="#services">Explore</a></li>
+            <li><a href="#blog">FAQ</a></li>
+            <li><a href="#contact">Contact</a></li>
+                      <ul class="nav navbar-nav navbar-right">
+            {{ loginButtons }} <!-- here -->
+          </ul>
+          </ul>
+
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+    </div>
+    <main id="main" class="site-main">
+      <!-- Carousel -->
+      <div id="carousel-example-captions" class="carousel slide" data-ride="carousel">
+        <ol class="carousel-indicators wow fadeInUp">
+          <li data-target="#carousel-example-captions" data-slide-to="0" class=""></li>
+          <li data-target="#carousel-example-captions" data-slide-to="1" class=""></li>
+          <li data-target="#carousel-example-captions" data-slide-to="2" class="active"></li>
+        </ol>
+        <div class="carousel-inner">
+          <div class="item">
+            <img class="wow pulse" data-wow-duration="3s" alt="1" src="img/bg-1.jpg" alt="bg-1">
+            <div class="carousel-caption">
+              <h3 class="wow bounceInLeft" data-wow-duration="2s">Direct, Live, Responsive!</h3>
+              <span class="wow bounceInRight" data-wow-duration="2s">Discover in real-time</span>
+            </div>
+          </div>
+          <div class="item">
+            <img class="wow pulse" data-wow-duration="3s" alt="2" src="img/bg-2.jpg" alt="bg-2">
+            <div class="carousel-caption">
+              <h3 class="wow bounceInLeft" data-wow-duration="2s">A network of information</h3>
+              <span class="wow bounceInRight" data-wow-duration="2s">Knowledge resides amongst us. Let's begin to explore within!</span>
+            </div>
+          </div>
+          <div class="item active">
+            <img class="wow pulse" data-wow-duration="3s" alt="3" src="img/bg-3.jpg" alt="bg-3">
+            <div class="carousel-caption">
+              <h3 class="wow bounceInLeft" data-wow-duration="2s">Knowledge that is pure, fresh, and instant </h3>
+              <span class="wow bounceInRight" data-wow-duration="2s">Don't roll a dice when you can make an intelligent choice.</span>
+            </div>
+          </div>
+        </div>
+        <a class="left carousel-control" href="#carousel-example-captions" data-slide="prev">
+        <span class="fa fa-chevron-left"></span>
+        </a>
+        <a class="right carousel-control" href="#carousel-example-captions" data-slide="next">
+        <span class="fa fa-chevron-right"></span>
+        </a>
+      </div>
+      <!-- ABOUT -->
+      <section id="about">
+        <a name="about"></a>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Concept</h3>
+            </div>
+            <div class="col-md-6 col-sm-6 wow bounceInLeft">
+              <p>Questions are at the foundation of our decision making process. We learn by asking questions from those around us. We reduce uncertainty and biases in our decision making by confirming our beliefs through asking questions. Or we just ask and then pick up the answer that sounds most reasonable on basis of our search.</p>
+              <p>Timely tiny packets of information can make a sea-change in people's lives and make the world around us a better place. Each of us knows a little something that may help others make better decisions. You do not need to be an expert to be able to make such an enormous positive impact. Simply by answering a few questions based only on readily available information around you or through your experience you can make possible a vast ecosystem of information. Once you are a part of this information eco system you will be a driver of continuously improvement of lives.</p>
+            </div>
+            <div class="col-md-6 col-sm-6 wow bounceInRight">
+              <p>People are our observers and transmitters of information that Qoll aggregates in simple facts to satisfy your curiosity with knowledge that is pure, fresh, and immediate.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- SERVICES -->
+      <section id="services">
+        <a name="services"></a>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Explore Possibilties</h3>
+            </div>
+            <div class="col-md-4 col-sm-4 wow bounceInLeft">
+              <p><span><i class="fa fa-user"></i></span></p>
+              <h4>Social </h4>
+              <p>Build your information network using Qoll. Using this network you can turn every tip of tongue to a tip of tap! Use Qoll to achieve quick and transparent group decisions or simply ask a question and get “common” opinion on it.</p>
+            </div>
+            <div class="col-md-4 col-sm-4 wow bounceInUp">
+              <p><span><i class="fa fa-pencil-square-o"></i></span></p>
+              <h4>Education</h4>
+              <p>Engage with your students during the class or before the exam and gauge their understanding of subject material. You can help them build their understanding questions by question.</p>
+            </div>
+            <div class="col-md-4 col-sm-4 wow bounceInRight">
+              <p><span><i class="fa fa-sitemap"></i></span></p>
+              <h4>Business</h4>
+              <p>Involve your customers in the decisions that are important to them. Gauge their interest in a product and assess demand through short surveys, or simply reach out to them and build a stronger bond. </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- Blog Posts -->
+      <section id="blog">
+        <a name="blog"></a>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h3>FAQ</h3>
+            </div>
+            <div class="col-md-6 col-sm-6 wow bounceInLeft">
+              <h4>Quick Tip: Working with Qoll</h4>
+              <p>Lorem ipsum dolor sit amet, ne qui animal regione adversarium, ferri nonumes signiferumque qui no, errem doming persecuti pro at. At sit suavitate consectetuer. Ad nec vide tincidunt. An esse docendi his, pro eius dicta dicit id. Qui an ludus albucius delectus, nec in meis corpora, dolorum nusquam torquatos quo ex.</p>
+            </div>
+            <div class="col-md-6 col-sm-6 wow bounceInRight">
+              <ul>
+                <li>
+                  <p>What is a qoll</p>
+                  <h5><a href="single.html">Creating a Simple Responsive Html email</a></h5>
+                </li>
+                <li>
+                  <p>Januari 17, 2014</p>
+                  <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
+                </li>
+                <li>
+                  <p>Januari 17, 2014</p>
+                  <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
+                </li>
+                <li>
+                  <p>Januari 17, 2014</p>
+                  <h5><a href="single.html">Lorem ipsum dolor sit amet</a></h5>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="contact">
+        <a name="contact"></a>        
+        <div class="container">
+          <div class="row">
+            <div class="col-md-12">
+              <h3>Contact</h3>
+            </div>
+          </div>
+        </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-8 col-sm-8 wow bounceInRight">
+              <form role="form" class="frm" method="post" action="contactus.php">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="Name">Name *</label>
+                    <input type="text" class="form-control" name="Name" id="Name" placeholder="Enter name">
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="Email">Email *</label>
+                    <input type="email" class="form-control" Name="Email" id="Email" placeholder="Enter email">
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="Message">Messages *</label>
+                    <textarea name="Message" id="Message" class="form-control" rows="3" placeholder="Enter messages"></textarea>
+                  </div>
+                  <input type="submit" name="submit" value="Send Message" class="btn btn-primary btn-lg btn-block btn-biru" />                    
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>page
+    </main>
+    <footer>
+      &copy;2014 Millennials Venture Labs <br>
+    </footer>
+  </div>
+  <!-- Scroll to top -->
+  <div class="scroll-to-top affix" data-spy="affix" data-offset-top="200"><a href="#" class="smooth-scroll"><i class="fa fa-arrow-up"></i></a></div>
+  <!-- modal -->
+  <div class="modal fade" id="modal-login" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-portfolio">
+      <div class="modal-content">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>       
+        <div class="modal-body">
+          <!--  -->   
+          <div id="carousel-example-generic" class="carousel slide" data-ride="carousel">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+              <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+              <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner">
+              <div class="item">
+                <img src="images/portfolio.jpg" alt="Portfolio1"> 
+              </div>
+              <div class="item">
+                <img src="images/portfolio2.jpg" alt="Portfolio2"> 
+              </div>
+              <div class="item active">
+                <img src="images/portfolio3.jpg" alt="Portfolio3"> 
+              </div>
+            </div>
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic" data-slide="prev">
+            <span class="fa fa-chevron-left"></span>
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic" data-slide="next">
+            <span class="fa fa-chevron-right"></span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>

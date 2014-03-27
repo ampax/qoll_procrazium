@@ -24,16 +24,3 @@ checkSessionAndSendToHome = function() {
 	}
 }
 
-Router.configure({
-	layout : 'layout',
-	loadingTemplate : 'loading',
-	notFoundTemplate : 'notFound',
-
-	before: function(){
-		//qlog.info('Initializing routing ...', filename);
-		//active_brand_nav();
-	},
-	after: function(){
-		//qlog.info('Done initializing routing ...', filename);
-	}
-});
