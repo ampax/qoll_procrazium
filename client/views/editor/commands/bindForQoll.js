@@ -2,7 +2,7 @@ var filename="bindForQoll.js";
 
 bindToolBarForQoll = function(editor) {
 	console.log('Initializing for qoll');
-	editor.getSession().setMode("ace/mode/text");
+	//editor.getSession().setMode("ace/mode/text");
 	//editor.setValue(editor.getValue(), 1);
 	if(editor.find("\n#Qoll ", {wrap: false}, false)){
 		console.log('Log found ...');
@@ -25,13 +25,23 @@ bindToolBarForQoll = function(editor) {
 	// Calculate total number of lines
 	var len = editor.session.getLength();
 	console.log("Total number of lines in the editor: " + len);
+	editor.focus();
 };
 
 
 bindToolBarForOption = function(editor) {
 	console.log('Initializing for option');
-	editor.getSession().setMode("ace/mode/text");
+	//editor.getSession().setMode("ace/mode/text");
 	editor.navigateLineEnd();
 	editor.insert("\n");
 	editor.insert("- ");
+	editor.focus();
+};
+
+bindToolBarForQollAnswer = function(editor){
+	console.log('Initializing for answer');
+	editor.navigateLineStart();
+	editor.navigateRight(1);
+	editor.insert("(a)");
+	editor.focus();
 };

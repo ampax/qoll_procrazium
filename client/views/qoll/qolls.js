@@ -83,7 +83,7 @@ Template.qolls.created= function(){
    	var qollId = v.qollId;
    	var qollTypeVal = v.qollTypeVal;
    	var qollTypeIx = v.qollTypeIndex;
-   	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
+   	/**$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
    			var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
    			qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
     		if(myouttxt== qollTypeIx){
@@ -94,7 +94,7 @@ Template.qolls.created= function(){
     			
     			$(elem).removeClass('bg-orange');
     		}
-    	});
+    	});**/
    } ,
    changed:function(v,vold){
    	 qlog.debug("Getting qoll regs ......", filename);   
@@ -102,7 +102,7 @@ Template.qolls.created= function(){
    	var qollId = v.qollId;
    	var qollTypeVal = v.qollTypeVal;
    	var qollTypeIx = v.qollTypeIndex;
-   	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
+   	/**$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
    			var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
    			qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
     		if(myouttxt== qollTypeIx){
@@ -113,7 +113,7 @@ Template.qolls.created= function(){
     			
     			$(elem).removeClass('bg-orange');
     		}
-    	});
+    	}); **/
    }
  });
 };
@@ -154,6 +154,9 @@ Template.qolls.helpers({
 	if_lock: function (){
 		return (this.action =='lock');
 	},
+    if_edit: function(){
+        return this.enableEdit;
+    },
     iif: function(qollType){
         //qlog.info("Getting all the qollslkjhadkhaskf ......", filename);
         //qlog.info('iif(qollType):  ' + qollType, filename);
@@ -198,18 +201,30 @@ Template.qolls.helpers({
     qoll_abbr_class: function(idx) {
         return "class_"+idx;
     },
-    check_orange: function(qollid,qollTypeIx){
-    	//qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    check_selected: function(qollid,qollTypeIx){
+    	qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
     	var retval ='';
     	QollRegist.find({qollId:qollid,qollTypeIndex:qollTypeIx},{reactive:false}).forEach(function (v){
     		//qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
-    		retval = 'bg-orange';
+    		retval = 'border-selected';
     	});
     	return retval;
     },
     comma_seperate: function (thelist){
     	return thelist.join();
-    }
+    },
+    is_chk_selected: function (qollTypeReg, idx){
+        qlog.info('is chk selected: ' + JSON.stringify(qollTypeReg[idx]), filename);
+        if(qollTypeReg == undefined) return '';
+        if(qollTypeReg[idx]) return 'border-selected'
+    },
+    is_correct_answer: function (qollTypesX, idx){
+        if(qollTypesX == undefined) return false;
+        if(qollTypesX[idx].isCorrect) {
+            return true;
+        }
+        return false;
+    },
 });
 
 
@@ -233,55 +248,62 @@ Template.qolls.events({
     },
 	'click .qoll-response-val': function(event){
 		event.preventDefault();
-        //jQuery(this).removeClass('orange');
         var chk=$(event.target);
-        var foundorange=false;
 
+        var isChkSelected = false;
         if(chk.hasClass('border-selected')) {
-            chk.removeClass('border-selected');
+            isChkSelected = true;
         }
-        else
-        {
+
+        //If not a multiple choice question, remove the border-selected
+        if(!this.isMultiple) {
+            $(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem){
+                $(this).removeClass('border-selected');
+            });
+        }
+
+        if(!isChkSelected) {
             chk.addClass('border-selected');
         }
 
+        /**var foundanswer=false;
         if(chk.hasClass('qoll-response-val')) {
-            //chk.siblings().removeClass('bg-orange');
-            //chk.addClass('bg-orange');
-            foundorange=true;
+            foundanswer=true;
         }
-        if(!foundorange){
-        chk=$(event.target).parent();
-        if(chk.hasClass('qoll-response-val')) {
-            //chk.siblings().removeClass('bg-orange');
-            //chk.addClass('bg-orange');
+        if(!foundanswer){
+            chk=$(event.target).parent();
+            if(chk.hasClass('qoll-response-val')) {
+            }
+            foundanswer=true;
         }
-        foundorange=true;
-        }
-        if(!foundorange){
-        chk=$(event.target).parent().parent();
-        if(chk.hasClass('qoll-response-val')) {
-            chk.siblings().removeClass('bg-orange');
-            chk.addClass('bg-orange');
-        }
-        foundorange=true;
-        }
-		var qollId = this.parent._id;
+        if(!foundanswer){
+            chk=$(event.target).parent().parent();
+            if(chk.hasClass('qoll-response-val')) {
+                chk.siblings().removeClass('bg-orange');
+                chk.addClass('bg-orange');
+            }
+            foundanswer=true;
+        }**/
+
+        var qollId = this.parent._id;
 		var qoll = this.parent;
 		var answerIndex =this._iter_ix;
 		var answerVal = this._iter_v;
 		
-		qlog.info('youclicked: ' +this._iter_v, filename);   
-		qlog.info('youclickedon: ' +event, filename);  
+		qlog.info('youclicked: ' +this._iter_v, filename);
+		qlog.info('youclickedon: ' +event, filename);
 		qlog.info('youclickedid: ' +qollId, filename);
 		qlog.info('the aindex ='+answerIndex,filename);
 	    Meteor.call('registerQollCustom', qollId, answerVal,answerIndex, function(err, qollRegId){
-            qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
+            if(err) {
+                qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
+            } else {
+                qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
+            }
         });
-		//ReactiveDataSource.refresh('qollstat'+ qollId);
 
-        $(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
-		},
+        //$(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
+	},
 	'click .send-qoll-btn': function(event){
 		event.preventDefault();
 		var qollId = this._id;
@@ -342,9 +364,7 @@ Template.qolls.events({
         if(Meteor.userId()){
             var qollId = this._id;
             qlog.info('Registering qoll for: ' + qollId+'/maybe' + event, filename);                                                                                                     
-            Meteor.call('registerQoll', qollId, 'maybe', function(err, qollRegId){
-                qlog.info('Registered qoll with id: ' + qollRegId+'/maybe', filename);
-            });
+             
         }
     },
 

@@ -8,6 +8,7 @@ bindForLatexInline = function(editor) {
 	//editor.insert("$$");
 	editor.insert("{inline}{/inline}");
 	editor.navigateLeft(9);
+	editor.focus();
 }
 
 bindForLatexBlock = function(editor) {
@@ -18,4 +19,5 @@ bindForLatexBlock = function(editor) {
 	//editor.insert("\n$$\n\n$$\n");
 	editor.insert("\n{block}\n\n{/block}\n");
 	editor.navigateUp(2);
+	editor.focus();
 }

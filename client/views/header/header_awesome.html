@@ -19,10 +19,11 @@
             <li><a href="dashboard"><span class="glyphicon glyphicon-list"> Inbox</span></a></li>
             <li><a href="qolleditor_adv"><span class="glyphicon glyphicon-send"> Create Qoll</span></a></li>
             <li><a href="newgroup"><span class="fa fa-users"> Create Group </span></a></li>
+
             {{/if}}
              {{> contextbtns}}
             {{#if currentUser.profile.admin}}
-            <li class=""><a href="admin"><i class="fa fa-cogs"></i> Admin</a></li>
+            <li class=""><a href="/admin"><i class="fa fa-cogs"></i> Admin</a></li>
             {{/if}}
           </ul>        
             <ul class="nav navbar-nav navbar-right">

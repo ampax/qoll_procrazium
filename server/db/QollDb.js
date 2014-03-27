@@ -4,6 +4,8 @@ Qoll = new Meteor.Collection("QOLL");
 
 QollMaster = new Meteor.Collection("QOLL_MASTER");
 
+QollRaw = new Meteor.Collection("QOLL_RAW");
+
 /** Database insert method for qolls  **/
 Meteor.methods({
         addQoll: function(qollText, qollType){
@@ -20,7 +22,7 @@ Meteor.methods({
             return qollId;
         },
 
-        addQoll: function(action, qollText, qollTypes, emails){
+        addQoll: function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails){
             qlog.info("GOOD Add qoll: " +qollText, filename);
             var newQtype = {};
             var i =0, actualmails=[],actualgroups=[];
@@ -37,13 +39,17 @@ Meteor.methods({
             var qollId = Qoll.insert({
                     'action' : action,
                     'qollText' : qollText,
+                    'isMultiple' : isMultiple,
                     'qollTypes' : qollTypes,
+                    'qollTypesX' : qollTypesX,
                     'stats': newQtype,
                     'submittedToGroup' : actualgroups,
                     'submittedOn' : new Date(),
                     'submittedBy' : Meteor.userId(),
                     'submittedByEmail' : getCurrentEmail,
-                    'submittedTo' : actualmails
+                    'submittedTo' : actualmails,
+                    'qollRawId' : qollRawId,
+                    'qollMasterId' : qollMasterId
                 });
             
             return qollId;
@@ -96,17 +102,18 @@ Meteor.methods({
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-    addQollMaster : function(qollMaster,emailsandgroups){
+    addQollMaster : function(qollText,emailsandgroups, action){
         qlog.info('Inserting into qoll master', filename);
         var qollMasterId = QollMaster.insert({
-            'qollMaster' : qollMaster,
+            'qollText' : qollText,
             'submittedOn' : new Date(),
             'updatedOn' : new Date(),
             'submittedBy' : Meteor.userId(),
-            'submittedByEmail' : getCurrentEmail
+            'submittedByEmail' : getCurrentEmail,
+
         });
 
-        addQollsForMaster(qollMaster, qollMasterId,emailsandgroups);
+        addQollsForMaster(qollText, qollMasterId, emailsandgroups, action);
 
         return qollMasterId;
     },
@@ -114,25 +121,57 @@ Meteor.methods({
 
 
 /** Helper method for storing qolls for master-qoll-id **/
-var addQollsForMaster = function(qollMaster, qollMasterId,emailsandgroups) {
+var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, action) {
+        var regExAnser = /^(a)\s+/;
+        var regExNoAnser = /^\s+/;
         var qollId = new Array();
         var qolls = qollMaster.split(/\#Qoll\s/);
         qolls = qolls.slice(1);
         qolls.map(function(q){
-            var qs = q.split(/\n-\s/);
+            var qollRawId = addQollRaw(q, qollMasterId);
+            var qs = q.split(/\n-/);
             var qoll = qs[0];
-            qoll = downtown(qoll, downtowm_default);
+            qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
 
+            var count =0;
             var types = new Array();
+            var typesX = new Array();
+            var isMultiple = false;
             qs.slice(1).map(function(type){
-                type = downtown(type, downtowm_default);
+                var x = {};
+                type = type.trim();
+                if(type.indexOf('(a) ') == 0) {
+                    type = type.replace('(a) ', '');
+                    type = DownTown.downtown(type, DownTownOptions.downtown_default());
+                    x.type = type;
+                    x.isCorrect = 1;
+                    count++;
+                } else {
+                    type = DownTown.downtown(type, DownTownOptions.downtown_default());
+                    x.type = type;
+                    x.isCorrect = 0;
+                }
+
                 types.push(type);
+                typesX.push(x);
             });
+            if(count > 1) isMultiple = true;
             qlog.info('qoll: ' + qoll + ", types: " + types, filename);
-			var qid=Meteor.call('addQoll','store', qoll, types, emailsandgroups);
+			var qid=Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups);
      
                 qollId.push(qid);
             });
 
       qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
+};
+
+var addQollRaw = function(qollText, qollMasterId){
+    var qollRawId = QollRaw.insert({
+            'qollText' : qollText,
+            'qollMasterId' : qollMasterId,
+            'submittedOn' : new Date(),
+            'submittedBy' : Meteor.userId(),
+            'submittedByEmail' : getCurrentEmail
+        });
+    return qollRawId;
 };

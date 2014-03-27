@@ -4,19 +4,22 @@
   <div class="row">
     {{#each allQolls}}
     <div>
-    <div class="col-md-12 col-xs-12 list-group-item" id='{{_id}}'>
+    <div class="col-md-12 col-xs-12 list-group-item qoll-seperator bg-qoll" id='{{_id}}'>
 
-      <div class="col-md-10 col-xs-8">{{#mathjax}}{{{qollText}}}{{/mathjax}}</div>
+      <div class="col-md-10 col-xs-12">{{#mathjax}}{{{qollText}}}{{/mathjax}}</div>
 
-      <div class="col-md-2 col-xs-4">
+      <div class="col-md-2 col-xs-12">
         {{#if if_createusr}}
-        	<span class="badge lesstoggle">{{get_totals}}</span>
+        	<span class="pull-left badge lesstoggle">{{get_totals}}</span>
           {{#if if_stored}}
           <span class="pull-right send-qoll-btn glossy"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
           {{/if}}
           {{#if if_send}}
             <span class="pull-right lock-qoll-btn glossy"><i class="glyphicon glyphicon-off orange lock-btn ios-enabled"></i></span>
           {{/if}}
+          {{#if if_edit}}
+            <!-- span class="pull-right glossy"><a href="qolleditor_adv_edit"><i class="glyphicon glyphicon-pencil blue ios-enabled"></i></a></span-->
+          {{/if}} 
           {{#if if_lock}}
             <span class="pull-right resend-qoll-btn glossy"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
           {{/if}}          
@@ -29,14 +32,22 @@
       </div>
     </div>
     
+    <div class="row">
+      <div class="col-md-10 col-xs-12">
       {{#eachport qollTypes}}
       {{#include parent=.. }}
-      <div class="col-md-10 col-xs-10 list-group-item {{check_orange ../../_id _iter_ix}}">
-        <div class="col-md-8 col-xs-8 indent-littlebit" id="{{_iter_ix}}">
-           <span class="badge pull-left qoll-response-val {{qoll_abbr_class _iter_ix}} glossy">{{qoll_type_abbr _iter_ix}}</span>
+      <div class="col-md-12 col-xs-12 list-group-item">
+        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{_iter_ix}}">
+          <span class="badge pull-left qoll-response-val {{qoll_abbr_class _iter_ix}} {{is_chk_selected ../../qollTypeReg _iter_ix}} 
+          {{check_selected ../../_id _iter_ix}}  glossy">
+            {{qoll_type_abbr _iter_ix}}
+          </span>
             &nbsp;{{{_iter_v}}}
         </div>
         <div class="col-md-2 col-xs-2">
+            {{#if is_correct_answer ../../qollTypesX _iter_ix if_createusr}}
+              <i class="glyphicon glyphicon-check green"></i>
+            {{/if}}
             <span class="badge pull-right fulltoggle">{{value_at ../../stats _iter_ix}}</span>
         </div>
         {{#with  value_at ../../answers _iter_ix}}
@@ -50,15 +61,19 @@
 
       {{/include}}
       {{/eachport}}
-    
 
-      <div class="col-md-4 col-xs-4">
-        <canvas id="charts{{_id}}" width="50" height="50"></canvas>
+    </div>
+    <div class="col-md-2 col-xs-12">
+      
+      <!--div class="col-md-12 col-xs-12"-->
+        <canvas id="charts{{_id}}" width="100" height="100"></canvas>
         <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
-      </div>
+      <!--/div-->
+    </div>
 </div>
     {{/each}}
   </div>
+  <div id="navbrand"></div>
   {{#if nextPath}}
   <ul class="pager">
   
