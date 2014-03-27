@@ -39,7 +39,7 @@ Template.toolbar.events({
 
     var editor = ace.edit("aceEditor");
     var parsed_qoll;
-    Meteor.call('parse_downtown', editor.getValue(), downtowm_default, function(err, val){
+    Meteor.call('parse_downtown', editor.getValue(), DownTownOptions.downtown_default(), function(err, val){
       qlog.info("Rec data from server: " + val, filename);
       if(err) {
         parsed_qoll = "Error occured while converting qoll-contents. Please try again: " + err;
@@ -131,17 +131,27 @@ var previewQoll = function(val) {
 var preparePreviewHtml = function (qolls){
   var html = '';
   qolls.map(function(qoll) {
-    html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll'>";
+    html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>";
     html += qoll['qoll'];
     html +="</div>";
     var types = qoll['types'];
     var idx = 0;
     types.map(function(t){
-      html += "<div class='col-md-12 col-xs-12 list-group-item'>";
-      html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
-      html += t;
-      html += "</div>";
-      html += '<p>';
+      if(t.isCorrect) {
+        html += "<div class='col-md-12 col-xs-12 list-group-item'>";
+        html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
+        html += t.type;
+        //html += "</div>";
+        //html+= "<div class='col-md-2 col-xs-2 list-group-item'>";
+        html += "<i class='glyphicon glyphicon-check pull-right green'></i>";
+        html += "</div>";
+      } else {
+        html += "<div class='col-md-12 col-xs-12 list-group-item'>";
+        html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
+        html += t.type;
+        html += "</div>";
+      }
+
       idx=idx+1;
     });
   });

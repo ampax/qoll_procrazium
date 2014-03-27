@@ -131,7 +131,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
             var qollRawId = addQollRaw(q, qollMasterId);
             var qs = q.split(/\n-/);
             var qoll = qs[0];
-            qoll = downtown(qoll, downtowm_default);
+            qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
 
             var count =0;
             var types = new Array();
@@ -142,12 +142,12 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
                 type = type.trim();
                 if(type.indexOf('(a) ') == 0) {
                     type = type.replace('(a) ', '');
-                    type = downtown(type, downtowm_default);
+                    type = DownTown.downtown(type, DownTownOptions.downtown_default());
                     x.type = type;
                     x.isCorrect = 1;
                     count++;
                 } else {
-                    type = downtown(type, downtowm_default);
+                    type = DownTown.downtown(type, DownTownOptions.downtown_default());
                     x.type = type;
                     x.isCorrect = 0;
                 }
