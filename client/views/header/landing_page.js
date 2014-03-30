@@ -39,7 +39,23 @@ Template.landing_page.events({
     'click .smooth-scroll': function(event){
         event.preventDefault();
         $('html,body').animate({scrollTop: $('#page').offset().top}, 600);
-    }    
+    },
+    'click .send-msg': function(event) {
+        event.preventDefault();
+        var name = $('#Name').val();
+        var from = $('#Email').val();
+        var to = "webmaster@qoll.io";
+        var msg = $('#Message').val();
+        var subject = "Qoll Cust Contacting: " + name;
+
+        Meteor.call('sendContactUsEmail', from, to, subject, msg, function(err){
+            if(err) {
+                qlog.error('Failed sending the email' + err, filename);
+            } else {
+                qlog.info('Sent the email', filename);
+            }
+        });
+    },
 });
 
 /**
