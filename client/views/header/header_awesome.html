@@ -14,7 +14,7 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
           <ul class="nav navbar-nav collapse-onclick">
-            <li><a href="home"><span class="glyphicon glyphicon-home"> Home</span></a></li>
+            <li><a href="/"><span class="glyphicon glyphicon-home"> Home</span></a></li>
             {{#if currentUser}}
             <li><a href="dashboard"><span class="glyphicon glyphicon-list"> Inbox</span></a></li>
             <li><a href="qolleditor_adv"><span class="glyphicon glyphicon-send"> Create Qoll</span></a></li>
@@ -26,9 +26,9 @@
             <li class=""><a href="/admin"><i class="fa fa-cogs"></i> Admin</a></li>
             {{/if}}
           </ul>        
-            <ul class="nav navbar-nav navbar-right">
-              {{ loginButtons }} <!-- here -->
-            </ul>
+          <ul class="nav navbar-nav navbar-right">
+              {{ loginButtons }} 
+           </ul>
         </div>
       </div>
     <!--/div-->

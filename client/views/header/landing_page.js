@@ -1,7 +1,16 @@
 var filename = "client/views/header/landing_page.js";
 
 Template.landing_page.rendered = function() {
-  new WOW().init();
+    new WOW().init();
+    
+    $('.collapse-onclick').each(function() {
+        $(this).on("click", function () {
+            var $obj = $($(this).parents('.in')[0]);
+            $obj.animate({'height': '1px'}, function() {
+                $obj.removeClass('in').addClass('collapse');
+            });
+        });
+    });
 
       // One page navigation
     $('.nav').singlePageNav({
@@ -9,7 +18,8 @@ Template.landing_page.rendered = function() {
     });
 }
 
-Template.landing_page.events({
+
+/*Template.landing_page.events({
     'click .smooth-scroll': function(event){
         event.preventDefault();
         if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
@@ -23,6 +33,13 @@ Template.landing_page.events({
             }
         }
     }
+});
+*/
+Template.landing_page.events({
+    'click .smooth-scroll': function(event){
+        event.preventDefault();
+        $('html,body').animate({scrollTop: $('#page').offset().top}, 600);
+    }    
 });
 
 /**
