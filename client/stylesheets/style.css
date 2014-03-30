@@ -1,3 +1,11 @@
+hr .divider {
+    background-color: #d4d4d4;
+    color: #d4d4d4;
+    height: 1px;
+    border: 0px;
+    clear: both;
+}
+
 /** START: Core body and html style **/
 
 div.navbar-fixed-bottom {
@@ -254,17 +262,17 @@ textarea.editor-upen {
 }
 
 div.div-qoll-types {
-    width: 49%;
+    width: 100%;
     vertical-align: top;
 }
 
 div.panel-qoll-type-list {
-    width: 49%;
+    width: 100%;
     
 }
 
 div.panel-body {
-    height: 60px;
+    height: 10em;
     overflow: scroll;
 }
 
@@ -366,6 +374,7 @@ a.group-plus {
     border-width: 1px;
     border-style: solid;
     border-color: #bdc3c7;
+    width: 100%;
     /**border-bottom: solid;
     border-bottom-width: 1px;
     border-bottom-style: solid;
