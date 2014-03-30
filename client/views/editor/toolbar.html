@@ -1,22 +1,36 @@
 <template name="toolbar">
 	<div class="editor-toolbar">
 
-		<span class="toolbar-buttons"><a class="toolbar-buttons-link addqoll" href="#" title="Ctrl+Q">  New Qoll </a></span>
-		<span class="toolbar-buttons"><a class="toolbar-buttons-link addopti" href="#" title="Ctrl+O">  Opt </a></span>
-		<span class="toolbar-buttons"><a class="toolbar-buttons-link addcode" href="#" title="Ctrl+C">  Code </a></span>
-		<span class="toolbar-buttons"><a class="toolbar-buttons-link addbloc" href="#" title="Ctrl+>">  Block </a></span>
-		<span class="toolbar-buttons"><a class="toolbar-buttons-link addltxi" href="#" title="Ctrl+I">  {{#mathjax}}$LaTeX^I${{/mathjax}} </a></span>
-		<span class="toolbar-buttons"><a class="toolbar-buttons-link addltxb" href="#" title="Ctrl+L">  {{#mathjax}}$LaTeX^B${{/mathjax}} </a></span>&nbsp;
-		<span class="toolbar-checkqoll"><a class="toolbar-buttons-link checkqoll" href="#" title="Ctrl+A"> <i class="glyphicon glyphicon-check green"></i> </a></span>
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addqoll" href="#" title="Ctrl+Q" data-intro="each qoll begins with #qoll click to start writing your first qoll!" data-step="2" > New Qoll </a></span>
+		<span class="toolbar-buttons"><a class="toolbar-buttons-link addopti" href="#" title="Ctrl+O" data-intro="each option line begins click to start writing your first qoll!" data-step="3"> Opt </a></span>
+		&nbsp;&nbsp;
+		<span class="toolbar-checkqoll"><a class="toolbar-buttons-link checkqoll" href="#" title="Ctrl+A" data-intro="if your question has a correct answer use this button to indicate the correct answer, only one correct answer per qoll for now." data-step="6"> <i class="glyphicon glyphicon-check green"></i> </a></span>
+		&nbsp;
+		<div class="btn-group">
+			<span class="toolbar-buttons dropdown-toggle" data-toggle="dropdown">
+				<a class="toolbar-buttons-link"  data-intro="try out these advanced formatting features to add source code, math equations and more!" data-step="4" > 
+					Formatting
+					<span class="caret"></span> 
+				</a> 
+			 </span>
 
+			<ul class="dropdown-menu">
+				<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addcode" href="#" title="Ctrl+C"> Code </a></span></li>
+				<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addbloc" href="#" title="Ctrl+>"> Block </a></span></li>
+				<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addltxi" href="#" title="Ctrl+I"> {{#mathjax}}$LaTeX^I${{/mathjax}} </a></span></li>
+				<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addltxb" href="#" title="Ctrl+L"> {{#mathjax}}$LaTeX^B${{/mathjax}} </a></span></li>
+			</ul>
+		</div>
+		&nbsp;
+
+		<a class="toolbar-buttons-link  alert-success" onclick="javascript:introJs().start();" href="javascript:void(0);"><strong>help!</strong></a>
 		<span class="toolbar-error-msg red"></span>
 
+		<span class="toolbar-buttons toolbar-buttons-right toolbar-storqoll"><a class="toolbar-buttons-link storqoll" href="#" title="Ctrl+S" data-intro="Store the qolls to send them later, make sure you added recipients first! To send right away see the next button" data-step="7"> Store </a></span>
 
-		<span class="toolbar-buttons toolbar-buttons-right toolbar-storqoll"><a class="toolbar-buttons-link storqoll" href="#" title="Ctrl+S">  Store </a></span>
+		<span class="toolbar-buttons toolbar-buttons-right toolbar-sendqoll"><a class="toolbar-buttons-link sendqoll" href="#" title="Send" data-intro="To send right away click this send button" data-step="8"> <i class="glyphicon glyphicon-send"></i> </a></span>
 
-		<span class="toolbar-buttons toolbar-buttons-right toolbar-sendqoll"><a class="toolbar-buttons-link sendqoll" href="#" title="Send"> <i class="glyphicon glyphicon-send"></i> </a></span>
-
-		<span class="toolbar-buttons toolbar-buttons-right toolbar-previewqoll"><a class="toolbar-buttons-link previewqoll" href="#" title="Ctrl+P"> <i class="glyphicon glyphicon-eye-open"></i> </a></span>
+		<span class="toolbar-buttons toolbar-buttons-right toolbar-previewqoll"><a class="toolbar-buttons-link previewqoll" href="#" title="Ctrl+P"  data-intro="At any point while editing click this button to preview how your qolls would look" data-step="5" > <i class="glyphicon glyphicon-eye-open"></i> </a></span>
 
 	</div>
 </template>
