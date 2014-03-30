@@ -53,6 +53,9 @@ Template.landing_page.events({
                 qlog.error('Failed sending the email' + err, filename);
             } else {
                 qlog.info('Sent the email', filename);
+                $('#Name').val('');
+                $('#Email').val('');
+                $('#Message').val('');
             }
         });
     },

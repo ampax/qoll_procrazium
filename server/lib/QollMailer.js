@@ -15,10 +15,11 @@ QollMailer.sendContactUsEmail = function(from, to, subject, msg) {
     });
 
     // setup e-mail data with unicode symbols
+    qlog.info("Sending mail from: " + from, filename);
     var mailOptions = {
         from: from, // sender address
         to: to, // list of receivers
-        subject: subject, //"Hello ✔", // Subject line
+        subject: from +" : "+ subject, //"Hello ✔", // Subject line
         text: msg, // plaintext body
         html: msg // html body
     }
