@@ -10,7 +10,7 @@ QollMailer.sendContactUsEmail = function(from, to, subject, msg) {
         service: "Gmail",
         auth: {
             user: "webmaster@qoll.io",
-            pass: "password of webmaster@qoll.io"
+            pass: "Kaushik793"
         }
     });
 
