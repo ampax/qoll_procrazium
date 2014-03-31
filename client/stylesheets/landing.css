@@ -40,7 +40,9 @@ body {
 	border: 1px solid #fff;
 	border-radius: 0;
 }
-
+.navbar-special {
+	text-transform: lowercase;
+}
 /* Main */
 .site-main {
 	margin-top: 90px;
@@ -169,105 +171,7 @@ body {
 	font-family: 'Montserrat', sans-serif;
 }
 
-/* portfolio */
-#portfolio {
-	background: #273035;
-	color: #fff;
-}
-#portfolio img {
-	width: 100%;
-	margin-bottom: 20px;
-	height: auto;
-}
-#portfolio h4 {
-	font-size: 1.6em;
-	font-weight: bold;
-	text-transform: uppercase;
-	font-family: 'Montserrat', sans-serif;
-	margin-bottom: 0;
-}
-#portfolio span {
-	background: #1b93c7;
-	border-radius: 50px;
-	padding: 25px 13px;
-	position: absolute;
-	top: 28%;
-	left: 40%;
-	display: none;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 24px;
-	text-transform: uppercase;
-	font-weight: bold;
-	color: #fff;
-	width: 84px;
-	height: 84px;
-}
-#portfolio .imgport {
-	position: relative;
-}
-#portfolio .imgport:hover {
-	cursor: pointer;
-	opacity: 0.9;
-}
-#portfolio .imgport:hover span {
-	display: block;
-}
-
-/* Team */
-#team {
-}
-#team h4 {
-	font-size: 1.6em;
-	font-weight: bold;
-	text-transform: uppercase;
-	font-family: 'Montserrat', sans-serif;
-	margin-bottom: 0;
-	text-align: center;
-}
-#team p {
-	text-align: center;
-}
-#team img {
-	width: 100%;
-	margin-bottom: 20px;
-}
-#team ul {
-	position: absolute;
-	top: 60%;
-	left: 16%;
-	display: none;
-	font-family: 'Open Sans', sans-serif;
-	font-size: 24px;
-	text-transform: uppercase;
-	font-weight: bold;
-	color: #fff;
-	padding: 0;
-	margin: 0;
-}
-#team ul li {
-	display: inline-block;
-	background: #1b93c7;
-	padding: 0 10px;
-}
-#team ul li a {
-	color: #fff;
-	font-size: 1.8em;
-}
-#team ul li:hover {
-	background: #273035;
-}
-#team .imgteam {
-	position: relative;
-}
-#team .imgteam:hover {
-	cursor: pointer;
-	opacity: 0.9;
-}
-#team .imgteam:hover ul {
-	display: block;
-}
-
-/* Blog */
+/* FAQ */
 #blog {
 	background: #1b2124;
 	color: #fff;
@@ -278,7 +182,7 @@ body {
 #blog h4 {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 2.5em;
-	text-transform: uppercase;
+	/*text-transform: uppercase;*/
 }
 #blog ul {
 	padding: 0;
@@ -291,7 +195,7 @@ body {
 #blog h5 {
 	font-family: 'Montserrat', sans-serif;
 	font-size: 1.4em;
-	text-transform: uppercase;
+	/*text-transform: uppercase;*/
 }
 #blog p {
 	font-family: 'Open Sans', sans-serif;
