@@ -1,20 +1,20 @@
 <template name="managecontacts">
 	<div class="content">
-		<div class="qoll-toolbar">
+		<div class="qoll-toolbar col-md-12 col-xs-12">
 			<h4>Manage Contacts<h4>
 		</div><p></p>
 
-		<div class="input-group div-addgroup">
+		<div class="input-group col-md-12 col-xs-12">
 		  <span class="input-group-addon">@Qoll</span>
 		  <input type="text" class="form-control create-group" placeholder="Enter Group Name ...">
 		</div><p></p>
 
-		<div class="input-group div-qoll-types">
+		<div class="input-group div-qoll-types col-md-12 col-xs-12">
 	  		<input type="text" class="qoll-type-option" id="addemail" placeholder="Enter Email(s) eg user12345@qoll.io;user54321@qoll.io,user4567@qoll.io"/>
 	  		<span class="input-group-addon input-group-addon-klik add-email ios-enabled">+Email</span>
 		</div><p></p>
 
-		<div class="panel panel-default panel-qoll-type-list" id="">
+		<div class="panel panel-default panel-qoll-type-list col-md-12 col-xs-12" id="">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">Emails in the Group</h3>
 		  </div>
@@ -26,11 +26,13 @@
 
 	</div>
 
-	<span >
-		<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
-		<a href="#" class="btn btn-primary create-group {{#unless currentUser}}disabled{{/unless}}" role="button">
-			<i class="fa fa-users"></i>Create Group</a>
-	</span>
+	<div class="col-md-12 col-xs-12">
+		<span >
+			<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
+			<a href="#" class="btn btn-primary create-group {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="fa fa-users"></i>Create Group</a>
+		</span>
+	</div>
 
 
 

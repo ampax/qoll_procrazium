@@ -1,95 +1,29 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'install', '-g', 'meteor-npm' ]
-2 info using npm@1.3.7
-3 info using node@v0.10.15
-4 verbose cache add [ 'meteor-npm', null ]
-5 verbose cache add name=undefined spec="meteor-npm" args=["meteor-npm",null]
-6 verbose parsed url { protocol: null,
-6 verbose parsed url   slashes: null,
-6 verbose parsed url   auth: null,
-6 verbose parsed url   host: null,
-6 verbose parsed url   port: null,
-6 verbose parsed url   hostname: null,
-6 verbose parsed url   hash: null,
-6 verbose parsed url   search: null,
-6 verbose parsed url   query: null,
-6 verbose parsed url   pathname: 'meteor-npm',
-6 verbose parsed url   path: 'meteor-npm',
-6 verbose parsed url   href: 'meteor-npm' }
-7 silly lockFile 5e87be25-meteor-npm meteor-npm
-8 verbose lock meteor-npm /Users/priyanka/.npm/5e87be25-meteor-npm.lock
-9 silly lockFile 5e87be25-meteor-npm meteor-npm
-10 silly lockFile 5e87be25-meteor-npm meteor-npm
-11 verbose addNamed [ 'meteor-npm', '' ]
-12 verbose addNamed [ null, '*' ]
-13 silly lockFile e018f6c3-meteor-npm meteor-npm@
-14 verbose lock meteor-npm@ /Users/priyanka/.npm/e018f6c3-meteor-npm.lock
-15 silly addNameRange { name: 'meteor-npm', range: '*', hasData: false }
-16 verbose url raw meteor-npm
-17 verbose url resolving [ 'https://registry.npmjs.org/', './meteor-npm' ]
-18 verbose url resolved https://registry.npmjs.org/meteor-npm
-19 info trying registry request attempt 1 at 23:20:25
-20 verbose etag "8PA5M7PJHRS95SJPK2ZBQ7F"
-21 http GET https://registry.npmjs.org/meteor-npm
-22 http 304 https://registry.npmjs.org/meteor-npm
-23 silly registry.get cb [ 304,
-23 silly registry.get   { date: 'Thu, 20 Feb 2014 04:14:19 GMT',
-23 silly registry.get     server: 'Apache',
-23 silly registry.get     connection: 'Keep-Alive',
-23 silly registry.get     'keep-alive': 'timeout=10, max=50',
-23 silly registry.get     etag: '"8PA5M7PJHRS95SJPK2ZBQ7F"',
-23 silly registry.get     'cache-control': 'max-age=1',
-23 silly registry.get     vary: 'Accept' } ]
-24 verbose etag meteor-npm from cache
-25 silly addNameRange number 2 { name: 'meteor-npm', range: '*', hasData: true }
-26 silly addNameRange versions [ 'meteor-npm',
-26 silly addNameRange   [ '0.1.1', '0.1.5', '0.1.6', '0.1.7', '0.1.8', '0.1.9', '0.1.10' ] ]
-27 verbose addNamed [ 'meteor-npm', '0.1.10' ]
-28 verbose addNamed [ '0.1.10', '0.1.10' ]
-29 silly lockFile bc4722f4-meteor-npm-0-1-10 meteor-npm@0.1.10
-30 verbose lock meteor-npm@0.1.10 /Users/priyanka/.npm/bc4722f4-meteor-npm-0-1-10.lock
-31 silly lockFile bc4722f4-meteor-npm-0-1-10 meteor-npm@0.1.10
-32 silly lockFile bc4722f4-meteor-npm-0-1-10 meteor-npm@0.1.10
-33 silly lockFile e018f6c3-meteor-npm meteor-npm@
-34 silly lockFile e018f6c3-meteor-npm meteor-npm@
-35 silly resolved [ { name: 'meteor-npm',
-35 silly resolved     version: '0.1.10',
-35 silly resolved     description: 'Complete NPM support for Meteor',
-35 silly resolved     bin: { 'meteor-npm': './bin/meteor-npm' },
-35 silly resolved     author:
-35 silly resolved      { name: 'Arunoda Susiripala',
-35 silly resolved        email: 'arunoda.susiripala@gmail.com' },
-35 silly resolved     dependencies: { rimraf: '2.x', mkdirp: '0.3.x' },
-35 silly resolved     repository: { type: 'git', url: 'git://github.com/arunoda/meteor-npm.git' },
-35 silly resolved     readme: '# Complete NPM integration for Meteor [![Build Status](https://travis-ci.org/arunoda/meteor-npm.png?branch=master)](https://travis-ci.org/arunoda/meteor-npm)\n\nSee MeteorHacks article on [Complete NPM integration for Meteor](http://meteorhacks.com/complete-npm-integration-for-meteor.html)\n\n#### If you are migrating from Meteor 0.6.5.x to 0.6.6.x, please check this [issue](https://github.com/arunoda/meteor-npm/issues/12).\n\n---\n\n### Adding NPM support to your app\n\n    mrt add npm\n\n### Create packages.json file for listing dependencies.\n\n    {\n      "redis": "0.8.2",\n      "github": "0.1.8"\n    }\n\n### Example on using npm module inside a Meteor method\n\n~~~js\nif (Meteor.isClient) {\n  getGists = function getGists(user, callback) {\n    Meteor.call(\'getGists\', user, callback);\n  }\n}\n\nif (Meteor.isServer) {\n  Meteor.methods({\n    \'getGists\': function getGists(user) {\n      var GithubApi = Meteor.require(\'github\');\n      var github = new GithubApi({\n          version: "3.0.0"\n      });\n\n      var gists = Async.runSync(function(done) {\n        github.gists.getFromUser({user: \'arunoda\'}, function(err, data) {\n          done(null, data);\n        });\n      });\n\n      return gists.result;\n    }\n  });\n}\n~~~\n\n## API\n> Available in the Server Side only\n\n### Meteor.require(npmModuleName)\n\nThis method loads NPM modules you\'ve specified in the `packages.json` file.\n\n~~~\nvar Github = Meteor.require(\'github\');\n~~~\n\n## Async Utilities\n> Available in the Server Side only\n\nMeteor APIs are executed synchronously. Most of the NodeJS modules works asynchronously. \nSo we need a way to bride the gap. Async Utilities comes to rescue you.\n\n### Async.runSync(function) \n\n`Async.runSync()` pause the execution until you invoke `done()` callback as shown below.\n\n~~~\nvar response = Async.runSync(function(done) {\n  setTimeout(function() { \n    done(null, 1001);\n  }, 100);\n});\n\nconsole.log(response.result); // 1001\n~~~\n\n`done()` callback takes 2 arguments. `error` and the `result` object. You can get them as the return value of the `Async.runSync()` as shown as response in the above example.\n\nreturn value is an object and it has 2 fields. `error` and `result`.\n\n### Meteor.sync(function)\n\nSame as `Async.runSync` but deprecated. \n\n### Async.wrap(function) \n\nWrap an asynchronous function and allow it to be run inside Meteor without callbacks.\n\n~~~\n\n//declare a simple async function\nfunction delayedMessge(delay, message, callback) {\n  setTimeout(function() {\n    callback(null, message);\n  }, delay);\n}\n\n//wrapping\nvar wrappedDelayedMessage = Async.wrap(delayedMessge);\n\n//usage\nMeteor.methods({\n  \'delayedEcho\': function(message) {\n    var response = wrappedDelayedMessage(500, message);\n    return response;\n  }\n});\n~~~\n\nIf the callback has a result, it will be returned from the wrapped function. If there is an error, it will be thrown.\n\n> `Async.wrap(function)` is very similar to `Meteor._wrapAsync`. \n\n### Async.wrap(object, functionName)\n\nVery similar to `Async.wrap(function)`, \nbut this API can be used to wrap an instance method of an object.\n\n~~~\nvar github = new GithubApi({\n    version: "3.0.0"\n});\n\n//wrapping github.user.getFrom\nvar wrappedGetFrom = Async.wrap(github.user, \'getFrom\');\n~~~\n\n### Async.wrap(object, functionNameList)\n\nVery similar to `Async.wrap(object, functionName)`, \nbut this API can be used to wrap **multiple** instance methods of an object.\n\n~~~\nvar github = new GithubApi({\n    version: "3.0.0"\n});\n\n//wrapping github.user.getFrom and github.user.getEmails\nvar wrappedGithubUser = Async.wrap(github.user, [\'getFrom\', \'getEmails\']);\n\n//usage\nvar profile = wrappedGithubUser.getFrom(\'arunoda\');\nvar emails = wrappedGithubUser.getEmails();\n~~~\n',
-35 silly resolved     readmeFilename: 'README.md',
-35 silly resolved     bugs: { url: 'https://github.com/arunoda/meteor-npm/issues' },
-35 silly resolved     _id: 'meteor-npm@0.1.10',
-35 silly resolved     _from: 'meteor-npm@' } ]
-36 info install meteor-npm@0.1.10 into /usr/local/lib
-37 info installOne meteor-npm@0.1.10
-38 info /usr/local/lib/node_modules/meteor-npm unbuild
-39 info preuninstall meteor-npm@0.1.10
-40 info uninstall meteor-npm@0.1.10
-41 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild meteor-npm@0.1.10
-42 verbose /usr/local/bin,[object Object] binRoot
-43 info /usr/local/lib/node_modules/meteor-npm unbuild
-44 info preuninstall meteor-npm@0.1.10
-45 info uninstall meteor-npm@0.1.10
-46 verbose true,/usr/local/lib/node_modules,/usr/local/lib/node_modules unbuild meteor-npm@0.1.10
-47 verbose /usr/local/bin,[object Object] binRoot
-48 error error rolling back Error: EACCES, unlink '/usr/local/bin/meteor-npm'
-48 error error rolling back  meteor-npm@0.1.10 { [Error: EACCES, unlink '/usr/local/bin/meteor-npm'] errno: 3, code: 'EACCES', path: '/usr/local/bin/meteor-npm' }
-49 error Error: EACCES, unlink '/usr/local/bin/meteor-npm'
-49 error  { [Error: EACCES, unlink '/usr/local/bin/meteor-npm'] errno: 3, code: 'EACCES', path: '/usr/local/bin/meteor-npm' }
-50 error Please try running this command again as root/Administrator.
-51 error System Darwin 13.0.0
-52 error command "node" "/usr/local/bin/npm" "install" "-g" "meteor-npm"
-53 error cwd /Users/priyanka/Meteor/qpoll
-54 error node -v v0.10.15
-55 error npm -v 1.3.7
-56 error path /usr/local/bin/meteor-npm
-57 error code EACCES
-58 error errno 3
-59 error stack Error: EACCES, unlink '/usr/local/bin/meteor-npm'
-60 verbose exit [ 3, true ]
+1 verbose cli [ '/home/ubuntu/.nvm/v0.10.12/bin/node',
+1 verbose cli   '/home/ubuntu/.nvm/v0.10.12/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'fibers' ]
+2 info using npm@1.2.32
+3 info using node@v0.10.12
+4 verbose read json /home/ubuntu/qoll_procrazium/package.json
+5 warn package.json Qoll@0.1 No repository field.
+6 error Error: invalid version: 0.1
+6 error     at Object.module.exports.fixVersionField (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/fixer.js:84:13)
+6 error     at /home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/normalize.js:28:38
+6 error     at Array.forEach (native)
+6 error     at normalize (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/normalize.js:27:15)
+6 error     at final (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/read-json.js:304:33)
+6 error     at then (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/read-json.js:118:48)
+6 error     at /home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/read-json.js:293:40
+6 error     at fs.js:266:14
+6 error     at Object.oncomplete (fs.js:107:15)
+7 error If you need help, you may report this log at:
+7 error     <http://github.com/isaacs/npm/issues>
+7 error or email it to:
+7 error     <npm-@googlegroups.com>
+8 error System Linux 3.2.0-58-generic-pae
+9 error command "/home/ubuntu/.nvm/v0.10.12/bin/node" "/home/ubuntu/.nvm/v0.10.12/bin/npm" "install" "fibers"
+10 error cwd /home/ubuntu/qoll_procrazium
+11 error node -v v0.10.12
+12 error npm -v 1.2.32
+13 verbose exit [ 1, true ]

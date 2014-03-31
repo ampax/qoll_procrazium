@@ -1,9 +1,11 @@
 <template name="qolls">
+    {{> header_awesome}}
 <p class="lead">
 <div class="container" id="qoll-container-id">
+  <!-- Starting of the row for all qolls -->
   <div class="row">
     {{#each allQolls}}
-    <div>
+    <!-- Start of Qoll Section -->
     <div class="col-md-12 col-xs-12 list-group-item qoll-seperator bg-qoll" id='{{_id}}'>
 
       <div class="col-md-10 col-xs-12">{{#mathjax}}{{{qollText}}}{{/mathjax}}</div>
@@ -31,7 +33,9 @@
         {{/unless}}
       </div>
     </div>
+    <!-- End of Qoll Section here -->
     
+    <!-- Starting of qoll-types for the Qoll -->
     <div class="row">
       <div class="col-md-10 col-xs-12">
       {{#eachport qollTypes}}
@@ -62,30 +66,31 @@
       {{/include}}
       {{/eachport}}
 
+      </div>
+      <div class="col-md-2 col-xs-12">
+        
+        <!--div class="col-md-12 col-xs-12"-->
+          <canvas id="charts{{_id}}" width="100" height="100"></canvas>
+          <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
+        <!--/div-->
+      </div>
     </div>
-    <div class="col-md-2 col-xs-12">
-      
-      <!--div class="col-md-12 col-xs-12"-->
-        <canvas id="charts{{_id}}" width="100" height="100"></canvas>
-        <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
-      <!--/div-->
-    </div>
-</div>
+    <!-- End of qoll types here -->
     {{/each}}
   </div>
+  <!-- End of the row here -->
+
   <div id="navbrand"></div>
   {{#if nextPath}}
   <ul class="pager">
-  
-  <li><a class="load-more" href="{{nextPath}}">Load More &darr;</a></li>
-</ul>
-
-
-{{/if}}
+    <li><a class="load-more" href="{{nextPath}}">Load More &darr;</a></li>
+  </ul>
+  {{/if}}
 
 </div>
 </p> 
 </template>
+
 <template name="contextbtns">
 	            {{#if if_inbox}}
             	<li><button type="button" class="btn btn-link information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">{{info_pref}}</span></button></li>

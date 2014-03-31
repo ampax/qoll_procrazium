@@ -8,7 +8,7 @@ bindToolBarForQoll = function(editor) {
 		console.log('Log found ...');
 		editor.moveCursorToPosition(editor.getCursorPosition());
 		editor.navigateUp(1);
-		editor.insert("\n");
+		//editor.insert("\n");
 		editor.navigateUp(1);
 		editor.insert("\n#Qoll ");
 		editor.setHighlightActiveLine(true);
@@ -16,9 +16,9 @@ bindToolBarForQoll = function(editor) {
 		//no #Qoll found
 		console.log('No qoll found ...');
 		editor.navigateFileEnd();
-		editor.insert("\n");
+		//editor.insert("\n");
 		editor.navigateUp(1);
-		editor.insert("\n#Qoll ");
+		editor.insert("#Qoll ");
 		editor.setHighlightActiveLine(true);
 	}
 

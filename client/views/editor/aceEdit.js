@@ -11,6 +11,7 @@ Template.aceEditor.rendered = function() {
   editor.setOptions({
       enableBasicAutocompletion: true
   });
+  editor.focus();
 
   //initEditor(editor);
 };

@@ -4,11 +4,8 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-preserve-inputs
 observatory
 accounts-password
-iron-router
-bootstrap-3
 font-awesome
 HTML5-History-API
 observatory-apollo
@@ -18,7 +15,6 @@ inspector
 chartjs
 jquery
 jquery-ui
-accounts-ui-bootstrap-3
 npm
 mathjax
 facebook
@@ -26,3 +22,9 @@ oauth
 google
 ace-embed
 autocompletion
+wow
+email
+animate-css
+iron-router
+bootstrap-3
+accounts-ui-bootstrap-3
