@@ -1,63 +1,99 @@
 <template name="qolls">
+    {{> header_awesome}}
 <p class="lead">
 <div class="container" id="qoll-container-id">
+  <!-- Starting of the row for all qolls -->
   <div class="row">
     {{#each allQolls}}
-    <div>
-    <div class="col-md-12 col-xs-12 list-group-item" id='{{_id}}'>
-      <div class="col-md-10 col-xs-10">{{qollText}}</div>
-      <div class="col-md-2 col-xs-2">
+    <!-- Start of Qoll Section -->
+    <div class="col-md-12 col-xs-12 list-group-item qoll-seperator bg-qoll" id='{{_id}}'>
+
+      <div class="col-md-10 col-xs-12">{{#mathjax}}{{{qollText}}}{{/mathjax}}</div>
+
+      <div class="col-md-2 col-xs-12">
         {{#if if_createusr}}
+        	<span class="pull-left badge lesstoggle">{{get_totals}}</span>
           {{#if if_stored}}
-          <span class="pull-right send-qoll-btn"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
+          <span class="pull-right send-qoll-btn glossy"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
           {{/if}}
           {{#if if_send}}
-            <span class="pull-right lock-qoll-btn"><i class="glyphicon glyphicon-off orange lock-btn ios-enabled"></i></span>
+            <span class="pull-right lock-qoll-btn glossy"><i class="glyphicon glyphicon-off orange lock-btn ios-enabled"></i></span>
           {{/if}}
+          {{#if if_edit}}
+            <!-- span class="pull-right glossy"><a href="qolleditor_adv_edit"><i class="glyphicon glyphicon-pencil blue ios-enabled"></i></a></span-->
+          {{/if}} 
           {{#if if_lock}}
-            <span class="pull-right resend-qoll-btn"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
+            <span class="pull-right resend-qoll-btn glossy"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
           {{/if}}          
-          <span class="pull-right render-chart-btn"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
-          <span class="pull-right archive-qoll-btn"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+          <span class="pull-right render-chart-btn glossy"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
+          <span class="pull-right archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
         {{/if}}
         {{#unless if_createusr}}
         	<span class="badge pull-right sender-badge">{{sendingUser}}</span>
         {{/unless}}
       </div>
     </div>
+    <!-- End of Qoll Section here -->
     
+    <!-- Starting of qoll-types for the Qoll -->
+    <div class="row">
+      <div class="col-md-10 col-xs-12">
       {{#eachport qollTypes}}
       {{#include parent=.. }}
-      <div class="col-md-10 col-xs-10 list-group-item  qoll-response-val ios-enabled">
-        <div class="col-md-8 col-xs-8 indent-littlebit" id="{{_iter_ix}}">
-           <span class="badge pull-left {{qoll_abbr_class _iter_ix}}">{{qoll_type_abbr _iter_ix}}</span>
-            &nbsp;{{_iter_v}}
+      <div class="col-md-12 col-xs-12 list-group-item">
+        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{_iter_ix}}">
+          <span class="badge pull-left qoll-response-val {{qoll_abbr_class _iter_ix}} {{is_chk_selected ../../qollTypeReg _iter_ix}} 
+          {{check_selected ../../_id _iter_ix}}  glossy">
+            {{qoll_type_abbr _iter_ix}}
+          </span>
+            &nbsp;{{{_iter_v}}}
         </div>
         <div class="col-md-2 col-xs-2">
-            <span class="badge pull-right">{{value_at ../../stats _iter_v}}</span>
+            {{#if is_correct_answer ../../qollTypesX _iter_ix if_createusr}}
+              <i class="glyphicon glyphicon-check green"></i>
+            {{/if}}
+            <span class="badge pull-right fulltoggle">{{value_at ../../stats _iter_ix}}</span>
         </div>
+        {{#with  value_at ../../answers _iter_ix}}
+        <div class="col-md-12 col-xs-12  list-group-item-info">
+            
+            Answered By:	{{comma_seperate this}}
+           
+        </div>
+         {{/with}}
       </div>
+
       {{/include}}
       {{/eachport}}
-    
 
-      <div class="col-md-4 col-xs-4">
-        <canvas id="charts{{_id}}" width="50" height="50"></canvas>
-        <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
       </div>
-</div>
+      <div class="col-md-2 col-xs-12">
+        
+        <!--div class="col-md-12 col-xs-12"-->
+          <canvas id="charts{{_id}}" width="100" height="100"></canvas>
+          <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
+        <!--/div-->
+      </div>
+    </div>
+    <!-- End of qoll types here -->
     {{/each}}
   </div>
+  <!-- End of the row here -->
+
+  <div id="navbrand"></div>
+  {{#if nextPath}}
+  <ul class="pager">
+    <li><a class="load-more" href="{{nextPath}}">Load More &darr;</a></li>
+  </ul>
+  {{/if}}
+
 </div>
 </p> 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+</template>
 
-  ga('create', 'UA-47377901-1', 'qoll.io');
-  ga('send', 'pageview');
-
-</script>        
+<template name="contextbtns">
+	            {{#if if_inbox}}
+            	<li><button type="button" class="btn btn-link information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">{{info_pref}}</span></button></li>
+            {{/if}}
+	
 </template>

@@ -1,0 +1,29 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/home/ubuntu/.nvm/v0.10.12/bin/node',
+1 verbose cli   '/home/ubuntu/.nvm/v0.10.12/bin/npm',
+1 verbose cli   'install',
+1 verbose cli   'fibers' ]
+2 info using npm@1.2.32
+3 info using node@v0.10.12
+4 verbose read json /home/ubuntu/qoll_procrazium/package.json
+5 warn package.json Qoll@0.1 No repository field.
+6 error Error: invalid version: 0.1
+6 error     at Object.module.exports.fixVersionField (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/fixer.js:84:13)
+6 error     at /home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/normalize.js:28:38
+6 error     at Array.forEach (native)
+6 error     at normalize (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/node_modules/normalize-package-data/lib/normalize.js:27:15)
+6 error     at final (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/read-json.js:304:33)
+6 error     at then (/home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/read-json.js:118:48)
+6 error     at /home/ubuntu/.nvm/v0.10.12/lib/node_modules/npm/node_modules/read-package-json/read-json.js:293:40
+6 error     at fs.js:266:14
+6 error     at Object.oncomplete (fs.js:107:15)
+7 error If you need help, you may report this log at:
+7 error     <http://github.com/isaacs/npm/issues>
+7 error or email it to:
+7 error     <npm-@googlegroups.com>
+8 error System Linux 3.2.0-58-generic-pae
+9 error command "/home/ubuntu/.nvm/v0.10.12/bin/node" "/home/ubuntu/.nvm/v0.10.12/bin/npm" "install" "fibers"
+10 error cwd /home/ubuntu/qoll_procrazium
+11 error node -v v0.10.12
+12 error npm -v 1.2.32
+13 verbose exit [ 1, true ]

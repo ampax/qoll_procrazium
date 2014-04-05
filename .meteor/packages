@@ -4,15 +4,8 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-preserve-inputs
 observatory
-highcharts
 accounts-password
-google
-facebook
-oauth
-iron-router
-bootstrap-3
 font-awesome
 HTML5-History-API
 observatory-apollo
@@ -20,7 +13,18 @@ observatory-galileo
 page-js-ie-support
 inspector
 chartjs
-showdown
 jquery
 jquery-ui
+npm
+mathjax
+facebook
+oauth
+google
+ace-embed
+autocompletion
+wow
+email
+animate-css
+iron-router
+bootstrap-3
 accounts-ui-bootstrap-3

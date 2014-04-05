@@ -1,0 +1,29 @@
+<template name="managecontacts_adv">
+	<div class="container-fluid">
+		<div class="row">
+			{{> managecontacts_adv_toolbar}}
+			{{> social}}
+		</div>
+	</div>
+</template>
+
+<template name="managecontacts_adv_toolbar">
+	<div class="col-sm-12 col-md-12 main">
+		<div class="editor-toolbar">
+
+			<span class="toolbar-buttons"><a class="toolbar-buttons-link newgroup" href="#" title="New Group">  New </a></span>
+			<span class="toolbar-buttons"><a class="toolbar-buttons-link editgroup" href="#" title="Edit Group">  Edit </a></span>
+			<span class="toolbar-buttons"><a class="toolbar-buttons-link friends" href="#" title="Manage Friends">  Social </a></span>
+
+
+			<span class="toolbar-buttons toolbar-buttons-right"><a class="toolbar-buttons-link storechanges" href="#" title="Store">  Store </a></span>
+
+		</div>
+	</div>
+</template>
+
+<template name="social">
+	<div class="col-sm-12 col-md-12 main">
+		<input type="text" class="friends" placeholder="Type names to find friends ..." id="friends_search">
+	</div>
+</template>
