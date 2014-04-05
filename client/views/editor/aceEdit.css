@@ -1,0 +1,97 @@
+/* CSS declarations go here */
+#aceEditor {
+    width: 100%;
+    height: 450px;
+}
+
+#aceEditorContainer {
+	padding-left: 2.0em;
+	padding-right: 2.0em;
+}
+
+
+/* CSS Declarations for toolbar */
+div.editor-toolbar > .toolbar-buttons-left {
+	padding-right: 15px;
+	float: left;
+}
+
+div.editor-toolbar > .toolbar-buttons-right {
+	padding-right: 15px;
+	float: right;
+}
+
+.editor-toolbar {
+	position: relative;
+	display: block;
+	padding-top: 12px;
+	padding-bottom: 12px;
+	padding-left: 10px;
+	padding-right: 10px;
+	/**line-height: 40px;**/
+	background-color: #F0F0F0;
+	/**margin: 2px;**/
+	border: solid;
+	border-style: solid;
+	border-color: #bdc3c7;
+
+	border-bottom-width: thick;
+}
+
+.editor-toolbar:before .editor-toolbar:after{
+	display: block;
+	height: 1px;
+	background-color: #F0F0F0;
+}
+
+.editor-toolbar:before {
+	/**margin-bottom: 8px;**/
+}
+
+.editor-toolbar:after {
+	/**margin-top: 8px;**/
+}
+
+.toolbar-buttons {
+	color: #663300;
+	padding: 2px;
+}
+
+.toolbar-buttons:hover {
+	background-color: #000033;
+	border-radius: 5px;
+	border-width: 1px;
+	border: thick; 
+	border-color: #F8F8F8;
+}
+
+.toolbar-buttons:hover > .toolbar-buttons-link {
+	color: #CC6633;
+}
+
+
+
+/* CSS Declaration for tag input text area */
+textarea.editor {
+	display: inherit;
+	height: 30px;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	resize: none;
+	border-color: #bdc3c7;
+}
+
+.recipient {
+	display: inherit;
+	height: 2.5em;
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	resize: none;
+	border-color: #bdc3c7;
+	border-left: none;
+	border-right: none;
+	border-top: none;
+	vertical-align: middle;
+}

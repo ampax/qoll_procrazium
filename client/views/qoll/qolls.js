@@ -1,6 +1,6 @@
 var filename = "client/views/qoll/qolls.js";
 
-var AllQolls = new Meteor.Collection("all-qolls");
+AllQolls = new Meteor.Collection("all-qolls");
 //var QollDetails = new Meteor.Collection("qoll-details-by-id");
 var QollRegist = new Meteor.Collection("qoll-regs");
 
@@ -76,16 +76,17 @@ $.fn.outertxtonly = function( ) {
 
 
 //Meteor.autosubscribe(function () {
-
+Template.qolls.created= function(){
    QollRegist.find({}, {reactive:true}).observe({added:function(v){
    	 qlog.debug("Getting qoll regs ......", filename);   
  //alert("gotqoll reg");
    	var qollId = v.qollId;
    	var qollTypeVal = v.qollTypeVal;
-   	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
-   			var myouttxt = $.trim($(elem).find('.indent-littlebit').outertxtonly()) ;
-   			qlog.info("a ......"+ myouttxt  +" *"+$.trim(qollTypeVal), filename);
-    		if(myouttxt== $.trim(qollTypeVal)){
+   	var qollTypeIx = v.qollTypeIndex;
+   	/**$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
+   			var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
+   			qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
+    		if(myouttxt== qollTypeIx){
     			
     			$(elem).addClass('bg-orange');
     			
@@ -93,18 +94,18 @@ $.fn.outertxtonly = function( ) {
     			
     			$(elem).removeClass('bg-orange');
     		}
-    	});
+    	});**/
    } ,
    changed:function(v,vold){
    	 qlog.debug("Getting qoll regs ......", filename);   
  //alert("gotqoll reg");
    	var qollId = v.qollId;
    	var qollTypeVal = v.qollTypeVal;
-   	//$( '#'+qollId).siblings('.qoll-response-val').addClass('bg-orange');/*each(function(elem){
-      	$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
-   			var myouttxt = $.trim($(elem).find('.indent-littlebit').outertxtonly()) ;
-   			qlog.info("a ......"+myouttxt  +" *"+$.trim(qollTypeVal), filename);
-    		if(myouttxt== $.trim(qollTypeVal)){
+   	var qollTypeIx = v.qollTypeIndex;
+   	/**$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
+   			var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
+   			qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
+    		if(myouttxt== qollTypeIx){
     			
     			$(elem).addClass('bg-orange');
     			
@@ -112,23 +113,36 @@ $.fn.outertxtonly = function( ) {
     			
     			$(elem).removeClass('bg-orange');
     		}
-    	});
+    	}); **/
    }
  });
+};
 //});
 
 
 Template.qolls.helpers({
     allQolls: function(event){
         qlog.debug("Getting all the qolls ......", filename);                                                                                                                
-        var q = AllQolls.find({}, {sort:{'submittedOn':-1}, reactive:true});
-        qlog.info("Found qoll: " + JSON.stringify(q.fetch()), filename);
-        return q;
+        this.qollList.rewind();
+        return this.qollList.fetch();
+      
+    },
+    get_totals:function(){
+    	if(Session.get('info_pref')=='full' || Session.get('info_pref')=='less'){
+    		return this['totals'];
+    	}
     },
     value_at:function (obj,val){
-		return obj?obj[val.replace(/\./g,"_")]:obj;
+    	if(Session.get('info_pref')=='full')
+    	{
+    		//qlog.info("LOOKUP VALUE AT "+ JSON.stringify(obj) , filename);
+			return obj?obj[val]:obj;
+		}
 	},
 	if_createusr: function (){
+		if(this.viewContext=='createUsr'){
+			Session.set('hasCreated',true);
+		}
 		return (this.viewContext =='createUsr');
 	},
 	if_stored: function (){
@@ -140,6 +154,9 @@ Template.qolls.helpers({
 	if_lock: function (){
 		return (this.action =='lock');
 	},
+    if_edit: function(){
+        return this.enableEdit;
+    },
     iif: function(qollType){
         //qlog.info("Getting all the qollslkjhadkhaskf ......", filename);
         //qlog.info('iif(qollType):  ' + qollType, filename);
@@ -183,7 +200,31 @@ Template.qolls.helpers({
     },
     qoll_abbr_class: function(idx) {
         return "class_"+idx;
-    }
+    },
+    check_selected: function(qollid,qollTypeIx){
+    	qlog.info('Testing responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    	var retval ='';
+    	QollRegist.find({qollId:qollid,qollTypeIndex:qollTypeIx},{reactive:false}).forEach(function (v){
+    		//qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+    		retval = 'border-selected';
+    	});
+    	return retval;
+    },
+    comma_seperate: function (thelist){
+    	return thelist.join();
+    },
+    is_chk_selected: function (qollTypeReg, idx){
+        qlog.info('is chk selected: ' + JSON.stringify(qollTypeReg[idx]), filename);
+        if(qollTypeReg == undefined) return '';
+        if(qollTypeReg[idx]) return 'border-selected'
+    },
+    is_correct_answer: function (qollTypesX, idx){
+        if(qollTypesX == undefined) return false;
+        if(qollTypesX[idx].isCorrect) {
+            return true;
+        }
+        return false;
+    },
 });
 
 
@@ -207,46 +248,62 @@ Template.qolls.events({
     },
 	'click .qoll-response-val': function(event){
 		event.preventDefault();
-        //jQuery(this).removeClass('orange');
         var chk=$(event.target);
-        var foundorange=false;
+
+        var isChkSelected = false;
+        if(chk.hasClass('border-selected')) {
+            isChkSelected = true;
+        }
+
+        //If not a multiple choice question, remove the border-selected
+        if(!this.isMultiple) {
+            $(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem){
+                $(this).removeClass('border-selected');
+            });
+        }
+
+        if(!isChkSelected) {
+            chk.addClass('border-selected');
+        }
+
+        /**var foundanswer=false;
         if(chk.hasClass('qoll-response-val')) {
-          //  chk.siblings().removeClass('bg-orange');
-          //  chk.addClass('bg-orange');
-            foundorange=true;
+            foundanswer=true;
         }
-        if(!foundorange){
-        chk=$(event.target).parent();
-        if(chk.hasClass('qoll-response-val')) {
-          //  chk.siblings().removeClass('bg-orange');
-          //  chk.addClass('bg-orange');
+        if(!foundanswer){
+            chk=$(event.target).parent();
+            if(chk.hasClass('qoll-response-val')) {
+            }
+            foundanswer=true;
         }
-        foundorange=true;
-        }
-        if(!foundorange){
-        chk=$(event.target).parent().parent();
-        if(chk.hasClass('qoll-response-val')) {
-         //   chk.siblings().removeClass('bg-orange');
-         //   chk.addClass('bg-orange');
-        }
-        foundorange=true;
-        }
-		var qollId = this.parent._id;
+        if(!foundanswer){
+            chk=$(event.target).parent().parent();
+            if(chk.hasClass('qoll-response-val')) {
+                chk.siblings().removeClass('bg-orange');
+                chk.addClass('bg-orange');
+            }
+            foundanswer=true;
+        }**/
+
+        var qollId = this.parent._id;
 		var qoll = this.parent;
-		var answerIndex =0;//event.target.id;
+		var answerIndex =this._iter_ix;
 		var answerVal = this._iter_v;
 		
-		qlog.info('youclicked: ' +this._iter_v, filename);   
-		qlog.info('youclickedon: ' +event, filename);  
+		qlog.info('youclicked: ' +this._iter_v, filename);
+		qlog.info('youclickedon: ' +event, filename);
 		qlog.info('youclickedid: ' +qollId, filename);
 		qlog.info('the aindex ='+answerIndex,filename);
-	    Meteor.call('registerQollCustom', qollId, answerVal,0, function(err, qollRegId){
-            qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
+	    Meteor.call('registerQollCustom', qollId, answerVal,answerIndex, function(err, qollRegId){
+            if(err) {
+                qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
+            } else {
+                qlog.info('Registered qoll with id: ' + qollRegId+ answerVal, filename);
+            }
         });
-		ReactiveDataSource.refresh('qollstat'+ qollId);
 
-        $(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
-		},
+        //$(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
+	},
 	'click .send-qoll-btn': function(event){
 		event.preventDefault();
 		var qollId = this._id;
@@ -307,9 +364,7 @@ Template.qolls.events({
         if(Meteor.userId()){
             var qollId = this._id;
             qlog.info('Registering qoll for: ' + qollId+'/maybe' + event, filename);                                                                                                     
-            Meteor.call('registerQoll', qollId, 'maybe', function(err, qollRegId){
-                qlog.info('Registered qoll with id: ' + qollRegId+'/maybe', filename);
-            });
+             
         }
     },
 
@@ -354,4 +409,56 @@ Template.qolls.rendered = function(){
 
     //$('body').addClass('bg1');
     $('body').removeClass('bg1');
-}
+};
+
+Template.contextbtns.helpers({
+		if_inbox:function(){
+			var curpath=  Router && Router.current() && Router.current().path;
+			if ((curpath||'').indexOf( "/dashboard")==0 && Session.get("hasCreated"))
+				return true;
+		},
+		info_pref:function(){
+			if(!Session.get('info_pref')){
+				Session.set('info_pref', 'full');
+			}
+			return Session.get('info_pref');
+		}
+	}
+);
+
+
+
+
+Template.contextbtns.events({
+ 
+    'click .information-toggle': function(event){
+        event.preventDefault();
+
+            qlog.info('changing');
+            var oldtext=Session.get('info_pref');
+            
+            if(oldtext=="less"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-down").addClass("glyphicon-volume-up");
+            	$('.information-toggle-txt').text("full");
+            	Session.set('info_pref','full');
+            	$('.fulltoggle').show();
+            	$('.lesstoggle').show();
+            }
+            if(oldtext=="none"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-off").addClass("glyphicon-volume-down");
+            	$('.information-toggle-txt').text("less");
+            	Session.set('info_pref','less');
+            	$('.fulltoggle').hide();
+            	$('.lesstoggle').show();
+            }
+            if(oldtext=="full"){
+            	$('.information-toggle-txt').removeClass("glyphicon-volume-up").addClass("glyphicon-volume-off");
+            	$('.information-toggle-txt').text("none");
+            	Session.set('info_pref','none');
+            	$('.fulltoggle').hide();
+            	$('.lesstoggle').hide();            	
+            }
+          
+     }
+    }
+  );

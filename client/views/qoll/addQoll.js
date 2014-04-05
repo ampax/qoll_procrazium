@@ -91,7 +91,7 @@ jQuery('.qoll-grp-select').click(function(){
     });
 
     $('body').removeClass('bg1');
-}
+};
 
 processQoll = function(act, event) {
     var _id = $("div#update_qoll_id").val();
@@ -131,16 +131,16 @@ processQoll = function(act, event) {
         }
         $('.qoll-panel').remove();
         $("#qollText").val('');
-        $("div#update_qoll_id").val('')
+        $("div#update_qoll_id").val('');
     } else {
         qlog.info('Pre check failed, returning', filename);
         return;
     }
     
     
-}
+};
 
 preCheckFailed = function(qollText, qollTypes) {
     if(!qollText || qollTypes.length == 0) return true;
     return false;
-}
+};
