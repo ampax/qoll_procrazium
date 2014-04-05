@@ -14,7 +14,7 @@ body {
 	border: 0;
 }
 .site-navbar a {
-	color: #fff;
+	color: #62DA97;
 	text-transform: uppercase;
 	font-family: 'Open Sans', sans-serif;
 }
@@ -40,7 +40,8 @@ body {
 	border: 1px solid #fff;
 	border-radius: 0;
 }
-.navbar-special {
+#login {
+	color: #1b93c7;
 	text-transform: lowercase;
 }
 /* Main */
@@ -50,7 +51,7 @@ body {
 
 /* carousel */
 .carousel-caption {
-	bottom: 100px;
+	bottom : 190px;
 }
 .carousel-caption h3 {
 	font-size: 4.5em;
