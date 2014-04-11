@@ -19,8 +19,9 @@ QollsController = RouteController.extend({
 		};
 	},
 	waitOn : function() {
-
-		return [Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER')];
+		Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions());
+		Meteor.subscribe('QOLL_REG_PUBLISHER');
+		//return [Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER')];
 	},
 	allqollsfun : function() {
 		return AllQolls.find({}, this.findOptions());
