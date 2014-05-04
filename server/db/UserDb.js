@@ -1,4 +1,34 @@
 var filename = 'server/db/UserDb.js';
+/** START: New standard code **/
+Usr = {};
+
+Usr.all = function() {
+    return Meteor.users.find({});
+};
+
+Usr.update = function(userId, hash_to_update){
+    Meteor.users.update({_id: userId}, {$set : hash_to_update});
+};
+
+//Ensure a hash in the user-hash
+Usr.ensure = function(userId, col) {
+    var usr = Meteor.users.findOne({_id : userId});
+    if(usr[col] == undefined) {
+        usr[col] = {};
+    }
+};
+
+//Ensure a hash in the user hash and insert the value in it
+Usr.ensureUpdate = function(userId, col_name, col_val) {
+    var usr = Meteor.users.findOne({_id : userId});
+    if(usr[col] == undefined) {
+        usr[col] = {};
+    }
+    usr[col][col_name] = col_val;
+};
+/** END: New standard code **/
+
+
 QollGroups = new Meteor.Collection("QOLL_GROUPS");
 
 Meteor.methods({
