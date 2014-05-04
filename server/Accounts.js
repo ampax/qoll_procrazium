@@ -1,253 +1,130 @@
 var filename = 'server/Accounts.js';
 
-/**Accounts.onCreateUser(function(options, user){
-	qlog.info('Printing the user information: ' + JSON.stringify(user), filename);
-	qlog.info('Printing the options information: ' + JSON.stringify(options), filename);
-	qlog.info('Printing the services: ' + JSON.stringify(user.services), filename);
 
-    if (user.services) {
-    	// Get the service and email from the user object returned by the service 
-	    var service = _.keys(user.services)[0];
-	    var email = user.services[service].email;
-	    // Set the profile from options 
-    	if (options.profile) {
-	        user.services[service].profile = options.profile
-	    }
-	    qlog.info('Service: ' + service + ', email: ' + email);
+Accounts.onCreateUser(function(options, user){
+  var userProperties = {
+    profile: options.profile || {},
+    karma: 0,
+    isInvited: false,
+    isAdmin: false,
+    postCount: 0,
+    commentCount: 0,
+    invitedCount: 0
+  }
+  user = _.extend(user, userProperties);
 
-	    // Set the email from user object returned by the service 
-	    if (!email) {
-	        if (user.emails) {
-	            email = user.emails.address;
-	        }
-	    }
+  if (options.email)
+    user.profile.email = options.email;
+    
+  if (UserUtil.getEmail(user))
+    user.email_hash = getEmailHash(user);
+  
+  if (!user.profile.name)
+    user.profile.name = user.username;
+  
+  // set notifications default preferences
+  user.profile.notifications = {
+    users: false,
+    posts: false,
+    comments: true,
+    replies: true
+  }
 
-	    // Still no email, try the options 
-	    if (!email) {
-	        email = options.email;
-	    }
+  // create slug from username
+  user.slug = URLUtil.slugify(UserUtil.getUserName(user));
+  // add slug to the profile
+  if (!user.profile.slug)
+    user.profile.slug = user.slug;
 
-	    // At this point, return since the user can not be mapped with no email 
-	    if (!email) {
-	        return user;
-	    }
+  // if this is the first user ever, make them an admin
+  if (!Meteor.users.find().count() )
+    user.isAdmin = true;
 
-	    
-	    //	Past this point, initialize the user with further information
-	    //	See if any existing user has this email address
-	    //	If there is no existing-user
-	    
-	    // see if any existing user has this email address, otherwise create new 
-	    var existingUser = Meteor.users.findOne({'emails.address': email});
-	    if(!existingUser) {
-	        // if User exists else if user does not exist 
-	        if(!userDoesntExist(email)) {
-	        	// The user does not exist in the DB yet, initialize it with some more info and return it
-	        	initUser(service, user);
-	        	return user;
-	        } else {
-	        	// Find existing server for the service and email-id the user is trying to login with
-	        	existingUser = existingUserForService(service, email);
-	        	if(existingUser) {
-	        		if(user.emails) {
-	        			// User is signing in by emails, set it to user emails 
-	        			existingUser.emails = user.emails;
-	        		}
-	        	}
-	        }
-	    }
+  // give new users a few invites (default to 3)
+  user.inviteCount = URLUtil.getSetting('startInvitesCount', 3);
 
-	    // Precaution, these will exist from accounts-password if used 
-	    if (!existingUser.services) {
-	        existingUser.services = { resume: { loginTokens: [] }};
-	    }
-	    // Copy across the new service info 
-	    existingUser.services[service] = user.services[service];
-	    existingUser.services.resume.loginTokens.push(
-	        user.services.resume.loginTokens[0]
-	    );
+  //trackEvent('new user', {username: user.username, email: user.profile.email});
 
-	    //
-	    //	Remove the existing record - CHECK WHY DO WE NEED THIS LOGIC HERE
-	    //	Can we just update the existing record and 
+  // if user has already filled in their email, add them to MailChimp list
+  if(user.profile.email)
+    addToMailChimpList(user);
 
-	    Meteor.users.remove({_id: existingUser._id});
+  // send notifications to admins
+  var admins = Meteor.users.find({isAdmin: true});
+  /**admins.forEach(function(admin){
+    if(UserUtil.getUserSetting('notifications.users', false, admin)){
+      var notification = getNotificationContents({
+        event: 'newUser',
+        properties: {
+          username: UserUtil.getUserName(user),
+          profileUrl: UserUtil.getProfileUrl(user)
+        },
+        userId: admin._id
+      }, 'email');
+      sendNotification(notification, admin);
     }
+  });**/
+
+
+  return user;
 });
-**/
 
 
-/** Find whether user with the email-id exists or not **/
-var userDoesntExist = function(email) {
-	/** Check if github user account exists for this email **/
-	var existingGitHubUser = Meteor.users.findOne({'services.github.email': email});
-
-	/** Check if google user account exists for this email **/
-	var existingGoogleUser = Meteor.users.findOne({'services.google.email': email});
-
-	/** Check if twitter user account exists for this email **/
-    var existingTwitterUser = Meteor.users.findOne({'services.twitter.email': email});
-
-    /** Check if facebook user account exists for this email **/
-    var existingFacebookUser = Meteor.users.findOne({'services.facebook.email': email});
-
-    var doesntExist = !existingGitHubUser && !existingGoogleUser && !existingTwitterUser && !existingFacebookUser;
+getEmailHash = function(user){
+  // todo: add some kind of salt in here
+  return CryptoJS.MD5(UserUtil.getEmail(user).trim().toLowerCase() + user.createdAt).toString();
 }
 
-/** 
-	Return the user-object for the service user is trying to login with 
-	services.github.email
-	services.google.email
-	services.twitter.email
-	services.facebook.email
-**/
-var existingUserForService = function(service, email) {
-	var s = 'services.'+service+'.email';
-	return Meteor.users.findOne({s : email});
+addToMailChimpList = function(user){
+  // add a user to a MailChimp list.
+  // called when a new user is created, or when an existing user fills in their email
+  if((MAILCHIMP_API_KEY=URLUtil.getSetting('mailChimpAPIKey')) && (MAILCHIMP_LIST_ID=URLUtil.getSetting('mailChimpListId'))){
+
+    var email = UserUtil.getEmail(user);
+    if (! email)
+      throw 'User must have an email address';
+
+    console.log('adding "'+email+'" to MailChimp list…');
+    
+    var mailChimp = new MailChimpAPI(MAILCHIMP_API_KEY, { version : '1.3', secure : false });
+    
+    mailChimp.listSubscribe({
+      id: MAILCHIMP_LIST_ID,
+      email_address: email,
+      double_optin: false
+    });
+  }
 }
 
-
-var initUser = function(service, user){
-
-	if(service === 'github'){
-		//init github user
-		initGitHubUser(user);
-	} else if(service === 'facebook'){
-		//init facebook user
-		initFacebookUser(user);
-	} else if(service === 'google'){
-		//init google user
-		initGoogleUser(user);
-	} else if(service === 'weibo'){
-		//init weibo user
-		initWeiboUser(user);
-	} else if(service === 'meetup'){
-		//init meetup user
-		initMeetupUser(user);
-	} else if(service === 'twitter'){
-		//init twitter user
-		initTwitterUser(user);
-	} else{
-		qlog.info("In ELSE STATEMENT USER INIT",filename);
-		if((user.emails[0].address=='perfectly.cromulent@yahoo.com')||
-			(user.emails[0].address=='procrazium@gmail.com')||
-			(user.emails[0].address=='cozenlabs@gmail.com')){
-			user.admin=true;
-			user.profile = user.profile ||{};
-			user.profile.admin = true;
-		}
-	}
-}
-
-var initGitHubUser = function(user){
-	var accessToken = user.services.github.accessToken, result, profile;
-
-	result = Meteor.http.get('https://api.github.com/user', {
-		headers: {
-		    'User-Agent' : 'Qoll/1.0'
-		},
-		params: {
-		    access_token : accessToken
-		}
-	});
-
-	qlog.info('Received user result from github: ' + JSON.stringify(result), filename);
-	qlog.info('Setting profile for the user: ' + JSON.stringify(user), filename);
-
-	if(result.error)
-	    throw result.error;
-
-	profile = _.pick(result.data,
-			 'login',
-			 'name',
-			 'avatar_url',
-			 'url',
-			 'company',
-			 'blog',
-			 'location',
-			 'email',
-			 'bio',
-			 'html_url'
-			 );
-
-	//user.services.github.profile = profile;
-	user.services.profile = profile;
-	user.profile = profile;
-
-	return user;
-}
-
-var initFacebookUser = function(user){
-	var accessToken = user.services.facebook.accessToken, result, profile;
-
-	result = Meteor.http.get('https://graph.facebook.com/me', {
-		headers: {
-		    'User-Agent' : 'Qoll/1.0'
-		},
-		params: {
-		    access_token : accessToken
-		}
-	});
-
-	qlog.info('Received user result from facebook: ' + JSON.stringify(result), filename);
-
-	if(result.error)
-	    throw result.error;
-
-	profile = _.pick(result.data,
-			 'login',
-			 'name',
-			 'url',
-			 'company',
-			 'blog',
-			 'location',
-			 'email',
-			 'bio',
-			 'html_url'
-			 );
-	profile['avatar_url'] = 'http://graph.facebook.com/'+user.services.facebook.id+'/picture?type=small'
-	//http://graph.facebook.com/USERNAME_OR_USERID/picture?type=large
-	//598298352
-
-	//user.services.facebook.profile = profile;
-	user.services.profile = profile;
-	user.profile = profile;
-}
-
-var initGoogleUser = function(user){
-	var accessToken = user.services.google.accessToken, result, profile;
-	
-	//result = Meteor.http.get('https://www.googleapis.com/auth/plus.me', {
-	result = Meteor.http.get('https://accounts.google.com/o/oauth2/auth', {
-		headers: {
-		    'User-Agent' : 'Qoll/1.0'
-		},
-		params: {
-		    access_token : accessToken
-		}
-	});
-
-	qlog.info('Received user result from google: ' + JSON.stringify(result), filename);
-
-	if(result.error)
-	    throw result.error;
-
-	//https://developers.google.com/accounts/docs/OAuth2Login#scopeparameter
-	//https://accounts.google.com/o/oauth2/token
-	//https://accounts.google.com/o/oauth2/auth
-	//https://www.googleapis.com/plus/v1/people/me
-}
-
-var initWeiboUser = function(user){
-	var accessToken = user.services.weibo.accessToken, result, profile;
-}
-
-var initMeetupUser = function(user){
-	var accessToken = user.services.meetup.accessToken, result, profile;
-}
-
-var initTwitterUser = function(user){
-	var accessToken = user.services.twitter.accessToken, result, profile;
-}
-
+Meteor.methods({
+  changeEmail: function(newEmail) {
+    Meteor.users.update(Meteor.userId(), {$set: {emails: [{address: newEmail}]}});
+  },
+  numberOfPostsToday: function(){
+    console.log(numberOfItemsInPast24Hours(Meteor.user(), Posts));
+  },
+  numberOfCommentsToday: function(){
+    console.log(numberOfItemsInPast24Hours(Meteor.user(), Comments));
+  },
+  testEmail: function(){
+    Email.send({from: 'test@test.com', to: UserUtil.getEmail(Meteor.user()), subject: 'Telescope email test', text: 'lorem ipsum dolor sit amet.'});
+  },
+  testBuffer: function(){
+    // TODO
+  },
+  getScoreDiff: function(id){
+    var object = Posts.findOne(id);
+    var baseScore = object.baseScore;
+    var ageInHours = (new Date().getTime() - object.submitted) / (60 * 60 * 1000);
+    var newScore = baseScore / Math.pow(ageInHours + 2, 1.3);
+    return Math.abs(object.score - newScore);
+  },
+  setEmailHash: function(user){
+    var email_hash = CryptoJS.MD5(UserUtil.getEmail(user).trim().toLowerCase()).toString();
+    Meteor.users.update(user._id, {$set : {email_hash : email_hash}});
+  },
+  addCurrentUserToMailChimpList: function(){
+    addToMailChimpList(Meteor.user());
+  }
+});
 
