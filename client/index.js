@@ -1,7 +1,7 @@
 var filename='client/views/index.js';
 
-Template.user_loggedout.events({
-	/*'click #login_gh' : function(e, tmpl){
+/*Template.user_loggedout.events({
+	'click #login_gh' : function(e, tmpl){
 		loginWithService('github');
 	},
 	'click #login_fb' : function(e, tmpl){
@@ -16,7 +16,6 @@ Template.user_loggedout.events({
 		qlog.info('User login with weibo', filename);
 	    loginWithService('weibo');
 	}
-*/
 });
 
 Template.user_loggedin.events({
@@ -24,4 +23,4 @@ Template.user_loggedin.events({
 		qlog.info('User logout event happened', filename);
 	    logoutFromService();
 	}
-});
+});*/

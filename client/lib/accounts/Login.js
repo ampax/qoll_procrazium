@@ -1,5 +1,9 @@
 var filename = 'server/lib/Login.js';
 
+Accounts.ui.config({
+	passwordSignupFields: 'USERNAME_AND_EMAIL'
+});
+
 /**
 	Global login-with-service method 
 **/

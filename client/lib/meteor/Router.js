@@ -1,4 +1,4 @@
-var filename = "client/lib/meteor/router.js";
+var filename = "client/lib/meteor/Router.js";
 
 var active_nav = function(){
 	$('ul.nav > li').click(function (e) {
@@ -24,3 +24,82 @@ checkSessionAndSendToHome = function() {
 	}
 }
 
+
+//--------------------------------------------------------------------------------------------------//
+//------------------------------------------- Controllers ------------------------------------------//
+//--------------------------------------------------------------------------------------------------//
+// Controller for user pages
+
+UserPageController = FastRender.RouteController.extend({
+  waitOn: function() {
+  	qlog.info('before subscribing to singleUser - ' + this.params._idOrSlug, filename);
+    Meteor.subscribe('singleUser', this.params._idOrSlug);
+  },
+  data: function() {
+    var findById = Meteor.users.findOne(this.params._idOrSlug);
+    var findBySlug = Meteor.users.findOne({slug: this.params._idOrSlug});
+    qlog.info('found users findById - ' + JSON.stringify(findById) + ', findBySlug - ' 
+    	+ JSON.stringify(findBySlug) + ', slug - ' + this.params._idOrSlug);
+    if(typeof findById !== "undefined"){
+      // redirect to slug-based URL
+      Router.go(UserUtil.getProfileUrl(findById), {replaceState: true});
+    }else{
+      return {
+        user: (typeof findById == "undefined") ? findBySlug : findById
+      }
+    }
+  }
+});
+
+
+//--------------------------------------------------------------------------------------------------//
+//--------------------------------------------- Routes ---------------------------------------------//
+//--------------------------------------------------------------------------------------------------//
+
+
+Router.map(function() {
+
+// ---------------------------------- user page routers -------------------------------------- //
+  // User Profile
+
+  this.route('user_profile', {
+    path: '/users/:_idOrSlug',
+    controller: UserPageController
+  });
+
+  // User Edit
+
+  this.route('user_edit', {
+    path: '/users/:_idOrSlug/edit',
+    controller: UserPageController
+  });
+
+  // Account
+
+  this.route('account', {
+    path: '/account',
+    template: 'user_edit',
+    data: function() {
+      return {
+        user: Meteor.user()
+      }
+    }
+  });
+
+  // Forgot Password
+
+  this.route('forgot_password');
+
+/** End: Router **/
+});
+
+// adding common subscriptions that's need to be loaded on all the routes
+// notification does not included here since it is not much critical and 
+// it might have considerable amount of docs
+if(Meteor.isServer) {
+  FastRender.onAllRoutes(function() {
+    this.subscribe('categories');
+    this.subscribe('settings');
+    this.subscribe('currentUser');
+  });
+}
