@@ -40,8 +40,13 @@ Template.header_awesome.rendered = function()
 };
 
 Template.header_awesome.events({
-	'click #logout' : function(event, tmpl) {
-		qlog.info('User logout event happened', filename);
-	    logoutFromService();
-	}
+    'click #logout' : function(event, tmpl) {
+    
+     qlog.info('User logout event happened', filename);
+     logoutFromService();
+    },
+   /* 'click .dsb': function() {
+    event.preventDefault();
+    Router.go('dashboard');
+    }*/
 });

@@ -3,14 +3,17 @@ var filename = "client/views/header/landing_page.js";
 Template.landing_page.rendered = function() {
     new WOW().init();
     
-    $('.collapse-onclick').each(function() {
+    /*$('.collapse-onclick').each(function() {
         $(this).on("click", function () {
             var $obj = $($(this).parents('.in')[0]);
             $obj.animate({'height': '1px'}, function() {
-                $obj.removeClass('in').addClass('collapse');
+                if (!$obj.hasClass('loginButtons'))
+                {
+                    $obj.removeClass('in').addClass('collapse');
+                }
             });
         });
-    });
+    });*/
 
       // One page navigation
     $('.nav').singlePageNav({
