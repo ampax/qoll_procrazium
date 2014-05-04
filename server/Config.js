@@ -8,8 +8,8 @@ Meteor.startup(function(){
 	if(SITE_URL === 'http://localhost:3000/'){
 		//Initialize localhost for login with github
 		initWithGitDev();
-		initWithFacebookDev();
-		initWithGoogleDev();
+		//initWithFacebookDev();
+		//initWithGoogleDev();
 	} else if(SITE_URL === 'http://qoll.io/'){
 		//Initialize localhost for login with github
 		initWithGitServer();
