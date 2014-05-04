@@ -21,9 +21,8 @@
       "bootstrap-3": {
         "version": "0.3.7"
       },
-      "accounts-ui-bootstrap-3": {
-        "version": "0.2.4"
-      }
+      "fast-render": {},
+      "crypto-md5": {}
     },
     "packages": {
       "observatory": {
@@ -101,10 +100,15 @@
         "tag": "v0.3.7",
         "commit": "5dd0d142c870647b910be80bc777b96f0dd45e5e"
       },
-      "accounts-ui-bootstrap-3": {
-        "git": "https://github.com/mangasocial/meteor-accounts-ui-bootstrap-3.git",
+      "fast-render": {
+        "git": "https://github.com/arunoda/meteor-fast-render.git",
         "tag": "v0.2.4",
-        "commit": "cdbd20eb065310c0cc302bbd5f22e5b2121c769a"
+        "commit": "160a64bd61792f53a7c8848c5e979a953be13564"
+      },
+      "crypto-md5": {
+        "git": "https://github.com/oortcloud/meteor-crypto-md5.git",
+        "tag": "v3.1.2.2",
+        "commit": "75bbb3eeace302122d3554a6212a6fe92553fa18"
       },
       "observatory-apollo": {
         "git": "https://github.com/superstringsoftware/observatory-apollo.git",
@@ -115,6 +119,11 @@
         "git": "https://github.com/apendua/module-loader.git",
         "tag": "v0.5.1",
         "commit": "06c4f220272fb10dadec3ff431a47ce58e84cc8f"
+      },
+      "crypto-base": {
+        "git": "https://github.com/oortcloud/meteor-crypto-base.git",
+        "tag": "v3.1.2.1",
+        "commit": "5df8d82a0595553415bbfae2930c6ecbeece5794"
       },
       "observatory-galileo": {
         "git": "https://github.com/superstringsoftware/observatory-galileo.git",

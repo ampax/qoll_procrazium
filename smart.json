@@ -19,8 +19,7 @@
     "bootstrap-3": {
       "version": "0.3.7"
     },
-    "accounts-ui-bootstrap-3": {
-      "version": "0.2.4"
-    }
+    "fast-render": {},
+    "crypto-md5": {}
   }
 }
