@@ -1,6 +1,8 @@
 <template name="user_profile">
 	{{> header_awesome}}
-	<div class="grid">
+	<p class="lead"/>
+	<div class="container">
+		<div class="row">
 		{{#with user}}
 		<div class="user-profile grid-block">
 			<table>
@@ -27,8 +29,20 @@
 				</tr>
 				{{#if getTwitterName}}
 					<tr>
-						<td>Twitter: </td>
+						<td>{{i18n "Twitter"}}: </td>
 						<td><a href="http://twitter.com/{{getTwitterName}}">{{getTwitterName}}</a></td>
+					</tr>
+				{{/if}}
+				{{#if getGoogle}}
+					<tr>
+						<td>{{i18n "Google"}}: </td>
+						<td><a href="http://twitter.com/{{getGoogle}}">{{getGoogle}}</a></td>
+					</tr>
+				{{/if}}
+				{{#if getFacebookName}}
+					<tr>
+						<td>{{i18n "Facebook"}}: </td>
+						<td><a href="http://twitter.com/{{getFacebookName}}">{{getFacebookName}}</a></td>
 					</tr>
 				{{/if}}
 				{{#if getGitHubName}}
@@ -44,6 +58,7 @@
 					</tr>
 				{{/if}}					
 			</table>
+			<p class="lead"/>
 			{{#if canEditProfile}}
 				<a class="btn btn-primary btn-qoll" href="/users/{{slug}}/edit">{{i18n "Edit Profile"}}</a>
 			{{/if}}
@@ -57,4 +72,5 @@
 		</div>
 		{{/with}}
 	</div>
+</div>
 </template>
