@@ -58,7 +58,8 @@ Template.user_edit.events({
     var user = this;
     var update = {
       "profile.name": name,
-      "profile.slug": URLUtil.slugify(name),
+      "profile.name_slug": URLUtil.slugify(name),
+      "profile.slug": URLUtil.slugify($target.find('[name=username]').val()),
       "profile.bio": $target.find('[name=bio]').val(),
       "profile.email": $target.find('[name=email]').val(),
       "profile.twitter": $target.find('[name=twitter]').val(),
