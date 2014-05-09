@@ -1,0 +1,26 @@
+<template name="qollbank">
+	{{> header_awesome}}
+	<p class="lead">
+		<H1>Below are questions in your QBank</H1>
+		<div class="container" id="qoll-container-id">
+			<!-- Starting of the row for all qolls -->
+			<div class="row">
+				{{#each QBankSumm}}
+				<!-- Start of Qoll Section -->
+				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success" id='{{_id}}'>
+
+					<div class="col-md-10 col-xs-12">
+						{{#mathjax}}{{{qollText}}}{{/mathjax}}
+					</div>
+
+				</div>
+				<!-- End of Qoll Section here -->
+				{{/each}}
+			</div>
+			<!-- End of the row here -->
+
+			<div id="navbrand"></div>
+
+		</div>
+	</p>
+</template>
