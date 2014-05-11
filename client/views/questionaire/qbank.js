@@ -67,7 +67,10 @@ Template.qollbank.events({
 			} else {
 				qlog.info("Added qoll-master-content with id: " + qollMasterId, filename);
 				target.html("Qoll Saved...");
-				editor.setValue('', 1);
+				jQuery(".qollstionnaire-title").val('');
+				$('.qoll_selection').prop("checked", false);
+				$('.qoll_selectall').prop("checked", false);
+		
 				jQuery("input#recipient_search").val('');
 				target.fadeOut(2400, function() {
 					//setTimeout(function(){
