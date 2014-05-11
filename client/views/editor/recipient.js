@@ -8,7 +8,6 @@ Template.recipient.rendered = function() {
 	QollAutoComplete.init("input#recipient_search");
 	QollAutoComplete.enableLogging = true;
 };
-
 Template.recipient.events({
   'keyup .recipient': function () {
 
@@ -24,7 +23,8 @@ Template.recipient.events({
       //filter: { 'gender': 'female' }}); // Additional filtering
   }, 
   'click .qollQbankToggle': function(){
-  	if( $('.qollQbankToggle').html().indexOf('Qoll To:')>-1){
+  	if (Session.get('disable_sendtoQbank')) return;
+  	if( $('.qollQbankToggle').html().indexOf('Qoll To:')>-1 ){
   		$('.qollQbankToggle').html($('.qollQbankToggle').html().replace('Qoll To:','To Qbank...'));
   		$('.recipient').val('qbank@qoll.io');
   		$(".recipient").prop('disabled', true);
