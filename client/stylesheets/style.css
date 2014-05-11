@@ -90,6 +90,10 @@ p.pull-left {
     /**margin-left: 200px;**/
 }
 
+.pull-left {
+    float: none;
+}
+
 p.newStyleClassP {
     font-family: Verdana, Arial, Helvetica, , sans-serif;
     font-weight: bold;
@@ -218,6 +222,10 @@ i.red:hover {
     color: green;
 }
 
+a.qoll-color {
+    color: #2a6496;
+}
+
 
 span.qoll-badge {
     float: left !important; 
@@ -264,6 +272,7 @@ textarea.editor-upen {
 div.div-qoll-types {
     width: 100%;
     vertical-align: top;
+    padding-top: 10px;
 }
 
 div.panel-qoll-type-list {
@@ -375,10 +384,27 @@ a.group-plus {
     border-style: solid;
     border-color: #bdc3c7;
     width: 100%;
+    height: 40px;
     /**border-bottom: solid;
     border-bottom-width: 1px;
     border-bottom-style: solid;
     border-bottom-color: #bdc3c7;**/
+}
+
+.qoll-toolbar > .title {
+    width: 50%;
+    float: left;
+    height: 100%;
+}
+
+.qoll-toolbar > .editor-link {
+    width: 50%;
+    float: right;
+    height: 100%;
+    text-align: -webkit-center;
+    text-align: right;
+    padding-top: 8px;
+    vertical-align: -webkit-baseline-middle;
 }
 
 
@@ -399,9 +425,16 @@ span.qoll-toolbar-plain {
     overflow: hidden !important;
     padding: 5px 5px !important;
     color: #000305 !important;
+    background-color:rgba(191, 162, 219, 0.17);
     font-size: 14px !important;
     font-family: Arial, 'Lucida Sans Unicode' !important;
     text-align: left;
+}
+
+.list-group-item-heading {
+	color: #FFF  !important;
+	background-color: rgba(50, 118, 177, 0.56);
+	border-color: rgba(9, 28, 80, 1);
 }
 
 .qoll-seperator {
@@ -480,3 +513,57 @@ text-overflow: ellipsis;
     cursor:pointer; 
     }
 }
+
+
+/* Smartphones ----------- */
+@media only screen and (min-width: 760px) {
+  #mob-only { display: none; }
+}
+
+@media (max-width: 761px) {
+    #desk-only { display: none !important; }
+}
+
+/* Start: Search input box style */
+.search {
+  position: relative; 
+}
+
+.search > .search-field {
+    font-size: 14px;
+    padding: 4px 12px;
+    line-height: 1.3;
+    border-radius: 20px;
+    border: 0px;
+    width: 100px;
+    -webkit-transition: 0.2s all;
+    -moz-transition: 0.2s all;
+    background: white; 
+}
+
+.search > .search-field:focus {
+  outline: none; 
+}
+  
+.search.empty > .search-field {
+    background: rgba(255, 255, 255, 0.1); 
+}
+
+.search.empty > .search-field:focus {
+    background: white; 
+}
+
+.search.empty > .search-clear {
+    display: none; 
+}
+/* End: Search input box style */
+
+/* Start: Basic styling for html elements for Qoll */
+.btn-qoll {
+    padding-left: 18px;
+    padding-right: 18px;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    display: inline;
+}
+/* End: Basic styling for html elements for Qoll */

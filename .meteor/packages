@@ -5,7 +5,6 @@
 
 standard-app-packages
 observatory
-accounts-password
 font-awesome
 HTML5-History-API
 observatory-apollo
@@ -27,4 +26,8 @@ email
 animate-css
 iron-router
 bootstrap-3
-accounts-ui-bootstrap-3
+fast-render
+crypto-md5
+accounts-password
+accounts-base
+accounts-ui

@@ -66,6 +66,8 @@ http://www.iclarified.com/28180/how-to-open-applications-from-unidentified-devel
 -	Event Hooks – mrt add event-hooks
 -	Meteorite – sudo npm install –g meteorite <<Used to install and run meteor app using atmosphere packages>>
 -   meteor add jquery
+-   mrt add accounts-ui-bootstrap-dropdown
+	Refer to if you have issues with blaze - https://github.com/EventedMind/blaze-layout/issues/3
 ```
 
 
@@ -139,6 +141,15 @@ meteor-npm #type inside your project
 
 Now edit root/packages.json <<Not package.json>> file and add the following - 
 "marked": "0.3.1" 
+```
+
+Find Meteor process, kill it (if hidden), and reset the project
+```
+ps -x | grep meteor
+kill -9 <pid>
+mrt reset
+or
+meteor reset
 ```
 
 Now you can start adding server side code for mark-down processing. If you add client-side processing, it

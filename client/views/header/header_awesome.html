@@ -1,5 +1,5 @@
 <template name="header_awesome">
-   <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+   <div class="navbar navbar-inverse navbar-fixed-top dsb" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
           <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -13,21 +13,22 @@
           </div>  
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-          <ul class="nav navbar-nav collapse-onclick">
-            <li><a href="/"><span class="glyphicon glyphicon-home"> Home</span></a></li>
+          <ul class="nav navbar-nav">
+            <li id="mob-only" class="qoll-login auth-buttons">{{loginButtons align="right"}}</li>
+            <li><a href="/"><span class="glyphicon glyphicon-home"> {{i18n "Home"}}</span></a></li>
             {{#if currentUser}}
-            <li ><a href="dashboard"><span class="glyphicon glyphicon-list"> QBox</span></a></li>
-            <li><a href="qolleditor_adv"><span class="glyphicon glyphicon-send"> Create Qoll</span></a></li>
-            <li><a href="newgroup"><span class="fa fa-users"> Create Group </span></a></li>
-
+            <li><a href="/dashboard"><span class="glyphicon glyphicon-list"> {{i18n "QBox"}}</span></a></li>
+            <li><a href="/qolleditor_adv"><span class="glyphicon glyphicon-send"> {{i18n "Create Qoll"}}</span></a></li>
+            <li><a href="/newgroup"><span class="fa fa-users"> {{i18n "Create Group"}} </span></a></li>
+						<li><a href="/qbank"><span class="fa fa-cloud"> {{i18n "QBank"}} </span></a></li>
             {{/if}}
              {{> contextbtns}}
             {{#if currentUser.profile.admin}}
-            <li class=""><a href="/admin"><i class="fa fa-cogs"></i> Admin</a></li>
+            <li class=""><a href="/admin"><i class="fa fa-cogs"></i> {{i18n "Admin"}}</a></li>
             {{/if}}
           </ul>        
-          <ul class="nav navbar-nav navbar-right">
-              {{ loginButtons }} 
+          <ul class="nav navbar-nav navbar-right qoll-login">
+              <li id="desk-only" class="qoll-login auth-buttons">{{loginButtons align="right"}}</li>
            </ul>
         </div>
       </div>

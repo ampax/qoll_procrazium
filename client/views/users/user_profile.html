@@ -1,0 +1,76 @@
+<template name="user_profile">
+	{{> header_awesome}}
+	<p class="lead"/>
+	<div class="container">
+		<div class="row">
+		{{#with user}}
+		<div class="user-profile grid-block">
+			<table>
+				<tr>
+					<td colspan="2"><img class="user-avatar" src="{{avatarUrl}}"/></td>
+				</tr>
+				{{#if isAdmin}}
+					<tr>
+						<td>{{i18n "ID"}}: </td>
+						<td>{{_id}}</td>
+					</tr>
+				{{/if}}
+				<tr>
+					<td>{{i18n "Name"}}:</td>
+					<td>{{profile.name}}</td>
+				</tr>
+				<tr>
+					<td>{{i18n "Member Since"}}:</td>
+					<td>{{createdAtFormatted}}</td>
+				</tr>
+				<tr>
+					<td>{{i18n "Bio"}}:</td>
+					<td>{{profile.bio}}</td>
+				</tr>
+				{{#if getTwitterName}}
+					<tr>
+						<td>{{i18n "Twitter"}}: </td>
+						<td><a href="http://twitter.com/{{getTwitterName}}">{{getTwitterName}}</a></td>
+					</tr>
+				{{/if}}
+				{{#if getGoogle}}
+					<tr>
+						<td>{{i18n "Google"}}: </td>
+						<td><a href="http://twitter.com/{{getGoogle}}">{{getGoogle}}</a></td>
+					</tr>
+				{{/if}}
+				{{#if getFacebookName}}
+					<tr>
+						<td>{{i18n "Facebook"}}: </td>
+						<td><a href="http://twitter.com/{{getFacebookName}}">{{getFacebookName}}</a></td>
+					</tr>
+				{{/if}}
+				{{#if getGitHubName}}
+					<tr>
+						<td>{{i18n "GitHub"}}:</td>
+						<td><a href="http://github.com/{{getGitHubName}}">{{getGitHubName}}</a></td>
+					</tr>
+				{{/if}}
+				{{#if site}}
+					<tr>
+						<td>{{i18n "Site"}}:</td>
+						<td><a href="{{profile.site}}">{{profile.site}}</a></td>
+					</tr>
+				{{/if}}					
+			</table>
+			<p class="lead"/>
+			{{#if canEditProfile}}
+				<a class="btn btn-primary btn-qoll" href="/users/{{slug}}/edit">{{i18n "Edit Profile"}}</a>
+			{{/if}}
+			{{#if canInvite}}
+				{{#if inviteCount}}
+					<a class="button inline invite-link" href="#">{{i18n "Invite"}} ({{inviteCount}} {{i18n "left"}})</a>
+				{{else}}
+					<a class="button inline disabled" href="#">{{i18n "Invite (none left)"}}</a>
+				{{/if}}
+			{{/if}}
+		</div>
+		{{/with}}
+	</div>
+</div>
+</template>
