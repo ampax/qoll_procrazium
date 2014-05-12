@@ -99,7 +99,7 @@ Router.map(function() {
 if(Meteor.isServer) {
   FastRender.onAllRoutes(function() {
     this.subscribe('categories');
-    this.subscribe('settings');
+    this.subscribe('Settings');
     this.subscribe('currentUser');
   });
 }

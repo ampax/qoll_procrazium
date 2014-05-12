@@ -125,7 +125,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
         var regExAnser = /^(a)\s+/;
         var regExNoAnser = /^\s+/;
         var qollId = new Array();
-        var qolls = qollMaster.split(/\#Qoll\s/);
+        var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
         qolls = qolls.slice(1);
         qolls.map(function(q){
             var qollRawId = addQollRaw(q, qollMasterId);

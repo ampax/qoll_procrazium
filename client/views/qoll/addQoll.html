@@ -1,8 +1,8 @@
 <template name="addQoll">
-	{{> header_awesome}}
 	<div class="content">
 		<div class="qoll-toolbar">
-			<h4>Add a Qoll</h4>
+			<div class="title"><h4>Add a Qoll</h4></div>
+			<div class="editor-link"><a href="#" id="advanced">Advanced Editor>>&nbsp;&nbsp;&nbsp;</a></div>
 		</div><p></p>
 		<!--input type="text" class="qoll-title qoll-type-option" id="qolltitle" placeholder="Qoll Title Here ..."><p-->
 		<div class="editor-writer">
@@ -22,16 +22,16 @@
 		  		<span class="input-group-addon input-group-addon-klik send-to ios-enabled">+Email</span>
 		  		<div class ="btn-group">
 		  		 <button type="button" class="btn btn-default dropdown-toggle ios-enabled" data-toggle="dropdown">+Select Groups<span class="caret"></span>
-  </button> 
+  				</button> 
   
-  <ul class="dropdown-menu qoll-group-list" role="menu">
-  	 {{#each qollGroups}}
-  	<li class= "qoll-grp-select"><a href="#">{{this.name}}</a></li>
-  	{{/each}}
-  </ul>
+				  <ul class="dropdown-menu qoll-group-list" role="menu">
+				  	 {{#each qollGroups}}
+				  	<li class= "qoll-grp-select"><a href="#">{{this.name}}</a></li>
+				  	{{/each}}
+				  </ul>
 		  				
-</div>
-		</div>
+				</div>
+			</div>
 	
 			
 			</div>

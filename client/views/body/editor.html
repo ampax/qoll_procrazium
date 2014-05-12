@@ -1,0 +1,8 @@
+<template name="editor">
+	{{> header_awesome}}
+	{{#if is_adv}}
+		{{> qolleditor_adv}}
+	{{else}}
+		{{> newqoll}}
+	{{/if}}
+</template>

@@ -1,8 +1,13 @@
-Settings = new Meteor.Collection('settings');
+Settings = new Meteor.Collection('Settings');
 
 Settings.allow({
-  insert: UserUtil.isAdminById
-, update: UserUtil.isAdminById
-, remove: UserUtil.isAdminById
+  insert: function(userId, doc) {
+  	return doc && (UserUtil.isAdminById(userId) || Meteor.userId);
+  },
+  update: function(userId, doc) {
+  	return doc && (UserUtil.isAdminById(userId) || Meteor.userId) && userId == doc.userId;
+  },
+  remove: function(userId, doc) {
+  	return doc && (UserUtil.isAdminById(userId) || Meteor.userId) && userId == doc.userId;
+  }
 });
-

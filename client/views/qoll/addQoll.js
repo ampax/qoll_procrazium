@@ -39,6 +39,30 @@ Template.addQoll.events({
         $("#qollText").val('');
         $("div#update_qoll_id").val('');
     },
+    'click #advanced': function(event) {
+      event.preventDefault();
+      //store the pref in user-preferences and routh to basic editor.
+      //Meteor.Router.to('/news');
+      settings = Settings.find({'userId' : Meteor.userId()}).fetch();
+      qlog.info('Switching to advanced editor ' + settings, filename);
+      if(settings && settings.length > 0) {
+        qlog.info('Updating settings ' + settings[0]['editor_mode'] + ', _id ' + settings[0]._id, filename);
+        //Settings.update({'editor_mode': QollConstants.EDITOR_MODE.BASIC});
+
+        Settings.update({_id : settings[0]._id}, {
+          $set: {'editor_mode': QollConstants.EDITOR_MODE.ADV}
+        }, function(error){
+          if(error){
+            //throwError(error.reason);
+            qlog.error('Error happened while saving editor-preferences - '+error.reason, filename);
+          } else {
+            qlog.info('Saved editor_mode = advanced to preferences', filename);
+          }
+        });
+      } else {
+        Settings.insert({'userId' : Meteor.userId(), 'editor_mode': QollConstants.EDITOR_MODE.ADV});
+      }
+  },
 });
 
 

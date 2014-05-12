@@ -43,7 +43,7 @@ Meteor.methods({
     },
     parse_downtown : function(data, option, escape_mathjax) {
     	var parsed_qolls = new Array();
-    	var qolls = data.split(/\#Qoll\s/);
+    	var qolls = data.split(/\#\s/);
         qolls = qolls.slice(1);
         qolls.map(function(q){
             var qs = q.split(/\n-/);

@@ -6,21 +6,27 @@ Template.toolbar.events({
     var editor = ace.edit("aceEditor");
     bindToolBarForQoll(editor);
   },'click .addopti': function(){
+    event.preventDefault()
     var editor = ace.edit("aceEditor");
     bindToolBarForOption(editor);
   },'click .addltxi': function(){
+    event.preventDefault()
     var editor = ace.edit("aceEditor");
     bindForLatexInline(editor);
   },'click .addltxb': function(){
+    event.preventDefault()
     var editor = ace.edit("aceEditor");
     bindForLatexBlock(editor);
   },'click .addcode': function(){
+    event.preventDefault()
     var editor = ace.edit("aceEditor");
     bindForCode(editor);
   },'click .addbloc': function(){
+    event.preventDefault()
     var editor = ace.edit("aceEditor");
     bindForBlockQuotes(editor);
   },'click .sendqoll': function(){
+    event.preventDefault()
     console.log("Send qoll at this event ...");
     var editor = ace.edit("aceEditor");
     var qoll_editor_content = editor.getValue();
@@ -28,6 +34,7 @@ Template.toolbar.events({
 
     storeEditorContents(editor, recips, "send");
   },'click .storqoll': function(){
+    event.preventDefault()
     console.log("Store qoll at this event ...");
     var editor = ace.edit("aceEditor");
     var qoll_editor_content = editor.getValue();
@@ -66,9 +73,32 @@ Template.toolbar.events({
     }
     
   },'click .checkqoll': function(){
+    event.preventDefault()
     console.log("Check correct item in qoll at this event ...");
     var editor = ace.edit("aceEditor");
     bindToolBarForQollAnswer(editor);
+  },'click #basic': function(event) {
+      event.preventDefault();
+      //store the pref in user-preferences and routh to basic editor.
+      //Meteor.Router.to('/news');
+      qlog.info('Switching to basic editor', filename);
+      settings = Settings.find({'userId' : Meteor.userId()}).fetch();
+      if(settings && settings.length > 0) {
+        //Settings.update({'editor_mode': QollConstants.EDITOR_MODE.BASIC});
+
+        Settings.update({_id : settings[0]._id}, {
+          $set: {'editor_mode': QollConstants.EDITOR_MODE.BASIC}
+        }, function(error){
+          if(error){
+            //throwError(error.reason);
+            qlog.error('Error happened while saving editor-preferences - '+error.reason, filename);
+          } else {
+            qlog.info('Saved editor_mode = basic to preferences', filename);
+          }
+        });
+      } else {
+        Settings.insert({'userId' : Meteor.userId(), 'editor_mode': QollConstants.EDITOR_MODE.BASIC});
+      }
   },
 });
 

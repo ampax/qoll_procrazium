@@ -45,6 +45,53 @@
           </div>
         </div>
 
+        <!--  Demographic input  -->
+        <div class="form-group">
+          <label for="inputGeoDemo" class="col-sm-2 control-label">{{i18n "Geo/Demographic"}}</label>
+
+          <!-- DOB -->
+          <label for="inputDemographicDOB" class="col-sm-1 control-label">{{i18n "DOB"}}:</label>
+          <div class="col-sm-2">
+            <input type="text" class="form-control" id="dob" name="dob" placeholder='mm/dd/yyyy' value="{{profile.dob}}" />
+            <!-- input type="text" id="datepicker" -->
+          </div>
+
+          <!-- Sex -->
+          <!-- label for="inputDemographicSex" class="col-sm-1 control-label">{{i18n "Sex"}}:</label -->
+          <div class="col-sm-3">
+            <!-- input type="text" class="form-control" id="sex" name="sex" placeholder='{{i18n "Sex"}}' value="{{profile.sex}}" / -->
+            <select id="sex" class="form-control">
+              <option value="">{{i18n "Sex"}}</option>
+              <option value="male" {{isSex "male"}}>{{i18n "Male"}}</option>
+              <option value="female"  {{isSex "female"}}>{{i18n "Female"}}</option>
+            </select>
+          </div>
+
+          <!-- City -->
+          <!-- label for="inputDemographicState" class="col-sm-1 control-label">{{i18n "State"}}:</label -->
+          <div class="col-sm-2">
+            <select id="state" name="state" class="form-control">
+              <option value="">State</option>
+              {{#each statesForCountry 'USA'}}
+              <option value="{{state_code}}" {{isState this ../this}}>{{state_name}}</option>
+              {{/each}}
+            </select>
+            <!--input type="text" class="form-control" id="state" name="state" placeholder='{{i18n "State"}}' value="{{profile.state}}" /-->
+          </div>
+
+          <!-- State -->
+          <!-- label for="inputDemographicCountry" class="col-sm-1 control-label">{{i18n "Country"}}:</label -->
+          <div class="col-sm-2">
+            <select id="country" name="country" class="form-control">
+              <option value="">Country</option>
+              {{#each countries}}
+              <option value="{{country_code}}" {{isCountry this ../this}}>{{country_name}}</option>
+              {{/each}}
+            </select>
+            <!-- input type="text" class="form-control" id="country" name="country" placeholder='{{i18n "Country"}}' value="{{profile.country}}" / -->
+          </div>
+        </div>
+
         <!--  Display name input  -->
         <div class="form-group">
           <label for="inputName" class="col-sm-2 control-label">{{i18n "Display Name"}}</label>

@@ -19,6 +19,12 @@ Template.user_profile.helpers({
   getTwitterName: function () {
     return UserUtil.getTwitterName(this);
   },
+  getGoogle: function () {
+    return UserUtil.getGoogleName(this);
+  },
+  getFacebookName: function () {
+    return UserUtil.getFacebookName(this);
+  },
   getGitHubName: function () {
     return UserUtil.getGitHubName(this);
   }
