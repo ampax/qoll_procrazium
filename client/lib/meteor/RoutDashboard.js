@@ -18,8 +18,7 @@ QollsController = RouteController.extend({
 			limit : this.limit()
 		};
 	},
-	waitOn : function() {
-		[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER')];
+	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER')];
 	},
 	allqollsfun : function() {
 		return AllQolls.find({}, this.findOptions());
@@ -43,4 +42,5 @@ Router.map(function() {
 		path : '/dashboard/:qollsLimit?',
 		controller : QollsController,
 	});
+
 });

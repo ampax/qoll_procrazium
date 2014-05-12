@@ -1,0 +1,58 @@
+<template name="qollbank">
+	{{> header_awesome}}
+	<p class="lead">
+		<H3><center>Create a qollstionnaire by selecting questions from QBank, providing title and specifying recipients.</center></H3>
+
+		<div class="container" id="qbank-container-id">
+
+			<!-- Starting of the row for all qolls -->
+			<div class="row">
+				{{> recipient}}
+			</div>
+			<div class="row">
+				<div class="well well-sm">
+					<div class="input-group input-group-sm">
+
+						<input type="text" class="qollstionnaire-title form-control" placeholder="Qollstionnaire title" default="Qollstionnaire title" >
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-primary store-qollstionnaire"  >
+								Create
+							</button> </span>
+					</div>
+					<span class="qbank-error-msg red"></span>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+
+					<div class="col-md-10 col-xs-12">
+						Qoll Text
+					</div>
+					<div class="col-md-2 col-xs-12">
+						<input type="checkbox" class="qoll_selectall"/>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				{{#each QBankSumm}}
+				<!-- Start of Qoll Section -->
+				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success" id='qdiv_{{_id}}'>
+
+					<div class="col-md-10 col-xs-12">
+						{{#mathjax}}{{{qollText}}}{{/mathjax}}
+					</div>
+					<div class="col-md-2 col-xs-12">
+						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
+					</div>
+				</div>
+				<!-- End of Qoll Section here -->
+				{{/each}}
+			</div>
+			<!-- End of the row here -->
+
+			<div id="navbrand"></div>
+
+		</div>
+	</p>
+</template>
