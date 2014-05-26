@@ -1,0 +1,59 @@
+<template name="edu_dashboard">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> edu_side_nav}}
+
+		<!-- Page content here -->
+		{{> edu_dashboard_prof}}
+	</div>
+</template>
+
+
+<template name="edu_dashboard_stu">
+	<!-- Page content -->
+	<div id="page-content-wrapper">
+		<div class="content-header">
+            <h1>
+            	<!-- Toggle on small screen -->
+                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+                some stu content to come here(placeholder)
+            </h1>
+        </div>
+		
+		<hr class='divider'>
+		<!-- Keep all page content within the page-content inset div! -->
+		<div class="page-content inset">
+			<div class="row">
+            	<div class="col-md-12 col-xs-12">
+            		<!-- Print the contents here -->
+            		stu page contents here
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+<template name="edu_dashboard_prof">
+	<!-- Page content -->
+	<div id="page-content-wrapper">
+		<div class="content-header">
+            <h1>
+            	<!-- Toggle on small screen -->
+                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+                some prof content to come here(placeholder)
+            </h1>
+        </div>
+		
+		<hr class='divider'>
+		<!-- Keep all page content within the page-content inset div! -->
+		<div class="page-content inset">
+			<div class="row">
+            	<div class="col-md-12 col-xs-12">
+            		<!-- Print the contents here -->
+            		prof page contents here
+				</div>
+			</div>
+		</div>
+	</div>
+</template>

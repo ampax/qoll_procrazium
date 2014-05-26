@@ -40,11 +40,17 @@ Template.header_awesome.rendered = function()
 };
 
 Template.header_awesome.events({
-    'click #logout' : function(event, tmpl) {
+    'click #login-buttons-logout' : function(event, tmpl) {
     
      qlog.info('User logout event happened', filename);
-     logoutFromService();
+     Login.logoutFromService();
     },
+    'click #login-buttons-facebook' : function(event, tmpl) {
+        Login.loginWithService('facebook');
+    },
+    'click #login-buttons-google' : function(event, tmpl) {
+        Login.loginWithService('google');
+    }
    /* 'click .dsb': function() {
     event.preventDefault();
     Router.go('dashboard');

@@ -1,0 +1,69 @@
+<template name="social_circle">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> contacts_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="content-header">
+	            <h1>
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                Social
+	            </h1>
+	        </div>
+			
+			<hr class='divider'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset">
+				<div class="row">
+	            	<div class="col-md-12 col-xs-12">
+	            		<!-- Print the contact list -->
+						{{> contacts_container}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<!-- Container to print all the contacts on the social circle page -->
+<template name="contacts_container">
+	<div class="group-contact-container">
+		<div class="viewers-container round-buttons">
+			<ul class="viewers-list card-view" id="contact-container-gen">
+				{{#each contacts}}
+					<li class="contact">
+						<div class="contact-wrapper">
+							<div class="entityblock profile">
+								<img src="/img/ghost_avatar.png" alt="Ghost Avatar" class="avatar-image">
+							</div>
+							<div class="actions">
+								<br><p>&nbsp;{{lname}}, {{fname}}</p>
+								<br><p>&nbsp;{{organization}}</p>
+								&nbsp;<a href="#" class="search" title="Add to group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span></a>
+							</div>
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</template>
+
+
+<!-- Sample contact card -->
+<template name="contact_card">
+	<div class="contact-wrapper">
+		<div class="entityblock profile">
+			<img src="/img/ghost_avatar.png" alt="Ghost Avatar" class="avatar-image">
+		</div>
+		<div class="actions">
+			<br><p>&nbsp;{{lname}}, {{fname}}</p>
+			<br><p>&nbsp;{{organization}}</p>
+			&nbsp;<a href="#" class="search" title="Add to group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-plus"></span></a>
+		</div>
+	</div>
+</template>

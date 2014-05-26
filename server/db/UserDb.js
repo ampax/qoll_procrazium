@@ -1,4 +1,22 @@
 var filename = 'server/db/UserDb.js';
+
+/*
+* QOLL_GROUPS {
+   group_name,
+   group_desc,
+   pub_or_pvt,
+   closed_or_open_ended,
+   small_or_large,
+   by_invite_only,
+   created_by,
+   created_on,
+   modified_on,
+   role,
+   _id
+* }
+*/
+
+
 /** START: New standard code **/
 Usr = {};
 
@@ -48,11 +66,24 @@ Meteor.methods({
     },
     
 	updateUserGroup: function(groupName, userEmails) {
+        var size = userEmails.length;
+        var groupSize = QollConstants.GROUPS.SM;
+        if(size > 1000 && size < 1000)
+            groupSize = QollConstants.GROUPS.MD;
+        else if (size >= 1000)
+            groupSize = QollConstants.GROUPS.LG;
+
 		var gpId = QollGroups.insert({
 			'groupName' : groupName,
+            'groupDesc' : groupName,
+            'pubOrPvt'  : QollConstants.GROUPS.PVT,
+            'closedOrOpen' : QollConstants.GROUPS.CLOSED,
+            'groupSize' : groupSize,
+            'inviteOnly' : QollConstants.GROUPS.INVITE,
 			'userEmails' : userEmails,
-			'submittedOn' : new Date(),
-			'submittedBy' : Meteor.userId()
+			'createdOn' : new Date(),
+			'createdBy' : Meteor.userId(),
+            'role' : QollConstants.GROUPS.ROLE.OWNER
 		});
 		userEmails.map(function(userEmail) {
 			//qlog.info('Updating the user for groups: *' + userEmail + '*, groupName: ' + groupName, filename);
@@ -68,7 +99,13 @@ Meteor.methods({
 
 
 updateUserGroupWithEmail = function(groupName, userEmail){
-    var user=Meteor.users.findOne({ "emails.address" : userEmail });
+    var user=Meteor.users.findOne({ "profile.email" : userEmail });
+    if(!user) {
+        user=Meteor.users.findOne({ "emails.address" : userEmail });
+    }
+
+    if(user) qlog.info('Fetched user with email - ' + userEmail, filename);
+
     if(!user.groups) {
         user.groups = {};
     }

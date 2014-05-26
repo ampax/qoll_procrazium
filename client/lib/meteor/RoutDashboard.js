@@ -44,3 +44,12 @@ Router.map(function() {
 	});
 
 });
+
+Router.map(function() {
+	this.route('edu_dashboard', {
+		template : 'edu_dashboard',
+		path : '/edu_dashboard',
+		controller : QollsController,
+	});
+
+});

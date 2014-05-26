@@ -1,5 +1,6 @@
 var filename = 'server/Accounts.js';
 
+QollAccounts = {};
 
 Accounts.onCreateUser(function(options, user){
   var userProperties = {
@@ -51,24 +52,22 @@ Accounts.onCreateUser(function(options, user){
 
   // send notifications to admins
   var admins = Meteor.users.find({isAdmin: true});
-  /**admins.forEach(function(admin){
-    if(UserUtil.getUserSetting('notifications.users', false, admin)){
-      var notification = getNotificationContents({
-        event: 'newUser',
-        properties: {
-          username: UserUtil.getUserName(user),
-          profileUrl: UserUtil.getProfileUrl(user)
-        },
-        userId: admin._id
-      }, 'email');
-      sendNotification(notification, admin);
-    }
-  });**/
+
+  qlog.info('Creating the user - ' + JSON.stringify(user), filename);
+
+  if(user.services.facebook) {
+    if(!user.profile.email)
+      user.profile.email = user.services.facebook.email;
+    var friends = FB.SocialFunFacebook(user);
+  } else if(user.services.google) {
+    if(!user.profile.email)
+      user.profile.email = user.services.google.email;
+    setTimeout(Ggl.SocialFunGoogle(user), 500);
+  }
 
 
   return user;
 });
-
 
 getEmailHash = function(user){
   // todo: add some kind of salt in here

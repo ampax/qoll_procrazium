@@ -7,11 +7,12 @@ Meteor.startup(function(){
 	qlog.info('Site url: '+SITE_URL, filename);
 	qlog.info('Site url: ' + process.env.ROOT_URL, filename);
 
-	if(SITE_URL === 'http://localhost:3000/'){
+	//if(SITE_URL.startsWith('http://localhost')){
+	if( 'http://localhost:3000/' == SITE_URL ){
 		//Initialize localhost for login with github
 		initWithGitDev();
-		//initWithFacebookDev();
-		//initWithGoogleDev();
+		initWithFacebookDev();
+		initWithGoogleDev();
 
 		/**var InitUserForProfile = 'InitDefaultProfile';
 		//use this to find if this init has already run. Else initizlize.

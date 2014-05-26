@@ -91,6 +91,18 @@ Template.landing_page.events({
             }
         });
     },
+    'click #login-buttons-logout' : function(event, tmpl) {
+    
+     qlog.info('User logout event happened', filename);
+     Login.logoutFromService();
+    },
+    'click #login-buttons-facebook' : function(event, tmpl) {
+        Login.loginWithService('facebook');
+    },
+    'click #login-buttons-google' : function(event, tmpl) {
+        Login.loginWithService('google');
+    }
+
 });
 
 /**

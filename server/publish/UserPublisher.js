@@ -58,11 +58,80 @@ Meteor.publish('singleUser', function(userIdOrSlug) {
 });
 
 Meteor.publish('allUsers', function(filterBy, sortBy, limit) {
-  if(canViewById(this.userId)){
+  if(PermUtil.canViewById(this.userId)){
     var parameters = getUsersParameters(filterBy, sortBy, limit);
     if (!isAdminById(this.userId)) // if user is not admin, filter out sensitive info
       parameters.options = _.extend(parameters.options, {fields: privacyOptions});
-    return Meteor.users.find(parameters.find, parameters.options);  
+    return Meteor.users.find(parameters.find, parameters.options);
   }
   return [];
+});
+
+
+
+
+/*
+Sample -
+(1) Google  
+{   name: 'Amit Kaushik',
+  email: 'kaushik.amit@gmail.com',
+  photoUrl: 'https://www.google.com/m8/feeds/photos/media/procrazium%40gmail.com/2f202ab00f7a85a2',
+  mime_type: 'image/*' 
+}
+
+(2) Facebook
+{
+  "id":"100004286557312",
+  "gender":"male",
+  "last_name":"Khandelwal",
+  "first_name":"Ajay",
+  "locale":"en_US",
+  "username":"ajay.khandelwal.142892"
+}
+*/
+Meteor.publish('allFriends', function() { //filterBy, sortBy, limit
+  var self=this;
+  qlog.info('Fetching friends for user-id - ' + this.userId, filename);
+  //if(PermUtil.canViewById(this.userId)){
+    var friends = new Array();
+    var sfrnds = SocialFriends.find({user_id : this.userId, active : 1});
+    //qlog.info('All friends - ' + JSON.stringify(sfrnds), filename);
+    if(sfrnds != undefined) {
+      sfrnds.map(function(sf){
+        qlog.info('Iterating over friends data - ' + sf.friend_id, filename);
+        var contact = SocialConnect.findOne({_id : sf.friend_id, active : 1});
+        qlog.info('Printing the friend found - ' + JSON.stringify(contact), filename);
+        if(contact) {
+          var tmp = {};
+          //Got active contact from SocialConnect. That means the user is not part of Qoll yet. 
+          //Push it on the contacts array and publish.
+          qlog.info('----------------------*' + contact.social_type + '*----------------------');
+          if(contact.social_type === 'facebook') {
+            qlog.info('initializing facebook contact - ' + contact.first_name + ' ' 
+              + contact.last_name + ' ' + contact.gender, filename);
+            tmp['name'] = contact.first_name + ' ' + contact.last_name;
+            tmp['gender'] = contact.gender;
+          } else if(contact.social_type === 'google') {
+            qlog.info('initializing google contact - ' + contact.name + ' ' + contact.email, filename);
+            tmp['name'] = contact.name;
+            tmp['email'] = contact.email;
+            tmp['photoUrl'] = contact.photoUrl;
+          }
+          friends.push(tmp);
+          //if(contact.social_type )
+        } else {
+          //Did not get active contact from SocialConnect. That means the user has become part of the Qoll. 
+          //Query further qoll users
+        }
+      });
+      qlog.info('----===============>>>>>> ' + JSON.stringify(friends), filename);
+      self.added('allFriends', this.userId, friends);
+      //return friends;
+    } else {
+        //return Meteor.users.find(parameters.find, parameters.options);
+      //}
+
+    //return [];
+    }
+    self.ready();
 });

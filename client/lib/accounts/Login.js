@@ -1,14 +1,27 @@
-var filename = 'server/lib/Login.js';
+var filename = 'client/lib/accounts/Login.js';
 
 Accounts.ui.config({
+	requestPermissions: {
+		//facebook: ['email','id','name','first_name','last_name','username','gender','locale','age_range',
+	    //	'email', 'user_friends', 'user_location', 'user_events', 'friends_events', 'friends_location', 'friends_about_me',
+        //   'user_status', 'friends_status', 'read_friendlists'],
+        google: ['https://www.google.com/m8/feeds'],//['https://accounts.google.com/o/oauth2/auth?approval_prompt=force&access_type=offline'],//'https://www.google.com/m8/feeds', 
+        github:['user', 'public_repo']
+	},
+	requestOfflineToken: {
+		google: true
+	},
 	passwordSignupFields: 'USERNAME_AND_EMAIL'
 });
+
+Login = {};
 
 /**
 	Global login-with-service method 
 **/
-loginWithService = function(service){
+Login.loginWithService = function(service){
 	//handle in if/else for the kind of service being used for loggin in
+	qlog.info('xxxxxxxxxx loginWithService xxxxxxxxxx', filename);
 	if(service === 'github'){
 		//login using github
 		loginWithGithub();
@@ -30,7 +43,7 @@ loginWithService = function(service){
 	}
 }
 
-logoutFromService = function() {
+Login.logoutFromService = function() {
 	Meteor.logout(function(err){
 	    if(err) {
 			qlog.error('Failed to logout ...' + err, filename);
@@ -48,7 +61,7 @@ logoutFromService = function() {
 var loginWithGithub = function(){
 	qlog.info('logging in with github', filename);
 	Meteor.loginWithGithub({
-	    	requestPermissions:['user', 'public_repo']
+	    	//requestPermissions:['user', 'public_repo']
 		}, function(err){
 		    if(err) {
 				qlog.error('Error occured while logging in with github ...' + err, filename);
@@ -60,6 +73,7 @@ var loginWithGithub = function(){
 
 var loginWithFacebook = function(){
 	qlog.info('logging in with facebook', filename);
+	return;
 	Meteor.loginWithFacebook({
 	    	//https://developers.facebook.com/docs/reference/login/extended-permissions/
 	    	/**
@@ -72,7 +86,9 @@ var loginWithFacebook = function(){
 	    		(4) user_friends - access to user's friends. request it when user is posting to his friends
 	    		(5) user_groups - groups user is part of. request for it when user is posting to facebook groups.
 	    	**/
-	    	requestPermissions: ['email','id','name','first_name','last_name','username','gender','locale','age_range']
+	    requestPermissions: ['email','id','name','first_name','last_name','username','gender','locale','age_range',
+	    'email', 'user_friends', 'user_location', 'user_events', 'friends_events', 'friends_location', 'friends_about_me',
+            'user_status', 'friends_status', 'read_friendlists']
 		}, function(err){
 		    if(err) {
 				qlog.error('Error occured while logging in with facebook ...' + err, filename);
@@ -86,12 +102,27 @@ var loginWithGoogle = function(){
 	qlog.info('logging in with google', filename);
 	Meteor.loginWithGoogle({
 	    	//https://developers.google.com/+/api/oauth#profile
-	    	requestPermissions: ['profile','email','openid']
+	    	//requestPermissions: ['profile','email','openid']
+	    	//requestPermissions: ['https://www.google.com/m8/feeds']
+	    	requestPermissions: "openid email https://www.googleapis.com/auth/drive https://www.google.com/m8/feeds",
+		    requestOfflineToken: true,
+		    forceApprovalPrompt: true
 		}, function(err){
 		    if(err) {
 				qlog.error('Error occured while logging in with google ...' + err, filename);
 		    } else {
-				qlog.info('Logged in with google', filename);
+				qlog.info('Logged in with google. Refreshing the contacts now.', filename);
+				/**if ( ! Meteor.loggingIn()){
+					Meteor.call('refreshGoogleContacts', function(err, success){
+						if(err) {
+							qlog.info('Error happened while refreshing google contacts. Try again - '+ err, filename);
+						} else {
+							if(success)
+								qlog.info('Refreshed data', filename);
+							else qlog.info('Did not refresh the data', filename);
+						}
+					});
+				}**/
 		    }
 	});
 }

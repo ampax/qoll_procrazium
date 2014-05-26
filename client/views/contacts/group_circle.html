@@ -1,0 +1,78 @@
+<template name="group_circle">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> contacts_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="content-header">
+	            <h1>
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                Groups
+	            </h1>
+	        </div>
+			
+			<hr class='divider'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset">
+				<div class="row">
+	            	<div class="col-md-12 col-xs-12">
+	            		<!-- Print the groups list -->
+						{{> groups_container}}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<!-- Container to print all the contacts on the social circle page -->
+<template name="groups_container">
+	<div class="group-contact-container">
+		<div class="viewers-container round-buttons">
+			<ul class="viewers-list card-view" id="contact-container-gen">
+				{{#each contact_groups}}
+				<li class="group-strip">
+					<div class="group-strip-wrapper">
+						<div class="entityblock profile profile-pic">
+							<img src="/img/ghost_avatar.png" alt="Ghost Avatar" class="avatar-image">
+						</div>
+						<div class="profile-snapshot">
+							<br><p>&nbsp;{{name}}</p>
+							<br><p>&nbsp;Status: {{status}}</p>
+							<p>&nbsp;Org: {{organization}}</p>
+							<p>&nbsp;Type: {{type}}</p>
+							<p>&nbsp;Members: {{mem_count}}</p>
+						</div>
+						<div class="group-action-container">
+							<a href="#" class="search" title="Edit group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-link red"></span></a>
+						</div>
+					</div>
+				</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</template>
+
+
+<!-- Sample group card -->
+<template name="group_card">
+	<div class="group-strip-wrapper">
+		<div class="entityblock profile profile-pic">
+			<img src="/img/ghost_avatar.png" alt="Ghost Avatar" class="avatar-image">
+		</div>
+		<div class="profile-snapshot">
+			<br><br><br><br><p>&nbsp;Status: Active</p>
+			<p>&nbsp;Name: Group</p>
+			<p>&nbsp;Type: Restricted</p>
+			<p>&nbsp;Members: 187</p>
+		</div>
+		<div class="group-action-container">
+			<a href="#" class="search" title="Edit group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-link red"></span></a>
+		</div>
+	</div>
+</template>
