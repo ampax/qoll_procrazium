@@ -17,10 +17,11 @@ var filename='client/views/index.js';
 	    loginWithService('weibo');
 	}
 });
+*/
 
 Template.user_loggedin.events({
 	'click #logout' : function(event, tmpl) {
 		qlog.info('User logout event happened', filename);
-	    logoutFromService();
+	    //logoutFromService();
 	}
-});*/
+});
