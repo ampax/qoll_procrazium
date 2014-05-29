@@ -31,16 +31,18 @@ Template.toolbar.events({
     var editor = ace.edit("aceEditor");
     var qoll_editor_content = editor.getValue();
     var recips = jQuery("input#recipient_search").val();
+    var tags = jQuery("input.tags").val();
 
-    storeEditorContents(editor, recips, "send");
+    storeEditorContents(editor, recips, tags, "send");
   },'click .storqoll': function(){
     event.preventDefault()
     console.log("Store qoll at this event ...");
     var editor = ace.edit("aceEditor");
     var qoll_editor_content = editor.getValue();
     var recips = jQuery("input#recipient_search").val();
+    var tags = jQuery("input.tags").val();
 
-    storeEditorContents(editor, recips, "store");
+    storeEditorContents(editor, recips, tags, "store");
   },'click .previewqoll': function(event){
     event.preventDefault();
 
@@ -104,11 +106,18 @@ Template.toolbar.events({
 
 
 /** Manage various events for storing the qoll contents **/
-var storeEditorContents = function(editor, recips, action) {
+var storeEditorContents = function(editor, recips, tags, action) {
+
+  qlog.info('Adding the qoll to the db with %' + recips + '%' + tags + '%', filename);
   
-  if($.trim(recips) === '') {
+  if($.trim(recips) === '' || $.trim(tags) === '') {
     var err_target = jQuery(".toolbar-error-msg");
-    err_target.html('Add recipients to save the qoll please ...');
+    var err_msg1='', err_msg2='', err_separator = '';
+    if($.trim(recips) === '') err_msg1 = 'recipients';
+    if($.trim(tags) === '') err_msg2 = 'at least one tag';
+    if($.trim(recips) === '' && $.trim(tags) === '') err_separator = ' \& ';
+
+    err_target.html('Add ' + err_msg1 + err_separator + err_msg2 + ' to proceed please ...');
     err_target.fadeOut( 6400, function(){
       err_target.html('');
       err_target.removeAttr("style");
@@ -129,7 +138,15 @@ var storeEditorContents = function(editor, recips, action) {
     }
   });
 
-  Meteor.call("addQollMaster", editor_content, emailsandgroups, action, function(error, qollMasterId){
+  var tagArr=[];
+  $.each(tags.split(/;|,|\s/),function (ix,tag){
+    tag=$.trim(tag);
+    if(tag.length>0){
+      tagArr.push(tag);
+    }
+  });
+
+  Meteor.call("addQollMaster", editor_content, emailsandgroups, tagArr, action, function(error, qollMasterId){
     if(error) {
       qlog.info('Error occured storing the master qoll. Please try again.', filename);
       target.html("Failed, try again...");
@@ -142,6 +159,7 @@ var storeEditorContents = function(editor, recips, action) {
       target.html("Qoll Saved...");
       editor.setValue('', 1);
       jQuery("input#recipient_search").val('');
+      jQuery("input.tags").val('');
       target.fadeOut( 2400, function(){
         //setTimeout(function(){
           target.html(store_html);

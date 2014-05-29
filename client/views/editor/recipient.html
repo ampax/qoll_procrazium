@@ -1,12 +1,23 @@
 <template name="recipient">
 	<div class="well well-sm">
-   <div class="input-group input-group-sm">
+    	<div class="input-group input-group-sm">
    	
-   	 <span class="input-group-btn">
-     		<button type="button" class="btn btn-primary qollQbankToggle"  >Qoll To: <span class="caret"></span></button>
-     </span>
-    
-		 <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1">
+		   	<span class="input-group-btn">
+		     	<button type="button" class="btn btn-primary qollQbankToggle"  >Qoll To: <span class="caret"></span><sup class="red">*</sup></button>
+		    </span>
+	    
+			 <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1">
+
+		</div><!-- /input-group --><br>
+
+		<div class="input-group input-group-sm">
+
+			 <span class="input-group-btn">
+		     	<button type="button" class="btn btn-info"  >Add Tags:<sup class="red">*</sup></button>
+		    </span>
+	    
+			 <input type="text" class="tags form-control" placeholder="Add Tags: Space separated tags ..." default="" id="tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1"></input>
+
 		</div><!-- /input-group -->
 	</div>
 </template>

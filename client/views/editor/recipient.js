@@ -22,15 +22,18 @@ Template.recipient.events({
     });              // Sort object to filter results with
       //filter: { 'gender': 'female' }}); // Additional filtering
   }, 
+  'keyup .tags': function(){
+    //TODO: Add google like tag class to the tags here
+  },
   'click .qollQbankToggle': function(){
   	if (Session.get('disable_sendtoQbank')) return;
   	if( $('.qollQbankToggle').html().indexOf('Qoll To:')>-1 ){
-  		$('.qollQbankToggle').html($('.qollQbankToggle').html().replace('Qoll To:','To Qbank...'));
+  		$('.qollQbankToggle').html($('.qollQbankToggle').html().replace('Qoll To:','Qbank:  '));
   		$('.recipient').val('qbank@qoll.io');
   		$(".recipient").prop('disabled', true);
   	}else{
   		$("input").prop('disabled', false);
-  		$('.qollQbankToggle').html($('.qollQbankToggle').html().replace('To Qbank...','Qoll To:'));
+  		$('.qollQbankToggle').html($('.qollQbankToggle').html().replace('Qbank:  ','Qoll To:'));
   		$('.recipient').val('');
   	}
   }
