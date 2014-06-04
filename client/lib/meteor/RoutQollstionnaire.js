@@ -10,7 +10,7 @@ QollstionnaireController = RouteController.extend({
 			parentId : this.params.quesid 
 		};
 	},
-	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER')];
+	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('RECIPIENTS_PUBLISHER')];
 	},
 	allqollsfun : function() {
 		return AllQolls.find({}, this.findOptions());

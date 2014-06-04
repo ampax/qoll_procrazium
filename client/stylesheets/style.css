@@ -566,4 +566,8 @@ text-overflow: ellipsis;
     padding-bottom: 6px;
     display: inline;
 }
+
+.qoll-width-1 {
+    width: 9.8em !important;
+}
 /* End: Basic styling for html elements for Qoll */

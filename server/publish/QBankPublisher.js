@@ -1,7 +1,7 @@
 var filename = 'server/publisher/QollPublisher.js';
 
 /** Publishing to the subscribers method for qolls  **/
-Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
+Meteor.publish('QBANK_PUBLISHER', function(findoptions) {
 	var self = this;
 	var uuid = Meteor.uuid();
 	var initializing = true;
@@ -13,32 +13,23 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 		if (ufound.length > 0) {
 			var user = ufound[0];
 
-			//submitted by this user
-			var handle = QBank.find({
-				'submittedBy' : this.userId,
-				'action' : {
-					$ne : 'archive'
-				}
-			}, {
-				'qollTitle' : 1,
-				'qollText' : 1,
-				'qollRawId' : 1,
-				'submittedOn' : 1
-			}, {
-				sort : {
-					'submittedOn' : -1
-				},
-				reactive : true
-			}).observe({
+			//submitted by this user or public (default)
+			//({$or: [{'submittedBy': 'RsZQXSSqLm8WjZAWg'},{'visibility': 'public'}]})
+			var handle = Qoll.find({$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
+			{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+			{sort : {'submittedOn' : -1}, reactive : true}
+			).observe({
 				added : function(item, idx) {
-					qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
 					var q = {
 						qollTitle : item.qollTitle,
 						qollText : item.qollText,
 						submittedOn : item.submittedOn,
 						viewContext : "createUsr",
 						_id : item._id,
-						qollRawId : item.qollRawId
+						qollRawId : item.qollRawId,
+						qollTypesX : item.qollTypesX,
+						attributes : item.attributes
 					};
 
 					self.added('qbank_summary', item._id, q);
@@ -52,7 +43,9 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						submittedOn : item.submittedOn,
 						viewContext : "createUsr",
 						_id : item._id,
-						qollRawId : item.qollRawId
+						qollRawId : item.qollRawId,
+						qollTypesX : item.qollTypesX,
+						attributes : item.attributes
 					};
 
 					self.changed('qbank_summary', item._id, q);

@@ -1,0 +1,55 @@
+<template name="qbank_opts">
+	<div class="well well-sm">
+		<div class="input-group input-group-sm">
+   	
+		   	<span class="input-group-btn">
+		     	<button type="button" class="btn btn-primary qollQbankToggle qoll-width-1"  >Qoll To:<sup class="red">*</sup></span></button>
+		    </span>
+	    
+			 <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1">
+
+		</div><!-- /input-group --><br>
+
+		<div class="input-group input-group-sm">
+
+			 <span class="input-group-btn">
+		     	<button type="button" class="btn btn-info qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
+		    </span>
+	    
+			 <input type="text" class="form-control" placeholder="Add Tags: Space separated tags ..." default="" id="add-tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1"></input>
+
+		</div><!-- /input-group --><br>
+
+		<!--div class="input-group input-group-sm">
+
+			 <span class="input-group-btn">
+		     	<button type="button" class="btn btn-info qoll-width-1"  >Attributes:</button>
+		    </span>
+		    <div class="form-control red"></div>
+
+		</div--><!-- /input-group --><!--br-->
+
+		<div class="input-group input-group-sm">
+
+			<input type="text" class="qollstionnaire-title form-control" placeholder="Enter Qollstionnaire title ..." default="Qollstionnaire title" >
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-primary store-qollstionnaire"  >
+					Create
+				</button> </span>
+		</div>
+		<span class="qbank-error-msg red"></span>
+	</div>
+
+	<div class="well well-sm">
+    	<div class="input-group input-group-sm">
+
+			 <span class="input-group-btn">
+		     	<button type="button" class="btn btn-info qoll-width-1"  >Search With Tags: </button>
+		    </span>
+	    
+			 <input type="text" class="tags form-control" placeholder="Search: Start searching by typing tags ..." default="" id="search-tags" data-intro="Start searching by typing tags" data-step="1"></input>
+
+		</div><!-- /input-group -->
+	</div>
+
+</template>

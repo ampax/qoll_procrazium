@@ -39,12 +39,25 @@ Meteor.publish('RECIPIENTS_PUBLISHER', function(){
         var handle = undefined;
 
         if(this.userId) {
-			handle= QollGroups.find({'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
-	        //var allUserGroups = [];
+        	var allUserGroups = [];
+
+			handle= QollGroups.find({'createdBy':this.userId}, {"_id": 1,'groupName':1,'createdBy':2}, {reactive:false});
+
 	        handle.forEach(function (grp){
-				//allUserGroups.push(grpEntry.groupName);
-				qlog.info("Printing the group-name: " + grp.groupName, filename);
-				self.added('recipients', grp._id, grp);
+				var t = {'name' : grp.groupName, 'createdBy': grp.createdBy, '_id' : grp._id};
+				allUserGroups.push(t);
+			});
+
+			//TODO: This will come from the user-social-contacts
+			handle = Meteor.users.find({}, {'profile': 1}, {reactive:false});
+			handle.forEach(function (usr){
+				//TODO: name should be name and front end should show a concatenated string of name and email-id
+				var t = {'name' : usr.profile.email, 'email' : usr.profile.email, '_id' : usr._id}; 
+				allUserGroups.push(t);
+			});
+
+			allUserGroups.forEach(function(tx){
+				self.added('recipients', tx._id, tx);
 			});
 		}
 		

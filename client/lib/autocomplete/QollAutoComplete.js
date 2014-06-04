@@ -27,6 +27,7 @@ QollAutoComplete.init = function (element) {
  * @param config
  */
 QollAutoComplete.autocomplete = function (config) {
+  //qlog.info('Running autoc-complete ' + config + ' typeof = ' + typeof(config));
   if (typeof(config) === 'undefined'){
     log('ERROR', 'Missing required config parameter in autocompleter()');
     return
@@ -45,9 +46,9 @@ QollAutoComplete.autocomplete = function (config) {
   qstr = qstr.replace(/\s/g,"");
 
   if(config['mode'] === 'mono' || config['mode'] == undefined) {
-    qlog.info("Procesisng for mono", filename);
+    //qlog.info("Procesisng for mono", filename);
   } else if(config['mode'] === 'multi') {
-    qlog.info("Procesisng for multi", filename);
+    //qlog.info("Procesisng for multi", filename);
     if(qstr.search(/,/) != -1) {
       var tmp = split(qstr);
       qstr = tmp[tmp.length-1];
@@ -61,7 +62,7 @@ QollAutoComplete.autocomplete = function (config) {
     query = initQuery;
   else
     query = mergeObjects(initQuery, config['filter']);
-  log('DEBUG', 'Query object: ');
+  //log('DEBUG', 'Query object: ');
   logObj(query);
 
   // Build filtering
@@ -71,14 +72,14 @@ QollAutoComplete.autocomplete = function (config) {
   filter['fields'] = {};
   filter['fields'][config['field']] = 1; // Only include the searchable
                                          // field in the result
-  log('DEBUG', 'Filter object: ');
+  //log('DEBUG', 'Filter object: ');
   logObj(filter);
 
   // Find all results
   results = {};
   if( qstr != "" ) {
     results = config['collection'].find(query, filter).fetch();
-    log('DEBUG', 'Results object: ');
+    //log('DEBUG', 'Results object: ' + config['collection']);
     logObj(results);
   }
 
@@ -88,7 +89,6 @@ QollAutoComplete.autocomplete = function (config) {
     autocompleteResults[i] = results[i][config['field']];
   };
 
-  qlog.info("Results for the query: " + JSON.stringify(query) + ", results: " + JSON.stringify(autocompleteResults), filename);
   // Update the autocomplete result list
   $(config['element']).autocomplete({ 
     //This is fired when user inputs some text to find more items from collections

@@ -33,7 +33,7 @@ Template.toolbar.events({
     var recips = jQuery("input#recipient_search").val();
     var tags = jQuery("input.tags").val();
 
-    storeEditorContents(editor, recips, tags, "send");
+    storeEditorContents(editor, recips, tags, QollConstants.QOLL_ACTION_SEND);
   },'click .storqoll': function(){
     event.preventDefault()
     console.log("Store qoll at this event ...");
@@ -42,7 +42,7 @@ Template.toolbar.events({
     var recips = jQuery("input#recipient_search").val();
     var tags = jQuery("input.tags").val();
 
-    storeEditorContents(editor, recips, tags, "store");
+    storeEditorContents(editor, recips, tags, QollConstants.QOLL_ACTION_STORE);
   },'click .previewqoll': function(event){
     event.preventDefault();
 
@@ -110,12 +110,12 @@ var storeEditorContents = function(editor, recips, tags, action) {
 
   qlog.info('Adding the qoll to the db with %' + recips + '%' + tags + '%', filename);
   
-  if($.trim(recips) === '' || $.trim(tags) === '') {
+  if($.trim(recips) === '' && action === QollConstants.QOLL_ACTION_SEND || $.trim(tags) === '') {
     var err_target = jQuery(".toolbar-error-msg");
     var err_msg1='', err_msg2='', err_separator = '';
-    if($.trim(recips) === '') err_msg1 = 'recipients';
+    if($.trim(recips) === '' && action === QollConstants.QOLL_ACTION_SEND) err_msg1 = 'recipients';
     if($.trim(tags) === '') err_msg2 = 'at least one tag';
-    if($.trim(recips) === '' && $.trim(tags) === '') err_separator = ' \& ';
+    if($.trim(err_msg1) === '' && $.trim(err_msg2) === '') err_separator = ' \& ';
 
     err_target.html('Add ' + err_msg1 + err_separator + err_msg2 + ' to proceed please ...');
     err_target.fadeOut( 6400, function(){

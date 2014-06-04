@@ -1,7 +1,5 @@
 var filename = "client/views/qoll/qbank.js";
 
-QbSummary = new Meteor.Collection("qbank_summary");
-
 Template.qollbank.rendered = function() {
 	Session.set('disable_sendtoQbank', true);
 
@@ -19,6 +17,7 @@ Template.qollbank.events({
 	'click .store-qollstionnaire' : function(event) {
 		var recips = jQuery("input#recipient_search").val();
 		var title = jQuery(".qollstionnaire-title").val();
+		var tags = jQuery("input#add-tags").val();
 		
 		var allqollids =[];
 		$('.qoll_selection').each(function(){
@@ -27,7 +26,7 @@ Template.qollbank.events({
 				allqollids.push(dolthis.attr('id'));
 			}
   		
-		});		
+		});
 		if ($.trim(recips) === '' || $.trim(title) === ''|| allqollids.length==0) {
 			var err_target = jQuery(".qbank-error-msg");
 			err_target.html('Select questions, add recipients and title to create qollstionnaire ...');
@@ -38,6 +37,15 @@ Template.qollbank.events({
 			return;
 		}
 
+		var tagArr=[];
+		$.each(tags.split(/;|,|\s/),function (ix,tag){
+		  tag=$.trim(tag);
+		  if(tag.length>0){
+		    tagArr.push(tag);
+		  }
+		});
+
+		qlog.info('tags are - ' + tagArr, filename);
 		
 		var target = jQuery(".qbank-error-msg");
 		var store_html = target.html();
@@ -50,15 +58,17 @@ Template.qollbank.events({
 				emailsandgroups.push(email);
 			}
 		});
+
 		var qollstionnaire ={};
 		qollstionnaire.emails =emailsandgroups;
 		qollstionnaire.title = title.trim();
+		qollstionnaire.tags = tagArr;
 
-		qollstionnaire.qbank_qollids = allqollids;
+		qollstionnaire.qollids = allqollids;
 		
-		Meteor.call("addQollstionnaire", qollstionnaire, function(error, qollMasterId) {
-			if (error) {
-				qlog.info('Error occured storing the master qoll. Please try again.', filename);
+		Meteor.call("addQollstionnaire", qollstionnaire, function(err, qollMasterId) {
+			if (err) {
+				qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);
 				target.html("Failed, try again...");
 				target.fadeOut(1600, function() {
 					target.html(store_html);
