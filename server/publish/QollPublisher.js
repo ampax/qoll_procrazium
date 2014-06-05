@@ -53,9 +53,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				var reguser = Meteor.users.find({
 					"_id" : thisReg.submittedBy
 				}).fetch();
-				qlog.info('REG  USER --------->>>>>' + JSON.stringify(reguser[0].emails[0].address));
-				if (reguser && reguser[0] && reguser[0].emails && reguser[0].emails[0].address) {
-					register_emails[thisReg.submittedBy] = reguser[0].emails[0].address;
+				qlog.info('REG  USER --------->>>>>' + JSON.stringify(reguser[0].profile.email));
+				if (reguser && reguser[0] && reguser[0].emails && reguser[0].profile.email) {
+					register_emails[thisReg.submittedBy] = reguser[0].profile.email;
 					thisReg['responder_email'] = register_emails[thisReg.submittedBy];
 					answers[thisReg.qollTypeIndex].push(thisReg['responder_email']);
 				}
@@ -167,13 +167,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 
 				}
 			});
-			qlog.info('looking for ' +JSON.stringify({
-				'submittedTo' : user.emails[0].address,
-				'action' : 'send',
-				parentId : parent_id_param
-			}));
+			qlog.info('looking for ' +JSON.stringify({'submittedTo' : user.profile.email, 'action' : 'send', parentId : parent_id_param}));
 			var handle = Qoll.find({
-				'submittedTo' : user.emails[0].address,
+				'submittedTo' : user.profile.email,//user.emails[0].address,
 				'action' : 'send',
 				parentId : parent_id_param
 			}, {
@@ -193,7 +189,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					}).fetch();
 					var sentby = '';
 					if (usentby.length > 0)
-						sentby = usentby[0].emails[0].address;
+						sentby = usentby[0].profile.email;
 					var q = {
 						qollTitle : item.qollTitle,
 						qollText : item.qollText,
@@ -232,7 +228,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				}
 			});
 			var gpsraw = QollGroups.find({
-				'userEmails' : user.emails[0].address
+				'userEmails' : user.profile.email
 			}, {
 				fields : {
 					"_id" : 0,
@@ -271,7 +267,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						}).fetch();
 						var sentby = '';
 						if (usentby.length > 0)
-							sentby = usentby[0].emails[0].address;
+							sentby = usentby[0].profile.email;
 						var q = {
 							qollTitle : item.qollTitle,
 							qollText : item.qollText,
