@@ -17,17 +17,6 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 		// replace 1234 with parent id
 	}
 	var initializing = true;
-	var sumstats = function(statsobj) {
-		ret = 0;
-		for (var key in statsobj) {
-			if (statsobj.hasOwnProperty(key)) {
-
-				ret = ret + statsobj[key];
-
-			}
-		}
-		return ret;
-	};
 	var register_emails = {};
 	//to cache emails for usr ids
 	var fetch_answers = function(item) {
@@ -168,20 +157,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				}
 			});
 			qlog.info('looking for ' +JSON.stringify({'submittedTo' : user.profile.email, 'action' : 'send', parentId : parent_id_param}));
-			var handle = Qoll.find({
-				'submittedTo' : user.profile.email,//user.emails[0].address,
-				'action' : 'send',
-				parentId : parent_id_param
-			}, {
-				sort : {
-					'submittedOn' : -1
-				},
-				limit : lim,
-				fields : {
-					stats : 0
-				},
-				reactive : true
-			}).observe({
+			var handle = Qoll.find({ 'submittedTo' : user.profile.email, 'action' : 'send', parentId : parent_id_param }, 
+				{ sort : { 'submittedOn' : -1}, limit : lim, fields : { stats : 0 }, reactive : true }
+			).observe({
 				added : function(item, idx) {
 					lim -= 1;
 					var usentby = Meteor.users.find({
@@ -474,3 +452,258 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 		});
 	}
 });
+
+
+
+/************************************************** NEW QOLL PUBLISHER ****************************************/
+//Publish qolls in set of QollConstants.QOLL.PUBLISH_SIZE (set to 100)
+/****
+Publish the following qolls
+	(1) My own created qolls - all created by me, and not yet archived
+	(2) My own recieved qolls - all recieved and responded by me
+	(3) All public qolls - all the qolls created which are public
+	(4) My groups - All groups that I have created
+	(5) My group's qoll - All qolls sent to this group
+	(6) My qollstionnaires - All qollstionnaires created by me
+****/
+Meteor.publish('QOLL_PUBLISHER', function(findoptions) {
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var lim = QollConstants.QOLL.PUBLISH_SIZE;
+	var targetDate = findoptions.submittedOn;
+	var groupName = findoptions.groupName;
+
+	if(!targetDate) targetDate = new Date();
+
+	qlog.info('Fetching all the qolls (for 1,2,3,4,5, and 6 use cases) in desc order of creation; uuid: ' + uuid, filename);
+	if (this.userId) {
+		//Check for existing user record
+		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		if (ufound.length > 0) {
+			//User found, will publish different qolls to user now
+			var user = ufound[0];
+
+			//Publishing my own created qolls (in chunks of 100) --- (1) My own created qolls - all created by me, and not yet archived
+			var handle_my_active_qolls = Qoll.find(
+				{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}, 'submittedOn' : {$lt : targetDate}}, 
+				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, limit : lim, reactive : true}
+			).observe({
+				added : function(item, idx){
+					self.added('my_active_qolls', item._id, fetchMyConciseQollInfo(item));
+				},
+				changed : function(item, idx){
+					self.added('my_active_qolls', item._id, fetchMyConciseQollInfo(item));
+				},
+				removed : function(item){
+					self.removed('my_active_qolls', item._id);
+				}
+			});
+
+
+			//Publishing my received qolls (in chunks of 100) --- (2) My own recieved qolls - all recieved and responded by me
+			var handle_my_rec_qolls = Qoll.find(
+				{ 'submittedTo' : user.profile.email, 'action' : QollConstants.QOLL_ACTION_SEND, 'submittedOn' : {$lt : targetDate}},
+				{ sort : { 'submittedOn' : -1}, limit : lim, reactive : true }
+			).observe({
+				added : function(item, idx){
+					self.added('my_rec_qolls', item._id, fetchMyRecConciseQollInfo(item));
+				},
+				changed : function(item, idx){
+					self.added('my_rec_qolls', item._id, fetchMyRecConciseQollInfo(item));
+				},
+				removed : function(item){
+					self.removed('my_rec_qolls', item._id);
+				}
+			});
+
+
+			//Publishing all public qolls (in chunks of 100) --- (3) All public qolls - all the qolls created which are public
+			var handle_public_qolls = Qoll.find(
+				{$or: [{'submittedBy' : this.userId, 'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+						{'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}], 'submittedOn' : {$lt : targetDate}}, 
+				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, limit : lim, reactive : true}
+			).observe({
+				added : function(item, idx){
+					self.added('mine_and_public_qolls', item._id, fetchConciseQollInfo(item));
+				},
+				changed : function(item, idx){
+					self.added('mine_and_public_qolls', item._id, fetchConciseQollInfo(item));
+				},
+				removed : function(item){
+					self.removed('mine_and_public_qolls', item._id);
+				}
+			});
+
+
+			//Publishing all the groups created by this user --- (4) My groups - All groups that I have created
+			var handle_groups = QollGroups.find(
+				{'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false}
+			).observe({
+				added : function(item, idx){
+					self.added('my_group', item._id, {'name' : item.groupName});
+				},
+				changed : function(item, idx){
+					self.added('my_group', item._id, {'name' : item.groupName});
+				},
+				removed : function(item){
+					self.removed('my_group', item._id);
+				}
+			});
+
+
+			//Publishing all the qolls sent to the group --- (5) My group's qoll - All qolls sent to this group
+			var handle_group_qolls = Qoll.find(
+				{ 'submittedToGroup' : groupName, 'submittedOn' : {$lt : targetDate}}, { sort : { 'groupName' : -1}, reactive : false }
+			).observe({
+				added : function(item, idx){
+					self.added('group_qolls', item._id, fetchConciseQollInfo(item));
+				},
+				changed : function(item, idx){
+					self.added('group_qolls', item._id, fetchConciseQollInfo(item));
+				},
+				removed : function(item){
+					self.removed('group_qolls', item._id);
+				}
+			});
+
+
+			//Publishing all qollstionnaires --- (6) My qollstionnaires - All qollstionnaires created by me
+			var handle_my_qollstionnaires = Qoll.find({$or: [{'submittedBy' : this.userId, 'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+				{'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
+				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, limit : lim, reactive : true}
+			).observe({
+				added : function(item, idx){
+					self.added('my_qollstionnaires', item._id, fetchConciseQolstInfo(item));
+				},
+				changed : function(item, idx){
+					self.added('my_qollstionnaires', item._id, fetchConciseQolstInfo(item));
+				},
+				removed : function(item){
+					self.removed('my_qollstionnaires', item._id);
+				}
+			});
+			/**var handle_group_qolls = Qoll.find({$or: [{'submittedBy' : this.userId, 'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+				{'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
+				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, limit : lim, reactive : true}
+			).observe({
+				added : function(item, idx){
+					self.added('my_qollstionnaires', item._id, fetchConciseQollInfo(item));
+				},
+				changed : function(item, idx){
+					self.added('my_qollstionnaires', item._id, fetchConciseQollInfo(item));
+				},
+				removed : function(item){
+					self.removed('my_qollstionnaires', item._id);
+				}
+			}); **/
+
+
+			//submitted by this user or public (default)
+			//({$or: [{'submittedBy': 'RsZQXSSqLm8WjZAWg'},{'visibility': 'public'}]})
+			/**var handle = Qoll.find({$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
+			{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+			{sort : {'submittedOn' : -1}, reactive : true}
+			).observe({
+				added : function(item, idx) {
+
+					self.added('qbank_summary', item._id, {});
+
+				},
+				changed : function(item, idx) {
+
+					self.changed('qbank_summary', item._id, {});
+
+				},
+				removed : function(item) {
+
+					self.removed('qbank_summary', item._id);
+					qlog.info('Removed item with id: ' + item._id);
+
+				}
+			});**/
+		}
+
+	}
+	qlog.info('Done initializing the publisher: QBANK_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		handle_my_active_qolls.stop();
+		handle_my_rec_qolls.stop();
+		handle_public_qolls.stop();
+		handle_groups.stop();
+		handle_group_qolls.stop();
+	});
+});
+
+var fetchConciseQollInfo = function(item) {
+	return {
+				qollTitle : item.qollTitle,
+				qollText : item.qollText,
+				qollTypes : item.qollTypes,
+				submittedOn : item.submittedOn,
+				submittedBy : item.submittedBy,
+				submittedTo : item.submittedTo,
+				action : item.action,
+				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
+				_id : item._id
+			};
+};
+
+
+var fetchMyConciseQollInfo = function(item) {
+	return {
+				qollTitle : item.qollTitle,
+				qollText : item.qollText,
+				qollTypes : item.qollTypes,
+				submittedOn : item.submittedOn,
+				submittedBy : item.submittedBy,
+				submittedTo : item.submittedTo,
+				action : item.action,
+				stats : item.stats,
+				totals : sumstats(item.stats),
+				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
+				_id : item._id
+			};
+};
+
+var fetchMyRecConciseQollInfo = function(item) {
+	return {
+				qollTitle : item.qollTitle,
+				qollText : item.qollText,
+				qollTypes : item.qollTypes,
+				submittedOn : item.submittedOn,
+				submittedBy : item.submittedBy,
+				submittedTo : item.submittedTo,
+				action : item.action,
+				stats : item.stats,
+				totals : sumstats(item.stats),
+				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
+				_id : item._id
+			};
+};
+
+var fetchConciseQolstInfo = function(item) {
+	return item;
+};
+
+
+var sumstats = function(statsobj) {
+	ret = 0;
+	for (var key in statsobj) {
+		if (statsobj.hasOwnProperty(key)) {
+			ret = ret + statsobj[key];
+		}
+	}
+	return ret;
+};
+
+
