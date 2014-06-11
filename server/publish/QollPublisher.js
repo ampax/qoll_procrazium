@@ -42,7 +42,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				var reguser = Meteor.users.find({
 					"_id" : thisReg.submittedBy
 				}).fetch();
-				qlog.info('REG  USER --------->>>>>' + JSON.stringify(reguser[0].profile.email));
+				qlog.info('REG  USER --------->>>>>' + JSON.stringify(UserUtil.getEmail(reguser[0])));
 				if (reguser && reguser[0] && reguser[0].emails && reguser[0].profile.email) {
 					register_emails[thisReg.submittedBy] = reguser[0].profile.email;
 					thisReg['responder_email'] = register_emails[thisReg.submittedBy];
@@ -156,8 +156,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 
 				}
 			});
-			qlog.info('looking for ' +JSON.stringify({'submittedTo' : user.profile.email, 'action' : 'send', parentId : parent_id_param}));
-			var handle = Qoll.find({ 'submittedTo' : user.profile.email, 'action' : 'send', parentId : parent_id_param }, 
+			qlog.info('looking for ' +JSON.stringify({'submittedTo' : UserUtil.getEmail(user), 'action' : 'send', parentId : parent_id_param}));
+			var handle = Qoll.find({ 'submittedTo' : UserUtil.getEmail(user), 'action' : 'send', parentId : parent_id_param }, 
 				{ sort : { 'submittedOn' : -1}, limit : lim, fields : { stats : 0 }, reactive : true }
 			).observe({
 				added : function(item, idx) {
@@ -167,7 +167,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					}).fetch();
 					var sentby = '';
 					if (usentby.length > 0)
-						sentby = usentby[0].profile.email;
+						sentby = UserUtil.getEmail(usentby[0]);
 					var q = {
 						qollTitle : item.qollTitle,
 						qollText : item.qollText,
@@ -206,7 +206,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				}
 			});
 			var gpsraw = QollGroups.find({
-				'userEmails' : user.profile.email
+				'userEmails' : UserUtil.getEmail(user)
 			}, {
 				fields : {
 					"_id" : 0,
@@ -245,7 +245,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						}).fetch();
 						var sentby = '';
 						if (usentby.length > 0)
-							sentby = usentby[0].profile.email;
+							sentby = UserUtil.getEmail(usentby[0]);
 						var q = {
 							qollTitle : item.qollTitle,
 							qollText : item.qollText,
@@ -504,7 +504,7 @@ Meteor.publish('QOLL_PUBLISHER', function(findoptions) {
 
 			//Publishing my received qolls (in chunks of 100) --- (2) My own recieved qolls - all recieved and responded by me
 			var handle_my_rec_qolls = Qoll.find(
-				{ 'submittedTo' : user.profile.email, 'action' : QollConstants.QOLL_ACTION_SEND, 'submittedOn' : {$lt : targetDate}},
+				{ 'submittedTo' : UserUtil.getEmail(user), 'action' : QollConstants.QOLL_ACTION_SEND, 'submittedOn' : {$lt : targetDate}},
 				{ sort : { 'submittedOn' : -1}, limit : lim, reactive : true }
 			).observe({
 				added : function(item, idx){

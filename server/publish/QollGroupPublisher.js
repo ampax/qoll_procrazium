@@ -52,7 +52,7 @@ Meteor.publish('RECIPIENTS_PUBLISHER', function(){
 			handle = Meteor.users.find({}, {'profile': 1}, {reactive:false});
 			handle.forEach(function (usr){
 				//TODO: name should be name and front end should show a concatenated string of name and email-id
-				var t = {'name' : usr.profile.email, 'email' : usr.profile.email, '_id' : usr._id}; 
+				var t = {'name' : UserUtil.getEmail(usr), 'email' : UserUtil.getEmail(usr), '_id' : usr._id}; 
 				allUserGroups.push(t);
 			});
 

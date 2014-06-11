@@ -76,7 +76,7 @@ Meteor.methods({
 				//step 1.1 verify qoll's group/user is valid for this user
 				var qollFound = Qoll.find({'_id':qollId}).fetch()[0];
 				var canModify = false;
-				qlog.info('checking ' + user.emails[0].address, filename);
+				qlog.info('checking ' + UserUtil.getEmail(user), filename);
 				if (qollFound.submittedBy === userId) {
 					canModify = true;
 				}

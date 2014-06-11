@@ -32,20 +32,20 @@ Meteor.methods({
 				//step 1.1 verify qoll's group/user is valid for this user
 				var qollFound = Qoll.find({'_id':qollId}).fetch()[0];
 				var canans =false;
-				qlog.info('checking '+ user.emails[0].address, filename);
+				qlog.info('checking '+ UserUtil.getEmail(user), filename);
 			
 				if(qollFound.submittedToGroup.length>0){
-		        var gpsraw= QollGroups.find({'userEmails':user.emails[0].address,'submittedBy':qollFound.submittedBy,'groupName':{$in:qollFound.submittedToGroup}},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
-				qlog.info('Custom one two three ' + user.emails[0].address + ', ' + qollFound.submittedBy + ', ' + Meteor.userId(), filename);
+		        var gpsraw= QollGroups.find({'userEmails':UserUtil.getEmail(user),'submittedBy':qollFound.submittedBy,'groupName':{$in:qollFound.submittedToGroup}},{fields:{"_id": 0,'groupName':1,'submittedBy':2}},{reactive:false});
+				qlog.info('Custom one two three ' + UserUtil.getEmail(user) + ', ' + qollFound.submittedBy + ', ' + Meteor.userId(), filename);
 		        var allUserGroups = [];
 		        gpsraw.forEach(function (grpEntry){
 					canans=true;
 					});
 				}
-				if(qollFound.submittedTo.indexOf(user.emails[0].address)>-1)
+				if(qollFound.submittedTo.indexOf(UserUtil.getEmail(user))>-1)
 				{
 					canans=true;
-					qlog.info('In register custom qoll: can publish '+ user.emails[0].address, filename);
+					qlog.info('In register custom qoll: can publish '+ UserUtil.getEmail(user), filename);
 				}	
 				if(canans){
 					//ansCount[qollFound.qollTypes.ind1exOf(qollTypeVal)]= ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]?ansCount[qollFound.qollTypes.indexOf(qollTypeVal)]+1:1;
