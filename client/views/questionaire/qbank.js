@@ -4,6 +4,7 @@ QbSummary = new Meteor.Collection("qbank_summary");
 
 Template.qollbank.rendered = function() {
 	Session.set('disable_sendtoQbank', true);
+	$('.hasDatepicker').datepicker();
 
 };
 $.fn.toggleCheckbox = function() {
@@ -19,16 +20,16 @@ Template.qollbank.events({
 	'click .store-qollstionnaire' : function(event) {
 		var recips = jQuery("input#recipient_search").val();
 		var title = jQuery(".qollstionnaire-title").val();
-		
-		var allqollids =[];
-		$('.qoll_selection').each(function(){
+
+		var allqollids = [];
+		$('.qoll_selection').each(function() {
 			var dolthis = $(this);
-			if(dolthis.prop("checked")){
+			if (dolthis.prop("checked")) {
 				allqollids.push(dolthis.attr('id'));
 			}
-  		
-		});		
-		if ($.trim(recips) === '' || $.trim(title) === ''|| allqollids.length==0) {
+
+		});
+		if ($.trim(recips) === '' || $.trim(title) === '' || allqollids.length == 0) {
 			var err_target = jQuery(".qbank-error-msg");
 			err_target.html('Select questions, add recipients and title to create qollstionnaire ...');
 			err_target.fadeOut(6400, function() {
@@ -38,7 +39,6 @@ Template.qollbank.events({
 			return;
 		}
 
-		
 		var target = jQuery(".qbank-error-msg");
 		var store_html = target.html();
 		target.html("<i class='fa fa-spinner fa-spin toolbar-buttons-link'></i>Saving...");
@@ -50,12 +50,12 @@ Template.qollbank.events({
 				emailsandgroups.push(email);
 			}
 		});
-		var qollstionnaire ={};
-		qollstionnaire.emails =emailsandgroups;
+		var qollstionnaire = {};
+		qollstionnaire.emails = emailsandgroups;
 		qollstionnaire.title = title.trim();
 
 		qollstionnaire.qbank_qollids = allqollids;
-		
+
 		Meteor.call("addQollstionnaire", qollstionnaire, function(error, qollMasterId) {
 			if (error) {
 				qlog.info('Error occured storing the master qoll. Please try again.', filename);
@@ -66,8 +66,46 @@ Template.qollbank.events({
 				return -1;
 			} else {
 				qlog.info("Added qoll-master-content with id: " + qollMasterId, filename);
+				if ($("#qollsenddate").val() != '') {
+					var actdt = new Date($("#qollsenddate").val());
+					var hour = parseInt($('.qstion_send_hour').val());
+					var min = parseInt($('.qstion_send_min').val());
+					if ($('.qstion_send_ampm').val() == 'PM' && hour<12) {
+						hour = hour + 12;
+					}
+				  if ($('.qstion_send_ampm').val() == 'AM' && hour==12) {
+						hour = hour - 12;
+					}
+
+					actdt.setHours(hour,min);
+					
+
+					Meteor.call("addTimerAction", qollMasterId, actdt, 'send');
+					qlog.info("Selected start or end date: " + $("#qollenddate").val() + $("#qollsenddate").val(), filename);
+
+				}
+				if ($("#qollenddate").val() != '') {
+					var actdt = new Date($("#qollenddate").val());
+					var hour = parseInt($('.qstion_end_hour').val());
+					var min = parseInt($('.qstion_end_min').val());
+					if ($('.qstion_end_ampm').val() == 'PM' && hour<12) {
+						hour = hour + 12;
+					}
+				  if ($('.qstion_end_ampm').val() == 'AM' && hour==12) {
+						hour = hour - 12;
+					}
+
+					actdt.setHours(hour,min);
+					
+
+					Meteor.call("addTimerAction", qollMasterId, actdt, 'lock');
+					qlog.info("Selected start or end date: " + $("#qollenddate").val() + $("#qollsenddate").val(), filename);
+					
+				}
 				target.html("Qoll Saved...");
-				editor.setValue('', 1);
+				jQuery(".qollstionnaire-title").val('');
+				$('.qoll_selection').prop("checked", false);
+				$('.qoll_selectall').prop("checked", false);
 				jQuery("input#recipient_search").val('');
 				target.fadeOut(2400, function() {
 					//setTimeout(function(){

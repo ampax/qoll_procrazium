@@ -5,6 +5,7 @@ Qoll = new Meteor.Collection("QOLL");
 QollMaster = new Meteor.Collection("QOLL_MASTER");
 QBank = new Meteor.Collection("QOLL_BANK");
 QollRaw = new Meteor.Collection("QOLL_RAW");
+QollTimerAction = new Meteor.Collection("QOLL_TIMER_ACTION");
 
 /** Database insert method for qolls  **/
 Meteor.methods({
@@ -82,25 +83,26 @@ Meteor.methods({
 				qlog.info('checking ' + user.emails[0].address, filename);
 				if (qollFound.submittedBy === userId) {
 					canModify = true;
+
+					Qoll.update({
+						'_id' : qollId
+					}, {
+						$set : {
+							action : newAction,
+							submittedOn : new Date()
+						}
+					});
+					Qoll.update({
+						'parentId' : qollId
+					}, {
+						$set : {
+							action : newAction,
+							submittedOn : new Date()
+						}
+					}, {
+						multi : true
+					});
 				}
-				Qoll.update({
-					'_id' : qollId
-				}, {
-					$set : {
-						action : newAction,
-						submittedOn : new Date()
-					}
-				});
-				Qoll.update({
-					'parentId' : qollId
-				}, {
-					$set : {
-						action : newAction,
-						submittedOn : new Date()
-					}
-				}, {
-					multi : true
-				});
 			}
 
 		}
@@ -144,6 +146,17 @@ Meteor.methods({
 			Meteor.call('addQoll', 'store', qbitem.qollText, qbitem.qollTypes, qbitem.qollTypesX, qbitem.isMultiple, qbitem.qollRawId, qbitem.qollMasterId, emails, false, parentid);
 		});
 		return parentid;
+	},
+	addTimerAction : function(qollid, action_date, action_string) {
+		var action_to_insert = {
+			'qollId' : qollid,
+			'actionDate' : action_date,
+			'actionString' : action_string,
+			'submittedOn' : new Date(),
+			'submittedBy' : Meteor.userId()
+
+		};
+		return QollTimerAction.insert(action_to_insert);
 	}
 });
 
