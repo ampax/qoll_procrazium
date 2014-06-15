@@ -5,6 +5,7 @@ QbSummary = new Meteor.Collection("qbank_summary");
 Template.qollbank.rendered = function() {
 	Session.set('disable_sendtoQbank', true);
 	$('.hasDatepicker').datepicker();
+	
 
 };
 $.fn.toggleCheckbox = function() {
