@@ -6,7 +6,7 @@ var filename = 'client/lib/meteor/RoutDashboard.js';
 
 QollsController = RouteController.extend({
 	template : 'qolls',
-	increment : 3,
+	increment : 10,
 	limit : function() {
 		return parseInt(this.params.qollsLimit) || this.increment;
 	},

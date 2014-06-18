@@ -159,7 +159,7 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 
 	//set the derfault values for correct-answers answered
 	if(stat.correct_answers.length == 0)
-		stat.correct_answers.push('---');
+		stat.correct_answers.push('--');
 
 	stat.answers = new Array();
 
