@@ -11,7 +11,6 @@ var qoll_display_fields = ['qoll_snip', 'answers', 'correct_answers'];
 
 Template.group_performance.helpers({
 	group_stats1 : function(group_name) {
-		qlog.info('<================ Getting stats for: ' + group_name + ' ====================>');
 		return GroupStats.find(group_name);
 	},
 	qoll_class : function(){
@@ -36,10 +35,3 @@ Template.group_performance.helpers({
 		else return "<span class='glyphicon glyphicon-thumbs-down red'/>";
 	}
 });
-
-/**
-Template.group_performance.rendered = function() {
-	qlog.info('Group performance has been rendered.', filename);
-	$('#groupStatistics').dataTable();
-}
-**/
