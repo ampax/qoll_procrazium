@@ -28,9 +28,6 @@ Usr.ensureUpdate = function(userId, col_name, col_val) {
 };
 /** END: New standard code **/
 
-
-QollGroups = new Meteor.Collection("QOLL_GROUPS");
-
 Meteor.methods({
 	currentUserName: function(){
         qlog.info("Getting avatar for: " + Meteor.userId(), filename);

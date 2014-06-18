@@ -78,3 +78,132 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 	});
 });
 
+Meteor.publish('GROUP_STATS_PUBLISHER', function(group_name) {
+	var user_id = this.userId;
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var handle_group_stats; //make a json of handles and close those in onStop call
+
+	qlog.info('Fetching group performance; uuid: ' + uuid + ', group_name: ' + group_name + 'user - ' + this.userId, filename);
+	if (user_id) {
+		//Check for existing user record
+		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		if (ufound.length > 0) {
+			var group = QollGroups.find({'groupName' : group_name}).fetch();
+			if(group) {
+				group = group[0];
+				qlog.info('user emails - ' + JSON.stringify(group), filename);
+				group.userEmails.map(function(email){
+					var user = Meteor.users.findOne({"profile.email" : email});
+					if(user && user.profile) {
+						var qollsts = Qoll.find({'is_parent' : true, 'submittedToGroup' : group_name});
+						qollsts.map(function(qollst){
+							Qoll.find({$or:[{'parentId' : qollst._id},{'_id' : qollst._id}]}, {sort : {'submittedOn' : 1}, reactive : true}).observe({
+								added : function(item, idx){
+									//Initialize the json object here so that it does not depend on existence of the registers
+									var qollReg = QollRegister.find({qollId: item._id, submittedBy: user._id}).fetch()[0];
+									//function(var qollSt, var q, var qollReg, var user)
+									var stat = fetchQollPublishDetails(qollst, item, qollReg, user);
+									//qlog.info('<==============Adding stat===============>' + JSON.stringify(stat), filename);
+									self.added('group-stats', item._id + user._id, stat);
+								},
+								changed : function(item, idx) {
+									var qollReg = QollRegister.find({qollId: item._id, submittedBy: user._id}, {reactive : true});
+									//function(var qollSt, var q, var qollReg, var user)
+									var stat = fetchQollPublishDetails(qollst, item, qollReg, user);
+									//qlog.info('<==============Changing stat===============>' + JSON.stringify(stat), filename);
+									self.changed('group-stats', item._id + user._id, stat);
+
+								},
+								removed : function(item){
+									self.removed('group-stats', item._id + user._id);
+								}
+							});
+							
+						});
+					}
+				});
+			}
+		}
+
+	}
+
+	qlog.info('Done initializing the group-stats publisher: GROUP_STATS_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle_group_stats) handle_group_stats.stop();
+	});
+});
+
+
+var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
+	var stat = {};
+	stat['name'] = user.profile.name;
+	stat['email'] = user.profile.email;
+	stat['qollst'] = qollSt.qollText.length > 27 ? qollSt.qollText.substring(0,27) + '...' : qollSt.qollText;
+	stat['qoll_snip'] = q.qollText.length > 47 ? q.qollText.substring(0,47) + '...' : q.qollText;
+	stat['qoll'] = q.qollText;
+	stat['is_multiple'] = q.isMultiple;
+
+	//Set the correct answers for the qolls (if assigned from the editor)
+	stat.correct_answers = new Array();
+	var qtx_idx = 0;
+	q.qollTypesX.map(function(qtx){
+		if(qtx.isCorrect) stat.correct_answers.push(alphabetical[qtx_idx]);
+		qtx_idx++;
+	});
+
+	//set the derfault values for correct-answers answered
+	if(stat.correct_answers.length == 0)
+		stat.correct_answers.push('---');
+
+	stat.answers = new Array();
+
+	if(qollReg && qollReg!= null && qollReg.qollTypeReg !=null && !q.is_parent) {
+		//qlog.info('qollReg=================>' + qollReg + '<====================', filename);
+		var idx = 0;
+		qollReg.qollTypeReg.map(function(reg){
+			if(reg) {
+				stat.answers.push(alphabetical[idx]);
+			}
+			idx++;
+		});
+		//qlog.info('<==============Adding stat===============>' + JSON.stringify(stat), filename);
+		stat['is_parent'] = false;
+		//self.added('group-stats', qollReg._id, stat);
+	} else {
+		//set the answers for parent (not that parent will have none in current implementation)
+		stat.answers.push('---'); //Did not answer
+		if(!q.is_parent) {
+			stat['is_parent'] = false;
+		} else {
+			stat['is_parent'] = true;
+		}
+	}
+
+	if(JSON.stringify(stat.correct_answers) == JSON.stringify(stat.answers)) {
+		stat.did_pass = true;
+	} else {
+		stat.did_pass = false;
+	}
+
+	return stat;
+};
+
+
+var fetchGroupStats = function(item, group_name) {
+	var stats = new Array();
+	var group = QollGroups.find({'groupName' : group_name}).fetch();
+	if(group) {
+		group.userEmails.map(function(email) {
+			//TODO
+		});
+	}
+	
+
+	return item;
+}

@@ -1,5 +1,4 @@
 var filename = 'lib/db/QollRegisterDb.js';
-QollRegister = new Meteor.Collection("QOLL_REGISTER");
 
 Meteor.methods({
 	registerQoll: function(qollId, qollTypeVal){
