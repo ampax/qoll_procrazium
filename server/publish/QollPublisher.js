@@ -31,13 +31,15 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 	var register_emails = {};
 	//to cache emails for usr ids
 	var fetch_answers = function(item) {
+				var answers;
+		answers = [];
+		if(item.parentId) return answers;
 		var existQollRegs = QollRegister.find({
 			qollId : item._id
 		}, {
 			reactive : false
 		}).fetch();
-		var answers;
-		answers = [];
+
 		for (var i = 0; i < item.qollTypes.length; i++) {
 			answers[i] = [];
 		}
