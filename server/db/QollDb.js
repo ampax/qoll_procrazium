@@ -1,7 +1,5 @@
 var filename = 'server/db/QollDb.js';
 
-Qoll = new Meteor.Collection("QOLL");
-
 QollMaster = new Meteor.Collection("QOLL_MASTER");
 QBank = new Meteor.Collection("QOLL_BANK");
 QollRaw = new Meteor.Collection("QOLL_RAW");
