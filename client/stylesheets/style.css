@@ -9,6 +9,13 @@ body {
 
 /* ============================== END:Body level style override/define ================================ */
 
+
+/* ============================== START: Bootstrap style override/define ================================ */
+.btn {
+  padding: 0px 12px !important;
+}
+/* ============================== END:Body Bootstrap style override/define ================================ */
+
 hr .divider {
     background-color: #d4d4d4;
     color: #d4d4d4;

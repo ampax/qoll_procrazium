@@ -48,14 +48,45 @@ Meteor.methods({
         qolls.map(function(q){
             var qs = q.split(/\n-/);
             var qoll = qs[0];
+
+            //fetch the qoll level attributes here. split the qoll string on * and then apply
+            qlog.info('<==============Printing qoll===============>'+qoll, filename);
+            var qoll_parts = qoll.split(/\n\*/);
+            var qoll_star_attributes = {};
+            qoll = qoll_parts[0];
+            qoll_parts.slice(1).map(function(qp){
+            	if(qp) qp = qp.trim();
+            	var star = qp.split(/\s+/)[0];
+            	var star_val = qp.substr(qp.indexOf(' ') + 1);
+            	qlog.info('<======option name========>' +star, filename);
+            	qlog.info('<======option value========>' +star_val, filename);
+            	if(_.contains(QollConstants.EDU.ALLOWED_STARS, star)) {
+            		//handle the allowed options here
+            		if(_.contains(['unit','units'], star)) {
+            			qlog.info('This is unit' + star, filename);
+            			if(star_val.indexOf(":") != -1) {
+            				var tmp = star_val.split(":");
+            				qoll_star_attributes[QollConstants.EDU.UNIT_NAME] = tmp[0];
+            				star_val = tmp[1];
+            			}
+            			qoll_star_attributes[star] = new Array();
+        				star_val.split(/(?:,| )+/).map(function(tmp1){
+        					if(tmp1.length > 0) qoll_star_attributes[star].push(tmp1);
+        				});
+            		} else
+            			qoll_star_attributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
+            	}
+            });
+            qlog.info('<==========Printing final stars============>'+JSON.stringify(qoll_star_attributes), filename);
+
             qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
 
             var types = new Array();
             qs.slice(1).map(function(type){
             	var x = {};
             	type = type.trim();
-	            if(type.indexOf('(a) ') == 0) {
-	                type = type.replace('(a) ', '');
+	            if(type.indexOf('(a)') == 0) {
+	                type = type.replace('(a)', '');
 	                type = DownTown.downtown(type, DownTownOptions.downtown_default());
 	                x.type = type;
 	                x.isCorrect = 1;
@@ -71,7 +102,7 @@ Meteor.methods({
 
 
 
-            parsed_qolls.push({'qoll':qoll, 'types' : types});
+            parsed_qolls.push({'qoll':qoll, 'qoll_star_attributes' : qoll_star_attributes, 'types' : types});
         });
         return parsed_qolls;
     },

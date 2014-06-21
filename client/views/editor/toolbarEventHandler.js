@@ -40,7 +40,7 @@ Template.toolbar.events({
     var editor = ace.edit("aceEditor");
     var parsed_qoll;
     Meteor.call('parse_downtown', editor.getValue(), DownTownOptions.downtown_default(), function(err, val){
-      qlog.info("Rec data from server: " + val, filename);
+      qlog.info("Rec data from server: " + JSON.stringify(val), filename);
       if(err) {
         parsed_qoll = "Error occured while converting qoll-contents. Please try again: " + err;
         previewQoll(parsed_qoll);
@@ -132,7 +132,14 @@ var preparePreviewHtml = function (qolls){
   var html = '';
   qolls.map(function(qoll) {
     html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>";
-    html += qoll['qoll'];
+    if(qoll.qoll_star_attributes[QollConstants.EDU.HINT]) {
+      html += '<h4>'+qoll.qoll_star_attributes[QollConstants.EDU.TITLE]+'</h4>';
+    }
+    html += '<h5>'+qoll['qoll']+'</h5>';
+    html += getUnitsHtml(qoll.qoll_star_attributes[QollConstants.EDU.UNIT_NAME], qoll.qoll_star_attributes[QollConstants.EDU.UNITS]);
+    if(qoll.qoll_star_attributes[QollConstants.EDU.HINT]) {
+      html += getHintHtml(qoll.qoll_star_attributes[QollConstants.EDU.HINT]);
+    }
     html +="</div>";
     var types = qoll['types'];
     var idx = 0;
@@ -156,4 +163,63 @@ var preparePreviewHtml = function (qolls){
     });
   });
   return html;
+};
+
+var getUnitsHtml = function (unit_name, units) {
+  qlog.info('name/value ' + unit_name + '/' + units, filename);
+  /**var units_html = '<div class="btn-group">xyz'+
+  '<ul class="dropdown-menu">X'+
+    '<li>A<a href="#">Dropdown link</a></li>'+
+    '<li>B<a href="#">Dropdown link</a></li>'+
+  '</ul>'+'</div>';**/
+
+  /**var units_html = 
+  '<span class="toolbar-buttons dropdown-toggle" data-toggle="dropdown">' +
+      '<a class="toolbar-buttons-link"  data-intro="Drop down" data-step="2" >' + 
+        'Unit Name' +
+        '<span class="caret"></span>' +
+      '</a>' +
+     '</span>' +
+
+    '<ul class="dropdown-menu">' +
+      '<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addltxi" href="#" title="Ctrl+I">' +'$LaTeX^I$' + '</a></span></li>' +
+      '<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addltxb" href="#" title="Ctrl+L">' + '$LaTeX^B$' + '</a></span></li>' +
+    '</ul>'; **/
+
+  var units_html = '<div class="input-group">';
+  if(unit_name) units_html += unit_name+': ';
+  else unit_name += 'Unit: ';
+  units.map(function(unit){
+    units_html += '<input name="unit" type="radio">' + unit;
+  });
+  units_html += '</div>';
+
+  /**var units_html = 
+    '<div class="input-group">' +
+      '<input name="unit" type="radio">Unit 1' +
+      '<input name="unit" type="radio">Unit 2' +
+      '<input name="unit" type="radio">Unit 3' +
+    '</div>';**/
+
+    qlog.info('units_html: ' + units_html, filename);
+
+  return units_html;
+};
+
+var getHintHtml = function (hint) {
+  var hint_html = 
+  //"<div class='col-md-12 col-xs-12 list-group-item'>" + 
+  '<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip" data-placement="left" title="Partial credit will be deducted..." id="show_hint">' +
+    'Hint' +
+  '</button><div class="is-invisible red_1" id="hint">'+hint+'</div>';
+  //'<div id="demo" class="collapse col-md-12 col-xs-12 list-group-item">'+hint+'</div>';
+
+  /**var hint_html = //'<div class="col-md-12 col-xs-12 list-group-item">' + 
+  '<button type="button" class="btn btn-default" data-container="body"' +
+    'data-toggle="popover" data-placement="right"' +
+    'data-content="'+hint+'">' +
+    'Popover on left' +
+  '</button>';**/
+
+  return hint_html;
 };
