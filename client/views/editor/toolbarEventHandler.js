@@ -70,6 +70,15 @@ Template.toolbar.events({
     var editor = ace.edit("aceEditor");
     bindToolBarForQollAnswer(editor);
   },
+  
+  'click .qembedimg': function(){
+    console.log("Img Embed ...");
+    var img_url = prompt("Image Url","http://");
+    if (img_url != null) {
+    	var editor = ace.edit("aceEditor");
+    	bindToolBarForImgEmbed(editor,img_url);
+    }
+  },
 });
 
 

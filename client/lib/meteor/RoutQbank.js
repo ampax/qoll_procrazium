@@ -17,7 +17,10 @@ Router.map(function(){
 			//TODO
 		},
 		data:function(){
-			return {QBankSumm: QbSummary.find({})};
+			return {QBankSumm: QbSummary.find({},{
+			sort : {
+				submittedOn : -1
+			}})};
 		}
 	});
 });
