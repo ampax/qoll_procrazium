@@ -1,249 +1,282 @@
 <template name="user_edit">
-  {{> header_awesome}}
-<p class="lead"/>
-<div class="container">
-  <div class="row">
-    {{#with user}}
-    
-    <h3>{{i18n "Account"}}</h3>
-    <small class="red">
-      {{#if profileIncomplete}}
-        {{i18n "Please complete your profile below before continuing."}}
-      {{/if}}
-    </small>
-    <hr class="divider"/>
+	{{> header_awesome}}
+	<p class="lead"/>
+	<div class="container">
+		<div class="row">
+			{{#with user}}
 
-    <div class="col-md-10" role="main">
-      <form class="form-horizontal" role="form">
-        <!--  User name input (disabled, can not be changed)  -->
-        <div class="form-group">
-          <label for="inputUsername" class="col-sm-2 control-label">{{i18n "Username"}}</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="username" name="username" disabled value="{{userName}}" />
-          </div>
-        </div>
+			<h3>{{i18n "Account"}}</h3>
+			<small class="red"> {{#if profileIncomplete}}
+				{{i18n "Please complete your profile below before continuing."}}
+				{{/if}} </small>
+			<hr class="divider"/>
 
-        <!-- Set user locale, page standard text display will change -->
-        <div class="form-group">
-          <label for="inputLanguage" class="col-sm-2 control-label">{{i18n "Language"}}</label>
-          <div class="col-sm-10">
-            <div class="radio-inline">
-              <label>
-                <input type="radio" name="locale" id="en" value="en" {{isLocale 'en'}}>{{i18n "English"}}
-              </label>
-            </div>
-            <div class="radio-inline">
-              <label>
-                <input type="radio" name="locale" id="hi" value="hi" {{isLocale 'hi'}}>{{i18n "Hindi"}}
-              </label>
-            </div>
-            <div class="radio-inline">
-              <label>
-                <input type="radio" name="locale" id="fr" value="fr" {{isLocale 'fr'}}>{{i18n "French"}}
-              </label>
-            </div>
-          </div>
-        </div>
+			<div class="col-md-10" role="main">
+				<form class="form-horizontal" role="form">
+					<!--  User name input (disabled, can not be changed)  -->
+					<div class="form-group">
+						<label for="inputUsername" class="col-sm-2 control-label">{{i18n "Username"}}</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="username" name="username" disabled value="{{userName}}" />
+						</div>
+					</div>
+					<!--  User group memberships   -->
 
-        <!--  Display name input  -->
-        <div class="form-group">
-          <label for="inputName" class="col-sm-2 control-label">{{i18n "Display Name"}}</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="name" name="name" placeholder="Profile Name" value="{{profile.name}}" />
-          </div>
-        </div>
+					<div class="form-group">
+						<label for="inputGroups" class="col-sm-2 control-label">{{i18n "Groups"}}</label>
+						<div class="col-sm-10">
+							<div class="panel panel-default panel-qoll-type-list" >
+								<div class="panel-heading">
+									<h3 class="panel-title">GroupName,GroupOwner</h3>
+								</div>
+								<div class="panel-body" id="usersgroups">
+									{{#each groupMemberships}}
+									<div class='email-group-panel' id='emailtogrouppanel'>
+										{{groupName}},{{groupOwner}}
+									</div>
+									<!--div class="qoll-type-panel">Panel content 1</div-->
+									<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
+									{{/each}}
+								</div>
+								<button  class="btn btn-primary btn-qoll addgroupbtn pull-left">
+								{{i18n "Add Group membership"}}
+							</button>
+							</div>
+						</div>
 
-        <!--  Email input  -->
-        <div class="form-group">
-          <label for="inputEmail" class="col-sm-2 control-label">{{i18n "Email"}}</label>
-          <div class="col-sm-10">
-            <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{userEmail}}" />
-          </div>
-        </div>
+					</div>
 
-        <!--  Bio input  -->
-        <div class="form-group">
-          <label for="inputBio" class="col-sm-2 control-label">{{i18n "Bio"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <textarea class="form-control" rows="3"  id="bio" name="bio" placeholder="Bio">{{userBio}}</textarea>
-          </div>
-        </div>
+					<!-- Set user locale, page standard text display will change -->
+					<div class="form-group">
+						<label for="inputLanguage" class="col-sm-2 control-label">{{i18n "Language"}}</label>
+						<div class="col-sm-10">
+							<div class="radio-inline">
+								<label>
+									<input type="radio" name="locale" id="en" value="en" {{isLocale 'en'}}>
+									{{i18n "English"}} </label>
+							</div>
+							<div class="radio-inline">
+								<label>
+									<input type="radio" name="locale" id="hi" value="hi" {{isLocale 'hi'}}>
+									{{i18n "Hindi"}} </label>
+							</div>
+							<div class="radio-inline">
+								<label>
+									<input type="radio" name="locale" id="fr" value="fr" {{isLocale 'fr'}}>
+									{{i18n "French"}} </label>
+							</div>
+						</div>
+					</div>
 
-        <!--  Twitter Username input  -->
-        <div class="form-group">
-          <label for="inputTwitterUName" class="col-sm-2 control-label">{{i18n "Twitter Username"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="text" class="form-control" id="twitter" name="twitter" placeholder="Link Twitter User Name" value="{{getTwitter}}" />
-          </div>
-        </div>
+					<!--  Display name input  -->
+					<div class="form-group">
+						<label for="inputName" class="col-sm-2 control-label">{{i18n "Display Name"}}</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="name" name="name" placeholder="Profile Name" value="{{profile.name}}" />
+						</div>
+					</div>
 
-        <!--  Google Username input  -->
-        <div class="form-group">
-          <label for="inputGoogleUName" class="col-sm-2 control-label">{{i18n "Google Username"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="text" class="form-control" id="google" name="google" placeholder="Link Google User Name" value="{{getGoogle}}" />
-          </div>
-        </div>
+					<!--  Email input  -->
+					<div class="form-group">
+						<label for="inputEmail" class="col-sm-2 control-label">{{i18n "Email"}}</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{userEmail}}" />
+						</div>
+					</div>
 
-        <!--  Facebook Username input  -->
-        <div class="form-group">
-          <label for="inputFacebookUName" class="col-sm-2 control-label">{{i18n "Facebook Username"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="text" class="form-control" id="facebook" name="facebook" placeholder="Link Facebook User Name" value="{{getFacebook}}" />
-          </div>
-        </div>
+					<!--  Bio input  -->
+					<div class="form-group">
+						<label for="inputBio" class="col-sm-2 control-label">{{i18n "Bio"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<textarea class="form-control" rows="3"  id="bio" name="bio" placeholder="Bio">{{userBio}}</textarea>
+						</div>
+					</div>
 
-        <!--  GitHub Username input  -->
-        <div class="form-group">
-          <label for="inputGithubUName" class="col-sm-2 control-label">{{i18n "GitHub Username"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="text" class="form-control" id="github" name="github" placeholder="Link Github User Name" value="{{getGitHub}}" />
-          </div>
-        </div>
+					<!--  Twitter Username input  -->
+					<div class="form-group">
+						<label for="inputTwitterUName" class="col-sm-2 control-label">{{i18n "Twitter Username"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="text" class="form-control" id="twitter" name="twitter" placeholder="Link Twitter User Name" value="{{getTwitter}}" />
+						</div>
+					</div>
 
-        <!--  Site input  -->
-        <div class="form-group">
-          <label for="inputSite" class="col-sm-2 control-label">{{i18n "Site"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="text" class="form-control" id="site" name="site" placeholder="Site" value="{{profile.site}}" />
-          </div>
-        </div>
+					<!--  Google Username input  -->
+					<div class="form-group">
+						<label for="inputGoogleUName" class="col-sm-2 control-label">{{i18n "Google Username"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="text" class="form-control" id="google" name="google" placeholder="Link Google User Name" value="{{getGoogle}}" />
+						</div>
+					</div>
 
-        <h3>{{i18n "Change Password"}}?</h3>
-        <!--  Change password  -->
-        <div class="form-group">
-          <label for="inputOldPass" class="col-sm-2 control-label">{{i18n "Old Password"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="password" class="form-control" id="old_password" name="old_password" placeholder="Input Old Password" value="" />
-          </div>
-        </div>
+					<!--  Facebook Username input  -->
+					<div class="form-group">
+						<label for="inputFacebookUName" class="col-sm-2 control-label">{{i18n "Facebook Username"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="text" class="form-control" id="facebook" name="facebook" placeholder="Link Facebook User Name" value="{{getFacebook}}" />
+						</div>
+					</div>
 
-        <div class="form-group">
-          <label for="inputNewPass" class="col-sm-2 control-label">{{i18n "New Password"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="password" class="form-control" id="new_password" name="new_password" placeholder="Input New Password" value="" />
-          </div>
-        </div>
+					<!--  GitHub Username input  -->
+					<div class="form-group">
+						<label for="inputGithubUName" class="col-sm-2 control-label">{{i18n "GitHub Username"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="text" class="form-control" id="github" name="github" placeholder="Link Github User Name" value="{{getGitHub}}" />
+						</div>
+					</div>
 
-        <div class="form-group">
-          <label for="inputNewPass1" class="col-sm-2 control-label">{{i18n "Confirm New Password"}}</label>
-          <div class="col-sm-10">
-            <!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
-            <input type="password" class="form-control" id="new_password1" name="new_password1" placeholder="Confirm New Password" value="" />
-          </div>
-        </div>
+					<!--  Site input  -->
+					<div class="form-group">
+						<label for="inputSite" class="col-sm-2 control-label">{{i18n "Site"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="text" class="form-control" id="site" name="site" placeholder="Site" value="{{profile.site}}" />
+						</div>
+					</div>
 
-        <!-- div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <a href="/forgot_password">{{i18n "Forgot Password"}}?</a>
-          </div>
-        </div -->
+					<h3>{{i18n "Change Password"}}?</h3>
+					<!--  Change password  -->
+					<div class="form-group">
+						<label for="inputOldPass" class="col-sm-2 control-label">{{i18n "Old Password"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="password" class="form-control" id="old_password" name="old_password" placeholder="Input Old Password" value="" />
+						</div>
+					</div>
 
-        <div class="form-group">
-          <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary btn-qoll pull-left">{{i18n "Submit"}}</button>
-          </div>
-        </div>
+					<div class="form-group">
+						<label for="inputNewPass" class="col-sm-2 control-label">{{i18n "New Password"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="password" class="form-control" id="new_password" name="new_password" placeholder="Input New Password" value="" />
+						</div>
+					</div>
 
-      </form>
-    </div>
-    {{/with}}
-  </div>
-</div>
+					<div class="form-group">
+						<label for="inputNewPass1" class="col-sm-2 control-label">{{i18n "Confirm New Password"}}</label>
+						<div class="col-sm-10">
+							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
+							<input type="password" class="form-control" id="new_password1" name="new_password1" placeholder="Confirm New Password" value="" />
+						</div>
+					</div>
+
+					<!-- div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+					<a href="/forgot_password">{{i18n "Forgot Password"}}?</a>
+					</div>
+					</div -->
+
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-primary btn-qoll pull-left">
+								{{i18n "Submit"}}
+							</button>
+						</div>
+					</div>
+
+				</form>
+			</div>
+			{{/with}}
+		</div>
+	</div>
 </template>
 
 <template name="user_edit1">
-  {{> header_awesome}}
-  <div class="grid-small grid-block dialog user-edit">
-  	{{#with user}}
-    {{#if profileIncomplete}}
-    <div>
-      {{i18n "Please complete your profile below before continuing."}}
-    </div>
-    {{/if}}
-    <form>
-      <h2>{{i18n "Account"}}</h2>
-      <div class="control-group">
-        <label>{{i18n "Username"}}</label>
-        <div class="controls">
-          <input id="username" name="username" disabled="disabled" type="text" value="{{userName}}" />
-        </div>
-        <p class="note">{{i18n "Profile"}} URL: {{profileUrl}}</p>
-      </div>
-<!--       <div class="control-group">
-        <label>Email</label>
-        <div class="controls">
-          <input id="email" name="email" disabled="disabled" type="text" value="{{email}}" />
-        </div>
-      </div> -->
-      <div class="control-group">
-        <label>{{i18n "Display Name"}}</label>
-        <div class="controls">
-          <input name="name" type="text" value="{{profile.name}}" />
-        </div>
-      </div>
-      <div class="control-group">
-        <label>{{i18n "Email"}}</label>
-        <div class="controls">
-          <input name="email" type="text" value="{{userEmail}}" />
-        </div>
-      </div>
-      <div class="control-group">
-        <label>{{i18n "Bio"}}</label>
-        <div class="controls"><textarea name="bio" type="text">{{profile.bio}}</textarea></div>
-      </div>
-      <div class="control-group">
-      <label>{{i18n "Twitter Username"}}</label>
-        <div class="controls">
-          <input name="twitter" type="text" value="{{getTwitter}}" />
-        </div>
-      </div>
-      <div class="control-group">
-        <label>{{i18n "Google Username"}}</label>
-        <div class="controls">
-          <input name="google" type="text" value="{{getGoogle}}" />
-        </div>
-      </div>
-      <div class="control-group">
-        <label>{{i18n "Facebook Username"}}</label>
-        <div class="controls">
-          <input name="facebook" type="text" value="{{getFacebook}}" />
-        </div>
-      </div>
-      <div class="control-group">
-        <label>{{i18n "GitHub Username"}}</label>
-        <div class="controls">
-          <input name="github" type="text" value="{{getGitHub}}" />
-        </div>
-      </div>
-      <div class="control-group">
-        <label>{{i18n "Site"}}</label>
-        <div class="controls">
-          <input name="site" type="text" value="{{profile.site}}" />
-        </div>
-      </div>
-      <h3>{{i18n "Change Password"}}?</h3>
-      <div class="control-group">
-        <label>{{i18n "Old Password"}}</label>
-        <div class="controls"><input name="old_password" type="password" value="" /></div>
-      </div>
-      <div class="control-group">
-        <label>{{i18n "New Password"}}</label>
-        <div class="controls"><input name="new_password" type="password" value="" /></div>
-      </div>
-      <div class="form-actions">
-        <a href="/forgot_password">{{i18n "Forgot Password"}}?</a>
-        <input type="submit" class="button" value="{{i18n "Submit"}}" />
-      </div>
-    </form>
-    {{/with}}
-  </div>
+	{{> header_awesome}}
+	<div class="grid-small grid-block dialog user-edit">
+		{{#with user}}
+		{{#if profileIncomplete}}
+		<div>
+			{{i18n "Please complete your profile below before continuing."}}
+		</div>
+		{{/if}}
+		<form>
+			<h2>{{i18n "Account"}}</h2>
+			<div class="control-group">
+				<label>{{i18n "Username"}}</label>
+				<div class="controls">
+					<input id="username" name="username" disabled="disabled" type="text" value="{{userName}}" />
+				</div>
+				<p class="note">
+					{{i18n "Profile"}} URL: {{profileUrl}}
+				</p>
+			</div>
+			<!--       <div class="control-group">
+			<label>Email</label>
+			<div class="controls">
+			<input id="email" name="email" disabled="disabled" type="text" value="{{email}}" />
+			</div>
+			</div> -->
+			<div class="control-group">
+				<label>{{i18n "Display Name"}}</label>
+				<div class="controls">
+					<input name="name" type="text" value="{{profile.name}}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "Email"}}</label>
+				<div class="controls">
+					<input name="email" type="text" value="{{userEmail}}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "Bio"}}</label>
+				<div class="controls">
+					<textarea name="bio" type="text">{{profile.bio}}</textarea>
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "Twitter Username"}}</label>
+				<div class="controls">
+					<input name="twitter" type="text" value="{{getTwitter}}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "Google Username"}}</label>
+				<div class="controls">
+					<input name="google" type="text" value="{{getGoogle}}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "Facebook Username"}}</label>
+				<div class="controls">
+					<input name="facebook" type="text" value="{{getFacebook}}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "GitHub Username"}}</label>
+				<div class="controls">
+					<input name="github" type="text" value="{{getGitHub}}" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "Site"}}</label>
+				<div class="controls">
+					<input name="site" type="text" value="{{profile.site}}" />
+				</div>
+			</div>
+			<h3>{{i18n "Change Password"}}?</h3>
+			<div class="control-group">
+				<label>{{i18n "Old Password"}}</label>
+				<div class="controls">
+					<input name="old_password" type="password" value="" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label>{{i18n "New Password"}}</label>
+				<div class="controls">
+					<input name="new_password" type="password" value="" />
+				</div>
+			</div>
+			<div class="form-actions">
+				<a href="/forgot_password">{{i18n "Forgot Password"}}?</a>
+				<input type="submit" class="button" value="{{i18n "Submit"}}" />
+			</div>
+		</form>
+		{{/with}}
+	</div>
 </template>

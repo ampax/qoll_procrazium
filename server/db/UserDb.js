@@ -59,6 +59,25 @@ Meteor.methods({
 		});
 
 		updateUserGroupsCreated(groupName);
+	},
+	userAddGroupMembership:function(groupName, ownerEmail){
+		var owneruser=Meteor.users.findOne({'emails.address':ownerEmail});
+		
+		if(owneruser){
+			var grpfound=QollGroups.findOne({'submittedBy':owneruser._id,'groupName':groupName});
+					
+			if(grpfound){
+				
+				if( grpfound.userEmails=== undefined || grpfound.userEmails.indexOf(Meteor.user().emails[0].address)<0){
+							
+					return QollGroups.update(
+                    { _id: grpfound._id },
+                    { $push: { userEmails: Meteor.user().emails[0].address } }
+                 );
+				}
+			}
+		}
+		return false;
 	}
 
 });
