@@ -34,6 +34,7 @@ UserPageController = FastRender.RouteController.extend({
   waitOn: function() {
   	qlog.info('before subscribing to singleUser - ' + this.params._idOrSlug, filename);
     Meteor.subscribe('singleUser', this.params._idOrSlug);
+    Meteor.subscribe('currentUser');
   },
   data: function() {
     var findById = Meteor.users.findOne(this.params._idOrSlug);
