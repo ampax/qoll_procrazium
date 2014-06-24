@@ -31,7 +31,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 	var register_emails = {};
 	//to cache emails for usr ids
 	var fetch_answers = function(item) {
-				var answers;
+		var answers;
 		answers = [];
 		if(item.parentId) return answers;
 		var existQollRegs = QollRegister.find({
@@ -93,19 +93,21 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					lim -= 1;
 
 					var q = {
-						qollTitle : item.qollTitle,
-						qollText : item.qollText,
-						qollTypes : item.qollTypes,
-						qollTypesX : item.qollTypesX,
-						submittedOn : item.submittedOn,
-						submittedBy : item.submittedBy,
-						submittedTo : item.submittedTo,
-						action : item.action,
-						enableEdit : item.action === 'store',
-						stats : item.stats,
-						answers : fetch_answers(item),
-						totals : sumstats(item.stats),
-						viewContext : "createUsr",
+						qollTitle 		: item.qollTitle,
+						qollText 		: item.qollText,
+						qollTypes 		: item.qollTypes,
+						qollTypesX 		: item.qollTypesX,
+						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+						qollAttributes 	: item.qollAttributes,
+						submittedOn 	: item.submittedOn,
+						submittedBy 	: item.submittedBy,
+						submittedTo 	: item.submittedTo,
+						action 			: item.action,
+						enableEdit 		: item.action === 'store',
+						stats 			: item.stats,
+						//answers 		: fetch_answers(item),
+						totals 			: sumstats(item.stats),
+						viewContext 	: "createUsr",
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -113,13 +115,15 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (item.is_parent)
 						q.is_parent = true;
 					//get qoll registers
-					Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, qollTypeReg) {
+					Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
 						if (err) {
 							qlog.error('Error happened while getting registers' + err, filename);
 						} else {
-							qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
-							if (qollTypeReg != undefined)
-								q.qollTypeReg = qollTypeReg;
+							qlog.info('Found qoll regs. Processing now ' + JSON.stringify(reg), filename);
+							if (reg != undefined) {
+								q.qollTypeReg = reg.qollTypeReg;
+								q.myAnswers = reg;
+							}
 						}
 					});
 
@@ -129,19 +133,21 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				changed : function(item, idx) {
 
 					var q = {
-						qollTitle : item.qollTitle,
-						qollText : item.qollText,
-						qollTypes : item.qollTypes,
-						qollTypesX : item.qollTypesX,
-						submittedOn : item.submittedOn,
-						submittedBy : item.submittedBy,
-						submittedTo : item.submittedTo,
-						action : item.action,
-						enableEdit : item.action === 'store',
-						stats : item.stats,
-						answers : fetch_answers(item),
-						totals : sumstats(item.stats),
-						viewContext : "createUsr",
+						qollTitle 			: item.qollTitle,
+						qollText 			: item.qollText,
+						qollTypes 			: item.qollTypes,
+						qollTypesX 			: item.qollTypesX,
+						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+						qollAttributes 		: item.qollAttributes,
+						submittedOn 		: item.submittedOn,
+						submittedBy 		: item.submittedBy,
+						submittedTo 		: item.submittedTo,
+						action 				: item.action,
+						enableEdit 			: item.action === 'store',
+						stats 				: item.stats,
+						//answers 			: fetch_answers(item),
+						totals 				: sumstats(item.stats),
+						viewContext 		: "createUsr",
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -149,13 +155,15 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (item.is_parent)
 						q.is_parent = true;
 					//get qoll registers
-					Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, qollTypeReg) {
+					Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
 						if (err) {
 							qlog.error('Error happened while getting registers' + err, filename);
 						} else {
-							qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
-							if (qollTypeReg != undefined)
-								q.qollTypeReg = qollTypeReg;
+							qlog.info('Found qoll regs. Processing now ' + JSON.stringify(reg), filename);
+							if (reg != undefined) {
+								q.qollTypeReg = reg.qollTypeReg;
+								q.myAnswers = reg;
+							}
 						}
 					});
 

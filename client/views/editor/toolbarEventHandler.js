@@ -132,60 +132,63 @@ var preparePreviewHtml = function (qolls){
   var html = '';
   qolls.map(function(qoll) {
     html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>";
-    if(qoll.qoll_star_attributes[QollConstants.EDU.HINT]) {
+    if(qoll.qoll_star_attributes[QollConstants.EDU.TITLE]) {
       html += '<h4>'+qoll.qoll_star_attributes[QollConstants.EDU.TITLE]+'</h4>';
     }
     html += '<h5>'+qoll['qoll']+'</h5>';
-    html += getUnitsHtml(qoll.qoll_star_attributes[QollConstants.EDU.UNIT_NAME], qoll.qoll_star_attributes[QollConstants.EDU.UNITS]);
+    if(qoll.qoll_star_attributes[QollConstants.EDU.UNITS]) {
+      html += getUnitsHtml(qoll.qoll_star_attributes[QollConstants.EDU.UNIT_NAME], qoll.qoll_star_attributes[QollConstants.EDU.UNITS]);
+    }
     if(qoll.qoll_star_attributes[QollConstants.EDU.HINT]) {
       html += getHintHtml(qoll.qoll_star_attributes[QollConstants.EDU.HINT]);
     }
     html +="</div>";
     var types = qoll['types'];
     var idx = 0;
-    types.map(function(t){
-      if(t.isCorrect) {
+    if(types.length > 1) {
+      types.map(function(t){
+        if(t.isCorrect) {
+          html += "<div class='col-md-12 col-xs-12 list-group-item'>";
+          html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
+          html += t.type;
+          //html += "</div>";
+          //html+= "<div class='col-md-2 col-xs-2 list-group-item'>";
+          html += "<i class='glyphicon glyphicon-check pull-right green'></i>";
+          html += "</div>";
+        } else {
+          html += "<div class='col-md-12 col-xs-12 list-group-item'>";
+          html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
+          html += t.type;
+          html += "</div>";
+        }
+
+        idx=idx+1;
+      });
+    } else if(types) {
+      //this is a fill in the blanks question, create input boxes
+      if(types.length === 0) {
+        //this is inline fill in the blanks. find first ? and replace it with input box
+        html = html.replace(/\?\=/g, getFillInTheBlanksHtml());
+      } else if (types.length === 1) {
+        qlog.info('Printing types - ' + types[0].type, filename);
         html += "<div class='col-md-12 col-xs-12 list-group-item'>";
-        html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
-        html += t.type;
-        //html += "</div>";
-        //html+= "<div class='col-md-2 col-xs-2 list-group-item'>";
-        html += "<i class='glyphicon glyphicon-check pull-right green'></i>";
-        html += "</div>";
-      } else {
-        html += "<div class='col-md-12 col-xs-12 list-group-item'>";
-        html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
-        html += t.type;
+        var tmp1 = types[0].type.replace(/\?\=/g, getFillInTheBlanksHtml());
+        html += tmp1;
         html += "</div>";
       }
-
-      idx=idx+1;
-    });
+    }
   });
   return html;
 };
 
+var getFillInTheBlanksHtml = function() {
+  var html = '<div class="input-group">'+
+    '<input type="text" class="form-control" placeholder="Fill in the blanks ...">' +
+    '</div>';
+  return html;
+};
+
 var getUnitsHtml = function (unit_name, units) {
-  qlog.info('name/value ' + unit_name + '/' + units, filename);
-  /**var units_html = '<div class="btn-group">xyz'+
-  '<ul class="dropdown-menu">X'+
-    '<li>A<a href="#">Dropdown link</a></li>'+
-    '<li>B<a href="#">Dropdown link</a></li>'+
-  '</ul>'+'</div>';**/
-
-  /**var units_html = 
-  '<span class="toolbar-buttons dropdown-toggle" data-toggle="dropdown">' +
-      '<a class="toolbar-buttons-link"  data-intro="Drop down" data-step="2" >' + 
-        'Unit Name' +
-        '<span class="caret"></span>' +
-      '</a>' +
-     '</span>' +
-
-    '<ul class="dropdown-menu">' +
-      '<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addltxi" href="#" title="Ctrl+I">' +'$LaTeX^I$' + '</a></span></li>' +
-      '<li><span class="toolbar-buttons"><a class="toolbar-buttons-link addltxb" href="#" title="Ctrl+L">' + '$LaTeX^B$' + '</a></span></li>' +
-    '</ul>'; **/
-
   var units_html = '<div class="input-group">';
   if(unit_name) units_html += unit_name+': ';
   else unit_name += 'Unit: ';
@@ -194,32 +197,14 @@ var getUnitsHtml = function (unit_name, units) {
   });
   units_html += '</div>';
 
-  /**var units_html = 
-    '<div class="input-group">' +
-      '<input name="unit" type="radio">Unit 1' +
-      '<input name="unit" type="radio">Unit 2' +
-      '<input name="unit" type="radio">Unit 3' +
-    '</div>';**/
-
-    qlog.info('units_html: ' + units_html, filename);
-
   return units_html;
 };
 
 var getHintHtml = function (hint) {
   var hint_html = 
-  //"<div class='col-md-12 col-xs-12 list-group-item'>" + 
   '<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip" data-placement="left" title="Partial credit will be deducted..." id="show_hint">' +
     'Hint' +
   '</button><div class="is-invisible red_1" id="hint">'+hint+'</div>';
-  //'<div id="demo" class="collapse col-md-12 col-xs-12 list-group-item">'+hint+'</div>';
-
-  /**var hint_html = //'<div class="col-md-12 col-xs-12 list-group-item">' + 
-  '<button type="button" class="btn btn-default" data-container="body"' +
-    'data-toggle="popover" data-placement="right"' +
-    'data-content="'+hint+'">' +
-    'Popover on left' +
-  '</button>';**/
 
   return hint_html;
 };

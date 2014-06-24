@@ -14,6 +14,10 @@ body {
 .btn {
   padding: 0px 12px !important;
 }
+
+.row {
+    height: auto;
+}
 /* ============================== END:Body Bootstrap style override/define ================================ */
 
 hr .divider {

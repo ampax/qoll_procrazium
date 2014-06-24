@@ -21,7 +21,7 @@ Meteor.methods({
 		return qollId;
 	},
 
-	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails, isparent, parentid) {
+	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, qollStarAttributes, qollAttributes, emails, isparent, parentid) {
 		qlog.info("GOOD Add qoll: " + qollText, filename);
 		var newQtype = {};
 		var i = 0, actualmails = [], actualgroups = [];
@@ -48,6 +48,8 @@ Meteor.methods({
 			'isMultiple' : isMultiple,
 			'qollTypes' : qollTypes,
 			'qollTypesX' : qollTypesX,
+			'qollStarAttributes' : qollStarAttributes,
+			'qollAttributes' : qollAttributes,
 			'stats' : newQtype,
 			'submittedToGroup' : actualgroups,
 			'submittedOn' : new Date(),
@@ -141,7 +143,7 @@ Meteor.methods({
 		//function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails,isparent,parentid)
 		qbankids.forEach(function(qbid) {
 			var qbitem = QBank.findOne(qbid);
-			Meteor.call('addQoll', 'store', qbitem.qollText, qbitem.qollTypes, qbitem.qollTypesX, qbitem.isMultiple, qbitem.qollRawId, qbitem.qollMasterId, emails, false, parentid);
+			Meteor.call('addQoll', 'store', qbitem.qollText, qbitem.qollTypes, qbitem.qollTypesX, qbitem.isMultiple, qbitem.qollRawId, qbitem.qollMasterId, qbitem.qollStarAttributes, emails, false, parentid);
 		});
 		return parentid;
 	},
@@ -188,8 +190,47 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		var qollRawId = addQollRaw(q, qollMasterId);
 		var qs = q.split(/\n-/);
 		var qoll = qs[0];
-		qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
+		var qollType = QollConstants.QOLL_TYPE.MULTI; //multi is by default
+		var qollAttributes = {};
+		
 
+		//fetch the qoll level attributes here. split the qoll string on * and then apply
+        qlog.info('<==============Printing qoll===============>'+qoll, filename);
+        var qoll_parts = qoll.split(/\n\*/);
+        var qollStarAttributes = {};
+        qoll = qoll_parts[0];
+        
+        //Start attributes are qoll level inputs like units, hints, and title. Fetch it here
+        if(qoll_parts.length > 1) {
+            qoll_parts.slice(1).map(function(qp){
+            	if(qp) qp = qp.trim();
+            	var star = qp.split(/\s+/)[0];
+            	var star_val = qp.substr(qp.indexOf(' ') + 1);
+            	qlog.info('<======option name========>' +star, filename);
+            	qlog.info('<======option value========>' +star_val, filename);
+            	if(_.contains(QollConstants.EDU.ALLOWED_STARS, star)) {
+            		//handle the allowed options here
+            		if(_.contains(['unit','units'], star)) {
+            			qlog.info('This is unit' + star, filename);
+            			if(star_val.indexOf(":") != -1) {
+            				var tmp = star_val.split(":");
+            				qollStarAttributes[QollConstants.EDU.UNIT_NAME] = tmp[0];
+            				star_val = tmp[1];
+            			}
+            			qollStarAttributes[star] = new Array();
+        				star_val.split(/(?:,| )+/).map(function(tmp1){
+        					if(tmp1.length > 0) qollStarAttributes[star].push(tmp1);
+        				});
+            		} else
+            			qollStarAttributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
+            	}
+            });
+        }
+        qlog.info('<==========Printing final stars============>'+JSON.stringify(qollStarAttributes), filename);
+
+        qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
+
+        //Fetching and initializing all the qoll answers, with correct answers marked
 		var count = 0;
 		var types = new Array();
 		var typesX = new Array();
@@ -197,8 +238,8 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		qs.slice(1).map(function(type) {
 			var x = {};
 			type = type.trim();
-			if (type.indexOf('(a) ') == 0) {
-				type = type.replace('(a) ', '');
+			if (type.indexOf('(a)') == 0) {
+				type = type.replace('(a)', '');
 				type = DownTown.downtown(type, DownTownOptions.downtown_default());
 				x.type = type;
 				x.isCorrect = 1;
@@ -212,10 +253,42 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 			types.push(type);
 			typesX.push(x);
 		});
+
+		//If this is a single statement fill in the blanks
+        if(qoll.indexOf("?=") != -1){
+        	qlog.info('<==============Printing qoll type is blank===============>'+qoll, filename);
+        	qollType = QollConstants.QOLL_TYPE.BLANK;
+        }
+        //Check for type values, if there is one choice only and has ?= then mark it as BLANK. this can be extended to having
+		//more than one choices with blanks in 'em'
+		else if(typesX.length === 1) {
+			if(typesX[0].type.indexOf("?=") != -1)
+				qollType = QollConstants.QOLL_TYPE.BLANK;
+		}
+        //Check the type values, if these are true/false then this will be a bool type
+		else if(typesX.length === 2) {
+			var foundTrue = false, foundFalse = false;
+			typesX.map(function(t){
+				if(_.contains(['1', 'true', 'True', 'TRUE'], t.type))
+					foundTrue = true;
+
+				if(_.contains(['0', 'false', 'False', 'FALSE'], t.type))
+					foundFalse = true;
+			});
+
+			if(foundTrue && foundFalse)
+				qollType = QollConstants.QOLL_TYPE.BOOL;
+		}
+
+		//If there are more than one correct answers, this is a multiple choice question
 		if (count > 1)
 			isMultiple = true;
-		qlog.info('qoll: ' + qoll + ", types: " + types, filename);
-		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups);
+		qlog.info('qoll: ' + qoll + ", types: " + qollType, filename);
+
+		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
+		qollAttributes.type = qollType;
+		qollAttributes.isMultiple = isMultiple;
+		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, qollStarAttributes, qollAttributes, emailsandgroups);
 
 		qollId.push(qid);
 	});

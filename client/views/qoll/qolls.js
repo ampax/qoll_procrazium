@@ -1,7 +1,5 @@
 var filename = "client/views/qoll/qolls.js";
 
-AllQolls = new Meteor.Collection("all-qolls");
-//var QollDetails = new Meteor.Collection("qoll-details-by-id");
 var QollRegist = new Meteor.Collection("qoll-regs");
 
 Handlebars.registerHelper('include', function(options) {
@@ -130,7 +128,6 @@ Template.qolls.created = function() {
 
 Template.qolls.helpers({
 	allQolls : function(event) {
-		qlog.debug("Getting all the qolls ......", filename);
 		this.qollList.rewind();
 		return this.qollList.fetch();
 
@@ -209,15 +206,15 @@ Template.qolls.helpers({
 		return "class_" + idx;
 	},
 	check_selected : function(qollid, qollTypeIx) {
-		qlog.info('Testing responce for : ' + qollid + ' and index ' + qollTypeIx, filename);
+		//qlog.info('Testing responce for : ' + qollid + '/' + this.parent._id + ' and index ' + qollTypeIx, filename);
 		var retval = '';
 		QollRegist.find({
-			qollId : qollid,
+			qollId : this.parent._id,
 			qollTypeIndex : qollTypeIx
 		}, {
 			reactive : false
 		}).forEach(function(v) {
-			//qlog.info('FOUDN responce for : ' + qollid+' and index '+ qollTypeIx, filename);
+			//qlog.info('FOUND responce for : ' + this.parent._id+' and index '+ qollTypeIx, filename);
 			retval = 'border-selected';
 		});
 		return retval;
@@ -226,7 +223,7 @@ Template.qolls.helpers({
 		return thelist.join();
 	},
 	is_chk_selected : function(qollTypeReg, idx) {
-		qlog.info('is chk selected: ' + JSON.stringify(qollTypeReg[idx]), filename);
+		qlog.info('is chk selected: ' + JSON.stringify(qollTypeReg), filename);
 		if (qollTypeReg == undefined)
 			return '';
 		if (qollTypeReg[idx])
@@ -240,6 +237,82 @@ Template.qolls.helpers({
 		}
 		return false;
 	},
+	is_not_blank_type : function(qollAttributes) {
+		return qollAttributes && QollConstants.QOLL_TYPE.BLANK != qollAttributes.type;
+	},
+	is_blank_type : function(qollAttributes) {
+		return qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type;
+	},
+	is_blank_type_no_opt : function(qollTypes, qollAttributes) {
+		//qlog.info('Printing the qollType here - ' + qollType + '/' + qollAttributes.type, filename);
+		return qollTypes && qollTypes.length === 0 && qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type;
+	},
+	get_qoll_txt : function(qollText, qollAttributes) {
+		//Handle the blank type of questions here
+		if(qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
+			qollText = qollText.replace(/\?\=/g, getFillInTheBlanksHtml())
+		}
+
+		return qollText;
+	},
+	get_qoll_type : function(qollType, qollAttributes, myAnswers) {
+		//qlog.info('Printing myAnswers - ' + JSON.stringify(myAnswers), filename);
+		if(qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
+			qollType = qollType.replace(/\?\=/g, getFillInTheBlanksHtml())
+		}
+
+		return qollType;
+	},
+	has_title : function(qollStarAttributes) {
+		return qollStarAttributes[QollConstants.EDU.TITLE] != undefined;
+	},
+	get_title : function(qollStarAttributes) {
+		return qollStarAttributes[QollConstants.EDU.TITLE];
+	},
+	get_units_html : function (qollStarAttributes) {
+		var unit_name = qollStarAttributes[QollConstants.EDU.UNIT_NAME], 
+			units = qollStarAttributes[QollConstants.EDU.UNITS];
+		
+		if(units == undefined || units && units.length === 0) return '';
+
+	  	var units_html = '<div class="input-group">';
+	  	if(unit_name) units_html += unit_name+': ';
+	  	else unit_name += 'Unit: ';
+	  	units.map(function(unit){
+	    	units_html += '<input name="unit" value="'+unit+'" type="radio">' + unit;
+	  	});
+	  	units_html += '</div>';
+
+	  	return units_html;
+	},
+	get_hint_html : function (qollStarAttributes) {
+		var hint = qollStarAttributes[QollConstants.EDU.HINT];
+
+		if(hint == undefined) return '';
+
+	  	var hint_html = 
+	  	'<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip" data-placement="left" title="Partial credit will be deducted..." id="show_hint">' +
+	    	'Hint' +
+	  	'</button><div class="is-invisible red_1" id="hint">xyz</div>';
+
+	  	return hint_html;
+	},
+	show_hint : function(qollStarAttributes) {
+		var hint = qollStarAttributes[QollConstants.EDU.HINT];
+		$('div#hint').html(hint);
+		$('div#hint').removeClass('is-invisible');
+	},
+	fetch_my_response : function(myAnswers) {
+		if(myAnswers && myAnswers.qollTypeVal)
+			return myAnswers.qollTypeVal;
+		else return '';
+	},
+	fetch_my_units : function(myAnswers) {
+		if(myAnswers && myAnswers.unitSelected)
+			return myAnswers.unitSelected;
+		else return '';
+		return myAnswers.unitSelected;
+	}
 });
 
 Template.qolls.events({
@@ -318,6 +391,30 @@ Template.qolls.events({
 		});
 
 		//$(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
+	},
+
+	'click span.register-blank' : function(event) {
+		event.preventDefault();
+		var clk = $(event.target);
+		
+		var qollId = this.parent._id;
+		var blank_resp = clk.parent().find('input').val();
+		var unit_selected = $('div#'+qollId+' input[name="unit"]:checked').val();
+		qlog.info('Will register the blank response here - ' + qollId + '/**' + blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
+
+		Meteor.call('registerQollBlankResponse', qollId, blank_resp, unit_selected, {}, function(err, qollRegId) {
+			if (err) {
+				qlog.error('Failed registering the blank-qoll: ' + qollId + ' : ' + err, filename);
+			} else {
+				qlog.info('Updated/Registered blank-qoll with id: ' + qollRegId + '/' + blank_resp, filename);
+				var saved_target = clk.parent().find('span.saved-msg');
+			    saved_target.html('Response saved ...');
+			    saved_target.fadeOut( 6400, function(){
+			    	saved_target.html('');
+			    	saved_target.removeAttr("style");
+			    });
+			}
+		});
 	},
 	'click .send-qoll-btn' : function(event) {
 		event.preventDefault();
@@ -405,8 +502,6 @@ Template.qolls.events({
 });
 
 Template.qolls.rendered = function() {
-	qlog.info('Running post rendered code', filename);
-
 	jQuery(".selector").tabs({
 		active : 1
 	});
@@ -471,3 +566,11 @@ Template.contextbtns.events({
 
 	}
 });
+
+//some private functions. these should go to util classes so that they are shared throughout the ap
+var getFillInTheBlanksHtml = function() {
+  var html = '<div class="input-group">'+
+    '<input type="text" class="form-control" placeholder="Fill in the blanks ...">' +
+    '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span>';
+  return html;
+};

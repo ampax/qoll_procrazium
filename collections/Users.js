@@ -2,6 +2,8 @@ QollRegister = new Meteor.Collection("QOLL_REGISTER");
 QollGroups = new Meteor.Collection("QOLL_GROUPS");
 Qoll = new Meteor.Collection("QOLL");
 
+
+AllQolls = new Meteor.Collection("all-qolls");
 QollGps = new Meteor.Collection("qoll-groups");
 GroupStats = new Meteor.Collection("group-stats");
 
