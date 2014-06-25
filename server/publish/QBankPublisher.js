@@ -91,7 +91,7 @@ Meteor.publish('GROUP_STATS_PUBLISHER', function(group_name) {
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
 			var group = QollGroups.find({'groupName' : group_name}).fetch();
-			if(group) {
+			if((group && group[0])) {
 				group = group[0];
 				qlog.info('user emails - ' + JSON.stringify(group), filename);
 				group.userEmails.map(function(email){

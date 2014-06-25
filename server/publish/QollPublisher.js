@@ -242,7 +242,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				}
 			});
 			var gpsraw = QollGroups.find({
-				'userEmails' : user.emails[0].address
+				'userEmails' : UserUtil.getEmail(user)
 			}, {
 				fields : {
 					"_id" : 0,
