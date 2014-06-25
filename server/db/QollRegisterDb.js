@@ -158,3 +158,19 @@ Meteor.methods({
 	},
 	
 });
+
+
+
+findQollRegisters = function(submittedBy, qollId){
+	var q = QollRegister.findOne({'submittedBy':submittedBy,'qollId':qollId});
+	if(q != undefined) {
+		return {
+			'qollTypeVal' 	: q.qollTypeVal,
+			'qollTypeReg' 	: q.qollTypeReg,
+			'unitSelected' 	: q.unitSelected,
+			'submittedOn' 	: q.submittedOn
+		};
+	} else {
+		return CoreUtils.getUint8Array(0);
+	}
+};

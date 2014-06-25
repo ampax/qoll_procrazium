@@ -222,8 +222,9 @@ Template.qolls.helpers({
 	comma_seperate : function(thelist) {
 		return thelist.join();
 	},
-	is_chk_selected : function(qollTypeReg, idx) {
-		qlog.info('is chk selected: ' + JSON.stringify(qollTypeReg), filename);
+	is_chk_selected : function(idx) {
+		qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
+		var qollTypeReg = this.parent.qollTypeReg
 		if (qollTypeReg == undefined)
 			return '';
 		if (qollTypeReg[idx])
@@ -421,7 +422,11 @@ Template.qolls.events({
 		var qollId = this._id;
 		qlog.info('youclicked to send: ' + qollId, filename);
 		Meteor.call('modifyQollId', qollId, 'send', function(err, qollRegId) {
-			qlog.info('SENT qoll with id: ' + qollRegId + ' err ' + err, filename);
+			if(err) {
+				qlog.error('Failed while sending qoll - ' + qollId + '/' + err, filename);
+			} else {
+				qlog.info('SENT qoll with qollRegId: ' + qollRegId + '/qollId: ' + qollId, filename);
+			}
 		});
 	},
 	'click .lock-qoll-btn' : function(event) {
@@ -453,7 +458,11 @@ Template.qolls.events({
 		if (choice) {
 			//qlog.info('youclicked to archiveyes: ' +qollId, filename);
 			Meteor.call('modifyQollId', qollId, 'archive', function(err, qollRegId) {
-				qlog.info('archived qoll with id: ' + qollRegId + ' err ' + err, filename);
+				if(err) {
+					qlog.info('Failed while archiving the qoll - ' + qollId + '/' + err, filename);
+				} else {
+					qlog.info('archived qoll with id: ' + qollRegId + '/' + qollId, filename);
+				}
 			});
 		} else {
 			//qlog.info('youclicked to no: ' +qollId, filename);
@@ -466,7 +475,11 @@ Template.qolls.events({
 			var qollId = this._id;
 			qlog.info('Registering qoll for: ' + qollId + '/no', filename);
 			Meteor.call('registerQoll', qollId, 'no', function(err, qollRegId) {
-				qlog.info('Registered qoll with id: ' + qollRegId + '/no', filename);
+				if(err) {
+					qlog.error('Failed while answering the qoll: ' + qollId + '/' + err, filename);
+				} else {
+					qlog.info('Registered qoll with id: ' + qollRegId + '/' + qollId + '/no', filename);
+				}
 			});
 		}
 	},
