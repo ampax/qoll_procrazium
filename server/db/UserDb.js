@@ -61,18 +61,18 @@ Meteor.methods({
 		updateUserGroupsCreated(groupName);
 	},
 	userAddGroupMembership:function(groupName, ownerEmail){
-		var owneruser=Meteor.users.findOne({'emails.address':ownerEmail});
+		var owneruser=UserUtil.findByEmail(ownerEmail);
 		
 		if(owneruser){
 			var grpfound=QollGroups.findOne({'submittedBy':owneruser._id,'groupName':groupName});
 					
 			if(grpfound){
 				
-				if( grpfound.userEmails=== undefined || grpfound.userEmails.indexOf(Meteor.user().emails[0].address)<0){
+				if( grpfound.userEmails=== undefined || grpfound.userEmails.indexOf(UserUtil.getEmail(Meteor.user()))<0){
 							
 					return QollGroups.update(
                     { _id: grpfound._id },
-                    { $push: { userEmails: Meteor.user().emails[0].address } }
+                    { $push: { userEmails: UserUtil.getEmail(Meteor.user()) } }
                  );
 				}
 			}

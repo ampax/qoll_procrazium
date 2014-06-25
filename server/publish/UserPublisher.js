@@ -41,7 +41,7 @@ var privacyOptions = { // false means private
 Meteor.publish('currentUser', function() {
   var user = Meteor.users.findOne(this.userId);
   var self= this;
-  var user_email = user.emails[0].address;
+  var user_email =UserUtil.getEmail(user);// user.emails[0].address;
   var gp_memberships=[];
   
   
@@ -49,7 +49,7 @@ Meteor.publish('currentUser', function() {
   	
   	var owner= Meteor.users.findOne(val.submittedBy);
   	if(owner){
-  		gp_memberships.push({groupName:val.groupName,groupOwner:owner.emails[0].address});
+  		gp_memberships.push({groupName:val.groupName,groupOwner:UserUtil.getEmail(owner)});
   		
   	}
   });
