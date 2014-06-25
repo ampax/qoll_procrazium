@@ -20,8 +20,8 @@ Meteor.methods({
 
 		return qollId;
 	},
-
-	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, qollStarAttributes, qollAttributes, emails, isparent, parentid) {
+	
+	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails, isparent, parentid, qollStarAttributes, qollAttributes) {
 		qlog.info("GOOD Add qoll: " + qollText, filename);
 		var newQtype = {};
 		var i = 0, actualmails = [], actualgroups = [];
@@ -138,12 +138,13 @@ Meteor.methods({
 		var emails = qollstionnaire.emails;
 		var qbankids = qollstionnaire.qbank_qollids;
 		var qtext = qollstionnaire.title;
+		qlog.info('<=========' + qbankids + '=========>', filename);
 		// step1 add a qoll that is parent
 		var parentid = Meteor.call('addQoll', 'store', qtext, [], [], false, undefined, undefined, emails, true);
 		//function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails,isparent,parentid)
 		qbankids.forEach(function(qbid) {
 			var qbitem = QBank.findOne(qbid);
-			Meteor.call('addQoll', 'store', qbitem.qollText, qbitem.qollTypes, qbitem.qollTypesX, qbitem.isMultiple, qbitem.qollRawId, qbitem.qollMasterId, qbitem.qollStarAttributes, emails, false, parentid);
+			Meteor.call('addQoll', 'store', qbitem.qollText, qbitem.qollTypes, qbitem.qollTypesX, qbitem.isMultiple, qbitem.qollRawId, qbitem.qollMasterId, emails, false, parentid, qbitem.qollStarAttributes, qbitem.qollAttributes);
 		});
 		return parentid;
 	},
@@ -256,7 +257,6 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 
 		//If this is a single statement fill in the blanks
         if(qoll.indexOf("?=") != -1){
-        	qlog.info('<==============Printing qoll type is blank===============>'+qoll, filename);
         	qollType = QollConstants.QOLL_TYPE.BLANK;
         }
         //Check for type values, if there is one choice only and has ?= then mark it as BLANK. this can be extended to having
@@ -288,7 +288,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
 		qollAttributes.type = qollType;
 		qollAttributes.isMultiple = isMultiple;
-		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, qollStarAttributes, qollAttributes, emailsandgroups);
+		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups, undefined, undefined, qollStarAttributes, qollAttributes);
 
 		qollId.push(qid);
 	});
