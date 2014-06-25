@@ -11,12 +11,7 @@
       <div class="col-md-10 col-xs-12">
         <h4>{{{get_title qollStarAttributes}}}</h4>
         {{#if is_parent}} 
-          <a href="/qid/{{_id}}"><h5>{{/if}}{{#mathjax}}{{{get_qoll_txt qollText qollAttributes}}}{{/mathjax}}{{#if is_parent}}</h5></a>
-          {{#if is_blank_type_no_opt qollTypes qollAttributes}}
-          <span class="badge pull-left qoll-response-val glossy green_bg_1">
-            GO
-          </span>
-          {{/if}}
+          <a href="/qid/{{_id}}">{{/if}}<h5>{{#mathjax}}{{{get_qoll_txt qollText qollAttributes}}}{{/mathjax}}</h5>{{#if is_parent}}</a>
         {{/if}}
         {{{get_units_html qollStarAttributes}}}
         {{{get_hint_html qollStarAttributes}}}
