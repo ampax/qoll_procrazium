@@ -123,10 +123,10 @@ Meteor.methods({
 			return CoreUtils.getUint8Array(0);
 		}
 	},
-	registerQollBlankResponse: function(qollId, qollBlankResponse, unitSelected, attributes){
+	registerQollBlankResponse: function(qollId, qollBlankResponseHash){
 		var userId= Meteor.userId();
 		var qollRegId;
-        qlog.info('In register custom qoll: ' + qollId + ', ' + qollBlankResponse + ', Meteor.userId ' + Meteor.userId(), filename);
+        qlog.info('In register custom qoll: ' + qollId + ', ' + qollBlankResponseHash + ', Meteor.userId ' + Meteor.userId(), filename);
         var existQollReg = QollRegister.find({qollId: qollId, submittedBy: userId}).fetch();
         
         if(this.userId) {
@@ -134,21 +134,20 @@ Meteor.methods({
         		qlog.debug('Size and object - ' + existQollReg.length, filename);
         		//Update the existing one
         		var existingQollTypeReg = existQollReg[0].qollTypeReg;
-        		var qollTypeReg = [qollBlankResponse];
+        		var qollTypeReg = [qollBlankResponseHash];
         		existingQollTypeReg.map(function(t){
         			qollTypeReg.push(t);
         		});
         		qlog.info('Existing existingQollTypeReg =========>' + existingQollTypeReg + '/' + qollTypeReg,filename);
         		QollRegister.update({_id : existQollReg[0]._id}, 
-        			{ $set: {qollTypeVal : qollBlankResponse, unitSelected : unitSelected, qollTypeReg : qollTypeReg ,'submittedOn' : new Date()}});
+        			{ $set: {qollTypeVal : qollBlankResponseHash, qollTypeReg : qollTypeReg ,'submittedOn' : new Date()}});
         		qollRegId = existQollReg[0]._id;
         	} else {
         		//Insert the new one
         		qollRegId = QollRegister.insert({
 					'qollId' 		: qollId,
-					'qollTypeVal' 	: qollBlankResponse,
-					'qollTypeReg' 	: [qollBlankResponse],
-					'unitSelected'  : unitSelected,
+					'qollTypeVal' 	: qollBlankResponseHash,
+					'qollTypeReg' 	: [qollBlankResponseHash],
 					'submittedOn' 	: new Date(),
 					'submittedBy' 	: Meteor.userId()
 				});

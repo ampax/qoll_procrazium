@@ -118,6 +118,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					var reg = findQollRegisters(q.submittedBy, item._id);
 					q.myAnswers = reg;
 					q.qollTypeReg = reg.qollTypeReg;
+					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
 					/**Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
 						if (err) {
@@ -162,6 +163,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					var reg = findQollRegisters(q.submittedBy, item._id);
 					q.myAnswers = reg;
 					q.qollTypeReg = reg.qollTypeReg;
+					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
 					/** Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
 						if (err) {
@@ -233,6 +235,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					var reg = findQollRegisters(this.userId, item._id);
 					q.myAnswers = reg;
 					q.qollTypeReg = reg.qollTypeReg;
+					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
 					/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 						if (err) {
@@ -317,6 +320,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						var reg = findQollRegisters(this.userId, item._id);
 						q.myAnswers = reg;
 						q.qollTypeReg = reg.qollTypeReg;
+						q.qollTypeVal = reg.qollTypeVal;
 						q.myAnswers = reg;
 						/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 							if (err) {
@@ -378,6 +382,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 			var reg = findQollRegisters(this.userId, item._id);
 			q.myAnswers = reg;
 			q.qollTypeReg = reg.qollTypeReg;
+			q.qollTypeVal = reg.qollTypeVal;
 			q.myAnswers = reg;
 			/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 				if (err) {
@@ -460,6 +465,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				var reg = findQollRegisters(this.userId, item._id);
 				q.myAnswers = reg;
 				q.qollTypeReg = reg.qollTypeReg;
+				q.qollTypeVal = reg.qollTypeVal;
 				q.myAnswers = reg;
 				/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 					if (err) {
@@ -498,6 +504,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				var reg = findQollRegisters(this.userId, item._id);
 				q.myAnswers = reg;
 				q.qollTypeReg = reg.qollTypeReg;
+				q.qollTypeVal = reg.qollTypeVal;
 				q.myAnswers = reg;
 				/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 					if (err) {

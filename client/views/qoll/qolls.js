@@ -223,7 +223,7 @@ Template.qolls.helpers({
 		return thelist.join();
 	},
 	is_chk_selected : function(idx) {
-		qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
+		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
 		var qollTypeReg = this.parent.qollTypeReg
 		if (qollTypeReg == undefined)
 			return '';
@@ -251,7 +251,8 @@ Template.qolls.helpers({
 	get_qoll_txt : function(qollText, qollAttributes) {
 		//Handle the blank type of questions here
 		if(qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
-			qollText = qollText.replace(/\?\=/g, getFillInTheBlanksHtml())
+			var fillVal, fillPow;
+			qollText = qollText.replace(/\?\=/g, getFillInTheBlanksHtml(fillVal, fillPow))
 		}
 
 		return qollText;
@@ -259,7 +260,14 @@ Template.qolls.helpers({
 	get_qoll_type : function(qollType, qollAttributes, myAnswers) {
 		//qlog.info('Printing myAnswers - ' + JSON.stringify(myAnswers), filename);
 		if(qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
-			qollType = qollType.replace(/\?\=/g, getFillInTheBlanksHtml())
+			var qollTypeVal = this.parent.qollTypeVal;
+			var fillVal, fillPow;
+			if(qollTypeVal) {
+
+				fillVal = qollTypeVal.blankResponse;
+				fillPow = qollTypeVal.power;
+			}
+			qollType = qollType.replace(/\?\=/g, getFillInTheBlanksHtml(fillVal, fillPow))
 		}
 
 		return qollType;
@@ -276,11 +284,16 @@ Template.qolls.helpers({
 		
 		if(units == undefined || units && units.length === 0) return '';
 
+		var qollTypeVal = this.qollTypeVal;
+		var unitSelected = qollTypeVal? qollTypeVal.unitSelected : '';
+
 	  	var units_html = '<div class="input-group">';
 	  	if(unit_name) units_html += unit_name+': ';
 	  	else unit_name += 'Unit: ';
 	  	units.map(function(unit){
-	    	units_html += '<input name="unit" value="'+unit+'" type="radio">' + unit;
+	  		var checked = '';
+	  		if(unit === unitSelected) checked = 'checked';
+	    	units_html += '<input name="unit" value="'+unit+'" type="radio" '+checked+'>' + unit;
 	  	});
 	  	units_html += '</div>';
 
@@ -399,11 +412,37 @@ Template.qolls.events({
 		var clk = $(event.target);
 		
 		var qollId = this.parent._id;
-		var blank_resp = clk.parent().find('input').val();
+		var blank_resp = clk.parent().find('input#number').val();
+		var power = clk.parent().find('input#power').val();
 		var unit_selected = $('div#'+qollId+' input[name="unit"]:checked').val();
 		qlog.info('Will register the blank response here - ' + qollId + '/**' + blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
 
-		Meteor.call('registerQollBlankResponse', qollId, blank_resp, unit_selected, {}, function(err, qollRegId) {
+		var blankRespHash = {};
+		blankRespHash.blankResponse = Number(blank_resp);
+		blankRespHash.power = parseInt((power));
+		blankRespHash.unitSelected = unit_selected;
+		
+		if(unit_selected == undefined || blank_resp == undefined || blank_resp === '') {
+			//Show the error message and return
+			qlog.info('blank_resp/unit_selected ------------==========>' + blank_resp+'/'+unit_selected, filename);
+			var err_msgs = [];
+			if(unit_selected == undefined) err_msgs.push('Unit');
+			if(blank_resp == undefined || blank_resp === '') err_msgs.push('Coefficient');
+			var err_msg = err_msgs.length === 2? err_msgs.join(' & ') : err_msgs[0];
+			err_msg = 'Input ' + err_msg + ' to register response ...';
+
+			var saved_target = clk.parent().find('span.err-msg');
+			saved_target.html(err_msg);
+		    saved_target.fadeOut( 8400, function(){
+		    	saved_target.html('');
+		    	saved_target.removeAttr("style");
+		    });
+			return;
+		}
+
+		if(isNaN(blankRespHash.power)) blankRespHash.power = 0;
+		
+		Meteor.call('registerQollBlankResponse', qollId, blankRespHash, function(err, qollRegId) {
 			if (err) {
 				qlog.error('Failed registering the blank-qoll: ' + qollId + ' : ' + err, filename);
 			} else {
@@ -581,9 +620,29 @@ Template.contextbtns.events({
 });
 
 //some private functions. these should go to util classes so that they are shared throughout the ap
-var getFillInTheBlanksHtml = function() {
-  var html = '<div class="input-group">'+
-    '<input type="text" class="form-control" placeholder="Fill in the blanks ...">' +
+var getFillInTheBlanksHtml = function(fill_value, fill_power) {
+	//qlog.info('<======' + fill_power +'==========>', filename);
+	var border_selected = '';
+	if(fill_value != undefined) border_selected = 'border-selected';
+	else fill_value = '';
+
+	if(fill_power == undefined) fill_power = '';
+	
+	var html = '<div class="input-group">'+
+	'<input type="text" class="form-control '+border_selected+' maths_number_input" id="number" placeholder="coefficient" value="'+fill_value+'">' +
+	' $$ \\times 10^n,where\\,n=$$' +
+	'<input type="text" class="form-control '+border_selected+' maths_power_input" id="power" placeholder="power" value="'+fill_power+'">' +
+    '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
+	return html;
+};
+
+
+var getFillInTheBlanksHtml1 = function(fill_value) {
+	var border_selected = '';
+	if(fill_value != undefined) border_selected = 'border-selected';
+	else fill_value = '';
+	var html = '<div class="input-group">'+
+	'<input type="text" class="form-control '+border_selected+'" placeholder="Number" value="'+fill_value+'">' +
     '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span>';
-  return html;
+	return html;
 };
