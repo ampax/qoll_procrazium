@@ -20,6 +20,10 @@ body {
 }
 
 /** Override input boxes to proper width for scientific input boxes **/
+.blank_txt_input {
+    width: 100% !important;
+}
+
 .maths_number_input {
     width: 120px !important;
 }

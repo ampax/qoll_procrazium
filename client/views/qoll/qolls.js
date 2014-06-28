@@ -242,7 +242,6 @@ Template.qolls.helpers({
 		return qollAttributes && !_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
 	},
 	is_blank_type : function(qollAttributes) {
-		qlog.info('======>Printing the type<======/'+qollAttributes.type, filename);
 		return qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
 	},
 	is_blank_type_no_opt : function(qollTypes, qollAttributes) {
@@ -269,13 +268,9 @@ Template.qolls.helpers({
 				fillPow = qollTypeVal.power;
 			}
 
-			qlog.info('============>'+qollType+"<==============", filename);
-
 			if(qollType === "?==") {
-				qlog.info('============>'+qollType+"<==============", filename);
 				qollType = qollType.replace(/\?\=\=/g, getFillInTheBlanksCmplxHtml(fillVal, fillPow));
 			} else if(qollType === "?=") {
-				qlog.info('------------>'+qollType+"<--------------", filename);
 				qollType = qollType.replace(/\?\=/g, getFillInTheBlanksSimpleHtml(fillVal));
 			}
 		}
@@ -429,14 +424,13 @@ Template.qolls.events({
 		var power = clk.parent().find('input#power').val();
 		var unit_selected = $('div#'+qollId+' input[name="unit"]:checked').val();
 		qlog.info('Will register the blank response here - ' + qollId + '/**' + blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
-		qlog.info('Printing the type of the qoll===>' + qollAttributes.type, filename);
-
+		
 		var blankRespHash = {};
-		if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) {
+		if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) {
 			blankRespHash.blankResponse = Number(blank_resp);
 			blankRespHash.power = parseInt((power));
 			blankRespHash.unitSelected = unit_selected;
-		} else if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) {
+		} else if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) {
 			blankRespHash.blankResponse = blank_resp;
 		} else {
 			blankRespHash.blankResponse = blank_resp;
@@ -444,7 +438,7 @@ Template.qolls.events({
 			blankRespHash.unitSelected = unit_selected;
 		}
 
-		if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL
+		if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL
 			&& (unit_selected == undefined || blank_resp == undefined || blank_resp === '')) {
 			//Show the error message and return
 			qlog.info('blank_resp/unit_selected ------------==========>' + blank_resp+'/'+unit_selected, filename);
@@ -461,7 +455,7 @@ Template.qolls.events({
 		    	saved_target.removeAttr("style");
 		    });
 			return;
-		} else if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK && (blank_resp == undefined || blank_resp === '')) {
+		} else if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK && (blank_resp == undefined || blank_resp === '')) {
 			var saved_target = clk.parent().find('span.err-msg');
 			saved_target.html('Input Unit to register response ...');
 		    saved_target.fadeOut( 8400, function(){
@@ -655,7 +649,7 @@ var getFillInTheBlanksSimpleHtml = function(fill_value) {
 	if(fill_value != undefined) border_selected = 'border-selected';
 	else fill_value = '';
 	var html = '<div class="input-group">'+
-	'<input type="text" class="form-control '+border_selected+' maths_number_input" id="number" placeholder="Fill in the blanks ..." value="'+fill_value+'">' +
+	'<input type="text" class="form-control '+border_selected+' blank_txt_input" id="number" placeholder="Fill in the blanks ..." value="'+fill_value+'">' +
     '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
 	return html;
 };
