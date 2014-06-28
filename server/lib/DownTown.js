@@ -74,7 +74,43 @@ Meteor.methods({
             				star_val.split(/(?:,| )+/).map(function(tmp1){
             					if(tmp1.length > 0) qoll_star_attributes[star].push(tmp1);
             				});
-                		} else
+                		} else if(star === QollConstants.EDU.ANSWER){
+                            //Handle the answer here, first part will be number, second (if there) exponent, and third unit
+                            /**
+                            Examples - 
+                            *answer 9.8*10^2 m/sec2
+                            *answer 9.8 10 2 m/sec2
+                            *answer 9.8 2 m/sec2
+                            *answer 9.8 10^2
+                            *answer 9.8 2
+                            *answer 9.8
+                            **/
+                            qoll_star_attributes[star] = {};
+                            var tmp = star_val.split(/\s+/);
+                            if(tmp.length === 1) {
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                            }else if(tmp.length === 2){
+                                //handle case 1
+                                tmp = star_val.replace("*", " ").replace("^"," ").split(/\s+/);
+                                //var tmp1 = tmp[0].split("*");
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                                //var tmp2 = tmp1[1].split("^");
+                                qoll_star_attributes[star]['exponentBase'] = tmp[0];
+                                qoll_star_attributes[star]['power'] = tmp[1];
+                                qoll_star_attributes[star]['unitSelected'] = tmp[1];
+                            } else if(tmp.length === 4) {
+                                //handle case 2
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                                qoll_star_attributes[star]['exponentBase'] = tmp[1];
+                                qoll_star_attributes[star]['power'] = tmp[2];
+                                qoll_star_attributes[star]['unitSelected'] = tmp[3];
+                            } else if(tmp.length === 3) {
+                                //handle case 3 (simplest, considering default log base-10)
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                                qoll_star_attributes[star]['power'] = tmp[1];
+                                qoll_star_attributes[star]['unitSelected'] = tmp[2];
+                            }
+                        } else
                 			qoll_star_attributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
                 	}
                 });

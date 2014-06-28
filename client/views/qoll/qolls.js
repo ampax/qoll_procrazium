@@ -239,10 +239,11 @@ Template.qolls.helpers({
 		return false;
 	},
 	is_not_blank_type : function(qollAttributes) {
-		return qollAttributes && QollConstants.QOLL_TYPE.BLANK != qollAttributes.type;
+		return qollAttributes && !_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
 	},
 	is_blank_type : function(qollAttributes) {
-		return qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type;
+		qlog.info('======>Printing the type<======/'+qollAttributes.type, filename);
+		return qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
 	},
 	is_blank_type_no_opt : function(qollTypes, qollAttributes) {
 		//qlog.info('Printing the qollType here - ' + qollType + '/' + qollAttributes.type, filename);
@@ -252,14 +253,14 @@ Template.qolls.helpers({
 		//Handle the blank type of questions here
 		if(qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
 			var fillVal, fillPow;
-			qollText = qollText.replace(/\?\=/g, getFillInTheBlanksHtml(fillVal, fillPow))
+			qollText = qollText.replace(/\?\=/g, getFillInTheBlanksSimpleHtml(fillVal, fillPow))
 		}
 
 		return qollText;
 	},
 	get_qoll_type : function(qollType, qollAttributes, myAnswers) {
 		//qlog.info('Printing myAnswers - ' + JSON.stringify(myAnswers), filename);
-		if(qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
+		if(qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK,QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
 			var qollTypeVal = this.parent.qollTypeVal;
 			var fillVal, fillPow;
 			if(qollTypeVal) {
@@ -267,7 +268,16 @@ Template.qolls.helpers({
 				fillVal = qollTypeVal.blankResponse;
 				fillPow = qollTypeVal.power;
 			}
-			qollType = qollType.replace(/\?\=/g, getFillInTheBlanksHtml(fillVal, fillPow))
+
+			qlog.info('============>'+qollType+"<==============", filename);
+
+			if(qollType === "?==") {
+				qlog.info('============>'+qollType+"<==============", filename);
+				qollType = qollType.replace(/\?\=\=/g, getFillInTheBlanksCmplxHtml(fillVal, fillPow));
+			} else if(qollType === "?=") {
+				qlog.info('------------>'+qollType+"<--------------", filename);
+				qollType = qollType.replace(/\?\=/g, getFillInTheBlanksSimpleHtml(fillVal));
+			}
 		}
 
 		return qollType;
@@ -409,6 +419,9 @@ Template.qolls.events({
 
 	'click span.register-blank' : function(event) {
 		event.preventDefault();
+		
+		var qollAttributes = this.parent.qollAttributes;
+
 		var clk = $(event.target);
 		
 		var qollId = this.parent._id;
@@ -416,13 +429,23 @@ Template.qolls.events({
 		var power = clk.parent().find('input#power').val();
 		var unit_selected = $('div#'+qollId+' input[name="unit"]:checked').val();
 		qlog.info('Will register the blank response here - ' + qollId + '/**' + blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
+		qlog.info('Printing the type of the qoll===>' + qollAttributes.type, filename);
 
 		var blankRespHash = {};
-		blankRespHash.blankResponse = Number(blank_resp);
-		blankRespHash.power = parseInt((power));
-		blankRespHash.unitSelected = unit_selected;
-		
-		if(unit_selected == undefined || blank_resp == undefined || blank_resp === '') {
+		if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) {
+			blankRespHash.blankResponse = Number(blank_resp);
+			blankRespHash.power = parseInt((power));
+			blankRespHash.unitSelected = unit_selected;
+		} else if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) {
+			blankRespHash.blankResponse = blank_resp;
+		} else {
+			blankRespHash.blankResponse = blank_resp;
+			blankRespHash.power = power;
+			blankRespHash.unitSelected = unit_selected;
+		}
+
+		if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL
+			&& (unit_selected == undefined || blank_resp == undefined || blank_resp === '')) {
 			//Show the error message and return
 			qlog.info('blank_resp/unit_selected ------------==========>' + blank_resp+'/'+unit_selected, filename);
 			var err_msgs = [];
@@ -433,6 +456,14 @@ Template.qolls.events({
 
 			var saved_target = clk.parent().find('span.err-msg');
 			saved_target.html(err_msg);
+		    saved_target.fadeOut( 8400, function(){
+		    	saved_target.html('');
+		    	saved_target.removeAttr("style");
+		    });
+			return;
+		} else if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK && (blank_resp == undefined || blank_resp === '')) {
+			var saved_target = clk.parent().find('span.err-msg');
+			saved_target.html('Input Unit to register response ...');
 		    saved_target.fadeOut( 8400, function(){
 		    	saved_target.html('');
 		    	saved_target.removeAttr("style");
@@ -619,8 +650,18 @@ Template.contextbtns.events({
 	}
 });
 
+var getFillInTheBlanksSimpleHtml = function(fill_value) {
+	var border_selected = '';
+	if(fill_value != undefined) border_selected = 'border-selected';
+	else fill_value = '';
+	var html = '<div class="input-group">'+
+	'<input type="text" class="form-control '+border_selected+' maths_number_input" id="number" placeholder="Fill in the blanks ..." value="'+fill_value+'">' +
+    '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
+	return html;
+};
+
 //some private functions. these should go to util classes so that they are shared throughout the ap
-var getFillInTheBlanksHtml = function(fill_value, fill_power) {
+var getFillInTheBlanksCmplxHtml = function(fill_value, fill_power) {
 	//qlog.info('<======' + fill_power +'==========>', filename);
 	var border_selected = '';
 	if(fill_value != undefined) border_selected = 'border-selected';
@@ -633,16 +674,5 @@ var getFillInTheBlanksHtml = function(fill_value, fill_power) {
 	' $$ \\times 10^n,where\\,n=$$' +
 	'<input type="text" class="form-control '+border_selected+' maths_power_input" id="power" placeholder="power" value="'+fill_power+'">' +
     '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
-	return html;
-};
-
-
-var getFillInTheBlanksHtml1 = function(fill_value) {
-	var border_selected = '';
-	if(fill_value != undefined) border_selected = 'border-selected';
-	else fill_value = '';
-	var html = '<div class="input-group">'+
-	'<input type="text" class="form-control '+border_selected+'" placeholder="Number" value="'+fill_value+'">' +
-    '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span>';
 	return html;
 };

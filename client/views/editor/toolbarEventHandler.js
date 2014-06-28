@@ -138,19 +138,43 @@ var previewQoll = function(val) {
 };
 
 var preparePreviewHtml = function (qolls){
+  qlog.info('Printing preview qoll ============>' + qolls, filename);
   var html = '';
   qolls.map(function(qoll) {
     html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>";
+    
     if(qoll.qoll_star_attributes[QollConstants.EDU.TITLE]) {
       html += '<h4>'+qoll.qoll_star_attributes[QollConstants.EDU.TITLE]+'</h4>';
     }
+    
     html += '<h5>'+qoll['qoll']+'</h5>';
+
+    var ans;
+    if(qoll.qoll_star_attributes[QollConstants.EDU.ANSWER]) {
+      var answer = qoll.qoll_star_attributes[QollConstants.EDU.ANSWER]
+      if(Object.keys(answer).length === 3) {
+        //Base not provided, default to 10 - *answer 9.8 2 m/sec2
+        ans = '$$'+answer.blankResponse + '\\times 10^' + answer.power + '\\,' + answer.unitSelected + '$$';
+      } else if(Object.keys(answer).length === 4) {
+        //base provided
+        ans = '$$'+answer.blankResponse + '\\times '+answer.exponentBase+'^' + answer.power + '\\,' + answer.unitSelected + '$$';
+      } else {
+        ans = '$$' + answer.blankResponse + '$$';
+      }
+      html += '<h5 class="green_1">Answer: '+ans+'</h5>';
+    } else {
+      //show warning in red so that editor knows answer is not defined
+      html += '<h5 class="red_1">Answer: ***Not Defined***</h5>';
+    }
+    
     if(qoll.qoll_star_attributes[QollConstants.EDU.UNITS]) {
       html += getUnitsHtml(qoll.qoll_star_attributes[QollConstants.EDU.UNIT_NAME], qoll.qoll_star_attributes[QollConstants.EDU.UNITS]);
     }
+    
     if(qoll.qoll_star_attributes[QollConstants.EDU.HINT]) {
       html += getHintHtml(qoll.qoll_star_attributes[QollConstants.EDU.HINT]);
     }
+    
     html +="</div>";
     var types = qoll['types'];
     var idx = 0;
@@ -176,12 +200,28 @@ var preparePreviewHtml = function (qolls){
     } else if(types) {
       //this is a fill in the blanks question, create input boxes
       if(types.length === 0) {
-        //this is inline fill in the blanks. find first ? and replace it with input box
-        html = html.replace(/\?\=/g, getFillInTheBlanksHtml());
+        //this is inline fill in the blanks. find first ? and replace it with input box ... type.indexOf('(a)')
+        if(html.indexOf("?==") != -1) {
+          //this is extended fill in the blanks, right now this is only scientific support. Get double fill in the blanks
+          html = html.replace(/\?\=\=/g, getFillInTheBlanksCmplxHtml());
+        } else if(html.indexOf("?=") != -1) {
+          //this is single fill in the blanks. Will be used for various single statement posting
+          html = html.replace(/\?\=/g, getFillInTheBlanksSimpleHtml());
+        }
       } else if (types.length === 1) {
         qlog.info('Printing types - ' + types[0].type, filename);
         html += "<div class='col-md-12 col-xs-12 list-group-item'>";
-        var tmp1 = types[0].type.replace(/\?\=/g, getFillInTheBlanksHtml());
+        var tmp1 = types[0].type;//.replace(/\?\=/g, getFillInTheBlanksSimpleHtml());
+
+        if(tmp1.indexOf("?==") != -1) {
+          //this is extended fill in the blanks, right now this is only scientific support. Get double fill in the blanks
+          tmp1 = tmp1.replace(/\?\=\=/g, getFillInTheBlanksCmplxHtml());
+        } else if(tmp1.indexOf("?=") != -1) {
+          //this is single fill in the blanks. Will be used for various single statement posting
+          tmp1 = tmp1.replace(/\?\=/g, getFillInTheBlanksSimpleHtml());
+        }
+
+
         html += tmp1;
         html += "</div>";
       }
@@ -190,10 +230,20 @@ var preparePreviewHtml = function (qolls){
   return html;
 };
 
-var getFillInTheBlanksHtml = function() {
+var getFillInTheBlanksSimpleHtml = function() {
   var html = '<div class="input-group">'+
-    '<input type="text" class="form-control" placeholder="Fill in the blanks ...">' +
+    '<input type="text" class="form-control maths_number_input" placeholder="Fill in the blanks ...">' +
     '</div>';
+  return html;
+};
+
+var getFillInTheBlanksCmplxHtml = function() {
+  
+  var html = '<div class="input-group">'+
+  '<input type="text" class="form-control maths_number_input" id="number" placeholder="coefficient">' +
+  ' $$ \\times 10^n,where\\,n=$$' +
+  '<input type="text" class="form-control maths_power_input" id="power" placeholder="power">' +
+    '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
   return html;
 };
 

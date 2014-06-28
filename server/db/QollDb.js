@@ -222,7 +222,40 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
         				star_val.split(/(?:,| )+/).map(function(tmp1){
         					if(tmp1.length > 0) qollStarAttributes[star].push(tmp1);
         				});
-            		} else
+            		} else if(star === QollConstants.EDU.ANSWER){
+                        //Handle the answer here, first part will be number, second (if there) exponent, and third unit
+                        /**
+                        Examples - 
+                        *answer 9.8*10^2 m/sec2
+                        *answer 9.8 10 2 m/sec2
+                        *answer 9.8 2 m/sec2
+                        **/
+                        qollStarAttributes[star] = {};
+                        //star_val = star_val.replace("*", " ").replace("^" " ");
+                        var tmp = star_val.split(/\s+/);
+                        if(tmp.length === 1) {
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                        } else if(tmp.length === 2){
+                            //handle case 1
+                            var tmp1 = tmp[0].split("*");
+                            qollStarAttributes[star]['blankResponse'] = tmp1[0];
+                            var tmp2 = tmp1[1].split("^");
+                            qollStarAttributes[star]['exponentBase'] = tmp2[0];
+                            qollStarAttributes[star]['power'] = tmp2[1];
+                            qollStarAttributes[star]['unitSelected'] = tmp[1];
+                        } else if(tmp.length === 4) {
+                            //handle case 2
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                            qollStarAttributes[star]['exponentBase'] = tmp[1];
+                            qollStarAttributes[star]['power'] = tmp[2];
+                            qollStarAttributes[star]['unitSelected'] = tmp[3];
+                        } else if(tmp.length === 3) {
+                            //handle case 3 (simplest, considering default log base-10)
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                            qollStarAttributes[star]['power'] = tmp[1];
+                            qollStarAttributes[star]['unitSelected'] = tmp[2];
+                        }
+                    } else
             			qollStarAttributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
             	}
             });
@@ -256,14 +289,19 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		});
 
 		//If this is a single statement fill in the blanks
-        if(qoll.indexOf("?=") != -1){
+        if(qoll.indexOf("?==") != -1){
+        	qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
+        } else if(qoll.indexOf("?=") != -1){
         	qollType = QollConstants.QOLL_TYPE.BLANK;
         }
         //Check for type values, if there is one choice only and has ?= then mark it as BLANK. this can be extended to having
 		//more than one choices with blanks in 'em'
 		else if(typesX.length === 1) {
-			if(typesX[0].type.indexOf("?=") != -1)
+			if(typesX[0].type === "?==") {
+				qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
+			} else if(typesX[0].type === "?="){
 				qollType = QollConstants.QOLL_TYPE.BLANK;
+        	}
 		}
         //Check the type values, if these are true/false then this will be a bool type
 		else if(typesX.length === 2) {
@@ -283,7 +321,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		//If there are more than one correct answers, this is a multiple choice question
 		if (count > 1)
 			isMultiple = true;
-		qlog.info('qoll: ' + qoll + ", types: " + qollType, filename);
+		qlog.info('qoll: ' + qoll + ", types:=================---------> " + qollType, filename);
 
 		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
 		qollAttributes.type = qollType;
