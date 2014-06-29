@@ -74,8 +74,8 @@
 	                <td>{{get_display "name"}} {{get_display "email"}}</td>
 	                <td>{{get_display "qollst"}}</td>
 	                <td>{{get_display "qoll_snip"}}</td>
-	                <td>{{get_display "answers"}}</td>
-	                <td>{{get_display "correct_answers"}}</td>
+	                <td>{{#mathjax}}{{get_display "answers"}}{{/mathjax}}</td>
+	                <td>{{#mathjax}}{{get_display "correct_answers"}}{{/mathjax}}</td>
 	                <td>{{{did_pass_or_fail}}}</td>
 	            </tr>
 			{{/each}}

@@ -141,13 +141,17 @@ Meteor.publish('GROUP_STATS_PUBLISHER', function(group_name) {
 
 
 var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
+	//qlog.info('<=======This is the qoll we will use for fill in the blanks========>' + JSON.stringify(q), filename);
 	var stat = {};
 	stat['name'] = user.profile.name;
 	stat['email'] = user.profile.email;
 	stat['qollst'] = qollSt.qollText.length > 27 ? qollSt.qollText.substring(0,27) + '...' : qollSt.qollText;
 	stat['qoll_snip'] = q.qollText.length > 47 ? q.qollText.substring(0,47) + '...' : q.qollText;
 	stat['qoll'] = q.qollText;
-	stat['is_multiple'] = q.isMultiple;
+	stat['is_multiple'] = q.qollAttributes && q.qollAttributes.type ? 
+		(q.qollAttributes.type === QollConstants.QOLL_TYPE.MULTI ? true : false) : false;
+	stat['qoll_type'] = q.qollAttributes && q.qollAttributes.type ? q.qollAttributes.type : '';
+	stat['star_attributes'] = q.qollStarAttributes;
 
 	//Set the correct answers for the qolls (if assigned from the editor)
 	stat.correct_answers = new Array();
@@ -163,7 +167,9 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 
 	stat.answers = new Array();
 
-	if(qollReg && qollReg!= null && qollReg.qollTypeReg !=null && !q.is_parent) {
+	if(stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
+		stat.answers.push(qollReg.qollTypeVal);
+	} else if(qollReg && qollReg!= null && qollReg.qollTypeReg !=null && !q.is_parent) {
 		//qlog.info('qollReg=================>' + qollReg + '<====================', filename);
 		var idx = 0;
 		qollReg.qollTypeReg.map(function(reg){
@@ -185,11 +191,28 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 		}
 	}
 
-	if(JSON.stringify(stat.correct_answers) == JSON.stringify(stat.answers)) {
+	if(stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
+		var ans  = qollReg.qollTypeVal;
+		var cans = q.qollStarAttributes.answer;
+		qlog.info('===================================>'
+			+cans.blankResponse + '/' 
+			+cans.exponentBase + '/' 
+			+cans.power + '/' 
+			+ getAnswer(cans) + '/'
+			+ getAnswer(ans), filename);
+
+		if(getUnitSelected(cans) === getUnitSelected(cans) && getAnswer(cans) === getAnswer(ans)) 
+			stat.did_pass = true; 
+		else stat.did_pass = false;
+
+	}else if(JSON.stringify(stat.correct_answers) == JSON.stringify(stat.answers)) {
 		stat.did_pass = true;
 	} else {
 		stat.did_pass = false;
 	}
+
+	//qlog.info('<=======This is the qoll we will use for fill in the blanks========>' + JSON.stringify(stat), filename);
+	
 
 	return stat;
 };
@@ -203,7 +226,20 @@ var fetchGroupStats = function(item, group_name) {
 			//TODO
 		});
 	}
-	
-
 	return item;
-}
+};
+
+var getAnswer = function(ansHash) {
+	//
+	var val = ansHash.blankResponse;
+	var base = ansHash.exponentBase? ansHash.exponentBase : 10;
+	var pow = ansHash.power? ansHash.power : 0;
+	var calc = val * Math.pow(base, pow);
+	return calc;
+};
+
+var getUnitSelected = function(ansHash) {
+	return ansHash.unitSelected ? ansHash.unitSelected : '';
+};
+
+

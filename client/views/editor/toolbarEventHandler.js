@@ -154,17 +154,20 @@ var preparePreviewHtml = function (qolls){
       var answer = qoll.qoll_star_attributes[QollConstants.EDU.ANSWER]
       if(Object.keys(answer).length === 3) {
         //Base not provided, default to 10 - *answer 9.8 2 m/sec2
-        ans = '$$'+answer.blankResponse + '\\times 10^' + answer.power + '\\,' + answer.unitSelected + '$$';
+        //ans = '$$'+answer.blankResponse + '\\times 10^' + answer.power + '\\,' + answer.unitSelected + '$$';
+        ans = answer.blankResponse + ' X 10^' + answer.power + ',' + answer.unitSelected;
       } else if(Object.keys(answer).length === 4) {
         //base provided
-        ans = '$$'+answer.blankResponse + '\\times '+answer.exponentBase+'^' + answer.power + '\\,' + answer.unitSelected + '$$';
+        //ans = '$$'+answer.blankResponse + '\\times '+answer.exponentBase+'^' + answer.power + '\\,' + answer.unitSelected + '$$';
+        ans = answer.blankResponse + ' X '+answer.exponentBase+'^' + answer.power + ',' + answer.unitSelected;
       } else {
-        ans = '$$' + answer.blankResponse + '$$';
+        //ans = '$$' + answer.blankResponse + '$$';
+        ans = answer.blankResponse;
       }
       html += '<h5 class="green_1">Answer: '+ans+'</h5>';
     } else {
       //show warning in red so that editor knows answer is not defined
-      html += '<h5 class="red_1">Answer: ***Not Defined***</h5>';
+      html += '<h5 class="red_1">Answer: Not Defined (please provide answer for auto-checking)</h5>';
     }
     
     if(qoll.qoll_star_attributes[QollConstants.EDU.UNITS]) {
@@ -241,7 +244,7 @@ var getFillInTheBlanksCmplxHtml = function() {
   
   var html = '<div class="input-group">'+
   '<input type="text" class="form-control maths_number_input" id="number" placeholder="coefficient">' +
-  ' $$ \\times 10^n,where\\,n=$$' +
+  ' X 10^n,where n=' +
   '<input type="text" class="form-control maths_power_input" id="power" placeholder="power">' +
     '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
   return html;

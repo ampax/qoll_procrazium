@@ -406,6 +406,13 @@ Template.qolls.events({
 				qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
 			} else {
 				qlog.info('Registered qoll with id: ' + qollRegId + answerVal, filename);
+				var saved_target = $('#'+qollId).find('span.saved-msg');
+			    saved_target.html('Response saved ...');
+			    saved_target.fadeOut( 6400, 'swing', function(){
+			    	saved_target.html('');
+			    	saved_target.removeAttr("style");
+			    });
+			    qlog.info('The target is ----->'+chk.attr('class'), filename);
 			}
 		});
 
