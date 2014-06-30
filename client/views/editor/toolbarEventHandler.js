@@ -149,17 +149,23 @@ var preparePreviewHtml = function (qolls){
     
     html += '<h5>'+qoll['qoll']+'</h5>';
 
+    var types = qoll['types'];
     var ans;
     if(qoll.qoll_star_attributes[QollConstants.EDU.ANSWER]) {
       var answer = qoll.qoll_star_attributes[QollConstants.EDU.ANSWER]
-      if(Object.keys(answer).length === 3) {
+      if(Object.keys(answer).length === 2) {
         //Base not provided, default to 10 - *answer 9.8 2 m/sec2
         //ans = '$$'+answer.blankResponse + '\\times 10^' + answer.power + '\\,' + answer.unitSelected + '$$';
-        ans = answer.blankResponse + ' X 10^' + answer.power + ',' + answer.unitSelected;
+        ans = answer.blankResponse + ' X 10^' + answer.power;
+      }
+      else if(Object.keys(answer).length === 3) {
+        //Base not provided, default to 10 - *answer 9.8 2 m/sec2
+        //ans = '$$'+answer.blankResponse + '\\times 10^' + answer.power + '\\,' + answer.unitSelected + '$$';
+        ans = answer.blankResponse + ' X 10^' + answer.power + ' ' + answer.unitSelected;
       } else if(Object.keys(answer).length === 4) {
         //base provided
         //ans = '$$'+answer.blankResponse + '\\times '+answer.exponentBase+'^' + answer.power + '\\,' + answer.unitSelected + '$$';
-        ans = answer.blankResponse + ' X '+answer.exponentBase+'^' + answer.power + ',' + answer.unitSelected;
+        ans = answer.blankResponse + ' X '+answer.exponentBase+'^' + answer.power + ' ' + answer.unitSelected;
       } else {
         //ans = '$$' + answer.blankResponse + '$$';
         ans = answer.blankResponse;
@@ -167,7 +173,8 @@ var preparePreviewHtml = function (qolls){
       html += '<h5 class="green_1">Answer: '+ans+'</h5>';
     } else {
       //show warning in red so that editor knows answer is not defined
-      html += '<h5 class="red_1">Answer: Not Defined (please provide answer for auto-checking)</h5>';
+      if(_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qoll.qollType))
+        html += '<h5 class="red_1">Answer: Not Defined (please provide answer for auto-checking)</h5>';
     }
     
     if(qoll.qoll_star_attributes[QollConstants.EDU.UNITS]) {
@@ -179,7 +186,6 @@ var preparePreviewHtml = function (qolls){
     }
     
     html +="</div>";
-    var types = qoll['types'];
     var idx = 0;
     if(types.length > 1) {
       types.map(function(t){

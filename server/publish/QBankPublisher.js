@@ -167,7 +167,10 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 
 	stat.answers = new Array();
 
-	if(stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
+	qlog.info('==========================>qollReg==>' + JSON.stringify(qollReg), filename)
+
+	if(qollReg && qollReg!= undefined  && !q.is_parent && qollReg.qollTypeVal &&
+		stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
 		stat.answers.push(qollReg.qollTypeVal);
 	} else if(qollReg && qollReg!= null && qollReg.qollTypeReg !=null && !q.is_parent) {
 		//qlog.info('qollReg=================>' + qollReg + '<====================', filename);
@@ -191,18 +194,20 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 		}
 	}
 
-	if(stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
+	if(stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type']) && qollReg) {
 		var ans  = qollReg.qollTypeVal;
 		var cans = q.qollStarAttributes.answer;
-		qlog.info('===================================>'
-			+cans.blankResponse + '/' 
-			+cans.exponentBase + '/' 
-			+cans.power + '/' 
-			+ getAnswer(cans) + '/'
-			+ getAnswer(ans), filename);
 
-		if(getUnitSelected(cans) === getUnitSelected(cans) && getAnswer(cans) === getAnswer(ans)) 
-			stat.did_pass = true; 
+		if(getUnitSelected(cans) === getUnitSelected(cans)){ 
+			var ans1 = getAnswer(cans);
+			var ans2 = getAnswer(ans);
+			if(ans1 == undefined || ans2 == undefined || ans1 != ans2 ) {
+				stat.did_pass = false;
+			} else if(ans1 === ans2) {
+				stat.did_pass = true;
+			} else
+				stat.did_pass = true; 
+		}
 		else stat.did_pass = false;
 
 	}else if(JSON.stringify(stat.correct_answers) == JSON.stringify(stat.answers)) {
@@ -230,7 +235,7 @@ var fetchGroupStats = function(item, group_name) {
 };
 
 var getAnswer = function(ansHash) {
-	//
+	if(ansHash == undefined) return undefined;
 	var val = ansHash.blankResponse;
 	var base = ansHash.exponentBase? ansHash.exponentBase : 10;
 	var pow = ansHash.power? ansHash.power : 0;
@@ -239,7 +244,7 @@ var getAnswer = function(ansHash) {
 };
 
 var getUnitSelected = function(ansHash) {
-	return ansHash.unitSelected ? ansHash.unitSelected : '';
+	return ansHash && ansHash.unitSelected ? ansHash.unitSelected : '';
 };
 
 

@@ -423,6 +423,7 @@ Template.qolls.events({
 		event.preventDefault();
 		
 		var qollAttributes = this.parent.qollAttributes;
+		var qollStarAttributes = this.parent.qollStarAttributes;
 
 		var clk = $(event.target);
 		
@@ -439,32 +440,46 @@ Template.qolls.events({
 			blankRespHash.unitSelected = unit_selected;
 		} else if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) {
 			blankRespHash.blankResponse = blank_resp;
+			if(power) blankRespHash.unitSelected = Number(power);
+			if(unit_selected) blankRespHash.unitSelected = unit_selected;
 		} else {
 			blankRespHash.blankResponse = blank_resp;
-			blankRespHash.power = power;
+			blankRespHash.power = Number(power);
 			blankRespHash.unitSelected = unit_selected;
 		}
 
-		if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL
-			&& (unit_selected == undefined || blank_resp == undefined || blank_resp === '')) {
-			//Show the error message and return
-			qlog.info('blank_resp/unit_selected ------------==========>' + blank_resp+'/'+unit_selected, filename);
-			var err_msgs = [];
-			if(unit_selected == undefined) err_msgs.push('Unit');
-			if(blank_resp == undefined || blank_resp === '') err_msgs.push('Coefficient');
-			var err_msg = err_msgs.length === 2? err_msgs.join(' & ') : err_msgs[0];
-			err_msg = 'Input ' + err_msg + ' to register response ...';
+		/** 
+			blank answer wth no unit
+			blank-dbl answer with no unit
+			blank answer with unit
+			blank-dbl answer with unit
+		 **/
+		 var err_msgs = [];
+		 var units = qollStarAttributes[QollConstants.EDU.UNITS];
+		
+		//if(units == undefined || units && units.length === 0) return '';
 
+		if(units != undefined && units.length > 0 && qollAttributes && 
+			_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)
+			&& (unit_selected == undefined || blank_resp == undefined || blank_resp === '')) {
+			//TODO: Handle units defined but no unit selected or no blank response provided or both case
+			if(unit_selected == undefined) err_msgs.push('Unit');
+			if(blank_resp == undefined || blank_resp === '') {
+				if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) err_msgs.push('Value');
+				if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) err_msgs.push('Coefficient');
+			}
+		} else if((units == undefined || units && units.length == 0) && qollAttributes && 
+			_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)
+				&& (blank_resp == undefined || blank_resp === '')){
+			//TODO: Handle no units and blank responses issue here
+			if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) err_msgs.push('Value');
+			if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) err_msgs.push('Coefficient');
+		}
+
+		if(err_msgs.length > 0) {
 			var saved_target = clk.parent().find('span.err-msg');
-			saved_target.html(err_msg);
-		    saved_target.fadeOut( 8400, function(){
-		    	saved_target.html('');
-		    	saved_target.removeAttr("style");
-		    });
-			return;
-		} else if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK && (blank_resp == undefined || blank_resp === '')) {
-			var saved_target = clk.parent().find('span.err-msg');
-			saved_target.html('Input Unit to register response ...');
+			var err_msg = err_msgs.length > 1? err_msgs.join(' & ') : err_msgs[0];
+			saved_target.html('Input '+err_msg+' to register response ...');
 		    saved_target.fadeOut( 8400, function(){
 		    	saved_target.html('');
 		    	saved_target.removeAttr("style");

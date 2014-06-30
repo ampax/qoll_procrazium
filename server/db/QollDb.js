@@ -196,7 +196,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		
 
 		//fetch the qoll level attributes here. split the qoll string on * and then apply
-        qlog.info('<==============Printing qoll===============>'+qoll, filename);
+        //qlog.info('<==============Printing qoll===============>'+qoll, filename);
         var qoll_parts = qoll.split(/\n\*/);
         var qollStarAttributes = {};
         qoll = qoll_parts[0];
@@ -207,8 +207,8 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
             	if(qp) qp = qp.trim();
             	var star = qp.split(/\s+/)[0];
             	var star_val = qp.substr(qp.indexOf(' ') + 1);
-            	qlog.info('<======option name========>' +star, filename);
-            	qlog.info('<======option value========>' +star_val, filename);
+            	//qlog.info('<======option name========>' +star, filename);
+            	//qlog.info('<======option value========>' +star_val, filename);
             	if(_.contains(QollConstants.EDU.ALLOWED_STARS, star)) {
             		//handle the allowed options here
             		if(_.contains(['unit','units'], star)) {
@@ -231,29 +231,32 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
                         *answer 9.8 2 m/sec2
                         **/
                         qollStarAttributes[star] = {};
+                        var tmp = [];
                         //star_val = star_val.replace("*", " ").replace("^" " ");
-                        var tmp = star_val.split(/\s+/);
+                        if(star_val) {
+	                        star_val = star_val.replace("*", " ");
+	                        star_val = star_val.replace("^", " ");
+	                        tmp = star_val.split(/\s+/);
+	                    }
+
                         if(tmp.length === 1) {
+                        	qlog.info('Printing the array from case 1 ' + star_val + '/' + tmp[0], filename);
                             qollStarAttributes[star]['blankResponse'] = tmp[0];
                         } else if(tmp.length === 2){
                             //handle case 1
-                            var tmp1 = tmp[0].split("*");
-                            qollStarAttributes[star]['blankResponse'] = tmp1[0];
-                            var tmp2 = tmp1[1].split("^");
-                            qollStarAttributes[star]['exponentBase'] = tmp2[0];
-                            qollStarAttributes[star]['power'] = tmp2[1];
-                            qollStarAttributes[star]['unitSelected'] = tmp[1];
-                        } else if(tmp.length === 4) {
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                            qollStarAttributes[star]['power'] = tmp[1];
+                        } else if(tmp.length === 3) {
                             //handle case 2
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                            qollStarAttributes[star]['power'] = tmp[1];
+                            qollStarAttributes[star]['unitSelected'] = tmp[2];
+                        } else if(tmp.length === 4) {
+                            //handle case 3 (simplest, considering default log base-10)
                             qollStarAttributes[star]['blankResponse'] = tmp[0];
                             qollStarAttributes[star]['exponentBase'] = tmp[1];
                             qollStarAttributes[star]['power'] = tmp[2];
                             qollStarAttributes[star]['unitSelected'] = tmp[3];
-                        } else if(tmp.length === 3) {
-                            //handle case 3 (simplest, considering default log base-10)
-                            qollStarAttributes[star]['blankResponse'] = tmp[0];
-                            qollStarAttributes[star]['power'] = tmp[1];
-                            qollStarAttributes[star]['unitSelected'] = tmp[2];
                         }
                     } else
             			qollStarAttributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
