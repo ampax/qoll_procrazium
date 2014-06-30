@@ -1,10 +1,10 @@
 <template name="qollbank">
 	{{> header_awesome}}
 	<p class="lead">
-		<H3>
+		<!--H3>
 		<center>
-			Create a qollstionnaire by selecting questions from QBank, providing title and specifying recipients.
-		</center></H3>
+			Create a questionnaire by selecting questions from QBank, providing title and specifying recipients.
+		</center></H3 -->
 
 		<div class="container" id="qbank-container-id">
 
@@ -16,7 +16,7 @@
 				<div class="well well-sm">
 					<div class="input-group input-group-sm">
 
-						<input type="text" class="qollstionnaire-title form-control" placeholder="Qollstionnaire title" default="Qollstionnaire title" >
+						<input type="text" class="qollstionnaire-title form-control" placeholder="Questionnaire title" default="Questionnaire title" >
 						<span class="input-group-btn">
 							<button type="button" class="btn btn-primary store-qollstionnaire"  >
 								Create
@@ -30,7 +30,7 @@
 								Start Time
 							</button> </span>
 
-						<input id="qollsenddate" class="hasDatepicker form-control" type="text"  placeholder="Manual Send">
+						<input id="qollsenddate" class="hasDatepicker form-control" type="text"  placeholder="Leave blank to send manually">
 						</input>
 						<span class="input-group-addon ">
 							<select class="qstion_send_hour">
@@ -74,7 +74,7 @@
 								End Time
 							</button> </span>
 
-						<input id="qollenddate" class="hasDatepicker form-control" type="text"  placeholder="Manual Close">
+						<input id="qollenddate" class="hasDatepicker form-control" type="text"  placeholder="Leave blank to close manually">
 						</input>
 						<span class="input-group-addon ">
 							<select class="qstion_end_hour">
@@ -118,7 +118,7 @@
 				<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
 
 					<div class="col-md-10 col-xs-12">
-						Qoll Text
+						Qoll Text  (Check boxes on the right to include questions in this questionnaire) 
 					</div>
 					<div class="col-md-2 col-xs-12">
 						<input type="checkbox" class="qoll_selectall"/>
