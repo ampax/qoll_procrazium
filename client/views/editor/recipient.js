@@ -1,7 +1,5 @@
 var filename="client/views/editor/recipient.js";
 
-var Recipients = new Meteor.Collection("recipients");
-
 Template.recipient.rendered = function() {
 	qlog.info("Initializing autocomplete ... ", filename);
 	Meteor.subscribe('RECIPIENTS_PUBLISHER');

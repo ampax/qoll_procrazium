@@ -6,6 +6,7 @@ Qoll = new Meteor.Collection("QOLL");
 AllQolls = new Meteor.Collection("all-qolls");
 QollGps = new Meteor.Collection("qoll-groups");
 GroupStats = new Meteor.Collection("group-stats");
+Recipients = new Meteor.Collection("recipients");
 
 
 Meteor.users.allow({

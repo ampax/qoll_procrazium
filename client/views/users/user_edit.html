@@ -5,7 +5,7 @@
 		<div class="row">
 			{{#with user}}
 
-			<h3>{{i18n "Account"}}</h3>
+			<h3>{{i18n "Account"}}</h3><span class="scs-msg green_1"></span><span class="err-msg red_1"></span>
 			<small class="red"> {{#if profileIncomplete}}
 				{{i18n "Please complete your profile below before continuing."}}
 				{{/if}} </small>
@@ -20,8 +20,24 @@
 							<input type="text" class="form-control" id="username" name="username" disabled value="{{userName}}" />
 						</div>
 					</div>
-					<!--  User group memberships   -->
 
+					<!--  Group Name Search Using User Name/Email ID  -->
+					<div class="form-group">
+						<label for="inputName" class="col-sm-2 control-label">{{i18n "Search Group"}}</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<!-- input type="text" class="form-control" id="name" name="name" placeholder="Profile Name" value="{{profile.name}}" / -->
+
+								<input type="text" class="form-control green_bg_5" placeholder="Start typing author's name/email to search and click from the search results to add the group" default="" id="group_search" data-step="1">
+								<span class="input-group-btn bs_input_btn">
+							        <button class="btn btn-primary bs_input_btn" type="button" id="subscribe">Subscribe</button>
+							    </span>
+							</div>
+							<!-- /input-group -->
+						</div> <!-- col-sm-10 -->
+					</div>
+
+					<!--  User group memberships   -->
 					<div class="form-group">
 						<label for="inputGroups" class="col-sm-2 control-label">{{i18n "Groups"}}</label>
 						<div class="col-sm-10">
@@ -38,9 +54,6 @@
 									<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
 									{{/each}}
 								</div>
-								<button  class="btn btn-primary btn-qoll addgroupbtn pull-left">
-								{{i18n "Add Group membership"}}
-							</button>
 							</div>
 						</div>
 

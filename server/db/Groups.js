@@ -18,7 +18,7 @@ Groups.insertUpdate = function(g, userId){
 
 	//
 	if(group.length > 0) {
-		qlog.info('Updating the group - ' + g.group_name, filename);
+		//qlog.info('Updating the group - ' + g.group_name, filename);
 		/**group.group_name = g.group_name;
 		group.group_desc = g.group_desc;
 		group.pub_or_pvt = g.pub_or_pvt;
@@ -57,5 +57,40 @@ Meteor.methods({
 	},
 	fetchGroups : function(userId){
 		return Groups.fetch(userId);
+	},
+	subscribeToGroup : function(group_name, author_email) {
+		//TODO
+		var handle_usr = Meteor.users.findOne({'profile.email' : author_email});
+		var author_id = handle_usr._id;
+		var my_id = Meteor.userId();
+		var handle_me = Meteor.users.findOne(my_id);
+		var groups_me = handle_me.groups;
+
+		var just_groups = [];
+		groups_me.map(function(g){
+			just_groups.push(g.groupName);
+		});
+
+
+		var new_group = {"groupOwner" : author_id, "groupName" : group_name};
+		qlog.info("-------------------->" + just_groups + '' + new_group.groupName);
+		if(!_.contains(just_groups, group_name)) {
+			//Update the user and the groups table now
+			var handle_gp = QollGroups.findOne({'submittedBy': author_id, 'groupName' : group_name});
+			//QollGroups.find({'submittedBy': author_id, 'groupName' : group_name});
+			//qlog.info('Printing the group ---------->' + JSON.stringify(handle_gp) + '/' + author_id + '/' + handle_me.profile.email, filename);
+			var userEmails = handle_gp.userEmails;
+			if(!_.contains(userEmails, handle_me.profile.email)) {
+			qlog.info('Pusing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
+			userEmails.push(handle_me.profile.email);
+			QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmails}});
+			} else {
+				qlog.info('Not Pusing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
+			}
+
+			groups_me.push(new_group);
+			Meteor.users.update({_id : my_id}, {$set: {groups : groups_me}});
+		}
+		//qlog.info('Subscribing the user to -->' + group_name + '/' + author_email + '/' + JSON.stringify(handle_me), filename);
 	},
 });

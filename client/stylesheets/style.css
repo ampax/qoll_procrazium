@@ -31,6 +31,10 @@ body {
 .maths_power_input {
     width: 80px !important;
 }
+
+.bs_input_btn {
+    height: 30px !important;
+}
 /* ============================== END:Body Bootstrap style override/define ================================ */
 
 hr .divider {

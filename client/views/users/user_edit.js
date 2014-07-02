@@ -1,6 +1,7 @@
 var filename = "client/views/users/user_edit.js";
 
 currentUserData = new Meteor.Collection("currentUserData");
+
 Template.user_edit.helpers({
 	profileIncomplete : function() {
 		return this && !this.loading && !UserUtil.userProfileComplete(this);
@@ -51,7 +52,62 @@ Template.user_edit.helpers({
 	}
 })
 
+
+UserGroups = new Meteor.Collection("user-groups");
+
 Template.user_edit.events({
+	'keyup input#group_search': function (e) {
+		e.preventDefault();
+		var group_search_val = $('#group_search').val();
+		qlog.info('Printing group_search_val --->' + group_search_val, filename);
+		//Meteor.subscribe('PUBLISH_GROUPS_OF_USER', group_search_val);
+
+	    QollAutoComplete.autocomplete({
+		      element: 'input#group_search',       // DOM identifier for the element
+		      collection: UserGroups,              // MeteorJS collection object (published object)
+		      field: 'author_name',                    // Document field name to search for
+		      value: 'groupName',
+		      limit: 0,                         // Max number of elements to show
+		      sort: { groupName: 1 },
+		      mode: 'mono',
+		      delimiter: ';'
+		    }, 'groupName', 
+		    function(data){
+		    	return data.groupName + '(' + data.author_email + ')'; 
+		    	//TODO
+		    });              // Sort object to filter results with
+		      //filter: { 'gender': 'female' }}); // Additional filtering
+	}, 
+	'click #subscribe': function(e) {
+		e.preventDefault();
+		var group_search_val = $('#group_search').val();
+		qlog.info('Subscribing the user to the group - ' + group_search_val, filename);
+
+		var group_search_val_arr = group_search_val.split("(");
+		var	group_search_val_arr_1 = group_search_val_arr[1].split(")");
+		var group_name = group_search_val_arr[0];
+		var author_email = group_search_val_arr_1[0];
+		qlog.info('Printing the split value - ' + group_name + '/' + author_email, filename);
+
+		Meteor.call('subscribeToGroup', group_name, author_email, function(err, message) {
+			var cls = '.scs-msg';
+			var msg;
+			if (err) {
+				cls = '.err-msg';
+				msg = 'Failed subscribing to the group: ' + group_name + '('+ author_email +') ...'
+				qlog.error('Failed subscribing to the group: ' + group_name + '('+ author_email +')' + err, filename);
+			} else {
+				msg = 'Subscribed to the group - ' + group_name + '('+ author_email +') ... REFRESH THE PAGE PLEASE';
+				qlog.info('Subscribed to the group - ' + group_name + '('+ author_email +')');
+			}
+			var saved_target = $(cls);
+		    saved_target.html(msg);
+		    saved_target.fadeOut( 6400, 'swing', function(){
+		    	saved_target.html('');
+		    	saved_target.removeAttr("style");
+		    });
+		});
+	},
 	'submit form' : function(e) {
 		e.preventDefault();
 
@@ -126,3 +182,10 @@ Template.user_edit.events({
 		}
 	}
 }); 
+
+Template.user_edit.rendered = function() {
+	qlog.info("Initializing autocomplete ... ", filename);
+	Meteor.subscribe('PUBLISH_GROUPS_OF_USER_1');
+	QollAutoComplete.init("input#group_search");
+	QollAutoComplete.enableLogging = true;
+};
