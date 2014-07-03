@@ -46,13 +46,7 @@
 									<h3 class="panel-title">GroupName,GroupOwner</h3>
 								</div>
 								<div class="panel-body" id="usersgroups">
-									{{#each groupMemberships}}
-									<div class='email-group-panel' id='emailtogrouppanel'>
-										{{groupName}},{{groupOwner}}
-									</div>
-									<!--div class="qoll-type-panel">Panel content 1</div-->
-									<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
-									{{/each}}
+									{{> user_subscribed_groups}}
 								</div>
 							</div>
 						</div>
@@ -196,6 +190,14 @@
 			{{/with}}
 		</div>
 	</div>
+</template>
+
+<template name="user_subscribed_groups">
+	{{#each groupMemberships}}
+	<div class='email-group-panel' id='emailtogrouppanel'>
+		{{groupName}},{{groupOwner}}
+	</div>
+	{{/each}}
 </template>
 
 <template name="user_edit1">

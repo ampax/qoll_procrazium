@@ -12,7 +12,12 @@ Template.user_edit.helpers({
 	},
 	groupMemberships : function() {
 		var cu = currentUserData.findOne();
-		return cu.groupMemberships;
+		qlog.info('Printing cu - ' + cu, filename);
+		if(cu != undefined || cu == null) {
+			return cu.groupMemberships;
+		} else {
+			undefined;
+		}
 	},
 	userEmail : function() {
 		return UserUtil.getEmail(this);
@@ -50,7 +55,7 @@ Template.user_edit.helpers({
 	isLocale : function(locale) {
 		return UserUtil.getLocale(this) === locale ? 'checked' : '';
 	}
-})
+});
 
 
 UserGroups = new Meteor.Collection("user-groups");
@@ -97,12 +102,26 @@ Template.user_edit.events({
 				msg = 'Failed subscribing to the group: ' + group_name + '('+ author_email +') ...'
 				qlog.error('Failed subscribing to the group: ' + group_name + '('+ author_email +')' + err, filename);
 			} else {
-				msg = 'Subscribed to the group - ' + group_name + '('+ author_email +') ... REFRESH THE PAGE PLEASE';
-				qlog.info('Subscribed to the group - ' + group_name + '('+ author_email +')');
+				if(HashUtil.checkHash(message, 'err_msg')) {
+					//Display the error message
+					cls = '.err-msg';
+					msg = message.err_msg;
+				} else if(HashUtil.checkHash(message, 'scs_msg')) {
+					//Display the success message
+					cls = '.scs-msg';
+					msg = message.scs_msg;
+					$("#group_search").val('');
+				} else {
+					//Display some blah blah to say they succeded
+					cls = '.scs-msg';
+					msg = 'Subscribed to the group - ' + group_name + ','+ author_email +' ...';
+					$("#group_search").val('');
+				}
+				qlog.info('Subscribed to the group - ' + group_name + ','+ author_email +' ...');
 			}
 			var saved_target = $(cls);
 		    saved_target.html(msg);
-		    saved_target.fadeOut( 6400, 'swing', function(){
+		    saved_target.fadeOut( 8400, 'swing', function(){
 		    	saved_target.html('');
 		    	saved_target.removeAttr("style");
 		    });
@@ -189,3 +208,11 @@ Template.user_edit.rendered = function() {
 	QollAutoComplete.init("input#group_search");
 	QollAutoComplete.enableLogging = true;
 };
+
+
+Template.user_subscribed_groups.helpers({
+	groupMemberships : function(){
+		return UserSubscGroups.find({});
+	}
+});
+

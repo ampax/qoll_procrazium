@@ -5,6 +5,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 	var self = this;
 	var uuid = Meteor.uuid();
 	var initializing = true;
+	var handle;
 	qlog.info('Fetching all the qolls in desc order of creation; uuid: ' + uuid, filename);
 	if (this.userId) {//first publish specialized qolls to this user
 		var ufound = Meteor.users.find({
@@ -14,7 +15,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			//submitted by this user
-			var handle = QBank.find({
+			handle = QBank.find({
 				'submittedBy' : this.userId,
 				'action' : {
 					$ne : 'archive'
@@ -74,7 +75,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 	//self.flush();
 
 	self.onStop(function() {
-		handle.stop();
+		if(handle != undefined) handle.stop();
 	});
 });
 
@@ -157,13 +158,20 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 	stat.correct_answers = new Array();
 	var qtx_idx = 0;
 	//qlog.info('=======>qollTypesX =====>' + JSON.stringify(q), filename)
-	if(q._id === 'pBRwzigvnqbuyhT6T' || q._id === 'AGWMCxhPtb2aGyhuj') {
-		//qlog.info('=======>qollTypesX =====>' + JSON.stringify(q.qollTypesX), filename)
+
+	if(!q.is_parent && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
+		//handle fill in the blanks
+		if(HashUtil.checkHash(q.qollStarAttributes) && HashUtil.checkHash(q.qollStarAttributes.answer)) {
+			stat.correct_answers.push(q.qollStarAttributes.answer);
+		} else {
+			stat.correct_answers.push('--');
+		}
+	} else if(!q.is_parent && q.isMultiple){ //handle multiple choice questions
+		q.qollTypesX.map(function(qtx){
+			if(qtx.isCorrect && qtx.isCorrect === 1) stat.correct_answers.push(alphabetical[qtx_idx]);
+			qtx_idx++;
+		});
 	}
-	q.qollTypesX.map(function(qtx){
-		if(qtx.isCorrect && qtx.isCorrect === 1) stat.correct_answers.push(alphabetical[qtx_idx]);
-		qtx_idx++;
-	});
 
 	//set the derfault values for correct-answers answered
 	if(stat.correct_answers.length == 0)
@@ -182,7 +190,7 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 		//qlog.info('qollReg=================>' + qollReg + '<====================', filename);
 		var idx = 0;
 		qollReg.qollTypeReg.map(function(reg){
-			if(reg) {
+			if(reg === 1) {
 				stat.answers.push(alphabetical[idx]);
 			}
 			idx++;

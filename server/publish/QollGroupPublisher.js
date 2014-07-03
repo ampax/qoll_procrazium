@@ -81,39 +81,6 @@ Meteor.publish('QOLLERS_PUBLISHER', function(){
 
 
 /** Publish a list of friends and groups for the qoll-user-logged-in  **/
-Meteor.publish('PUBLISH_GROUPS_OF_USER', function(user_str){
-        var self = this;
-        var uuid = Meteor.uuid();
-        var initializing = true;
-
-        //qlog.info('=======>Group-publish; uuid: ' + uuid + ", this.userid:<======= " + this.userId + '/' + user_str , filename);
-        var handle = undefined;
-
-        if(this.userId) {
-			//handle= QollGroups.find({'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
-
-			var handle_users= Meteor.users.find({ $or: [{'profile.email': {$regex: "/.*"+user_str+".*/", $options: 'i'}}, 
-											  {'profile.name': {$regex: "/.*"+user_str+".*/", $options: 'i'}}] });
-			handle_users.forEach(function (usr){
-				//qlog.info('================>*********Finding groups for user - ' + usr, filename);
-				//self.added('user-groups', usr._id, {name:usr.username});
-				//handle= QollGroups.find({'submittedBy':usr._Id},{fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
-			});
-
-	        /**QollGroups.find( { $or: [ { quantity: { $lt: 20 } }, { price: 10 } ] } )
-	        handle.forEach(function (grp){
-				//allUserGroups.push(grpEntry.groupName);
-				qlog.info("Printing the group-name: " + grp.groupName, filename);
-				self.added('recipients', grp._id, grp);
-			});**/
-		}
-		
-        qlog.info('Done initializing the publisher: PUBLISH_GROUPS_OF_USER, uuid: ' + uuid, filename);
-        initializing = false;
-        self.ready();
-});
-
-/** Publish a list of friends and groups for the qoll-user-logged-in  **/
 Meteor.publish('PUBLISH_GROUPS_OF_USER_1', function(){
         var self = this;
         var uuid = Meteor.uuid();
@@ -145,4 +112,36 @@ Meteor.publish('PUBLISH_GROUPS_OF_USER_1', function(){
         initializing = false;
         self.ready();
 });
+
+/** Publish all the groups that the user has subscribed to **/
+Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
+  var self= this;
+  var gp_memberships=[];
+
+  if (this.userId) {
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var user_email = UserUtil.getEmail(user);// user.emails[0].address;
+      QollGroups.find({userEmails:user_email}, { sort : { 'submittedOn' : -1 }, reactive : true}).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(item, idx){
+          //populate the group with creaters information and publish
+          var owner= Meteor.users.findOne(item.submittedBy);
+          var owner_email = UserUtil.getEmail(owner);
+          if(owner_email && owner_email != '') {
+            var g = {groupId : item._id, groupName : item.groupName, userId : owner._id, groupOwner : owner_email};
+            self.added('user-subscription-groups', item._id, g);
+          }
+        },
+        removed : function(item){
+          qlog.info('Removed item with id: ' + item._id);
+          self.removed('user-subscription-groups', item._id);
+        }
+      });
+    }
+  }
+});
+
 

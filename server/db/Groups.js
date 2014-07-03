@@ -62,6 +62,10 @@ Meteor.methods({
 		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
 		/** Fix adding the group of legacy users **/
 		var handle_usr = Meteor.users.findOne({'profile.email' : author_email});
+		if(!handle_usr || !handle_usr._id) {
+			return {err_msg : 'There are issues with - '+group_name+'\'s author - '+author_email+'. Contact the group-owner to fix it please.'};
+		}
+
 		var author_id = handle_usr._id;
 		var my_id = Meteor.userId();
 		var handle_me = Meteor.users.findOne(my_id);
@@ -97,6 +101,6 @@ Meteor.methods({
 			groups_me.push(new_group);
 			Meteor.users.update({_id : my_id}, {$set: {groups : groups_me}});
 		}
-		//qlog.info('Subscribing the user to -->' + group_name + '/' + author_email + '/' + JSON.stringify(handle_me), filename);
+		return {scs_msg : 'Successfully Subscribed to - ' + group_name + ", " + author_email};
 	},
 });

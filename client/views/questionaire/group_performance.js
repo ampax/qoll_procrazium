@@ -30,9 +30,10 @@ Template.group_performance.helpers({
 					var answer = this.correct_answers? this.correct_answers : '--';
 					if(answer == undefined || answer === '--') return '--';
 
-					if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK) {
+					if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK && HashUtil.checkHash(this.star_attributes, 'answer')) {
 						return this.star_attributes.answer.blankResponse;
-					} else if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK_DBL){
+					} else if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK_DBL && HashUtil.checkHash(this.star_attributes, 'answer')){
+						answer = this.star_attributes.answer;
 						var ans = '$$';
 						if(answer.blankResponse) ans += answer.blankResponse;
 
@@ -54,21 +55,19 @@ Template.group_performance.helpers({
 					var answer = this.answers;
 					if(!answer || answer == undefined) return '--';
 
-					if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK) {
-						qlog.info('Printing the asnwer - ' + JSON.stringify(answer), filename);
+					if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK && HashUtil.checkHash(this, 'answers')) {
 						return answer.blankResponse;
-					} else if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK_DBL){
-						qlog.info('Printing the asnwer - ' + JSON.stringify(answer), filename);
+					} else if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK_DBL && HashUtil.checkHash(this, 'answers')){
 						var ans = '$$';
-						if(answer.blankResponse) ans += answer.blankResponse;
+						if(answer[0].blankResponse) ans += answer[0].blankResponse;
 
-						if(answer.exponentBase) ans += '\\times '+ answer.exponentBase;
+						if(answer[0].exponentBase) ans += '\\times '+ answer[0].exponentBase;
 						else ans += '\\times 10';
 
-						if(answer.power) ans += '^' + answer.power;
+						if(answer[0].power) ans += '^' + answer[0].power;
 						else ans += '^' + 0;
 
-						if(answer.unitSelected) ans += answer.unitSelected;
+						if(answer[0].unitSelected) ans += answer[0].unitSelected;
 
 						ans += '$$';
 

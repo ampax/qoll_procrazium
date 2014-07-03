@@ -37,7 +37,6 @@ var privacyOptions = { // false means private
 };
 
 //publish current user
-
 Meteor.publish('currentUser', function() {
   var user = Meteor.users.findOne(this.userId);
   var self= this;
@@ -48,11 +47,11 @@ Meteor.publish('currentUser', function() {
   
   
   QollGroups.find({userEmails:user_email}).forEach(function (val){
-  	
-  	var owner= Meteor.users.findOne(val.submittedBy);
-  	if(owner){
-  		gp_memberships.push({groupName:val.groupName,groupOwner:UserUtil.getEmail(owner)});
-  	}
+    
+    var owner= Meteor.users.findOne(val.submittedBy);
+    if(owner){
+      gp_memberships.push({groupName:val.groupName,groupOwner:UserUtil.getEmail(owner)});
+    }
   });
   
   user.groupMemberships = gp_memberships;
