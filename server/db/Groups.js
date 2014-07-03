@@ -59,7 +59,8 @@ Meteor.methods({
 		return Groups.fetch(userId);
 	},
 	subscribeToGroup : function(group_name, author_email) {
-		//TODO
+		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
+		/** Fix adding the group of legacy users **/
 		var handle_usr = Meteor.users.findOne({'profile.email' : author_email});
 		var author_id = handle_usr._id;
 		var my_id = Meteor.userId();

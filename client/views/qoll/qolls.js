@@ -308,7 +308,7 @@ Template.qolls.helpers({
 	  	units.map(function(unit){
 	  		var checked = '';
 	  		if(unit === unitSelected) checked = 'checked';
-	    	units_html += '<input name="unit" value="'+unit+'" type="radio" '+checked+'>' + unit;
+	    	units_html += '<input name="unit" value="'+unit+'" type="radio" '+checked+'>' + unit+'&nbsp;&nbsp;';
 	  	});
 	  	units_html += '</div>';
 

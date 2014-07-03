@@ -128,14 +128,10 @@ Meteor.publish('PUBLISH_GROUPS_OF_USER_1', function(){
 			handle= QollGroups.find({}, {$sort: {'groupName':-1}});
 			
 			handle.forEach(function (grp){
-				//qlog.info('Printing the user id for the groups ------------>' + grp.submittedBy, filename);
-	        	//var handle_usr= Meteor.users.find({},{'_id': grp.submittedBy});
-	        	var handle_usr= Meteor.users.findOne(grp.submittedBy);
-				//allUserGroups.push(grpEntry.groupName);
-				//qlog.info("Printing the group-name:==========> " + grp.groupName + '/' + handle_usr.username, filename);
+				var handle_usr= Meteor.users.findOne(grp.submittedBy);
 				grp.author_name = handle_usr.username;
-				grp.author_email = handle_usr.profile.email;
-				//qlog.info('Printing the group before publishing --------> ' + JSON.stringify(grp), filename);
+
+				grp.author_email = UserUtil.getEmail(handle_usr);
 				self.added('user-groups', grp._id, grp);
 			});
 		//}
