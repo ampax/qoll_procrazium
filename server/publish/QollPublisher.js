@@ -108,6 +108,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						//answers 		: fetch_answers(item),
 						totals 			: sumstats(item.stats),
 						viewContext 	: "createUsr",
+						isMultiple		: item.isMultiple,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -153,6 +154,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						//answers 			: fetch_answers(item),
 						totals 				: sumstats(item.stats),
 						viewContext 		: "createUsr",
+						isMultiple			: item.isMultiple,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -215,17 +217,18 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (usentby.length > 0)
 						sentby = usentby[0].emails[0].address;
 					var q = {
-						qollTitle : item.qollTitle,
-						qollText : item.qollText,
-						qollTypes : item.qollTypes,
-						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-						qollAttributes 	: item.qollAttributes,
-						submittedOn : item.submittedOn,
-						submittedBy : item.submittedBy,
-						sendingUser : sentby,
-						submittedTo : item.submittedTo,
-						action : item.action,
-						viewContext : "recieveUsr",
+						qollTitle 			: item.qollTitle,
+						qollText 			: item.qollText,
+						qollTypes 			: item.qollTypes,
+						qollStarAttributes 	: item.qollStarAttributes ? item.qollStarAttributes : {},
+						qollAttributes 		: item.qollAttributes,
+						submittedOn 		: item.submittedOn,
+						submittedBy 		: item.submittedBy,
+						sendingUser 		: sentby,
+						submittedTo 		: item.submittedTo,
+						action 				: item.action,
+						viewContext 		: "recieveUsr",
+						isMultiple			: item.isMultiple,
 
 						_id : item._id
 					};
@@ -311,6 +314,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 							submittedTo : item.submittedTo,
 							action : item.action,
 							viewContext : "recieveUsr",
+							isMultiple		: item.isMultiple,
 
 							_id : item._id
 						};
@@ -374,6 +378,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				submittedTo : item.submittedTo,
 				action : item.action,
 				viewContext : "publicQolls",
+				isMultiple		: item.isMultiple,
 				_id : item._id
 			};
 			if (item.is_parent)
@@ -457,6 +462,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					stats : item.stats,
 					totals : sumstats(item.stats),
 					viewContext : "createUsr",
+					isMultiple		: item.isMultiple,
 
 					_id : item._id
 				};
@@ -496,6 +502,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					stats : item.stats,
 					totals : sumstats(item.stats),
 					viewContext : "createUsr",
+					isMultiple		: item.isMultiple,
 
 					_id : item._id
 				};

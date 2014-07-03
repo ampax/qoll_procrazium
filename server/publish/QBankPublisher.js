@@ -105,7 +105,7 @@ Meteor.publish('GROUP_STATS_PUBLISHER', function(group_name) {
 									var qollReg = QollRegister.find({qollId: item._id, submittedBy: user._id}).fetch()[0];
 									//function(var qollSt, var q, var qollReg, var user)
 									var stat = fetchQollPublishDetails(qollst, item, qollReg, user);
-									//qlog.info('<==============Adding stat===============>' + JSON.stringify(stat), filename);
+									//qlog.info('<==============Adding stat===============>' + JSON.stringify(item), filename);
 									self.added('group-stats', item._id + user._id, stat);
 								},
 								changed : function(item, idx) {
@@ -156,8 +156,12 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 	//Set the correct answers for the qolls (if assigned from the editor)
 	stat.correct_answers = new Array();
 	var qtx_idx = 0;
+	//qlog.info('=======>qollTypesX =====>' + JSON.stringify(q), filename)
+	if(q._id === 'pBRwzigvnqbuyhT6T' || q._id === 'AGWMCxhPtb2aGyhuj') {
+		//qlog.info('=======>qollTypesX =====>' + JSON.stringify(q.qollTypesX), filename)
+	}
 	q.qollTypesX.map(function(qtx){
-		if(qtx.isCorrect) stat.correct_answers.push(alphabetical[qtx_idx]);
+		if(qtx.isCorrect && qtx.isCorrect === 1) stat.correct_answers.push(alphabetical[qtx_idx]);
 		qtx_idx++;
 	});
 
@@ -165,9 +169,11 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 	if(stat.correct_answers.length == 0)
 		stat.correct_answers.push('--');
 
+	qlog.info('=======>qollTypesX =====------->' + stat.correct_answers + '/' + JSON.stringify(q), filename)
+
 	stat.answers = new Array();
 
-	qlog.info('==========================>qollReg==>' + JSON.stringify(qollReg), filename)
+	//qlog.debug('==========================>qollReg==>' + JSON.stringify(qollReg), filename)
 
 	if(qollReg && qollReg!= undefined  && !q.is_parent && qollReg.qollTypeVal &&
 		stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {

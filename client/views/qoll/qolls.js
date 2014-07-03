@@ -206,7 +206,7 @@ Template.qolls.helpers({
 		return "class_" + idx;
 	},
 	check_selected : function(qollid, qollTypeIx) {
-		//qlog.info('Testing responce for : ' + qollid + '/' + this.parent._id + ' and index ' + qollTypeIx, filename);
+		qlog.info('Testing responce for : ' + qollid + '/' + this.parent._id + ' and index ' + qollTypeIx, filename);
 		var retval = '';
 		QollRegist.find({
 			qollId : this.parent._id,
@@ -214,8 +214,10 @@ Template.qolls.helpers({
 		}, {
 			reactive : false
 		}).forEach(function(v) {
-			//qlog.info('FOUND responce for : ' + this.parent._id+' and index '+ qollTypeIx, filename);
-			retval = 'border-selected';
+			if(this.parent._id === 'bxcMmBCAhLcrMCLws')
+				qlog.info('FOUND responce for : ' + this.parent._id+' and index '+ JSON.stringify(v), filename);
+			if(v.qollTypeReg && v.qollTypeReg[qollTypeIx] === 1)
+				retval = 'border-selected';
 		});
 		return retval;
 	},
@@ -227,7 +229,7 @@ Template.qolls.helpers({
 		var qollTypeReg = this.parent.qollTypeReg
 		if (qollTypeReg == undefined)
 			return '';
-		if (qollTypeReg[idx])
+		if (qollTypeReg[idx] === 1)
 			return 'border-selected'
 	},
 	is_correct_answer : function(qollTypesX, idx) {
@@ -239,18 +241,26 @@ Template.qolls.helpers({
 		return false;
 	},
 	is_not_blank_type : function(qollAttributes) {
-		return qollAttributes && !_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
+		if(this.parent._id === 'd3KY2DEEs4LzasCiK') {
+			qlog.info('Printing qollAttributes - ' + qollAttributes + '/' + this.parent.qollTypes, filename);
+		}
+
+		if(!HashUtil.checkHash(qollAttributes, 'type') && this.parent.qollTypes && this.parent.qollTypes.length > 1) {
+			return true;
+		}
+
+		return HashUtil.checkHash(qollAttributes, 'type') && !_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
 	},
 	is_blank_type : function(qollAttributes) {
-		return qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
+		return HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
 	},
 	is_blank_type_no_opt : function(qollTypes, qollAttributes) {
 		//qlog.info('Printing the qollType here - ' + qollType + '/' + qollAttributes.type, filename);
-		return qollTypes && qollTypes.length === 0 && qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type;
+		return qollTypes && qollTypes.length === 0 && HashUtil.checkHash(qollAttributes, 'type') && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type;
 	},
 	get_qoll_txt : function(qollText, qollAttributes) {
 		//Handle the blank type of questions here
-		if(qollAttributes && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
+		if(HashUtil.checkHash(qollAttributes, 'type') && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
 			var fillVal, fillPow;
 			qollText = qollText.replace(/\?\=/g, getFillInTheBlanksSimpleHtml(fillVal, fillPow))
 		}
@@ -259,7 +269,7 @@ Template.qolls.helpers({
 	},
 	get_qoll_type : function(qollType, qollAttributes, myAnswers) {
 		//qlog.info('Printing myAnswers - ' + JSON.stringify(myAnswers), filename);
-		if(qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK,QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
+		if(HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK,QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
 			var qollTypeVal = this.parent.qollTypeVal;
 			var fillVal, fillPow;
 			if(qollTypeVal) {
@@ -357,21 +367,31 @@ Template.qolls.events({
 		event.preventDefault();
 		var chk = $(event.target);
 
-		var isChkSelected = false;
+		/**var isChkSelected = false;
 		if (chk.hasClass('border-selected')) {
+			isChkSelected = false;
+		} else {
 			isChkSelected = true;
-		}
+		}**/
 
 		//If not a multiple choice question, remove the border-selected
-		if (!this.isMultiple) {
+		qlog.info('Printing if this is multiple - ' + this.isMultiple + '/' + this.parent.isMultiple);
+		if (!this.parent.isMultiple) {
 			$(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem) {
 				$(this).removeClass('border-selected');
 			});
+			chk.addClass('border-selected');
+		} else {
+			if (chk.hasClass('border-selected')) {
+				chk.removeClass('border-selected');
+			} else {
+				chk.addClass('border-selected');
+			}
 		}
 
-		if (!isChkSelected) {
+		/**if (!isChkSelected) {
 			chk.addClass('border-selected');
-		}
+		}**/
 
 		/**var foundanswer=false;
 		 if(chk.hasClass('qoll-response-val')) {
@@ -400,7 +420,7 @@ Template.qolls.events({
 		qlog.info('youclicked: ' + this._iter_v, filename);
 		qlog.info('youclickedon: ' + event, filename);
 		qlog.info('youclickedid: ' + qollId, filename);
-		qlog.info('the aindex =' + answerIndex, filename);
+		qlog.info('the aindex =' + answerVal + '/' + answerIndex, filename);
 		Meteor.call('registerQollCustom', qollId, answerVal, answerIndex, function(err, qollRegId) {
 			if (err) {
 				qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);

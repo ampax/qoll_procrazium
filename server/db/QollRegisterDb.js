@@ -65,19 +65,23 @@ Meteor.methods({
 						}
 
 						//reset the qollType for single choice, and modify/add it for multiple choice
-						qlog.info('yyyyyyyyyyyyyyyyyyyyyyyySetting registers for multiple qoll', filename);
+						qlog.info('Setting registers for multiple qoll', filename);
 						var qollTypeReg = undefined;
 						if(qollFound.isMultiple == true) {
-							qlog.info('xxxxxxxxxxxxxxxxxxxxxxxSetting registers for multiple qoll ' +qollFound.isMultiple, filename);
-							if(existQollReg.qollTypeReg != undefined && existQollReg.qollTypeReg != null) 
-								qollTypeReg = existQollReg.qollTypeReg;
-							else 
+							qlog.info('xxxxxxxxxxxxxxxxxxxxxxxSetting registers for multiple qoll ' +qollFound.isMultiple 
+								+ '/' + JSON.stringify(existQollReg[0]), filename);
+							if(existQollReg.length > 0 && existQollReg[0].qollTypeReg != undefined && existQollReg[0].qollTypeReg != null) {
+								qlog.info('AAAASetting registers for multiple qoll ' +qollFound.isMultiple, filename);
+								qollTypeReg = existQollReg[0].qollTypeReg;
+							} else {
+								qlog.info('BBBBSetting registers for multiple qoll ' +qollFound.isMultiple, filename);
 								qollTypeReg = CoreUtils.getUint8Array(QollConstants.MAX_SUPPORTED_QOLL_TYPES);
-								qollTypeReg[qollTypeIx] = 1;
+							}
+							qollTypeReg[qollTypeIx] = qollTypeReg[qollTypeIx] === 1? 0 : 1;
 						} else {
 							qlog.info('yyyyyyyyyyyyyyyyyyyyyyyySetting registers for multiple qoll '+qollFound.isMultiple, filename);
-							//qollTypeReg = CoreUtils.getUint8Array(QollConstants.MAX_SUPPORTED_QOLL_TYPES);
-							//qollTypeReg[qollTypeIx] = 1;
+							qollTypeReg = CoreUtils.getUint8Array(QollConstants.MAX_SUPPORTED_QOLL_TYPES);
+							qollTypeReg[qollTypeIx] = 1;
 						}
 
 						QollRegister.update({_id : existQollReg[0]._id}, 
