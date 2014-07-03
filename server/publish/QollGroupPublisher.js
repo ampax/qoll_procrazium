@@ -129,6 +129,11 @@ Meteor.publish('PUBLISH_GROUPS_OF_USER_1', function(){
 			
 			handle.forEach(function (grp){
 				var handle_usr= Meteor.users.findOne(grp.submittedBy);
+
+				/** Need to fix the users instead of bypassing it here **/
+				if(handle_usr == undefined || handle_usr.username == undefined)
+					return;
+
 				grp.author_name = handle_usr.username;
 
 				grp.author_email = UserUtil.getEmail(handle_usr);
