@@ -68,9 +68,14 @@ Meteor.methods({
 		var groups_me = handle_me.groups;
 
 		var just_groups = [];
-		groups_me.map(function(g){
-			just_groups.push(g.groupName);
-		});
+
+		if(HashUtil.checkArray(groups_me)) {
+			groups_me.map(function(g){
+				just_groups.push(g.groupName);
+			});
+		} else {
+			groups_me = new Array();
+		}
 
 
 		var new_group = {"groupOwner" : author_id, "groupName" : group_name};
