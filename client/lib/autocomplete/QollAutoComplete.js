@@ -89,8 +89,6 @@ QollAutoComplete.autocomplete = function (config, value, cb) {
   // Get the name parameter from the results
   autocompleteResults = []
   for (var i = results.length - 1; i >= 0; i--) {
-    qlog.info('Printing before pusing it to the array =======>' + JSON.stringify(results[i]) + '/' + cb(results[i]), filename);
-    
     if(cb && cb != null)
       autocompleteResults[i] = cb(results[i]);
     else autocompleteResults[i] = results[i][config['field']];
