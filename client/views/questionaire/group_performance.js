@@ -26,9 +26,9 @@ Template.group_performance.helpers({
 		} else {
 			if(_.contains(qoll_display_fields, field_name)) {
 				if(field_name === 'correct_answers') {
-					var answer = this.star_attributes? this.star_attributes.answer : '--';
-					//if(!answer || answer == undefined) answer = '--';
-					if(answer == undefined) return '--';
+					//var answer = this.star_attributes? this.star_attributes.answer : '--';
+					var answer = this.correct_answers? this.correct_answers : '--';
+					if(answer == undefined || answer === '--') return '--';
 
 					if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK) {
 						return this.star_attributes.answer.blankResponse;
@@ -47,11 +47,12 @@ Template.group_performance.helpers({
 						ans += '$$';
 
 						return ans;
+					} else {
+						return answer.join(',');
 					}
 				} else if(field_name === 'answers') {
-					var answer = this.answers[0];
-					if(!answer || answer == undefined) answer = '--';
-					if(answer === '--') return answer;
+					var answer = this.answers;
+					if(!answer || answer == undefined) return '--';
 
 					if(this.qoll_type === QollConstants.QOLL_TYPE.BLANK) {
 						qlog.info('Printing the asnwer - ' + JSON.stringify(answer), filename);
@@ -72,6 +73,8 @@ Template.group_performance.helpers({
 						ans += '$$';
 
 						return ans;
+					} else {
+						return answer.join(',');
 					}
 				} 
 				return this[field_name];
