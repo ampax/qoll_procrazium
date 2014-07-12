@@ -5,6 +5,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 	var self = this;
 	var uuid = Meteor.uuid();
 	var initializing = true;
+	var handle;
 	qlog.info('Fetching all the qolls in desc order of creation; uuid: ' + uuid, filename);
 	if (this.userId) {//first publish specialized qolls to this user
 		var ufound = Meteor.users.find({
@@ -14,7 +15,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			//submitted by this user
-			var handle = QBank.find({
+			handle = QBank.find({
 				'submittedBy' : this.userId,
 				'action' : {
 					$ne : 'archive'
@@ -74,7 +75,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 	//self.flush();
 
 	self.onStop(function() {
-		handle.stop();
+		if(handle != undefined) handle.stop();
 	});
 });
 
@@ -105,7 +106,7 @@ Meteor.publish('GROUP_STATS_PUBLISHER', function(group_name) {
 									var qollReg = QollRegister.find({qollId: item._id, submittedBy: user._id}).fetch()[0];
 									//function(var qollSt, var q, var qollReg, var user)
 									var stat = fetchQollPublishDetails(qollst, item, qollReg, user);
-									//qlog.info('<==============Adding stat===============>' + JSON.stringify(stat), filename);
+									//qlog.info('<==============Adding stat===============>' + JSON.stringify(item), filename);
 									self.added('group-stats', item._id + user._id, stat);
 								},
 								changed : function(item, idx) {
@@ -141,33 +142,55 @@ Meteor.publish('GROUP_STATS_PUBLISHER', function(group_name) {
 
 
 var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
+	//qlog.info('<=======This is the qoll we will use for fill in the blanks========>' + JSON.stringify(q), filename);
 	var stat = {};
 	stat['name'] = user.profile.name;
 	stat['email'] = user.profile.email;
 	stat['qollst'] = qollSt.qollText.length > 27 ? qollSt.qollText.substring(0,27) + '...' : qollSt.qollText;
 	stat['qoll_snip'] = q.qollText.length > 47 ? q.qollText.substring(0,47) + '...' : q.qollText;
 	stat['qoll'] = q.qollText;
-	stat['is_multiple'] = q.isMultiple;
+	stat['is_multiple'] = q.qollAttributes && q.qollAttributes.type ? 
+		(q.qollAttributes.type === QollConstants.QOLL_TYPE.MULTI ? true : false) : false;
+	stat['qoll_type'] = q.qollAttributes && q.qollAttributes.type ? q.qollAttributes.type : '';
+	stat['star_attributes'] = q.qollStarAttributes;
 
 	//Set the correct answers for the qolls (if assigned from the editor)
 	stat.correct_answers = new Array();
 	var qtx_idx = 0;
-	q.qollTypesX.map(function(qtx){
-		if(qtx.isCorrect) stat.correct_answers.push(alphabetical[qtx_idx]);
-		qtx_idx++;
-	});
+	//qlog.info('=======>qollTypesX =====>' + JSON.stringify(q), filename)
+
+	if(!q.is_parent && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
+		//handle fill in the blanks
+		if(HashUtil.checkHash(q.qollStarAttributes) && HashUtil.checkHash(q.qollStarAttributes.answer)) {
+			stat.correct_answers.push(q.qollStarAttributes.answer);
+		} else {
+			stat.correct_answers.push('--');
+		}
+	} else if(!q.is_parent && q.isMultiple){ //handle multiple choice questions
+		q.qollTypesX.map(function(qtx){
+			if(qtx.isCorrect && qtx.isCorrect === 1) stat.correct_answers.push(alphabetical[qtx_idx]);
+			qtx_idx++;
+		});
+	}
 
 	//set the derfault values for correct-answers answered
 	if(stat.correct_answers.length == 0)
 		stat.correct_answers.push('--');
 
+	qlog.info('=======>qollTypesX =====------->' + stat.correct_answers + '/' + JSON.stringify(q), filename)
+
 	stat.answers = new Array();
 
-	if(qollReg && qollReg!= null && qollReg.qollTypeReg !=null && !q.is_parent) {
+	//qlog.debug('==========================>qollReg==>' + JSON.stringify(qollReg), filename)
+
+	if(qollReg && qollReg!= undefined  && !q.is_parent && qollReg.qollTypeVal &&
+		stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type'])) {
+		stat.answers.push(qollReg.qollTypeVal);
+	} else if(qollReg && qollReg!= null && qollReg.qollTypeReg !=null && !q.is_parent) {
 		//qlog.info('qollReg=================>' + qollReg + '<====================', filename);
 		var idx = 0;
 		qollReg.qollTypeReg.map(function(reg){
-			if(reg) {
+			if(reg === 1) {
 				stat.answers.push(alphabetical[idx]);
 			}
 			idx++;
@@ -185,11 +208,30 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 		}
 	}
 
-	if(JSON.stringify(stat.correct_answers) == JSON.stringify(stat.answers)) {
+	if(stat['qoll_type'] && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], stat['qoll_type']) && qollReg) {
+		var ans  = qollReg.qollTypeVal;
+		var cans = q.qollStarAttributes.answer;
+
+		if(getUnitSelected(cans) === getUnitSelected(cans)){ 
+			var ans1 = getAnswer(cans);
+			var ans2 = getAnswer(ans);
+			if(ans1 == undefined || ans2 == undefined || ans1 != ans2 ) {
+				stat.did_pass = false;
+			} else if(ans1 === ans2) {
+				stat.did_pass = true;
+			} else
+				stat.did_pass = true; 
+		}
+		else stat.did_pass = false;
+
+	}else if(JSON.stringify(stat.correct_answers) == JSON.stringify(stat.answers)) {
 		stat.did_pass = true;
 	} else {
 		stat.did_pass = false;
 	}
+
+	//qlog.info('<=======This is the qoll we will use for fill in the blanks========>' + JSON.stringify(stat), filename);
+	
 
 	return stat;
 };
@@ -203,7 +245,20 @@ var fetchGroupStats = function(item, group_name) {
 			//TODO
 		});
 	}
-	
-
 	return item;
-}
+};
+
+var getAnswer = function(ansHash) {
+	if(ansHash == undefined) return undefined;
+	var val = ansHash.blankResponse;
+	var base = ansHash.exponentBase? ansHash.exponentBase : 10;
+	var pow = ansHash.power? ansHash.power : 0;
+	var calc = val * Math.pow(base, pow);
+	return calc;
+};
+
+var getUnitSelected = function(ansHash) {
+	return ansHash && ansHash.unitSelected ? ansHash.unitSelected : '';
+};
+
+

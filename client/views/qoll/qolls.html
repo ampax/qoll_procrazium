@@ -15,6 +15,7 @@
         {{/if}}
         {{{get_units_html qollStarAttributes}}}
         {{{get_hint_html qollStarAttributes}}}
+        <span class="saved-msg green">
       </div>
 
       <div class="col-md-2 col-xs-12">
@@ -51,7 +52,7 @@
       <div class="col-md-12 col-xs-12 list-group-item">
         <div class="col-md-10 col-xs-10 indent-littlebit" id="{{_iter_ix}}">
           {{#if is_not_blank_type ../../qollAttributes}}
-          <span class="badge pull-left qoll-response-val {{qoll_abbr_class _iter_ix}} {{is_chk_selected ../../qollTypeReg _iter_ix}} 
+          <span class="badge pull-left qoll-response-val {{qoll_abbr_class _iter_ix}} {{is_chk_selected _iter_ix}} 
           {{check_selected ../../_id _iter_ix}}  glossy">
             {{qoll_type_abbr _iter_ix}}
           </span>

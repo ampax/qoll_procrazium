@@ -18,6 +18,23 @@ body {
 .row {
     height: auto;
 }
+
+/** Override input boxes to proper width for scientific input boxes **/
+.blank_txt_input {
+    width: 100% !important;
+}
+
+.maths_number_input {
+    width: 120px !important;
+}
+
+.maths_power_input {
+    width: 80px !important;
+}
+
+.bs_input_btn {
+    height: 30px !important;
+}
 /* ============================== END:Body Bootstrap style override/define ================================ */
 
 hr .divider {

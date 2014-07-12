@@ -108,6 +108,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						//answers 		: fetch_answers(item),
 						totals 			: sumstats(item.stats),
 						viewContext 	: "createUsr",
+						isMultiple		: item.isMultiple,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -115,7 +116,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (item.is_parent)
 						q.is_parent = true;
 					//get qoll registers
-					Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
+					var reg = findQollRegisters(q.submittedBy, item._id);
+					q.myAnswers = reg;
+					q.qollTypeReg = reg.qollTypeReg;
+					q.qollTypeVal = reg.qollTypeVal;
+					q.myAnswers = reg;
+					/**Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
 						if (err) {
 							qlog.error('Error happened while getting registers' + err, filename);
 						} else {
@@ -125,7 +131,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 								q.myAnswers = reg;
 							}
 						}
-					});
+					});**/
 
 					self.added('all-qolls', item._id, q);
 
@@ -148,6 +154,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						//answers 			: fetch_answers(item),
 						totals 				: sumstats(item.stats),
 						viewContext 		: "createUsr",
+						isMultiple			: item.isMultiple,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -155,7 +162,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (item.is_parent)
 						q.is_parent = true;
 					//get qoll registers
-					Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
+					var reg = findQollRegisters(q.submittedBy, item._id);
+					q.myAnswers = reg;
+					q.qollTypeReg = reg.qollTypeReg;
+					q.qollTypeVal = reg.qollTypeVal;
+					q.myAnswers = reg;
+					/** Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
 						if (err) {
 							qlog.error('Error happened while getting registers' + err, filename);
 						} else {
@@ -165,7 +177,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 								q.myAnswers = reg;
 							}
 						}
-					});
+					}); **/
 
 					self.changed('all-qolls', item._id, q);
 
@@ -205,24 +217,30 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (usentby.length > 0)
 						sentby = usentby[0].emails[0].address;
 					var q = {
-						qollTitle : item.qollTitle,
-						qollText : item.qollText,
-						qollTypes : item.qollTypes,
-						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-						qollAttributes 	: item.qollAttributes,
-						submittedOn : item.submittedOn,
-						submittedBy : item.submittedBy,
-						sendingUser : sentby,
-						submittedTo : item.submittedTo,
-						action : item.action,
-						viewContext : "recieveUsr",
+						qollTitle 			: item.qollTitle,
+						qollText 			: item.qollText,
+						qollTypes 			: item.qollTypes,
+						qollStarAttributes 	: item.qollStarAttributes ? item.qollStarAttributes : {},
+						qollAttributes 		: item.qollAttributes,
+						submittedOn 		: item.submittedOn,
+						submittedBy 		: item.submittedBy,
+						sendingUser 		: sentby,
+						submittedTo 		: item.submittedTo,
+						action 				: item.action,
+						viewContext 		: "recieveUsr",
+						isMultiple			: item.isMultiple,
 
 						_id : item._id
 					};
 					if (item.is_parent)
 						q.is_parent = true;
 					//get qoll registers
-					Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
+					var reg = findQollRegisters(this.userId, item._id);
+					q.myAnswers = reg;
+					q.qollTypeReg = reg.qollTypeReg;
+					q.qollTypeVal = reg.qollTypeVal;
+					q.myAnswers = reg;
+					/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 						if (err) {
 							qlog.error('Error happened while getting registers' + err, filename);
 						} else {
@@ -230,7 +248,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 							if (qollTypeReg != undefined)
 								q.qollTypeReg = qollTypeReg;
 						}
-					});
+					});**/
 
 					self.added('all-qolls', item._id, q);
 					//qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
@@ -296,13 +314,19 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 							submittedTo : item.submittedTo,
 							action : item.action,
 							viewContext : "recieveUsr",
+							isMultiple		: item.isMultiple,
 
 							_id : item._id
 						};
 						if (item.is_parent)
 							q.is_parent = true;
 						//get qoll registers
-						Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
+						var reg = findQollRegisters(this.userId, item._id);
+						q.myAnswers = reg;
+						q.qollTypeReg = reg.qollTypeReg;
+						q.qollTypeVal = reg.qollTypeVal;
+						q.myAnswers = reg;
+						/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 							if (err) {
 								qlog.error('Error happened while getting registers' + err, filename);
 							} else {
@@ -310,7 +334,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 								if (qollTypeReg != undefined)
 									q.qollTypeReg = qollTypeReg;
 							}
-						});
+						});**/
 
 						self.added('all-qolls', item._id, q);
 						//qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
@@ -354,12 +378,18 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				submittedTo : item.submittedTo,
 				action : item.action,
 				viewContext : "publicQolls",
+				isMultiple		: item.isMultiple,
 				_id : item._id
 			};
 			if (item.is_parent)
 				q.is_parent = true;
 			//get qoll registers
-			Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
+			var reg = findQollRegisters(this.userId, item._id);
+			q.myAnswers = reg;
+			q.qollTypeReg = reg.qollTypeReg;
+			q.qollTypeVal = reg.qollTypeVal;
+			q.myAnswers = reg;
+			/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 				if (err) {
 					qlog.error('Error happened while getting registers' + err, filename);
 				} else {
@@ -367,7 +397,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (qollTypeReg != undefined)
 						q.qollTypeReg = qollTypeReg;
 				}
-			});
+			});**/
 
 			self.added('all-qolls', item._id, q);
 
@@ -432,12 +462,18 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					stats : item.stats,
 					totals : sumstats(item.stats),
 					viewContext : "createUsr",
+					isMultiple		: item.isMultiple,
 
 					_id : item._id
 				};
 
 				//get qoll registers
-				Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
+				var reg = findQollRegisters(this.userId, item._id);
+				q.myAnswers = reg;
+				q.qollTypeReg = reg.qollTypeReg;
+				q.qollTypeVal = reg.qollTypeVal;
+				q.myAnswers = reg;
+				/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 					if (err) {
 						qlog.error('Error happened while getting registers' + err, filename);
 					} else {
@@ -445,7 +481,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 						if (qollTypeReg != undefined)
 							q.qollTypeReg = qollTypeReg;
 					}
-				});
+				});**/
 
 				self.added('all-open-qolls', item._id, q);
 				//qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
@@ -466,12 +502,18 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					stats : item.stats,
 					totals : sumstats(item.stats),
 					viewContext : "createUsr",
+					isMultiple		: item.isMultiple,
 
 					_id : item._id
 				};
 
 				//get qoll registers
-				Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
+				var reg = findQollRegisters(this.userId, item._id);
+				q.myAnswers = reg;
+				q.qollTypeReg = reg.qollTypeReg;
+				q.qollTypeVal = reg.qollTypeVal;
+				q.myAnswers = reg;
+				/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
 					if (err) {
 						qlog.error('Error happened while getting registers' + err, filename);
 					} else {
@@ -479,7 +521,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 						if (qollTypeReg != undefined)
 							q.qollTypeReg = qollTypeReg;
 					}
-				});
+				});**/
 
 				self.changed('all-open-qolls', item._id, q);
 				//qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);

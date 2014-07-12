@@ -41,7 +41,7 @@
 		<div class="container" id="qbank-container-id">
 			
 			<div class="col-md-12 col-xs-12 list-group-item-heading list-group-item blue_bg_5">
-				Displaying group statistics for - {{groupName}}
+				Displaying group performance details for - {{groupName}}
 			</div>
 
 			{{#constant}}
@@ -50,10 +50,10 @@
 			<table id="groupStatistics" class="table table-bordered" cellspacing="0" width="100%">
 				<thead class='blue_bg_5'>
 		            <tr>
-		                <th>Name (Email)</th>
+		                <th>Name, Email</th>
 		                <th>Homework Title</th>	
 		                <th>Qoll</th>
-		                <th>Students Answer</th>
+		                <th>Student's Answer</th>
 		                <th>Correct Answer</th>
 		                <th>Result</th>
 		            </tr>
@@ -74,8 +74,8 @@
 	                <td>{{get_display "name"}} {{get_display "email"}}</td>
 	                <td>{{get_display "qollst"}}</td>
 	                <td>{{get_display "qoll_snip"}}</td>
-	                <td>{{get_display "answers"}}</td>
-	                <td>{{get_display "correct_answers"}}</td>
+	                <td>{{#mathjax}}{{get_display "answers"}}{{/mathjax}}</td>
+	                <td>{{#mathjax}}{{get_display "correct_answers"}}{{/mathjax}}</td>
 	                <td>{{{did_pass_or_fail}}}</td>
 	            </tr>
 			{{/each}}

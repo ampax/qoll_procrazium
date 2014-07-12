@@ -48,6 +48,7 @@ Meteor.methods({
         qolls.map(function(q){
             var qs = q.split(/\n-/);
             var qoll = qs[0];
+            var qollType = QollConstants.QOLL_TYPE.MULTI
 
             //fetch the qoll level attributes here. split the qoll string on * and then apply
             qlog.info('<==============Printing qoll===============>'+qoll, filename);
@@ -74,7 +75,40 @@ Meteor.methods({
             				star_val.split(/(?:,| )+/).map(function(tmp1){
             					if(tmp1.length > 0) qoll_star_attributes[star].push(tmp1);
             				});
-                		} else
+                		} else if(star === QollConstants.EDU.ANSWER){
+                            //Handle the answer here, first part will be number, second (if there) exponent, and third unit
+                            /**
+                            Examples - 
+                            *answer 9.8*10^2 m/sec2
+                            *answer 9.8 10 2 m/sec2
+                            *answer 9.8 2 m/sec2
+                            *answer 9.8 10^2
+                            *answer 9.8 2
+                            *answer 9.8
+                            **/
+                            qoll_star_attributes[star] = {};
+                            star_val = star_val.replace("*", " ");
+                            star_val = star_val.replace("^", " ")
+                            var tmp = star_val.split(/\s+/);
+                            if(tmp.length === 1) {
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                            } else if(tmp.length === 2){
+                                //handle case 1
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                                qoll_star_attributes[star]['power'] = tmp[1];
+                            } else if(tmp.length === 3) {
+                                //handle case 2
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                                qoll_star_attributes[star]['power'] = tmp[1];
+                                qoll_star_attributes[star]['unitSelected'] = tmp[2];
+                            } else if(tmp.length === 4) {
+                                //handle case 3 (simplest, considering default log base-10)
+                                qoll_star_attributes[star]['blankResponse'] = tmp[0];
+                                qoll_star_attributes[star]['exponentBase'] = tmp[1];
+                                qoll_star_attributes[star]['power'] = tmp[2];
+                                qoll_star_attributes[star]['unitSelected'] = tmp[3];
+                            }
+                        } else
                 			qoll_star_attributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
                 	}
                 });
@@ -101,10 +135,44 @@ Meteor.methods({
 	            types.push(x);
             });
 
+            var qollType
+            //If this is a single statement fill in the blanks
+            if(qoll.indexOf("?==") != -1){
+                qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
+            } else if(qoll.indexOf("?=") != -1){
+                qollType = QollConstants.QOLL_TYPE.BLANK;
+            }
+            //Check for type values, if there is one choice only and has ?= then mark it as BLANK. this can be extended to having
+            //more than one choices with blanks in 'em'
+            else if(types.length === 1) {
+                if(types[0].type === "?==") {
+                    qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
+                } else if(types[0].type === "?="){
+                    qollType = QollConstants.QOLL_TYPE.BLANK;
+                }
+            }
+            //Check the type values, if these are true/false then this will be a bool type
+            else if(types.length === 2) {
+                var foundTrue = false, foundFalse = false;
+                types.map(function(t){
+                    if(_.contains(['1', 'true', 'True', 'TRUE'], t.type))
+                        foundTrue = true;
+
+                    if(_.contains(['0', 'false', 'False', 'FALSE'], t.type))
+                        foundFalse = true;
+                });
+
+                if(foundTrue && foundFalse)
+                    qollType = QollConstants.QOLL_TYPE.BOOL;
+            }
+
+            if (types.length > 1)
+                qollType = QollConstants.QOLL_TYPE.MULTI
 
 
 
-            parsed_qolls.push({'qoll':qoll, 'qoll_star_attributes' : qoll_star_attributes, 'types' : types});
+
+            parsed_qolls.push({'qoll':qoll, 'qoll_star_attributes' : qoll_star_attributes, 'types' : types, 'qollType': qollType});
         });
         return parsed_qolls;
     },

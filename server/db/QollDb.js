@@ -196,7 +196,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		
 
 		//fetch the qoll level attributes here. split the qoll string on * and then apply
-        qlog.info('<==============Printing qoll===============>'+qoll, filename);
+        //qlog.info('<==============Printing qoll===============>'+qoll, filename);
         var qoll_parts = qoll.split(/\n\*/);
         var qollStarAttributes = {};
         qoll = qoll_parts[0];
@@ -207,8 +207,8 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
             	if(qp) qp = qp.trim();
             	var star = qp.split(/\s+/)[0];
             	var star_val = qp.substr(qp.indexOf(' ') + 1);
-            	qlog.info('<======option name========>' +star, filename);
-            	qlog.info('<======option value========>' +star_val, filename);
+            	//qlog.info('<======option name========>' +star, filename);
+            	//qlog.info('<======option value========>' +star_val, filename);
             	if(_.contains(QollConstants.EDU.ALLOWED_STARS, star)) {
             		//handle the allowed options here
             		if(_.contains(['unit','units'], star)) {
@@ -222,7 +222,43 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
         				star_val.split(/(?:,| )+/).map(function(tmp1){
         					if(tmp1.length > 0) qollStarAttributes[star].push(tmp1);
         				});
-            		} else
+            		} else if(star === QollConstants.EDU.ANSWER){
+                        //Handle the answer here, first part will be number, second (if there) exponent, and third unit
+                        /**
+                        Examples - 
+                        *answer 9.8*10^2 m/sec2
+                        *answer 9.8 10 2 m/sec2
+                        *answer 9.8 2 m/sec2
+                        **/
+                        qollStarAttributes[star] = {};
+                        var tmp = [];
+                        //star_val = star_val.replace("*", " ").replace("^" " ");
+                        if(star_val) {
+	                        star_val = star_val.replace("*", " ");
+	                        star_val = star_val.replace("^", " ");
+	                        tmp = star_val.split(/\s+/);
+	                    }
+
+                        if(tmp.length === 1) {
+                        	qlog.info('Printing the array from case 1 ' + star_val + '/' + tmp[0], filename);
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                        } else if(tmp.length === 2){
+                            //handle case 1
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                            qollStarAttributes[star]['power'] = tmp[1];
+                        } else if(tmp.length === 3) {
+                            //handle case 2
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                            qollStarAttributes[star]['power'] = tmp[1];
+                            qollStarAttributes[star]['unitSelected'] = tmp[2];
+                        } else if(tmp.length === 4) {
+                            //handle case 3 (simplest, considering default log base-10)
+                            qollStarAttributes[star]['blankResponse'] = tmp[0];
+                            qollStarAttributes[star]['exponentBase'] = tmp[1];
+                            qollStarAttributes[star]['power'] = tmp[2];
+                            qollStarAttributes[star]['unitSelected'] = tmp[3];
+                        }
+                    } else
             			qollStarAttributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
             	}
             });
@@ -256,14 +292,19 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		});
 
 		//If this is a single statement fill in the blanks
-        if(qoll.indexOf("?=") != -1){
+        if(qoll.indexOf("?==") != -1){
+        	qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
+        } else if(qoll.indexOf("?=") != -1){
         	qollType = QollConstants.QOLL_TYPE.BLANK;
         }
         //Check for type values, if there is one choice only and has ?= then mark it as BLANK. this can be extended to having
 		//more than one choices with blanks in 'em'
 		else if(typesX.length === 1) {
-			if(typesX[0].type.indexOf("?=") != -1)
+			if(typesX[0].type === "?==") {
+				qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
+			} else if(typesX[0].type === "?="){
 				qollType = QollConstants.QOLL_TYPE.BLANK;
+        	}
 		}
         //Check the type values, if these are true/false then this will be a bool type
 		else if(typesX.length === 2) {
@@ -283,7 +324,7 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, acti
 		//If there are more than one correct answers, this is a multiple choice question
 		if (count > 1)
 			isMultiple = true;
-		qlog.info('qoll: ' + qoll + ", types: " + qollType, filename);
+		qlog.info('qoll: ' + qoll + ", types:=================---------> " + qollType, filename);
 
 		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
 		qollAttributes.type = qollType;
