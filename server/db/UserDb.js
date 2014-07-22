@@ -46,9 +46,6 @@ Usr.ensureUpdate = function(userId, col_name, col_val) {
 };
 /** END: New standard code **/
 
-
-QollGroups = new Meteor.Collection("QOLL_GROUPS");
-
 Meteor.methods({
 	currentUserName: function(){
         qlog.info("Getting avatar for: " + Meteor.userId(), filename);
@@ -93,6 +90,25 @@ Meteor.methods({
 		});
 
 		updateUserGroupsCreated(groupName);
+	},
+	userAddGroupMembership:function(groupName, ownerEmail){
+		var owneruser=UserUtil.findByEmail(ownerEmail);
+		
+		if(owneruser){
+			var grpfound=QollGroups.findOne({'submittedBy':owneruser._id,'groupName':groupName});
+					
+			if(grpfound){
+				
+				if( grpfound.userEmails=== undefined || grpfound.userEmails.indexOf(UserUtil.getEmail(Meteor.user()))<0){
+							
+					return QollGroups.update(
+                    { _id: grpfound._id },
+                    { $push: { userEmails: UserUtil.getEmail(Meteor.user()) } }
+                 );
+				}
+			}
+		}
+		return false;
 	}
 
 });

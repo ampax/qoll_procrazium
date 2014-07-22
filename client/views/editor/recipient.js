@@ -29,10 +29,12 @@ Template.recipient.events({
   		$('.qollQbankToggle').html($('.qollQbankToggle').html().replace('Qoll To:','Qbank:  '));
   		$('.recipient').val('qbank@qoll.io');
   		$(".recipient").prop('disabled', true);
+  		$('.toolbar-sendqoll').hide();
   	}else{
   		$("input").prop('disabled', false);
   		$('.qollQbankToggle').html($('.qollQbankToggle').html().replace('Qbank:  ','Qoll To:'));
   		$('.recipient').val('');
+  		$('.toolbar-sendqoll').show();
   	}
   }
 });

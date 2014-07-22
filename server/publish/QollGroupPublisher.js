@@ -8,7 +8,7 @@ Meteor.publish('QOLL_GROUP_PUBLISHER', function(){
         qlog.info('Grouppublish; uuid: ' + uuid, filename);
         //db.QOLL.find({'submittedTo':'usr3322@qoll','action':'send'})
         if(this.userId) {//first publish specialized qolls to this user
-			qlog.info('Grouppublish USERID --------->>>>>'+this.userId);
+			//qlog.info('Grouppublish USERID --------->>>>>'+this.userId);
 			
 			
 			var gpsraw= QollGroups.find({'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
@@ -39,25 +39,12 @@ Meteor.publish('RECIPIENTS_PUBLISHER', function(){
         var handle = undefined;
 
         if(this.userId) {
-        	var allUserGroups = [];
-
-			handle= QollGroups.find({'createdBy':this.userId}, {"_id": 1,'groupName':1,'createdBy':2}, {reactive:false});
-
+			handle= QollGroups.find({'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
+	        //var allUserGroups = [];
 	        handle.forEach(function (grp){
-				var t = {'name' : grp.groupName, 'createdBy': grp.createdBy, '_id' : grp._id};
-				allUserGroups.push(t);
-			});
-
-			//TODO: This will come from the user-social-contacts
-			handle = Meteor.users.find({}, {'profile': 1}, {reactive:false});
-			handle.forEach(function (usr){
-				//TODO: name should be name and front end should show a concatenated string of name and email-id
-				var t = {'name' : UserUtil.getEmail(usr), 'email' : UserUtil.getEmail(usr), '_id' : usr._id}; 
-				allUserGroups.push(t);
-			});
-
-			allUserGroups.forEach(function(tx){
-				self.added('recipients', tx._id, tx);
+				//allUserGroups.push(grpEntry.groupName);
+				//qlog.info("Printing the group-name: " + grp.groupName, filename);
+				self.added('recipients', grp._id, grp);
 			});
 		}
 		
@@ -91,3 +78,70 @@ Meteor.publish('QOLLERS_PUBLISHER', function(){
         initializing = false;
         self.ready();
 }); 
+
+
+/** Publish a list of friends and groups for the qoll-user-logged-in  **/
+Meteor.publish('PUBLISH_GROUPS_OF_USER_1', function(){
+        var self = this;
+        var uuid = Meteor.uuid();
+        var initializing = true;
+
+        //qlog.info('=======>Group-publish; uuid: ' + uuid + ", this.userid:<======= " + this.userId, filename);
+        var handle = undefined;
+
+        //if(this.userId) {
+			//handle= QollGroups.find({fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
+			//handle= QollGroups.find();
+			handle= QollGroups.find({}, {$sort: {'groupName':-1}});
+			
+			handle.forEach(function (grp){
+				var handle_usr= Meteor.users.findOne(grp.submittedBy);
+
+				/** Need to fix the users instead of bypassing it here **/
+				if(handle_usr == undefined || handle_usr.username == undefined)
+					return;
+
+				grp.author_name = handle_usr.username;
+
+				grp.author_email = UserUtil.getEmail(handle_usr);
+				self.added('user-groups', grp._id, grp);
+			});
+		//}
+		
+        qlog.info('Done initializing the publisher: PUBLISH_GROUPS_OF_USER_1, uuid: ' + uuid, filename);
+        initializing = false;
+        self.ready();
+});
+
+/** Publish all the groups that the user has subscribed to **/
+Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
+  var self= this;
+  var gp_memberships=[];
+
+  if (this.userId) {
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var user_email = UserUtil.getEmail(user);// user.emails[0].address;
+      QollGroups.find({userEmails:user_email}, { sort : { 'submittedOn' : -1 }, reactive : true}).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(item, idx){
+          //populate the group with creaters information and publish
+          var owner= Meteor.users.findOne(item.submittedBy);
+          var owner_email = UserUtil.getEmail(owner);
+          if(owner_email && owner_email != '') {
+            var g = {groupId : item._id, groupName : item.groupName, userId : owner._id, groupOwner : owner_email};
+            self.added('user-subscription-groups', item._id, g);
+          }
+        },
+        removed : function(item){
+          qlog.info('Removed item with id: ' + item._id);
+          self.removed('user-subscription-groups', item._id);
+        }
+      });
+    }
+  }
+});
+
+

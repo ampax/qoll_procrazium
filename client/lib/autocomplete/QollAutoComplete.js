@@ -26,7 +26,7 @@ QollAutoComplete.init = function (element) {
  * Run a database query to find all objects and populate the autocomplete box
  * @param config
  */
-QollAutoComplete.autocomplete = function (config) {
+QollAutoComplete.autocomplete = function (config, value, cb) {
   //qlog.info('Running autoc-complete ' + config + ' typeof = ' + typeof(config));
   if (typeof(config) === 'undefined'){
     log('ERROR', 'Missing required config parameter in autocompleter()');
@@ -70,7 +70,10 @@ QollAutoComplete.autocomplete = function (config) {
   filter['limit'] = config['limit'];
   filter['sort'] = config['sort'];
   filter['fields'] = {};
-  filter['fields'][config['field']] = 1; // Only include the searchable
+  //filter['fields'][config['field']] = 1; // Only include the searchable
+  //filter['fields'][config['value']] = 1;//if(config['value']) 
+  qlog.info('Printing the config parameters -> '+config[1], filename);
+  //value: 'groupName',
                                          // field in the result
   //log('DEBUG', 'Filter object: ');
   logObj(filter);
@@ -86,7 +89,9 @@ QollAutoComplete.autocomplete = function (config) {
   // Get the name parameter from the results
   autocompleteResults = []
   for (var i = results.length - 1; i >= 0; i--) {
-    autocompleteResults[i] = results[i][config['field']];
+    if(cb && cb != null)
+      autocompleteResults[i] = cb(results[i]);
+    else autocompleteResults[i] = results[i][config['field']];
   };
 
   // Update the autocomplete result list

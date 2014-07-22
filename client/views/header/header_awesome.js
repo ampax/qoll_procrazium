@@ -32,7 +32,7 @@ Template.header_awesome.rendered = function()
         $('div#login-buttons-open-change-password').text(chang_passwd);
         $('div#login-buttons-logout').text(sign_out);
         $('#login-buttons-logout').before('<a href="/users/'+Meteor.user().profile.slug+'" class="account-link login-button button">'+view_profile+'</a>');
-        $('#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
+        //$('#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
       }
 
     //$('#login-buttons').append(SOMETHING CUSTOM).append('Some other custom thing');login-buttons-open-change-password

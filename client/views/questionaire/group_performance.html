@@ -1,0 +1,106 @@
+<template name="my_groups">
+	{{> header_awesome}}
+	<p class="lead"></p>
+	<div id="aceEditorContainer">
+
+		<div class="container" id="qbank-container-id">
+			
+			<div class="col-md-12 col-xs-12 list-group-item-heading list-group-item">
+				Click a group to see performance
+			</div>
+
+			{{#each groups}}
+			<!-- Start of Qoll Section -->
+			<div class="col-md-12 col-xs-12 list-group-item groups">
+				<div class="col-md-7 col-xs-12">
+					<a href="{{ pathFor 'groupPerformance' }}" class=''>
+						{{{name}}}
+					</a>
+				</div>
+				<div class="col-md-2 col-xs-12">
+					<!--Size - n-->
+				</div>
+				<div class="col-md-3 col-xs-12">
+					<!--Last Activity - time-->
+				</div>
+			</div>
+			<!-- End of Qoll Section here -->
+			{{/each}}
+
+		</div>
+	
+	</div>
+</template>
+
+
+<template name="group_performance">
+	{{> header_awesome}}
+	<p class="lead"></p>
+	<div id="aceEditorContainer">
+
+		<div class="container" id="qbank-container-id">
+			
+			<div class="col-md-12 col-xs-12 list-group-item-heading list-group-item blue_bg_5">
+				Displaying group performance details for - {{groupName}}
+			</div>
+
+			{{#constant}}
+<!--{"name":"Priyanka Sharma","email":"abc1@gmail.com","qollst":"Blackrock qollstionnaire","qoll_snip":"The SO    ion is called a sulfate ion.","qoll":"The SO    ion is called a sulfate ion.","is_multiple":false,"correct_answers":["\-\-\-"],"answers":["\-\-\-"],"is_parent":false} -->
+			<!-- Start of table here -->
+			<table id="groupStatistics" class="table table-bordered" cellspacing="0" width="100%">
+				<thead class='blue_bg_5'>
+		            <tr>
+		                <th>Name, Email</th>
+		                <th>Homework Title</th>	
+		                <th>Qoll</th>
+		                <th>Student's Answer</th>
+		                <th>Correct Answer</th>
+		                <th>Result</th>
+		            </tr>
+	        	</thead>
+	        	<!-- tfoot>
+		            <tr>
+		                <th>Name (Email)</th>
+		                <th>Homework Title</th>
+		                <th>Qoll</th>
+		                <th>Answer</th>
+		                <th>Correct</th>
+		                <th>Result</th>
+		            </tr>
+	        	</tfoot -->
+	        	<tbody>
+			{{#each group_stats}}
+				<tr class="{{qoll_class}}">
+	                <td>{{get_display "name"}} {{get_display "email"}}</td>
+	                <td>{{get_display "qollst"}}</td>
+	                <td>{{get_display "qoll_snip"}}</td>
+	                <td>{{#mathjax}}{{get_display "answers"}}{{/mathjax}}</td>
+	                <td>{{#mathjax}}{{get_display "correct_answers"}}{{/mathjax}}</td>
+	                <td>{{{did_pass_or_fail}}}</td>
+	            </tr>
+			{{/each}}
+				</tbody>
+			</table>
+			<!-- End of table here -->
+			{{/constant}}
+
+			<!-- Start of Qoll Section -->
+			<!--div class="col-md-12 col-xs-12 list-group-item groups">
+				<div class="col-md-7 col-xs-12">
+					<a href="{{ pathFor 'groupPerformance' }}" class=''>
+						{{{name}}}
+					</a>
+				</div>
+				<div class="col-md-2 col-xs-12">
+					Size - n
+				</div>
+				<div class="col-md-3 col-xs-12">
+					Last Activity - time
+				</div>
+			</div -->
+			<!-- End of Qoll Section here -->
+
+		</div>
+	
+	</div>
+</template>

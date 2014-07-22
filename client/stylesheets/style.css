@@ -1,3 +1,42 @@
+/* ============================== START: Body level style override/define ================================ */
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.428571429;
+    color: #333333;
+    background-color: #ffffff;
+}
+
+/* ============================== END:Body level style override/define ================================ */
+
+
+/* ============================== START: Bootstrap style override/define ================================ */
+.btn {
+  padding: 0px 12px !important;
+}
+
+.row {
+    height: auto;
+}
+
+/** Override input boxes to proper width for scientific input boxes **/
+.blank_txt_input {
+    width: 100% !important;
+}
+
+.maths_number_input {
+    width: 120px !important;
+}
+
+.maths_power_input {
+    width: 80px !important;
+}
+
+.bs_input_btn {
+    height: 30px !important;
+}
+/* ============================== END:Body Bootstrap style override/define ================================ */
+
 hr .divider {
     background-color: #d4d4d4;
     color: #d4d4d4;
@@ -194,6 +233,14 @@ a:hover, a:active {
 
 .red {
     color: red;
+}
+
+.green {
+    color: green;
+}
+
+.green-bg {
+    background-color: green;
 }
 
 i.orange:before {
@@ -424,7 +471,7 @@ span.qoll-toolbar-plain {
 .list-group-item {
     overflow: hidden !important;
     padding: 5px 5px !important;
-    color: #000305 !important;
+    color: #000305;
     background-color:rgba(191, 162, 219, 0.17);
     font-size: 14px !important;
     font-family: Arial, 'Lucida Sans Unicode' !important;
@@ -432,9 +479,21 @@ span.qoll-toolbar-plain {
 }
 
 .list-group-item-heading {
-	color: #FFF  !important;
+	color: #FFF;
 	background-color: rgba(50, 118, 177, 0.56);
 	border-color: rgba(9, 28, 80, 1);
+}
+
+/** Olive Color for Qollstionnaires **/
+.qollstion {
+    background-color: #D4D49C;
+    cursor: pointer;
+}
+
+/** Olive Color for Groups **/
+.groups {
+    background-color: #E6E6E6;
+    cursor: pointer;
 }
 
 .qoll-seperator {

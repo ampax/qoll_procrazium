@@ -33,3 +33,176 @@
 .class_8 {
 	background-color: #33CC33;
 }
+
+/* ========================================== Various colors with gradient ====================================== */
+/* lower number higher gradient (darker) and higher number lower gradient (ligher) */
+
+.red_1 {
+	color : #CC0000;
+}
+
+.red_2 {
+	color : #FF0000;
+}
+
+.red_3 {
+	color : #FF3300;
+}
+
+.red_4 {
+	color : #FF5050;
+}
+
+.red_5 {
+	color : #FF6666;
+}
+
+.red_bg_1 {
+	background-color : #CC0000;
+}
+
+.red_bg_2 {
+	background-color : #FF0000;
+}
+
+.red_bg_3 {
+	background-color : #FF3300;
+}
+
+.red_bg_4 {
+	background-color : #FF5050;
+}
+
+.red_bg_5 {
+	background-color : #FF6666;
+}
+
+.green_1 {
+	color : #006600;
+}
+
+.green_2 {
+	color : #009933;
+}
+
+.green_3 {
+	color : #009900;
+}
+
+.green_4 {
+	color : #00CC00;
+}
+
+.green_5 {
+	color : #80E680;
+}
+
+.green_bg_1 {
+	background-color : #006600;
+}
+
+.green_bg_2 {
+	background-color : #009933;
+}
+
+.green_bg_3 {
+	background-color : #009900;
+}
+
+.green_bg_4 {
+	background-color : #00CC00;
+}
+
+.green_bg_5 {
+	background-color : #80E680;
+}
+
+.blue_1 {
+	color : #1947A3;
+}
+
+.blue_2 {
+	color : #003399;
+}
+
+.blue_3 {
+	color : #0033CC;
+}
+
+.blue_4 {
+	color : #0066FF;
+}
+
+.blue_5 {
+	color : #3399FF;
+}
+
+.blue_6 {
+	color: #85C2FF !important;
+}
+
+.blue_bg_1 {
+	background-color : #1947A3;
+}
+
+.blue_bg_2 {
+	background-color : #003399;
+}
+
+.blue_bg_3 {
+	background-color : #0033CC;
+}
+
+.blue_bg_4 {
+	background-color : #0066FF;
+}
+
+.blue_bg_5 {
+	background-color : #3399FF;
+}
+
+.blue_bg_6 {
+	background-color: #85C2FF !important;
+}
+
+.white_1 {
+	color: #FFFFFF !important;
+}
+
+.white_2 {
+	color: #E6E6E6 !important;
+}
+
+.white_3 {
+	color: #CCCCCC !important;
+}
+
+.white_4 {
+	color: #B2B2B2 !important;
+}
+
+.white_5 {
+	color: #999999 !important;
+}
+
+
+.white_bg_1 {
+	color: #FFFFFF !important;
+}
+
+.white_bg_2 {
+	color: #E6E6E6 !important;
+}
+
+.white_bg_3 {
+	color: #CCCCCC !important;
+}
+
+.white_bg_4 {
+	color: #B2B2B2 !important;
+}
+
+.white_bg_5 {
+	color: #999999 !important;
+}
+

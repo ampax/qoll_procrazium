@@ -20,11 +20,13 @@ Meteor.publish('QOLL_REG_PUBLISHER', function(){
 	          added: function(item, idx) {
 				  
 	              var q = {
-	                qollId : item.qollId,
-	                qollTypeVal : item.qollTypeVal,
-	                qollTypeIndex: item.qollTypeIndex,
-	                submittedBy : item.submittedBy,
-	                submittedOn : item.submittedOn,
+	                qollId 			: item.qollId,
+	                qollTypeVal 	: item.qollTypeVal,
+	                qollTypeIndex	: item.qollTypeIndex,
+	                qollTypeReg		: item.qollTypeReg,
+	                unitSelected 	: item.unitSelected,
+	                submittedBy 	: item.submittedBy,
+	                submittedOn 	: item.submittedOn,
 	                
 	                _id : item._id
 	              };
@@ -36,11 +38,13 @@ Meteor.publish('QOLL_REG_PUBLISHER', function(){
 				  
 	            
 	              var q = {
-	                qollId : item.qollId,
-	                qollTypeVal : item.qollTypeVal,
-	                qollTypeIndex: item.qollTypeIndex,
-	                submittedBy : item.submittedBy,
-	                submittedOn : item.submittedOn,
+	                qollId 			: item.qollId,
+	                qollTypeVal 	: item.qollTypeVal,
+	                qollTypeIndex	: item.qollTypeIndex,
+	                qollTypeReg		: item.qollTypeReg,
+	                unitSelected 	: item.unitSelected,
+	                submittedBy 	: item.submittedBy,
+	                submittedOn 	: item.submittedOn,
 	                
 	                _id : item._id
 	              };
@@ -67,6 +71,4 @@ Meteor.publish('QOLL_REG_PUBLISHER', function(){
                 handle.stop();
         });
 }); 
-
-
 

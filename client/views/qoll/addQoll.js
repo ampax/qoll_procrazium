@@ -2,8 +2,6 @@ var filename="client/views/qoll/addQoll.js";
 
 //var StdQollTypes = new Meteor.Collection("standard-qoll-types");
 //var CstQollTypes = new Meteor.Collection("custom-qoll-types");
-var QollGps = new Meteor.Collection("qoll-groups");
-
 Template.addQoll.helpers({
     allQollTypes: function(event){
         qlog.info('Getting the qoll-types standard + custom');
