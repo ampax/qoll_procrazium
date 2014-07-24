@@ -15,7 +15,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			//submitted by this user or public (default)
-			handle = QBank.find({
+			
 			var handle = Qoll.find({$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
 										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
 			{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 

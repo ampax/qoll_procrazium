@@ -56,10 +56,10 @@ Template.user_edit.helpers({
     qlog.info('locale - ' + locale, filename);
 		return UserUtil.getLocale(this) === locale ? 'checked' : '';
   },
-});
-
-
-UserGroups = new Meteor.Collection("user-groups");
+  isState: function(state, user) {
+    return UserUtil.getState(user) === state.state_code ? 'selected' : '';
+  },
+  isCountry: function(country, user) {
     return UserUtil.getCountry(user) === country.country_code ? 'selected' : '';
   },
   isSex: function(sex) {
@@ -71,6 +71,11 @@ UserGroups = new Meteor.Collection("user-groups");
   countries: function(country) {
     return countries;
   },
+})
+
+
+UserGroups = new Meteor.Collection("user-groups");
+
 
 Template.user_edit.events({
 	'keyup input#group_search': function (e) {
