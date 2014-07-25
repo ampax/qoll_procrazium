@@ -53,24 +53,22 @@ Template.user_edit.helpers({
 		return UserUtil.getUserSetting('notifications.replies', '', this) ? 'checked' : '';
 	},
 	isLocale : function(locale) {
-    qlog.info('locale - ' + locale, filename);
+    	qlog.info('locale - ' + locale, filename);
 		return UserUtil.getLocale(this) === locale ? 'checked' : '';
-  },
+  	},
+  	isCountry : function(country, user) {
+  		return UserUtil.getCountry(user) === country.country_code ? 'selected' : '';
+  	},
+  	isSex: function(sex) {
+	    return UserUtil.getSex(this) === sex ? 'selected' : '';
+	},
+	statesForCountry: function(country) {
+	    return country === 'USA' ? us_states : undefined;
+	},
+	countries: function(country) {
+	    return countries;
+	},
 });
-
-
-UserGroups = new Meteor.Collection("user-groups");
-    return UserUtil.getCountry(user) === country.country_code ? 'selected' : '';
-  },
-  isSex: function(sex) {
-    return UserUtil.getSex(this) === sex ? 'selected' : '';
-  },
-  statesForCountry: function(country) {
-    return country === 'USA' ? us_states : undefined;
-  },
-  countries: function(country) {
-    return countries;
-  },
 
 Template.user_edit.events({
 	'keyup input#group_search': function (e) {

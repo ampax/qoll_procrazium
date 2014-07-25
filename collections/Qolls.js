@@ -7,6 +7,7 @@ QBank = new Meteor.Collection("QOLL_BANK");
 QollRaw = new Meteor.Collection("QOLL_RAW");
 Qollstionnaire = new Meteor.Collection("QOLLSTIONNAIRE");
 QollTags = new Meteor.Collection("QOLL_TAGS");
+QollRegister = new Meteor.Collection("QOLL_REGISTER");
 
 
 // =============================== Add published collections here ================================ //
@@ -23,10 +24,10 @@ Publish the following qolls
 	(5) My group's qoll - All qolls sent to this group
 	(6) My qollstionnaires - All qollstionnaires created by me
 ****/
+AllQolls = new Meteor.Collection("all-qolls");
 MyCreatedQolls = new Meteor.Collection("my_active_qolls");
 MyRecievedQolls = new Meteor.Collection("my_rec_qolls");
 AllPublicQolls = new Meteor.Collection("mine_and_public_qolls");
-MyGroups = new Meteor.Collection("my_group");
 MyGroupQolls = new Meteor.Collection("group_qolls");
 //MyQollstionnaires = new Meteor.Collection("my_qollstionnaires");
 

@@ -132,7 +132,7 @@ Meteor.methods({
 			return qollId;
 		}
 	},
-	addQollstionnaire : function(qollstionnaire) {
+	addQollstionnaire1 : function(qollstionnaire) {
 		var emails = qollstionnaire.emails;
 		var qbankids = qollstionnaire.qbank_qollids;
 		var qtext = qollstionnaire.title;
