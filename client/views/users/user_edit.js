@@ -56,7 +56,10 @@ Template.user_edit.helpers({
     	qlog.info('locale - ' + locale, filename);
 		return UserUtil.getLocale(this) === locale ? 'checked' : '';
   	},
-  	isCountry : function(country, user) {
+  isState: function(state, user) {
+    return UserUtil.getState(user) === state.state_code ? 'selected' : '';
+  },
+  isCountry: function(country, user) {
   		return UserUtil.getCountry(user) === country.country_code ? 'selected' : '';
   	},
   	isSex: function(sex) {
@@ -69,6 +72,8 @@ Template.user_edit.helpers({
 	    return countries;
 	},
 });
+
+
 
 Template.user_edit.events({
 	'keyup input#group_search': function (e) {
