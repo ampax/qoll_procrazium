@@ -1,5 +1,16 @@
 <template name="qbank_opts">
 	<div class="well well-sm">
+
+		<div class="input-group input-group-sm">
+
+			<input type="text" class="qollstionnaire-title form-control" placeholder="Enter Qollstionnaire title ..." default="Qollstionnaire title" >
+			<span class="input-group-btn">
+				<button type="button" class="btn btn-primary store-qollstionnaire"  >
+					Create
+				</button> </span>
+		</div>
+		<span class="qbank-error-msg red"></span><br>
+
 		<div class="input-group input-group-sm">
    	
 		   	<span class="input-group-btn">
@@ -13,7 +24,7 @@
 		<div class="input-group input-group-sm">
 
 			 <span class="input-group-btn">
-		     	<button type="button" class="btn btn-info qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
+		     	<button type="button" class="btn btn-primary qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
 		    </span>
 	    
 			 <input type="text" class="form-control" placeholder="Add Tags: Space separated tags ..." default="" id="add-tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1"></input>
@@ -29,15 +40,95 @@
 
 		</div--><!-- /input-group --><!--br-->
 
-		<div class="input-group input-group-sm">
 
-			<input type="text" class="qollstionnaire-title form-control" placeholder="Enter Qollstionnaire title ..." default="Qollstionnaire title" >
-			<span class="input-group-btn">
-				<button type="button" class="btn btn-primary store-qollstionnaire"  >
-					Create
+
+		<!-- Add the times here -->
+		<div class="input-group input-group-sm">
+			<span class="input-group-btn  ">
+				<button type="button" class="btn btn-info qoll-width-1"  >
+					Start Time
 				</button> </span>
-		</div>
-		<span class="qbank-error-msg red"></span>
+
+			<input id="qollsenddate" class="hasDatepicker form-control" type="text"  placeholder="Leave blank to send manually">
+			</input>
+			<span class="input-group-addon ">
+				<select class="qstion_send_hour">
+					<!--option value="HH">HH</option -->
+					<option value="01">01</option>
+					<option value="02">02</option>
+					<option value="03">03</option>
+					<option value="04">04</option>
+					<option value="05">05</option>
+					<option value="06">06</option>
+					<option value="07">07</option>
+					<option value="08">08</option>
+					<option value="09">09</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12" selected="selected">12</option>
+				</select>
+				<select class="qstion_send_min">
+					<option value="00">00</option>
+					<option value="05">05</option>
+					<option value="10">10</option>
+					<option value="15">15</option>
+					<option value="20">20</option>
+					<option value="25">25</option>
+					<option value="30">30</option>
+					<option value="35">35</option>
+					<option value="40">40</option>
+					<option value="45">45</option>
+					<option value="50">50</option>
+					<option value="55">55</option>
+				</select>
+				<select class="qstion_send_ampm">
+					<option value="AM">AM</option>
+					<option value="PM">PM</option>
+				</select> </span>
+		</div><br><!-- /start-time input-group -->
+		<div class="input-group input-group-sm">
+			<span class="input-group-btn  ">
+				<button type="button" class="btn btn-info qoll-width-1"  >
+					End Time
+				</button> </span>
+
+			<input id="qollenddate" class="hasDatepicker form-control" type="text"  placeholder="Leave blank to close manually">
+			</input>
+			<span class="input-group-addon ">
+				<select class="qstion_end_hour">
+					<!--option value="HH">HH</option -->
+					<option value="01">01</option>
+					<option value="02">02</option>
+					<option value="03">03</option>
+					<option value="04">04</option>
+					<option value="05">05</option>
+					<option value="06">06</option>
+					<option value="07">07</option>
+					<option value="08">08</option>
+					<option value="09">09</option>
+					<option value="10">10</option>
+					<option value="11">11</option>
+					<option value="12" selected="selected">12</option>
+				</select>
+				<select class="qstion_end_min">
+					<option value="00">00</option>
+					<option value="05">05</option>
+					<option value="10">10</option>
+					<option value="15">15</option>
+					<option value="20">20</option>
+					<option value="25">25</option>
+					<option value="30">30</option>
+					<option value="35">35</option>
+					<option value="40">40</option>
+					<option value="45">45</option>
+					<option value="50">50</option>
+					<option value="55">55</option>
+				</select>
+				<select class="qstion_end_ampm">
+					<option value="AM">AM</option>
+					<option value="PM">PM</option>
+				</select> </span>
+		</div><br><!-- /end-time input-group -->
 	</div>
 
 	<div class="well well-sm">

@@ -17,6 +17,16 @@ qoll----
 		| 		    ---stylesheets
 		| 		   |
 		| 		    ---views
+		|				|
+		|				|____editor
+		|						|
+		|						|____aceedit
+		|						|
+		|						|____ckedit
+		|								|
+		|								|____ckeditor (ckEditor library (js files) resides here)
+		|										|
+		|										|_____stylesheets (ckEditor stylesheets/skins, scayt is commented out)
 		|
 		 ---lib
 		|
