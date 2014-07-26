@@ -5,6 +5,8 @@
 }
 
 #aceEditorContainer {
+	padding-top: 0.75em;
+	padding-bottom: 0.75em;
 	padding-left: 2.0em;
 	padding-right: 2.0em;
 }
@@ -83,7 +85,7 @@ textarea.editor {
 }
 
 .recipient {
-	display: inherit;
+	/**display: inherit;
 	height: 2.5em;
 	position: relative;
 	overflow: hidden;
@@ -93,5 +95,5 @@ textarea.editor {
 	border-left: none;
 	border-right: none;
 	border-top: none;
-	vertical-align: middle;
+	vertical-align: middle;**/
 }

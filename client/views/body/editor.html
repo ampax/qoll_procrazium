@@ -1,8 +1,19 @@
 <template name="editor">
 	{{> header_awesome}}
+	{{> editor_selector}}
+
+	<!-- If the editor selection is markdown then this one will work -->
 	{{#if is_adv}}
 		{{> qolleditor_adv}}
-	{{else}}
+	{{/if}}
+
+	<!-- If the editor selection is html then this one will work -->
+	{{#if is_html}}
+		{{> html_editor}}
+	{{/if}}
+
+	<!-- If the editor selection is basic then this one will work -->
+	{{#if is_basic}}
 		{{> newqoll}}
 	{{/if}}
 </template>

@@ -1,0 +1,19 @@
+<!--
+  QollConstants.EDITOR_MODE.BASIC - basic
+  QollConstants.EDITOR_MODE.ADV - advanced (used for markdown now)
+  QollConstants.EDITOR_MODE.HTML - html
+-->
+<template name="editor_selector">
+	<div class="col-md-12 col-xs-12 text-right" id="aceEditorContainer">
+		Editor &rarr; 
+		<label class="radio-inline">
+		  <input type="radio" name="editorPref" id="simple" value="basic"> Simple
+		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="editorPref" id="markdown" value="advanced"> Text
+		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="editorPref" id="ckeditor" value="html"> Html
+		</label>
+	</div>
+</template>

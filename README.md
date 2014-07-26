@@ -118,6 +118,8 @@ Push the code to branch develop
 Revert back to commit version
 - git reset --hard <old-commit-id>
 - git push -f
+Check out a specific change list of code
+- git pull origin bc69283ea8f019304e4653a488b6d0530df7366a
 ```
 
 ####Repair mongodb if you get an error while connecting in local

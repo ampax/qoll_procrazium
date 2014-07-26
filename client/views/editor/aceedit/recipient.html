@@ -1,12 +1,13 @@
 <template name="recipient">
 	<div class="well well-sm">
-		<div class="input-group input-group-sm">
+
+		<div class="input-group input-group-sm highlight">
    	
 		   	<span class="input-group-btn">
 		     	<button type="button" class="btn btn-primary qoll-width-1"  >Attributes &rarr; </button>
 		    </span>
 	    
-			 <label class="radio-inline">
+			<label class="radio-inline">
 			  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1
 			</label>
 			<label class="radio-inline">
@@ -37,5 +38,10 @@
 			 <input type="text" class="tags form-control" placeholder="Add Tags: Space separated tags ..." default="" id="tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1"></input>
 
 		</div><!-- /input-group -->
+	</div>
+
+	<div class="input-group input-group-sm">
+		<button type="button" class="btn btn-primary btn-md">Store</button> &nbsp;
+		<button type="button" class="btn btn-primary btn-md">Send</button>
 	</div>
 </template>
