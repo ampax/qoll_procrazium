@@ -1,5 +1,24 @@
 var filename="client/views/editor/recipient.js";
 
+Template.recipient.events({
+  'click .store' : function(event){
+    var content = 'undefined';
+    var editor_choice = $('input[name=editorPref]:checked').val();
+    if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
+      content = $( 'textarea#editor' ).val();
+    }
+    qlog.info('Storing the qoll now - ' + content, filename);
+  },
+  'click .send' : function(event){
+    var content = 'undefined';
+    var editor_choice = $('input[name=editorPref]:checked').val();
+    if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
+      content = $( 'textarea#editor' ).val();
+    }
+    qlog.info('Sending the qoll now - ' + content, filename);
+  },
+});
+
 Template.recipient.rendered = function() {
 	qlog.info("Initializing autocomplete ... ", filename);
 	Meteor.subscribe('RECIPIENTS_PUBLISHER');

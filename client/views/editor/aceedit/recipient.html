@@ -4,18 +4,15 @@
 		<div class="input-group input-group-sm highlight">
    	
 		   	<span class="input-group-btn">
-		     	<button type="button" class="btn btn-primary qoll-width-1"  >Attributes &rarr; </button>
+		     	<button type="button" class="btn btn-primary qoll-width-1"  >Attributes: </button>
+			    &nbsp; Access :&rarr;
+			    <label class="radio-inline">
+				  <input type="radio" name="attribute_access" id="public" value="option1"> Public
+				</label>
+				<label class="radio-inline">
+				  <input type="radio" name="attribute_access" id="personal" value="option2"> Personal
+				</label>
 		    </span>
-	    
-			<label class="radio-inline">
-			  <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1"> 1
-			</label>
-			<label class="radio-inline">
-			  <input type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2"> 2
-			</label>
-			<label class="radio-inline">
-			  <input type="radio" name="inlineRadioOptions" id="inlineRadio3" value="option3"> 3
-			</label>
 
 		</div><!-- /input-group --><br>
 
@@ -41,7 +38,7 @@
 	</div>
 
 	<div class="input-group input-group-sm">
-		<button type="button" class="btn btn-primary btn-md">Store</button> &nbsp;
-		<button type="button" class="btn btn-primary btn-md">Send</button>
+		<button type="button" id="store" class="btn btn-primary btn-md store">Store</button> &nbsp;
+		<button type="button" id="send" class="btn btn-primary btn-md send">Send</button>
 	</div>
 </template>

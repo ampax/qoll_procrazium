@@ -41,5 +41,5 @@ Template.editor_selector.rendered = function() {
 
 var getEditorMode = function(mode) {
 	settings = Settings.find({'userId' : Meteor.userId()}).fetch()[0];
-	return settings.editor_mode != undefined && settings.editor_mode != '' ? settings.editor_mode : QollConstants.EDITOR_MODE.BASIC;
+	return settings !=undefined && settings.editor_mode != undefined && settings.editor_mode != '' ? settings.editor_mode : QollConstants.EDITOR_MODE.BASIC;
 }
