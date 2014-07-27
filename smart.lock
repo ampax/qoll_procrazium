@@ -2,7 +2,6 @@
   "meteor": {},
   "dependencies": {
     "basePackages": {
-      "observatory": {},
       "font-awesome": {},
       "inspector": {},
       "chartjs": {},
@@ -15,26 +14,19 @@
       "wow": {},
       "animate-css": {},
       "googleAnalytics": {},
-      "iron-router": {
-        "version": "0.6.4"
-      },
-      "bootstrap-3": {
-        "version": "0.3.7"
-      },
       "fast-render": {},
       "crypto-md5": {},
-      "google-contacts": {}
+      "iron-router": {},
+      "logger": {},
+      "bootstrap-3": {},
+      "google-contacts": {},
+      "accounts-ui-bootstrap-3-blaze": {}
     },
     "packages": {
-      "observatory": {
-        "git": "https://github.com/jhoxray/observatory.git",
-        "tag": "v0.3.21",
-        "commit": "3d6b436af0a70b784d0f9ec4709907c77bd4fd63"
-      },
       "font-awesome": {
         "git": "https://github.com/nate-strauser/meteor-font-awesome.git",
-        "tag": "v4.0.3",
-        "commit": "61e9361384347547ae144f8228faa4deffda23db"
+        "tag": "v4.1.0",
+        "commit": "ce6b1e92715d1938babc5d69c655c17e387f5926"
       },
       "inspector": {
         "git": "https://github.com/broth-eu/meteor-inspector.git",
@@ -43,8 +35,8 @@
       },
       "chartjs": {
         "git": "https://github.com/donskifarrell/meteor-chartjs.git",
-        "tag": "v0.0.4",
-        "commit": "9d2adcd1de3728c8227e8eb7da0dcb2e0df21d0b"
+        "tag": "v0.0.6",
+        "commit": "7999ee282dc6302806c421607ecd9248d160c6e7"
       },
       "HTML5-History-API": {
         "git": "https://github.com/tmeasday/meteor-HTML5-History-API.git",
@@ -68,8 +60,8 @@
       },
       "mathjax": {
         "git": "https://github.com/apendua/meteor-mathjax.git",
-        "tag": "v0.5.0.1",
-        "commit": "b8aeb29497953223c3e49733aadd59df685781a7"
+        "tag": "v0.5.1",
+        "commit": "4837e15a47c8c0db83d930e2b2828cd966f625ae"
       },
       "autocompletion": {
         "git": "https://github.com/sebdah/meteor-autocompletion.git",
@@ -91,35 +83,40 @@
         "tag": "v0.0.8",
         "commit": "2c47f147d64554e870c7c02691d5c2efde040ee3"
       },
-      "iron-router": {
-        "git": "https://github.com/EventedMind/iron-router.git",
-        "tag": "v0.6.4",
-        "commit": "927bbaed1b87894fb6fb70807f74ff3a5bd89f29"
-      },
-      "bootstrap-3": {
-        "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
-        "tag": "v0.3.7",
-        "commit": "5dd0d142c870647b910be80bc777b96f0dd45e5e"
-      },
       "fast-render": {
         "git": "https://github.com/arunoda/meteor-fast-render.git",
-        "tag": "v0.2.5",
-        "commit": "93e2fb334e55fbe9b5ebb2a2e65964018658f43e"
+        "tag": "v0.2.8",
+        "commit": "149984b1aff3a5642a270aff9bd9006872c8302e"
       },
       "crypto-md5": {
         "git": "https://github.com/oortcloud/meteor-crypto-md5.git",
         "tag": "v3.1.2.2",
         "commit": "75bbb3eeace302122d3554a6212a6fe92553fa18"
       },
+      "iron-router": {
+        "git": "https://github.com/EventedMind/iron-router.git",
+        "tag": "v0.7.1",
+        "commit": "d1ffb3f06ea4c112132b030f2eb1a70b81675ecb"
+      },
+      "logger": {
+        "git": "https://github.com/jerico-dev/meteor-logger.git",
+        "tag": "v0.1.2",
+        "commit": "8811ff33e4787d7c564e030ff3afaa3d7c4981fc"
+      },
+      "bootstrap-3": {
+        "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
+        "tag": "v3.2.0-1",
+        "commit": "17a63902fc6cf1096c5289d963c66cf28b474727"
+      },
       "google-contacts": {
         "git": "https://github.com/iyou/Meteor-Google-Contacts.git",
         "tag": "v0.1.1",
         "commit": "21927ee0b427fa33beda25bdbda63f5725ab0efb"
       },
-      "observatory-apollo": {
-        "git": "https://github.com/superstringsoftware/observatory-apollo.git",
-        "tag": "v0.3.2",
-        "commit": "f704848187a4da2bd179864ae80a1f73a3fd22a6"
+      "accounts-ui-bootstrap-3-blaze": {
+        "git": "https://github.com/rajit/meteor-accounts-ui-bootstrap-3.git",
+        "tag": "v0.3.10",
+        "commit": "2cf78b49529e62060da086ca0e861fabcbc84928"
       },
       "module-loader": {
         "git": "https://github.com/apendua/module-loader.git",
@@ -131,10 +128,10 @@
         "tag": "v3.1.2.1",
         "commit": "5df8d82a0595553415bbfae2930c6ecbeece5794"
       },
-      "observatory-galileo": {
-        "git": "https://github.com/superstringsoftware/observatory-galileo.git",
-        "branch": "master",
-        "commit": "f21b80e6502d38a7ce66206374b706f2cbd0228d"
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "tag": "v0.2.4",
+        "commit": "b40e9b0612329288d75cf52ad14a7da64bb8618f"
       }
     }
   }

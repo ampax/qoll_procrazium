@@ -4,11 +4,8 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-observatory
 font-awesome
 HTML5-History-API
-observatory-apollo
-observatory-galileo
 page-js-ie-support
 inspector
 chartjs
@@ -16,21 +13,19 @@ jquery
 jquery-ui
 npm
 mathjax
-facebook
-oauth
-google
 ace-embed
 autocompletion
 wow
 email
 animate-css
-iron-router
-bootstrap-3
 fast-render
 crypto-md5
+iron-router
+logger
+bootstrap-3
 accounts-password
 accounts-base
-accounts-ui
 accounts-facebook
 accounts-google
 google-contacts
+accounts-ui-bootstrap-3-blaze

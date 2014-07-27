@@ -13,6 +13,7 @@ Handlebars.registerHelper('include', function(options) {
 });
 
 Handlebars.registerHelper('eachport', function(context, options) {
+	if(options == undefined) return;
 	var fn = options.fn, inverse = options.inverse;
 	var i = 0, ret = "", data;
 

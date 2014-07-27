@@ -2,9 +2,8 @@
 	{{> header_awesome}}
 	<p class="lead"></p>
 	<div id="aceEditorContainer">
-		<center>
-			Create a questionnaire by selecting questions from QBank, providing title and specifying recipients.
-		</center></H3 -->
+
+		<center><h4>Create a questionnaire by selecting questions from QBank, providing title and specifying recipients.</h4></center>
 
 		<div class="container" id="qbank-container-id">
 
@@ -13,9 +12,8 @@
 				{{> qbank_opts}}
 			</div><br>
 			<!--div class="row" -->
-				<div class="well well-sm">
-					<span class="qbank-error-msg red"></span>
-					<br>
+			<div class="well well-sm">
+					<span class="qbank-error-msg red"></span><br>
 				<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
 
 					<div class="col-md-9 col-xs-12">
@@ -30,8 +28,8 @@
 					<div class="col-md-1 col-xs-12">
 						<input type="checkbox" class="qoll_selectall"/>
 					</div>
-				</div>
-			<!--/div -->
+				</div><!-- list-group-item list-group-item-heading -->
+			</div><!-- well well-sm -->
 			<div class="row">
 				{{#each QBankData}}
 				<!-- Start of Qoll Section -->
@@ -49,10 +47,10 @@
 					<div class="col-md-1 col-xs-12">
 						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 					</div>
-				</div>
+				</div><!-- list-group-item list-group-item-success -->
 				<!-- End of Qoll Section here -->
 				{{/each}}
-			</div>
+			</div><!-- row -->
 			<!-- End of the row here -->
 
 			<div id="navbrand"></div>

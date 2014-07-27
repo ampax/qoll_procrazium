@@ -1,90 +1,5 @@
 {
   "dependencies": {
-    "marked": {
-      "version": "0.3.1"
-    },
-    "nodemailer": {
-      "version": "0.6.1",
-      "dependencies": {
-        "mailcomposer": {
-          "version": "0.2.12",
-          "dependencies": {
-            "mimelib": {
-              "version": "0.2.16",
-              "dependencies": {
-                "encoding": {
-                  "version": "0.1.8",
-                  "dependencies": {
-                    "iconv-lite": {
-                      "version": "0.4.4"
-                    }
-                  }
-                },
-                "addressparser": {
-                  "version": "0.2.1"
-                }
-              }
-            },
-            "mime": {
-              "version": "1.2.11"
-            },
-            "follow-redirects": {
-              "version": "0.0.3",
-              "dependencies": {
-                "underscore": {
-                  "version": "1.6.0"
-                }
-              }
-            },
-            "dkim-signer": {
-              "version": "0.1.2",
-              "dependencies": {
-                "punycode": {
-                  "version": "1.2.4"
-                }
-              }
-            }
-          }
-        },
-        "simplesmtp": {
-          "version": "0.3.32",
-          "dependencies": {
-            "rai": {
-              "version": "0.1.11"
-            },
-            "xoauth2": {
-              "version": "0.1.8"
-            }
-          }
-        },
-        "directmail": {
-          "version": "0.1.8"
-        },
-        "he": {
-          "version": "0.3.6"
-        },
-        "public-address": {
-          "version": "0.1.1"
-        },
-        "readable-stream": {
-          "version": "1.1.13-1",
-          "dependencies": {
-            "core-util-is": {
-              "version": "1.0.1"
-            },
-            "isarray": {
-              "version": "0.0.1"
-            },
-            "string_decoder": {
-              "version": "0.10.25-1"
-            },
-            "inherits": {
-              "version": "2.0.1"
-            }
-          }
-        }
-      }
-    },
     "fbgraph": {
       "version": "0.2.10",
       "dependencies": {
@@ -116,6 +31,9 @@
           "version": "0.5.6"
         }
       }
+    },
+    "fibers": {
+      "version": "1.0.1"
     },
     "googleapis": {
       "version": "0.7.0",
@@ -288,8 +206,90 @@
         }
       }
     },
-    "fibers": {
-      "version": "1.0.1"
+    "marked": {
+      "version": "0.3.1"
+    },
+    "nodemailer": {
+      "version": "0.6.1",
+      "dependencies": {
+        "mailcomposer": {
+          "version": "0.2.12",
+          "dependencies": {
+            "mimelib": {
+              "version": "0.2.16",
+              "dependencies": {
+                "encoding": {
+                  "version": "0.1.8",
+                  "dependencies": {
+                    "iconv-lite": {
+                      "version": "0.4.4"
+                    }
+                  }
+                },
+                "addressparser": {
+                  "version": "0.2.1"
+                }
+              }
+            },
+            "mime": {
+              "version": "1.2.11"
+            },
+            "follow-redirects": {
+              "version": "0.0.3",
+              "dependencies": {
+                "underscore": {
+                  "version": "1.6.0"
+                }
+              }
+            },
+            "dkim-signer": {
+              "version": "0.1.2",
+              "dependencies": {
+                "punycode": {
+                  "version": "1.2.4"
+                }
+              }
+            }
+          }
+        },
+        "simplesmtp": {
+          "version": "0.3.32",
+          "dependencies": {
+            "rai": {
+              "version": "0.1.11"
+            },
+            "xoauth2": {
+              "version": "0.1.8"
+            }
+          }
+        },
+        "directmail": {
+          "version": "0.1.8"
+        },
+        "he": {
+          "version": "0.3.6"
+        },
+        "public-address": {
+          "version": "0.1.1"
+        },
+        "readable-stream": {
+          "version": "1.1.13-1",
+          "dependencies": {
+            "core-util-is": {
+              "version": "1.0.1"
+            },
+            "isarray": {
+              "version": "0.0.1"
+            },
+            "string_decoder": {
+              "version": "0.10.25-1"
+            },
+            "inherits": {
+              "version": "2.0.1"
+            }
+          }
+        }
+      }
     }
   }
 }

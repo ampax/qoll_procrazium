@@ -1,6 +1,6 @@
 <template name="user_edit">
 	{{> header_awesome}}
-	<p class="lead"/>
+	<p class="lead"></p>
 	<div class="container">
 		<div class="row">
 			{{#with user}}
@@ -99,27 +99,25 @@
 
           <!-- City -->
           <!-- label for="inputDemographicState" class="col-sm-1 control-label">{{i18n "State"}}:</label -->
-          <div class="col-sm-2">
+          <!-- div class="col-sm-2">
             <select id="state" name="state" class="form-control">
               <option value="">State</option>
               {{#each statesForCountry 'USA'}}
               <option value="{{state_code}}" {{isState this ../this}}>{{state_name}}</option>
               {{/each}}
             </select>
-            <!--input type="text" class="form-control" id="state" name="state" placeholder='{{i18n "State"}}' value="{{profile.state}}" /-->
-          </div>
+          </div --><!-- col-sm-2 -->
 
           <!-- State -->
           <!-- label for="inputDemographicCountry" class="col-sm-1 control-label">{{i18n "Country"}}:</label -->
-          <div class="col-sm-2">
+          <!-- div class="col-sm-2">
             <select id="country" name="country" class="form-control">
               <option value="">Country</option>
               {{#each countries}}
               <option value="{{country_code}}" {{isCountry this ../this}}>{{country_name}}</option>
               {{/each}}
             </select>
-            <!-- input type="text" class="form-control" id="country" name="country" placeholder='{{i18n "Country"}}' value="{{profile.country}}" / -->
-          </div>
+          </div -->
         </div>
 
 					<!--  Display name input  -->

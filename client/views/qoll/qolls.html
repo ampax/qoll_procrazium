@@ -11,11 +11,16 @@
       <div class="col-md-10 col-xs-12">
         <h4>{{{get_title qollStarAttributes}}}</h4>
         {{#if is_parent}} 
-          <a href="/qid/{{_id}}">{{/if}}<h5>{{#mathjax}}{{{get_qoll_txt qollText qollAttributes}}}{{/mathjax}}</h5>{{#if is_parent}}</a>
+            <a href="/qid/{{_id}}"><h5>{{#mathjax}}{{{get_qoll_txt qollText qollAttributes}}}{{/mathjax}}</h5></a>
         {{/if}}
+
+        {{#unless is_parent}} 
+            <h5>{{#mathjax}}{{{get_qoll_txt qollText qollAttributes}}}{{/mathjax}}</h5>
+        {{/unless}}
+
         {{{get_units_html qollStarAttributes}}}
         {{{get_hint_html qollStarAttributes}}}
-        <span class="saved-msg green">
+        <span class="saved-msg green"></span>
       </div>
 
       <div class="col-md-2 col-xs-12">

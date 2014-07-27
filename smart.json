@@ -1,6 +1,5 @@
 {
   "packages": {
-    "observatory": {},
     "font-awesome": {},
     "inspector": {},
     "chartjs": {},
@@ -13,14 +12,12 @@
     "wow": {},
     "animate-css": {},
     "googleAnalytics": {},
-    "iron-router": {
-      "version": "0.6.4"
-    },
-    "bootstrap-3": {
-      "version": "0.3.7"
-    },
     "fast-render": {},
     "crypto-md5": {},
-    "google-contacts": {}
+    "iron-router": {},
+    "logger": {},
+    "bootstrap-3": {},
+    "google-contacts": {},
+    "accounts-ui-bootstrap-3-blaze": {}
   }
 }

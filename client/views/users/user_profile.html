@@ -1,6 +1,6 @@
 <template name="user_profile">
 	{{> header_awesome}}
-	<p class="lead"/>
+	<p class="lead"></p>
 	<div class="container">
 		<div class="row">
 		{{#with user}}
@@ -58,7 +58,7 @@
 					</tr>
 				{{/if}}					
 			</table>
-			<p class="lead"/>
+			<p class="lead"></p>
 			{{#if canEditProfile}}
 				<a class="btn btn-primary btn-qoll" href="/users/{{slug}}/edit">{{i18n "Edit Profile"}}</a>
 			{{/if}}
