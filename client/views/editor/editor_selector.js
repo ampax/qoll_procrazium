@@ -1,5 +1,18 @@
 var filename='client/views/editor/editor_selector.js';
 
+Template.editor_selector.helpers({
+	is_adv : function(){
+		return checkEditorMode(QollConstants.EDITOR_MODE.ADV) ? 'checked' : '';
+	},
+	is_basic : function(){
+		return checkEditorMode(QollConstants.EDITOR_MODE.BASIC) ? 'checked' : '';
+		
+	},
+	is_html : function() {
+		return checkEditorMode(QollConstants.EDITOR_MODE.HTML) ? 'checked' : '';
+	}
+});
+
 Template.editor_selector.events({
 	"click input[name = 'editorPref']" : function(event) {
 		var editor_choice = $('input[name=editorPref]:checked').val();
@@ -34,12 +47,13 @@ Template.editor_selector.events({
 });
 
 Template.editor_selector.rendered = function() {
-	//Find editor mode and select it
-	$("input[name=editorPref][value=" + getEditorMode() + "]").attr('checked', 'checked');
 }
 
 
-var getEditorMode = function(mode) {
+var checkEditorMode = function(mode) {
 	settings = Settings.find({'userId' : Meteor.userId()}).fetch()[0];
-	return settings !=undefined && settings.editor_mode != undefined && settings.editor_mode != '' ? settings.editor_mode : QollConstants.EDITOR_MODE.BASIC;
+	qlog.info('printing settings - ' + JSON.stringify(settings) + ', userId - ' + Meteor.userId(), filename);
+	var flag = settings ? settings.editor_mode && settings.editor_mode === mode : false;
+	qlog.info('is_adv - ' + flag);
+	return settings ? settings.editor_mode && settings.editor_mode === mode : false;
 }

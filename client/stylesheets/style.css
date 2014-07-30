@@ -35,6 +35,10 @@ body {
 .bs_input_btn {
     height: 30px !important;
 }
+
+label.control-label-1 { /** Align the radio buttons to the half line **/
+    margin-top: 0.55em !important;
+}
 /* ============================== END:Body Bootstrap style override/define ================================ */
 
 hr .divider {

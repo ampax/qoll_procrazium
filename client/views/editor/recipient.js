@@ -1,21 +1,29 @@
 var filename="client/views/editor/recipient.js";
 
+//This will be used to convert the html to markdown in case it is ckEditor that user has selected
 Template.recipient.events({
   'click .store' : function(event){
     var content = 'undefined';
+    var markdown = 'undefined';
     var editor_choice = $('input[name=editorPref]:checked').val();
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
+      //var toMarkdown = require('to-markdown').toMarkdown;
+      markdown = toMarkdown(content);
     }
     qlog.info('Storing the qoll now - ' + content, filename);
+    qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
   },
   'click .send' : function(event){
     var content = 'undefined';
+    var markdown = 'undefined';
     var editor_choice = $('input[name=editorPref]:checked').val();
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
+      markdown = toMarkdown(content);
     }
     qlog.info('Sending the qoll now - ' + content, filename);
+    qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
   },
 });
 

@@ -5,15 +5,15 @@
 -->
 <template name="editor_selector">
 	<div class="col-md-12 col-xs-12 text-right" id="aceEditorContainer">
-		Editor :&rarr; 
+		<label class="control-label">&nbsp; Editor :&rarr;</label>
 		<label class="radio-inline">
-		  <input type="radio" name="editorPref" id="simple" value="basic"> Simple
+		  <input type="radio" name="editorPref" id="simple" value="basic" {{is_basic}}> Simple
 		</label>
 		<label class="radio-inline">
-		  <input type="radio" name="editorPref" id="markdown" value="advanced"> Text
+		  <input type="radio" name="editorPref" id="markdown" value="advanced" {{is_adv}}> Text
 		</label>
 		<label class="radio-inline">
-		  <input type="radio" name="editorPref" id="ckeditor" value="html"> Html
+		  <input type="radio" name="editorPref" id="ckeditor" value="html" {{is_html}}> Html
 		</label>
 	</div>
 </template>

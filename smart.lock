@@ -17,10 +17,11 @@
       "fast-render": {},
       "crypto-md5": {},
       "iron-router": {},
-      "logger": {},
       "bootstrap-3": {},
       "google-contacts": {},
-      "accounts-ui-bootstrap-3-blaze": {}
+      "accounts-ui-bootstrap-3-blaze": {},
+      "meteor-tomarkdown": {},
+      "pince": {}
     },
     "packages": {
       "font-awesome": {
@@ -98,11 +99,6 @@
         "tag": "v0.7.1",
         "commit": "d1ffb3f06ea4c112132b030f2eb1a70b81675ecb"
       },
-      "logger": {
-        "git": "https://github.com/jerico-dev/meteor-logger.git",
-        "tag": "v0.1.2",
-        "commit": "8811ff33e4787d7c564e030ff3afaa3d7c4981fc"
-      },
       "bootstrap-3": {
         "git": "https://github.com/mangasocial/meteor-bootstrap-3.git",
         "tag": "v3.2.0-1",
@@ -117,6 +113,16 @@
         "git": "https://github.com/rajit/meteor-accounts-ui-bootstrap-3.git",
         "tag": "v0.3.10",
         "commit": "2cf78b49529e62060da086ca0e861fabcbc84928"
+      },
+      "meteor-tomarkdown": {
+        "git": "https://github.com/BashtonLtd/meteor-tomarkdown.git",
+        "tag": "v0.0.1",
+        "commit": "e4356aa5a4f5245daca35ddc6ce38d03362beee6"
+      },
+      "pince": {
+        "git": "https://github.com/mad-eye/pince.git",
+        "tag": "v0.0.5",
+        "commit": "4524ecc0bdf043c49dc62e91bbd8a99c661081ed"
       },
       "module-loader": {
         "git": "https://github.com/apendua/module-loader.git",

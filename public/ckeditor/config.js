@@ -31,8 +31,18 @@ CKEDITOR.editorConfig = function( config ) {
 	config.removeButtons = 'Underline,Subscript,Superscript';
 
 	// Set the most common block elements.
-	config.format_tags = 'p;h1;h2;h3;pre';
+	// config.format_tags = 'p;h1;h2;h3;pre';
+	// Changing the above to qoll-specific format tags. We will allow only #/h1, and -/numbering options.
+	//config.format_tags = 'p;Heading';
+	//config.format_Heading = { element : 'h1', name: 'Heading123' };
+
+	config.format_tags = 'p;h1;h2;h3;h4;h5;h6;div';
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+	// Set the ui color
+	//config.uiColor = '#333333';
+
+	config.skins = 'office2003';
 };

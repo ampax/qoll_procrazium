@@ -21,7 +21,6 @@ animate-css
 fast-render
 crypto-md5
 iron-router
-logger
 bootstrap-3
 accounts-password
 accounts-base
@@ -29,3 +28,5 @@ accounts-facebook
 accounts-google
 google-contacts
 accounts-ui-bootstrap-3-blaze
+meteor-tomarkdown
+pince
