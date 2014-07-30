@@ -182,6 +182,9 @@ Meteor.methods({
 
 		return qollMasterId;
 	},
+	processStoreHtmlQoll : function(html, emailsandgroups, tags, action){
+		//TODO
+	}
 });
 
 /** Helper method for storing qolls for master-qoll-id **/

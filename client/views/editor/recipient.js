@@ -8,8 +8,14 @@ Template.recipient.events({
     var editor_choice = $('input[name=editorPref]:checked').val();
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
-      //var toMarkdown = require('to-markdown').toMarkdown;
+
+
+      //This method is added here only for display in log purpose. Remove it at some point of time.
+      //No need to call a server side function to get value and then send it to the server. 
+      //Convert the value on the server
       markdown = toMarkdown(content);
+
+
     }
     qlog.info('Storing the qoll now - ' + content, filename);
     qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
@@ -20,7 +26,13 @@ Template.recipient.events({
     var editor_choice = $('input[name=editorPref]:checked').val();
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
+
+      //This method is added here only for display in log purpose. Remove it at some point of time.
+      //No need to call a server side function to get value and then send it to the server. 
+      //Convert the value on the server
       markdown = toMarkdown(content);
+
+
     }
     qlog.info('Sending the qoll now - ' + content, filename);
     qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
@@ -65,3 +77,14 @@ Template.recipient.events({
   	}
   }
 });
+
+var toMarkdown = function(html) {
+   Meteor.call("toMarkdown", html, function(error, md){
+      if(error) {
+        qlog.error('Error occured while converting - ' + html + '/n to markdown - ' + error, filename);
+      } else {
+        qlog.info('Recieved md - ' + md, filename);
+        return md;
+      }
+    });
+}

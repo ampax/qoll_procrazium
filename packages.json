@@ -3,5 +3,6 @@
   "nodemailer": "0.6.1",
   "fbgraph": "0.2.10",
   "googleapis": "0.7.0",
-  "fibers": "1.0.1"
+  "fibers": "1.0.1",
+  "html-md": "3.0.2"
 }
