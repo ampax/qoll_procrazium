@@ -3,11 +3,12 @@ var filename='collections/Qolls.js';
 // =============================== All physical collections here ================================ //
 Qoll = new Meteor.Collection("QOLL");
 QollMaster = new Meteor.Collection("QOLL_MASTER");
-QBank = new Meteor.Collection("QOLL_BANK");
 QollRaw = new Meteor.Collection("QOLL_RAW");
-Qollstionnaire = new Meteor.Collection("QOLLSTIONNAIRE");
 QollTags = new Meteor.Collection("QOLL_TAGS");
 QollRegister = new Meteor.Collection("QOLL_REGISTER");
+QollRegisterStats = new Meteor.Collection("QOLL_REGISTER_STATS");
+QBank = new Meteor.Collection("QOLL_BANK");
+Qollstionnaire = new Meteor.Collection("QOLLSTIONNAIRE");
 
 
 // =============================== Add published collections here ================================ //

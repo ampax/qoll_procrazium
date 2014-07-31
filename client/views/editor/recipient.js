@@ -5,7 +5,10 @@ Template.recipient.events({
   'click .store' : function(event){
     var content = 'undefined';
     var markdown = 'undefined';
+    var recips = jQuery("input#recipient_search").val();
+    var tags = jQuery("input.tags").val();
     var editor_choice = $('input[name=editorPref]:checked').val();
+    
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
 
@@ -14,6 +17,14 @@ Template.recipient.events({
       //No need to call a server side function to get value and then send it to the server. 
       //Convert the value on the server
       markdown = toMarkdown(content);
+
+      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_STORE, function(error, msg){
+        if(error) {
+          qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
+        } else {
+          qlog.info('Recieved message - ' + msg, filename);
+        }
+      });
 
 
     }
@@ -23,7 +34,10 @@ Template.recipient.events({
   'click .send' : function(event){
     var content = 'undefined';
     var markdown = 'undefined';
+    var recips = jQuery("input#recipient_search").val();
+    var tags = jQuery("input.tags").val();
     var editor_choice = $('input[name=editorPref]:checked').val();
+    
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
 
@@ -31,6 +45,14 @@ Template.recipient.events({
       //No need to call a server side function to get value and then send it to the server. 
       //Convert the value on the server
       markdown = toMarkdown(content);
+
+      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_SEND, function(error, msg){
+        if(error) {
+          qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
+        } else {
+          qlog.info('Recieved message - ' + msg, filename);
+        }
+      });
 
 
     }

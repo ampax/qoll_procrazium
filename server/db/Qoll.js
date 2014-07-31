@@ -10,44 +10,48 @@ var filename="server/db/Qoll.js";
 
 		QollRaw - the table will keep one big blob of data from markdown editor
 
-		QollHtml - the table will keep raw html data before it is converted to markdown
-
 		QollRegister - the table will keep all registered responses for a qoll
 
 		QollRegisterStats - the table will keep high level statistics for all the registered responses
 **/
 
-Qoll = {
+QollDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},
 };
 
-QollMaster = {
+QollMasterDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},
 };
 
-QollRaw = {
+QollRawDb = {
+	insert : function(){
+		//This method stores original complete html qoll into the QollHtmlRaw table
+		var id = QollHtmlRaw.insert({
+			//JSON: You can send whatever you want but we will extract and store only required information
+			'qollText' : htmlQoll.qollText,
+			'qollMasterId' : qollMasterId,
+			'tags' : tags,
+			'submittedOn' : new Date(),
+			'submittedBy' : Meteor.userId(),
+			'submittedByEmail' : getCurrentEmail,
+			'visibility' : visibility
+		});
+	},
+	update : function(){},
+	remove : function(){},
+};
+
+QollRegisterDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},
 };
 
-QollHtml = {
-	insert : function(){},
-	update : function(){},
-	remove : function(){},
-};
-
-QollRegister = {
-	insert : function(){},
-	update : function(){},
-	remove : function(){},
-};
-
-QollRegisterStats = {
+QollRegisterStatsDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},

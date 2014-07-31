@@ -183,7 +183,12 @@ Meteor.methods({
 		return qollMasterId;
 	},
 	processStoreHtmlQoll : function(html, emailsandgroups, tags, action){
-		//TODO
+		var md = ToMarkdown.convert(html);
+
+		qlog.info('Persisting the html into database - ' + md + ', emailsandgroups - ' + emailsandgroups 
+			+ ', tags - ' + tags + ', action - ' + action, filename);
+
+		return 'Successfully stored the html qoll';
 	}
 });
 
