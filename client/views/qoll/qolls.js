@@ -10,62 +10,6 @@ Handlebars.registerHelper('include', function(options) {
 	return options.fn(context);
 });
 
-Handlebars.registerHelper('eachport', function(context, options) {
-	if(options == undefined) return;
-	var fn = options.fn, inverse = options.inverse;
-	var i = 0, ret = "", data;
-
-	if (options.data) {
-		data = Handlebars.createFrame(options.data);
-	}
-
-	if (context && typeof context === 'object') {
-		if ( context instanceof Array) {
-			for (var j = context.length; i < j; i++) {
-				if (data) {
-					data.index = i;
-				}
-
-				if ( typeof (context[i]) == 'object') {
-					context[i]['_iter_ix'] = i;
-					ret = ret + fn(context[i], {
-						data : data
-					});
-				} else {// make an object and add the index property
-					item = {
-						_iter_v : context[i], // TODO: make the name of the item configurable
-						_iter_ix : i
-					};
-					ret = ret + fn(item, {
-						data : data
-					});
-				}
-
-			}
-		} else {
-			for (var key in context) {
-				if (context.hasOwnProperty(key)) {
-					if (data) {
-						data.key = key;
-						data.index = i;
-						context[key]._iter_ix = i;
-					}
-					ret = ret + fn(context[key], {
-						data : data
-					});
-					i++;
-				}
-			}
-		}
-	}
-
-	if (i === 0) {
-		ret = inverse(this);
-	}
-
-	return ret;
-});
-
 $.fn.outertxtonly = function() {
 	var str = '';
 
@@ -183,7 +127,7 @@ Template.qolls.helpers({
 		return "class_" + idx;
 	},
 	check_selected : function(qollid, qollTypeIx) {
-		qlog.info('Testing responce for : ' + qollid + '/' + this.parent._id + ' and index ' + qollTypeIx, filename);
+		qlog.info('Testing responce for : ' + qollid + '/' + this._id + ' and index ' + qollTypeIx, filename);
 		var retval = '';
 		/**QollRegist.find({
 			qollId : this.parent._id,
@@ -203,7 +147,7 @@ Template.qolls.helpers({
 	},
 	is_chk_selected : function(idx) {
 		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
-		var qollTypeReg = this.parent.qollTypeReg
+		var qollTypeReg = this.qollTypeReg
 		if (qollTypeReg == undefined)
 			return '';
 		if (qollTypeReg[idx] === 1)
@@ -218,11 +162,8 @@ Template.qolls.helpers({
 		return false;
 	},
 	is_not_blank_type : function(qollAttributes) {
-		if(this.parent._id === 'd3KY2DEEs4LzasCiK') {
-			qlog.info('Printing qollAttributes - ' + qollAttributes + '/' + this.parent.qollTypes, filename);
-		}
-
-		if(!HashUtil.checkHash(qollAttributes, 'type') && this.parent.qollTypes && this.parent.qollTypes.length > 1) {
+		
+		if(!HashUtil.checkHash(qollAttributes, 'type') && this.qollTypes && this.qollTypes.length > 1) {
 			return true;
 		}
 
@@ -247,7 +188,7 @@ Template.qolls.helpers({
 	get_qoll_type : function(qollType, qollAttributes, myAnswers) {
 		//qlog.info('Printing myAnswers - ' + JSON.stringify(myAnswers), filename);
 		if(HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK,QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
-			var qollTypeVal = this.parent.qollTypeVal;
+			var qollTypeVal = this.qollTypeVal;
 			var fillVal, fillPow;
 			if(qollTypeVal) {
 
@@ -352,8 +293,8 @@ Template.qolls.events({
 		}**/
 
 		//If not a multiple choice question, remove the border-selected
-		qlog.info('Printing if this is multiple - ' + this.isMultiple + '/' + this.parent.isMultiple);
-		if (!this.parent.isMultiple) {
+		qlog.info('Printing if this is multiple - ' + this.isMultiple + '/' + this.isMultiple);
+		if (!this.isMultiple) {
 			$(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem) {
 				$(this).removeClass('border-selected');
 			});

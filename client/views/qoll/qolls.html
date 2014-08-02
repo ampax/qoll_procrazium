@@ -52,17 +52,17 @@
     <!-- Starting of qoll-types for the Qoll -->
     <div class="row">
       <div class="col-md-10 col-xs-12">
-      {{#eachport qollTypes}}
-      {{#include parent=.. }}
+      {{#each qollTypes}}
+     
       <div class="col-md-12 col-xs-12 list-group-item">
-        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{_iter_ix}}">
+        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{_index}}">
           {{#if is_not_blank_type ../../qollAttributes}}
-          <span class="badge pull-left qoll-response-val {{qoll_abbr_class _iter_ix}} {{is_chk_selected _iter_ix}} 
-          {{check_selected ../../_id _iter_ix}}  glossy">
-            {{qoll_type_abbr _iter_ix}}
+          <span class="badge pull-left qoll-response-val {{qoll_abbr_class _index}} {{is_chk_selected _index}} 
+          {{check_selected ../../_id _index}}  glossy">
+            {{qoll_type_abbr _index}}
           </span>
           {{/if}}
-            &nbsp;{{{get_qoll_type _iter_v ../../qollAttributes}}}
+            &nbsp;{{{get_qoll_type this ../../qollAttributes}}}
           {{#if is_blank_type ../../qollAttributes}}
           <span id="{{../../_id}}" class="badge pull-left register-blank glossy green_bg_1">
             Submit
@@ -70,12 +70,12 @@
           {{/if}}
         </div>
         <div class="col-md-2 col-xs-2">
-            {{#if is_correct_answer ../../qollTypesX _iter_ix if_createusr}}
+            {{#if is_correct_answer ../../qollTypesX _index if_createusr}}
               <i class="glyphicon glyphicon-check green"></i>
             {{/if}}
-            <span class="badge pull-right fulltoggle">{{value_at ../../stats _iter_ix}}</span>
+            <span class="badge pull-right fulltoggle">{{value_at ../../stats _index}}</span>
         </div>
-        {{#with  value_at ../../answers _iter_ix}}
+        {{#with  value_at ../../answers _index}}
         <div class="col-md-12 col-xs-12  list-group-item-info">
             
             Answered By:  {{comma_seperate this}}
@@ -84,8 +84,8 @@
          {{/with}}
       </div>
 
-      {{/include}}
-      {{/eachport}}
+     
+      {{/each}}
 
       </div>
       {{#unless is_parent}}
