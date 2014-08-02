@@ -35,6 +35,10 @@ Template.ckEditor.rendered = function() {
 
 	var editor = $('textarea#editor').ckeditor();
 
+	CKEDITOR.replace( 'textarea#editor', {
+		extraPlugins: 'mathjax'
+	} );
+
 	
 	/**editor = $('textarea#editor').ckeditor(function(){
 	   var $editor = $( 'textarea#editor' );

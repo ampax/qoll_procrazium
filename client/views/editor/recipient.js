@@ -34,7 +34,7 @@ Template.recipient.events({
       //Convert the value on the server
       markdown = toMarkdown(content);
 
-      Meteor.call("processStoreHtmlQoll", content, recips, tags, access, QollConstants.QOLL_ACTION_STORE, function(error, msg){
+      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_STORE, access, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
         } else {
@@ -68,7 +68,7 @@ Template.recipient.events({
       //Convert the value on the server
       markdown = toMarkdown(content);
 
-      Meteor.call("processStoreHtmlQoll", content, recips, tags, access, QollConstants.QOLL_ACTION_SEND, function(error, msg){
+      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_SEND, access, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
         } else {

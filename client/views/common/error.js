@@ -1,22 +1,22 @@
 var filename='client/views/common/error.js';
 
 Error = {
-	error : function(err_msg, timeout) {
-		if(timeout === undefined) timeout = 8400;
+	error : function(err_msg) {
+		//if(timeout === undefined) timeout = 8400;
 		var cls = '.err-msg';
 		var saved_target = $(cls);
 	    saved_target.html(err_msg);
-	    saved_target.fadeOut( timeout, 'swing', function(){
+	    saved_target.fadeOut( 8400, 'swing', function(){
 	    	saved_target.html('');
 	    	saved_target.removeAttr("style");
 	    });
 	},
-	success : function(scs_msg, timeout) {
-		if(timeout === undefined) timeout = 8400;
+	success : function(scs_msg) {
+		//if(timeout === undefined) timeout = 8400;
 		var cls = '.scs-msg';
 		var saved_target = $(cls);
 	    saved_target.html(scs_msg);
-	    saved_target.fadeOut( timeout, 'swing', function(){
+	    saved_target.fadeOut( 8400, 'swing', function(){
 	    	saved_target.html('');
 	    	saved_target.removeAttr("style");
 	    });
