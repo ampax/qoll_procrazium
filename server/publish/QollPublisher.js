@@ -1,5 +1,6 @@
 var filename = 'server/publisher/QollPublisher.js';
 
+
 /** Publishing to the subscribers method for qolls  **/
 Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 	var self = this;
@@ -17,6 +18,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 		// replace 1234 with parent id
 	}
 	var initializing = true;
+	
 	var register_emails = {};
 	//to cache emails for usr ids
 	var fetch_answers = function(item) {
@@ -84,7 +86,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					var q = {
 						qollTitle 		: item.qollTitle,
 						qollText 		: item.qollText,
-						qollTypes 		: item.qollTypes,
+						qollTypes 		: translateToIndexedArray(item.qollTypes),
 						qollTypesX 		: item.qollTypesX,
 						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
 						qollAttributes 	: item.qollAttributes,
@@ -130,7 +132,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					var q = {
 						qollTitle 			: item.qollTitle,
 						qollText 			: item.qollText,
-						qollTypes 			: item.qollTypes,
+						qollTypes 			: translateToIndexedArray(item.qollTypes),
 						qollTypesX 			: item.qollTypesX,
 						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
 						qollAttributes 		: item.qollAttributes,
@@ -193,7 +195,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					var q = {
 						qollTitle 			: item.qollTitle,
 						qollText 			: item.qollText,
-						qollTypes 			: item.qollTypes,
+						qollTypes 			: translateToIndexedArray(item.qollTypes),
 						qollStarAttributes 	: item.qollStarAttributes ? item.qollStarAttributes : {},
 						qollAttributes 		: item.qollAttributes,
 						submittedOn 		: item.submittedOn,
@@ -279,7 +281,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						var q = {
 							qollTitle : item.qollTitle,
 							qollText : item.qollText,
-							qollTypes : item.qollTypes,
+							qollTypes : translateToIndexedArray(item.qollTypes),
 							qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
 							qollAttributes 	: item.qollAttributes,
 							submittedOn : item.submittedOn,
@@ -344,7 +346,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 			var q = {
 				qollTitle : item.qollTitle,
 				qollText : item.qollText,
-				qollTypes : item.qollTypes,
+				qollTypes : translateToIndexedArray(item.qollTypes),
 				qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
 				qollAttributes 	: item.qollAttributes,
 				submittedOn : item.submittedOn,
@@ -426,7 +428,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				var q = {
 					qollTitle : item.qollTitle,
 					qollText : item.qollText,
-					qollTypes : item.qollTypes,
+					qollTypes : translateToIndexedArray(item.qollTypes),
 					qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
 					qollAttributes 	: item.qollAttributes,
 					submittedOn : item.submittedOn,
@@ -466,7 +468,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				var q = {
 					qollTitle : item.qollTitle,
 					qollText : item.qollText,
-					qollTypes : item.qollTypes,
+					qollTypes : translateToIndexedArray(item.qollTypes),
 					qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
 					qollAttributes 	: item.qollAttributes,
 					submittedOn : item.submittedOn,
@@ -710,7 +712,7 @@ var fetchConciseQollInfo = function(item) {
 	return {
 				qollTitle : item.qollTitle,
 				qollText : item.qollText,
-				qollTypes : item.qollTypes,
+				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
 				submittedBy : item.submittedBy,
 				submittedTo : item.submittedTo,
@@ -725,7 +727,7 @@ var fetchMyConciseQollInfo = function(item) {
 	return {
 				qollTitle : item.qollTitle,
 				qollText : item.qollText,
-				qollTypes : item.qollTypes,
+				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
 				submittedBy : item.submittedBy,
 				submittedTo : item.submittedTo,
@@ -741,7 +743,7 @@ var fetchMyRecConciseQollInfo = function(item) {
 	return {
 				qollTitle : item.qollTitle,
 				qollText : item.qollText,
-				qollTypes : item.qollTypes,
+				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
 				submittedBy : item.submittedBy,
 				submittedTo : item.submittedTo,
@@ -768,4 +770,7 @@ var sumstats = function(statsobj) {
 	return ret;
 };
 
-
+var translateToIndexedArray = function ( ar){
+		if(!ar) return [];
+		return ar.map(function (item,ix){ return {index : ix, value : item};});
+};

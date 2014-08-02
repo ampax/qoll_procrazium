@@ -55,14 +55,17 @@
       {{#each qollTypes}}
      
       <div class="col-md-12 col-xs-12 list-group-item">
-        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{_index}}">
+        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{this.index}}">
           {{#if is_not_blank_type ../../qollAttributes}}
-          <span class="badge pull-left qoll-response-val {{qoll_abbr_class _index}} {{is_chk_selected _index}} 
-          {{check_selected ../../_id _index}}  glossy">
-            {{qoll_type_abbr _index}}
+          {{#with item=this parent=..}}
+          <span class="badge pull-left qoll-response-val {{qoll_abbr_class item.index}} {{is_chk_selected item.index}} 
+          {{check_selected parent._id item.index}}  glossy">
+          
+            {{qoll_type_abbr item.index}}
           </span>
+          {{/with}}
           {{/if}}
-            &nbsp;{{{get_qoll_type this ../../qollAttributes}}}
+            &nbsp;{{{get_qoll_type this.value ../../qollAttributes}}}
           {{#if is_blank_type ../../qollAttributes}}
           <span id="{{../../_id}}" class="badge pull-left register-blank glossy green_bg_1">
             Submit
@@ -70,12 +73,12 @@
           {{/if}}
         </div>
         <div class="col-md-2 col-xs-2">
-            {{#if is_correct_answer ../../qollTypesX _index if_createusr}}
+            {{#if is_correct_answer ../../qollTypesX this.index if_createusr}}
               <i class="glyphicon glyphicon-check green"></i>
             {{/if}}
-            <span class="badge pull-right fulltoggle">{{value_at ../../stats _index}}</span>
+            <span class="badge pull-right fulltoggle">{{value_at ../../stats this.index}}</span>
         </div>
-        {{#with  value_at ../../answers _index}}
+        {{#with  value_at ../../answers this.index}}
         <div class="col-md-12 col-xs-12  list-group-item-info">
             
             Answered By:  {{comma_seperate this}}

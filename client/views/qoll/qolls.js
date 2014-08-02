@@ -121,9 +121,11 @@ Template.qolls.helpers({
 			return 'default';
 	},
 	qoll_type_abbr : function(idx) {
+		qlog.info('GOT IX 2'+ idx, filename);
 		return alphabetical[idx];
 	},
 	qoll_abbr_class : function(idx) {
+		qlog.info('GOT IX '+ idx, filename);
 		return "class_" + idx;
 	},
 	check_selected : function(qollid, qollTypeIx) {
@@ -162,7 +164,7 @@ Template.qolls.helpers({
 		return false;
 	},
 	is_not_blank_type : function(qollAttributes) {
-		
+		return true;
 		if(!HashUtil.checkHash(qollAttributes, 'type') && this.qollTypes && this.qollTypes.length > 1) {
 			return true;
 		}
@@ -293,10 +295,10 @@ Template.qolls.events({
 		}**/
 
 		//If not a multiple choice question, remove the border-selected
-		qlog.info('Printing if this is multiple - ' + this.isMultiple + '/' + this.isMultiple);
-		if (!this.isMultiple) {
+		qlog.info('Printing ooooif this is multiple - '  +this.parent+ '/' + this.parent.isMultiple);
+		if (!this.parent.isMultiple) {
 			$(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem) {
-				$(this).removeClass('border-selected');
+				$(this.parent).removeClass('border-selected');
 			});
 			chk.addClass('border-selected');
 		} else {
@@ -332,10 +334,10 @@ Template.qolls.events({
 
 		var qollId = this.parent._id;
 		var qoll = this.parent;
-		var answerIndex = this._iter_ix;
-		var answerVal = this._iter_v;
+		var answerIndex = this.item.index;
+		var answerVal = this.item.value;
 
-		qlog.info('youclicked: ' + this._iter_v, filename);
+		qlog.info('youclicked: ' + answerVal, filename);
 		qlog.info('youclickedon: ' + event, filename);
 		qlog.info('youclickedid: ' + qollId, filename);
 		qlog.info('the aindex =' + answerVal + '/' + answerIndex, filename);
@@ -360,12 +362,12 @@ Template.qolls.events({
 	'click span.register-blank' : function(event) {
 		event.preventDefault();
 		
-		var qollAttributes = this.parent.qollAttributes;
-		var qollStarAttributes = this.parent.qollStarAttributes;
+		var qollAttributes = this.qollAttributes;
+		var qollStarAttributes = this.qollStarAttributes;
 
 		var clk = $(event.target);
 		
-		var qollId = this.parent._id;
+		var qollId = this._id;
 		var blank_resp = clk.parent().find('input#number').val();
 		var power = clk.parent().find('input#power').val();
 		var unit_selected = $('div#'+qollId+' input[name="unit"]:checked').val();
