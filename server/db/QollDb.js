@@ -356,15 +356,13 @@ var addQollsForMaster = function(qollMaster, qollMasterId, emailsandgroups, tags
 		}
 
 		//If there are more than one correct answers, this is a multiple choice question
-            qlog.info('qoll: ' + qoll + ", types: " + types, filename);
-			var qid=Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups, null, null,  tags, attributes);
+        qlog.info('qoll: ' + qoll + ", types: " + types, filename);
 		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
 		qollAttributes.type = qollType;
 		qollAttributes.isMultiple = isMultiple;
 		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups, undefined, undefined,  tags, attributes, qollStarAttributes, qollAttributes);
-     
-                qollId.push(qid);
-            });
+		qollId.push(qid);
+        });
 
       qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
 };
