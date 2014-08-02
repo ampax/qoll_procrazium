@@ -80,6 +80,7 @@ $.fn.outertxtonly = function() {
 	return str;
 };
 
+/**
 //Meteor.autosubscribe(function () {
 Template.qolls.created = function() {
 	QollRegist.find({}, {
@@ -91,18 +92,6 @@ Template.qolls.created = function() {
 			var qollId = v.qollId;
 			var qollTypeVal = v.qollTypeVal;
 			var qollTypeIx = v.qollTypeIndex;
-			/**$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
-			 var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
-			 qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
-			 if(myouttxt== qollTypeIx){
-
-			 $(elem).addClass('bg-orange');
-
-			 }else{
-
-			 $(elem).removeClass('bg-orange');
-			 }
-			 });**/
 		},
 		changed : function(v, vold) {
 			qlog.debug("Getting qoll regs ......", filename);
@@ -110,22 +99,11 @@ Template.qolls.created = function() {
 			var qollId = v.qollId;
 			var qollTypeVal = v.qollTypeVal;
 			var qollTypeIx = v.qollTypeIndex;
-			/**$( '#'+qollId).siblings('.qoll-response-val').each(function(ix,elem){
-			 var myouttxt = $(elem).find('.indent-littlebit').first().attr( "id") ;
-			 qlog.info("a ......"+ myouttxt  +" *"+qollTypeIx, filename);
-			 if(myouttxt== qollTypeIx){
-
-			 $(elem).addClass('bg-orange');
-
-			 }else{
-
-			 $(elem).removeClass('bg-orange');
-			 }
-			 }); **/
 		}
 	});
 };
 //});
+**/
 
 Template.qolls.helpers({
 	allQolls : function(event) {

@@ -1,9 +1,5 @@
 var filename = 'client/lib/meteor/RoutDashboard.js';
 
-//var AllQolls = new Meteor.Collection("all-qolls");
-//var QollDetails = new Meteor.Collection("qoll-details-by-id");
-//var QollRegist = new Meteor.Collection("qoll-regs");
-
 QollsController = RouteController.extend({
 	template : 'qolls',
 	increment : 10,
@@ -11,17 +7,12 @@ QollsController = RouteController.extend({
 		return parseInt(this.params.qollsLimit) || this.increment;
 	},
 	findOptions : function() {
-		return {
-			sort : {
-				submittedOn : -1
-			},
-			limit : this.limit()
-		};
+		return { sort : { submittedOn : -1 }, limit : this.limit() };
 	},
 	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER')];
 	},
 	allqollsfun : function() {
-		return AllQolls.find({}, this.findOptions());
+		return AllQolls.find();
 	},
 	data : function() {
 		var hasMore = this.allqollsfun().count() === this.limit();

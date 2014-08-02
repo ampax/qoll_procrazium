@@ -54,6 +54,11 @@ Template.recipient.events({
     var recips = jQuery("input#recipient_search").val();
     var tags = jQuery("input.tags").val();
     var editor_choice = $('input[name=editorPref]:checked').val();
+
+    if(tags == undefined || tags === '') {
+      Error.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
+      return;
+    }
     
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
