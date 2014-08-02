@@ -33,7 +33,7 @@ Template.error.rendered = function(){
     qlog.info('Running post rendered code for editor', filename);
     //Meteor.subscribe('user-prefs-byname', QollConstants.PREF_KEY.EDITOR_MODE);
     if(URLUtil.isDev()) {
-	    Error.message(QollConstants.MSG_TYPE.ERROR, 'Use me to show error messages: Error.message(\'error\', msg);', 6000);
-	    Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Use me to show success messages: Error.message(\'success\', msg);', 6000);
+	    //Error.message(QollConstants.MSG_TYPE.ERROR, 'Use me to show error messages: Error.message(\'error\', msg);', 6000);
+	    //Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Use me to show success messages: Error.message(\'success\', msg);', 6000);
 	}
 };
