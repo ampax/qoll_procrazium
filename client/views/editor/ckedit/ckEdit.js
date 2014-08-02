@@ -1,5 +1,7 @@
 var filename='client/views/ckedit/ckEdit.js';
 
+/**require('mhchem');**/
+
 var test_qolls = 
 "<h1>Who is USA current president?</h1>"+
 
@@ -35,9 +37,7 @@ Template.ckEditor.rendered = function() {
 
 	var editor = $('textarea#editor').ckeditor();
 
-	CKEDITOR.replace( 'textarea#editor', {
-		extraPlugins: 'mathjax'
-	} );
+
 
 	
 	/**editor = $('textarea#editor').ckeditor(function(){
