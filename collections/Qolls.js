@@ -30,6 +30,7 @@ MyCreatedQolls = new Meteor.Collection("my_active_qolls");
 MyRecievedQolls = new Meteor.Collection("my_rec_qolls");
 AllPublicQolls = new Meteor.Collection("mine_and_public_qolls");
 MyGroupQolls = new Meteor.Collection("group_qolls");
+QollRegist = new Meteor.Collection("qoll-regs");
 //MyQollstionnaires = new Meteor.Collection("my_qollstionnaires");
 
 

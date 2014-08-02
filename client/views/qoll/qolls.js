@@ -1,7 +1,5 @@
 var filename = "client/views/qoll/qolls.js";
 
-var QollRegist = new Meteor.Collection("qoll-regs");
-
 Handlebars.registerHelper('include', function(options) {
 	var context = {}, mergeContext = function(obj) {
 		for (var k in obj)
@@ -187,7 +185,7 @@ Template.qolls.helpers({
 	check_selected : function(qollid, qollTypeIx) {
 		qlog.info('Testing responce for : ' + qollid + '/' + this.parent._id + ' and index ' + qollTypeIx, filename);
 		var retval = '';
-		QollRegist.find({
+		/**QollRegist.find({
 			qollId : this.parent._id,
 			qollTypeIndex : qollTypeIx
 		}, {
@@ -197,7 +195,7 @@ Template.qolls.helpers({
 				qlog.info('FOUND responce for : ' + this.parent._id+' and index '+ JSON.stringify(v), filename);
 			if(v.qollTypeReg && v.qollTypeReg[qollTypeIx] === 1)
 				retval = 'border-selected';
-		});
+		});**/
 		return retval;
 	},
 	comma_seperate : function(thelist) {
@@ -581,20 +579,12 @@ Template.qolls.events({
 	'click .render-chart-btn' : function(event) {
 		event.preventDefault();
 		qlog.info('clicked to fetch stats for qoll with id: ' + this._id, filename);
-		//var handle = QollStats.find(this._id);
-		//chartStats();
-		//qlog.info('Recieved qlog register data: ' + this._id + ', value: ' + $("div.charts").html(), filename);
-		//$("#chart").highcharts(handle);
-		//$("#charts").html(chartStats(this._id));
 		var chart_id = "#charts" + this._id;
 		var ctx = $(chart_id).get(0).getContext("2d");
 		qlog.info("Clicked on chart: charts" + this._id, filename);
 
 		qlog.info('******************Generating chart now at location: ' + chart_id, filename);
 		var str = chartStats(this, ctx, "div.chartStats" + this._id);
-		//LineChart(this._id, ctx);
-		//PieChart(this._id, ctx);
-		//DoughnutChart(this._id, ctx);
 		return;
 	}
 });
