@@ -182,11 +182,29 @@ Meteor.methods({
 
 		return qollMasterId;
 	},
-	processStoreHtmlQoll : function(html, emailsandgroups, tags, action){
+
+	/**		'qollText' : qoll.qollText,
+			'tags' : qoll.tags,
+			'submittedOn' : new Date(),
+			'updatedOn' : new Date(),
+			'submittedBy' : Meteor.userId(),
+			'submittedByEmail' : getCurrentEmail,
+			'visibility' : qoll.visibility,
+			'qollFormat' : qoll.qollFormat
+			**/
+	processStoreHtmlQoll : function(html, emailsandgroups, tags, visibility, action){
 		var md = ToMarkdown.convert(html);
 
+		md = md.replace(/(\d+)\.\s+/g, '- ');
+
+		md = md.replace(/\*\s+/g, '- ');
+
+		var master_id = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 
+			'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
+
 		qlog.info('Persisting the html into database - ' + md + ', emailsandgroups - ' + emailsandgroups 
-			+ ', tags - ' + tags + ', action - ' + action, filename);
+			+ ', tags - ' + tags + ', action - ' + action + ', visibility - ' + visibility + ', master_id - '
+			+ master_id, filename);
 
 		return 'Successfully stored the html qoll';
 	}

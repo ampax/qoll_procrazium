@@ -1,13 +1,29 @@
 var filename="client/views/editor/recipient.js";
 
+Template.recipient.helpers({
+  is_pub : function(){
+    return checkDefaultAccessMode(QollConstants.QOLL.VISIBILITY.PUB) ? 'checked' : '';
+  },
+  is_pvt : function(){
+    return checkDefaultAccessMode(QollConstants.QOLL.VISIBILITY.PVT) ? 'checked' : '';
+    
+  },
+});
+
 //This will be used to convert the html to markdown in case it is ckEditor that user has selected
 Template.recipient.events({
   'click .store' : function(event){
     var content = 'undefined';
     var markdown = 'undefined';
+    var access = $("input:radio[name=attribute_access]:checked").val();
     var recips = jQuery("input#recipient_search").val();
     var tags = jQuery("input.tags").val();
     var editor_choice = $('input[name=editorPref]:checked').val();
+
+    if(tags == undefined || tags === '') {
+      Error.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
+      return;
+    }
     
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
@@ -18,7 +34,7 @@ Template.recipient.events({
       //Convert the value on the server
       markdown = toMarkdown(content);
 
-      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_STORE, function(error, msg){
+      Meteor.call("processStoreHtmlQoll", content, recips, tags, access, QollConstants.QOLL_ACTION_STORE, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
         } else {
@@ -34,6 +50,7 @@ Template.recipient.events({
   'click .send' : function(event){
     var content = 'undefined';
     var markdown = 'undefined';
+    var access = $("input:radio[name=attribute_access]:checked").val();
     var recips = jQuery("input#recipient_search").val();
     var tags = jQuery("input.tags").val();
     var editor_choice = $('input[name=editorPref]:checked').val();
@@ -46,7 +63,7 @@ Template.recipient.events({
       //Convert the value on the server
       markdown = toMarkdown(content);
 
-      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_SEND, function(error, msg){
+      Meteor.call("processStoreHtmlQoll", content, recips, tags, access, QollConstants.QOLL_ACTION_SEND, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
         } else {
@@ -59,6 +76,35 @@ Template.recipient.events({
     qlog.info('Sending the qoll now - ' + content, filename);
     qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
   },
+  "click input[name = 'attribute_access']" : function(event) {
+    var access_mode = $("input:radio[name=attribute_access]:checked").val();
+    if(access_mode == undefined || access_mode == '') {
+      access_mode = QollConstants.QOLL.VISIBILITY.PUB; //default the editor choice to basic
+    }
+    qlog.info('Switching to editor mode - ' + access_mode, filename);
+    
+    settings = Settings.find({'userId' : Meteor.userId()}).fetch();
+      if(settings && settings.length > 0) {
+        //Settings.update({'access_mode': QollConstants.EDITOR_MODE.BASIC});
+        /**
+        QollConstants.QOLL.VISIBILITY.PUB - 'public' qolls created, will be shared publicly
+        QollConstants.QOLL.VISIBILITY.PVT - 'private' qolls created, will not be shared publicly
+        **/
+
+        Settings.update({_id : settings[0]._id}, {
+          $set: {'access_mode': access_mode}
+        }, function(error){
+          if(error){
+            //throwError(error.reason);
+            qlog.error('Error happened while saving editor-preferences '+access_mode+', error - '+error.reason, filename);
+          } else {
+            qlog.info('Saved access_mode = '+access_mode+' to preferences', filename);
+          }
+        });
+      } else {
+          Settings.insert({'userId' : Meteor.userId(), 'access_mode': QollConstants.QOLL.VISIBILITY.PUB});
+      }
+  }
 });
 
 Template.recipient.rendered = function() {
@@ -67,6 +113,8 @@ Template.recipient.rendered = function() {
 	QollAutoComplete.init("input#recipient_search");
 	QollAutoComplete.enableLogging = true;
 };
+
+
 Template.recipient.events({
   'keyup .recipient': function () {
 
@@ -109,4 +157,12 @@ var toMarkdown = function(html) {
         return md;
       }
     });
+}
+
+var checkDefaultAccessMode = function(mode) {
+  settings = Settings.find({'userId' : Meteor.userId()}).fetch()[0];
+  qlog.info('printing settings - ' + JSON.stringify(settings) + ', userId - ' + Meteor.userId(), filename);
+  var flag = settings ? settings.access_mode && settings.access_mode === mode : false;
+  qlog.info('is_adv - ' + flag);
+  return settings ? settings.access_mode && settings.access_mode === mode : false;
 }

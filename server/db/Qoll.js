@@ -15,43 +15,66 @@ var filename="server/db/Qoll.js";
 		QollRegisterStats - the table will keep high level statistics for all the registered responses
 **/
 
-QollDb = {
+Qolls = {};
+
+Qolls.QollDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},
 };
 
-QollMasterDb = {
-	insert : function(){},
-	update : function(){},
-	remove : function(){},
-};
+Qolls.QollMasterDb = {
+	insert : function(qoll){
+		if(qoll.visibility == undefined) qoll.visibility = QollConstants.QOLL.VISIBILITY.PUB;
 
-QollRawDb = {
-	insert : function(){
-		//This method stores original complete html qoll into the QollHtmlRaw table
-		var id = QollHtmlRaw.insert({
-			//JSON: You can send whatever you want but we will extract and store only required information
-			'qollText' : htmlQoll.qollText,
-			'qollMasterId' : qollMasterId,
-			'tags' : tags,
+		var qollMasterId = QollMaster.insert({
+			'qollText' : qoll.qollText,
+			'tags' : qoll.tags,
 			'submittedOn' : new Date(),
+			'updatedOn' : new Date(),
 			'submittedBy' : Meteor.userId(),
 			'submittedByEmail' : getCurrentEmail,
-			'visibility' : visibility
+			'visibility' : qoll.visibility
 		});
+
+		return qollMasterId;
 	},
 	update : function(){},
 	remove : function(){},
 };
 
-QollRegisterDb = {
+Qolls.QollRawDb = {
+	insert : function(qoll){
+		//This method stores original complete html qoll into the QollHtmlRaw table
+		if(qoll.qollFormat == undefined || qoll.qollFormat === '' 
+			|| !_.contains([QollConstants.QOLL.FORMAT.BASIC, QollConstants.QOLL.FORMAT.HTML, QollConstants.QOLL.FORMAT.TXT], qoll.qollFormat))
+			return 'ERROR: You must specify format to persist the Qoll';
+
+		var id = QollRaw.insert({
+			//JSON: You can send whatever you want but we will extract and store only required information
+			'qollText' : qoll.qollText,
+			'qollMasterId' : qoll.qollMasterId,
+			'qollFormat' : qoll.qollFormat,
+			'tags' : qoll.tags,
+			'submittedOn' : new Date(),
+			'submittedBy' : Meteor.userId(),
+			'submittedByEmail' : getCurrentEmail,
+			'visibility' : qoll.visibility
+		});
+
+		return id;
+	},
+	update : function(){},
+	remove : function(){},
+};
+
+Qolls.QollRegisterDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},
 };
 
-QollRegisterStatsDb = {
+Qolls.QollRegisterStatsDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},
