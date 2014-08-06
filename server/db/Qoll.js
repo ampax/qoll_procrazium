@@ -25,6 +25,11 @@ Qolls.QollDb = {
 
 Qolls.QollMasterDb = {
 	insert : function(qoll){
+		//This method stores original complete html qoll into the QollHtmlRaw table
+		if(qoll.qollFormat == undefined || qoll.qollFormat === '' 
+			|| !_.contains([QollConstants.QOLL.FORMAT.BASIC, QollConstants.QOLL.FORMAT.HTML, QollConstants.QOLL.FORMAT.TXT], qoll.qollFormat))
+			return 'ERROR: You must specify format to persist the Qoll';
+
 		if(qoll.visibility == undefined) qoll.visibility = QollConstants.QOLL.VISIBILITY.PUB;
 
 		var qollMasterId = QollMaster.insert({
@@ -34,7 +39,8 @@ Qolls.QollMasterDb = {
 			'updatedOn' : new Date(),
 			'submittedBy' : Meteor.userId(),
 			'submittedByEmail' : getCurrentEmail,
-			'visibility' : qoll.visibility
+			'visibility' : qoll.visibility,
+			'qollFormat' : qoll.qollFormat
 		});
 
 		return qollMasterId;
@@ -45,21 +51,19 @@ Qolls.QollMasterDb = {
 
 Qolls.QollRawDb = {
 	insert : function(qoll){
-		//This method stores original complete html qoll into the QollHtmlRaw table
-		if(qoll.qollFormat == undefined || qoll.qollFormat === '' 
-			|| !_.contains([QollConstants.QOLL.FORMAT.BASIC, QollConstants.QOLL.FORMAT.HTML, QollConstants.QOLL.FORMAT.TXT], qoll.qollFormat))
-			return 'ERROR: You must specify format to persist the Qoll';
-
+		
+		if(qoll.visibility == undefined) qoll.visibility = QollConstants.QOLL.VISIBILITY.PUB;
+		
 		var id = QollRaw.insert({
 			//JSON: You can send whatever you want but we will extract and store only required information
 			'qollText' : qoll.qollText,
 			'qollMasterId' : qoll.qollMasterId,
-			'qollFormat' : qoll.qollFormat,
 			'tags' : qoll.tags,
 			'submittedOn' : new Date(),
 			'submittedBy' : Meteor.userId(),
 			'submittedByEmail' : getCurrentEmail,
-			'visibility' : qoll.visibility
+			'visibility' : qoll.visibility,
+			'qollFormat' : qoll.qollFormat
 		});
 
 		return id;
