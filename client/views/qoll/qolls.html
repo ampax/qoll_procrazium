@@ -40,6 +40,7 @@
             <span class="pull-right resend-qoll-btn glossy"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
           {{/if}}          
           <span class="pull-right render-chart-btn glossy"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
+          <span class="pull-right edit-qoll-btn glossy"><i class="glyphicon glyphicon-edit red ios-enabled"></i></span>
           <span class="pull-right archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
         {{/if}}
         {{#unless if_createusr}}
@@ -115,6 +116,7 @@
 
 </div>
 </p> 
+  {{> qollModalEditor}}
 </template>
 
 <template name="contextbtns">

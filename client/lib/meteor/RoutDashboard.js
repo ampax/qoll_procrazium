@@ -9,7 +9,10 @@ QollsController = RouteController.extend({
 	findOptions : function() {
 		return { sort : { submittedOn : -1 }, limit : this.limit() };
 	},
-	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER')];
+	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER'),
+	  Meteor.subscribe('categories'),
+    Meteor.subscribe('Settings'),
+    Meteor.subscribe('currentUser')];
 	},
 	allqollsfun : function() {
 		return AllQolls.find();
@@ -44,3 +47,4 @@ Router.map(function() {
 	});
 
 });
+

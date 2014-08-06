@@ -1,6 +1,12 @@
 var filename="client/views/body/editor.js";
-
 Template.editor.helpers({
+	
+	is_basic : function(){
+		return checkEditorMode(QollConstants.EDITOR_MODE.BASIC);
+		
+	}
+});
+Template.editorcore.helpers({
 	is_adv : function(){
 		return checkEditorMode(QollConstants.EDITOR_MODE.ADV);
 	},
