@@ -3,6 +3,10 @@ var filename = 'server/db/QollDb.js';
 QollTimerAction = new Meteor.Collection("QOLL_TIMER_ACTION");
 /** Database insert method for qolls  **/
 Meteor.methods({
+	getRawQoll: function(qollrawid){
+		var rawqo= QollRaw.findOne({_id:qollrawid});
+		return rawqo;
+	},
 	addQoll : function(qollText, qollType) {
 		qlog.info("BAD Add qoll: " + qollText, filename);
 		var qollId = Qoll.insert({

@@ -495,6 +495,16 @@ Template.qolls.events({
 		}
 
 	},
+		'click .edit-qoll-btn' : function(event) {
+		event.preventDefault();
+		var qollId = this._id;
+		var qollRawId= this.qollRawId;
+		qlog.info('RAW %%%% qoll for: '+ qollRawId);
+		Session.set('QollIdToEdit', qollId);
+		Session.set('QollRawIdToEdit', qollRawId);
+			$('#qollModalEditor-topdiv').modal('show');
+
+	},
 	'click a.no' : function(event) {
 		event.preventDefault();
 		if (Meteor.userId()) {

@@ -1,8 +1,14 @@
 <template name="editor">
 	{{> header_awesome}}
 	{{> editor_selector}}
+	{{#unless is_basic}}
+		{{> recipient}}
+	{{/unless}}
+	{{> editorcore}}
 
-	<!-- If the editor selection is markdown then this one will work -->
+</template>
+<template name="editorcore">
+		<!-- If the editor selection is markdown then this one will work -->
 	{{#if is_adv}}
 		{{> qolleditor_adv}}
 	{{/if}}
