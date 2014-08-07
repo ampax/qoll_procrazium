@@ -50,6 +50,7 @@ Qolls.QollMasterDb = {
 };
 
 Qolls.QollRawDb = {
+	//qoll: {qollText: qollText, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat}
 	insert : function(qoll){
 		
 		if(qoll.visibility == undefined) qoll.visibility = QollConstants.QOLL.VISIBILITY.PUB;

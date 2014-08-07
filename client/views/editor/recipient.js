@@ -24,6 +24,22 @@ Template.recipient.events({
       Error.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
       return;
     }
+
+    var emailsandgroups=[];
+    $.each(recips.split(/;|,/),function (ix,email){
+      email=$.trim(email);
+      if(email.length>0){
+        emailsandgroups.push(email);
+      }
+    });
+
+    var tagArr=[];
+    $.each(tags.split(/;|,|\s/),function (ix,tag){
+      tag=$.trim(tag);
+      if(tag.length>0){
+        tagArr.push(tag);
+      }
+    });
     
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
@@ -34,7 +50,7 @@ Template.recipient.events({
       //Convert the value on the server
       markdown = toMarkdown(content);
 
-      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_STORE, access, function(error, msg){
+      Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
         } else {
@@ -59,6 +75,22 @@ Template.recipient.events({
       Error.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
       return;
     }
+
+    var emailsandgroups=[];
+    $.each(recips.split(/;|,/),function (ix,email){
+      email=$.trim(email);
+      if(email.length>0){
+        emailsandgroups.push(email);
+      }
+    });
+
+    var tagArr=[];
+    $.each(tags.split(/;|,|\s/),function (ix,tag){
+      tag=$.trim(tag);
+      if(tag.length>0){
+        tagArr.push(tag);
+      }
+    });
     
     if(editor_choice === QollConstants.EDITOR_MODE.HTML) {
       content = $( 'textarea#editor' ).val();
@@ -68,7 +100,7 @@ Template.recipient.events({
       //Convert the value on the server
       markdown = toMarkdown(content);
 
-      Meteor.call("processStoreHtmlQoll", content, recips, tags, QollConstants.QOLL_ACTION_SEND, access, function(error, msg){
+      Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
         } else {
