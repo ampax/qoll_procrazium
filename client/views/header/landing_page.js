@@ -95,12 +95,13 @@ Template.landing_page.events({
     
      qlog.info('User logout event happened', filename);
      Login.logoutFromService();
+     this.redirect('/')
     },
     'click #login-buttons-facebook' : function(event, tmpl) {
         Login.loginWithService('facebook');
     },
     'click #login-buttons-google' : function(event, tmpl) {
-        Login.loginWithService('google');
+        Login.loginWithService('google', function(){});
     }
 
 });

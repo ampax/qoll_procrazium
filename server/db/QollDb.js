@@ -8,7 +8,7 @@ Meteor.methods({
 		return rawqo;
 	},
 	addQoll : function(qollText, qollType) {
-		qlog.info("BAD Add qoll: " + qollText, filename);
+		//qlog.info("BAD Add qoll: " + qollText, filename);
 		var qollId = Qoll.insert({
 			'qollText' : qollText,
 			'submittedOn' : new Date(),
@@ -22,7 +22,7 @@ Meteor.methods({
 	},
 	
 	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails, isparent, parentid, tags, attributes, qollStarAttributes, qollAttributes, qollFormat) {
-		qlog.info("GOOD Add qoll: " + qollText, filename);
+		//qlog.info("GOOD Add qoll: " + qollText, filename);
 		var newQtype = {};
 		var i = 0, actualmails = [], actualgroups = [];
 
@@ -198,17 +198,15 @@ Meteor.methods({
 		md = md.replace(/\*\s+/g, '- ');
 
 		/** Testing the qoll functions here **/
-		QollParserTest.parseHtml(md);
+		//QollParserTest.parseHtml(md);
+		//QollParser.parseHtml(md);
+		//return;
 
 		var err_msg = QollTagsDb.storeTags(tags);
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
 
 		var qollIds = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML);
-
-		qlog.info('Persisting the html into database - ' + md + ', emailsandgroups - ' + emailsandgroups 
-			+ ', tags - ' + tags + ', action - ' + action + ', visibility - ' + visibility + ', master_id - '
-			+ masterId + ', qollIds - ' + qollIds, filename);
 
 		return 'Successfully stored the html qoll';
 	}

@@ -7,13 +7,13 @@ Router.map(function(){
 		waitOn: function(){
 			//Meteor.subscribe('QBANK_PUBLISHER');
 		},
-		before: [function(){
+		onBeforeAction: [function(){
 			[Meteor.subscribe('QBANK_PUBLISHER'), Meteor.subscribe('RECIPIENTS_PUBLISHER'), Meteor.subscribe('QOLL_TAG_PUBLISHER')];
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
 		}],
-		after: function(){
+		onAfterAction: function(){
 			//TODO
 		},
 		data:function(){

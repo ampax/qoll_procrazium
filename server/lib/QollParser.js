@@ -4,15 +4,16 @@ QollRegEx = {
 	num 		: /^[\d.,]+$/,
 	txt			: /^[\w\s.,:;"'=-_\\\(\)\[\]\{\}\^&#!@$*<>]+$/,
 	qoll 		: /^#[\s]*/,
-	qollTxt 	: /^[#\s]+(.*)/,
+	qollTxt 	: /^[#\s]+(.*)/gm,
 	hint 		: /^[\s]*[Hh]int[:=-\s]*/,
 	hintTxt 	: /^[\s]*[Hh]int[:=-\s]*(.*)/,
 	note 		: /^[\s]*[Nn]ote[:=-\s]*/,
 	noteTxt 	: /^[\s]*[Nn]ote[:=-\s]*(.*)/,
-	fib 		: /_[\w\s]+_/,
-	fibTxt 		: /_(.+)_/,
+	fib 		: /\\_[\w\s,]+\\_/,
+	fibTxt 		: /\\_(,.+)\\_/,
 	opt 		: /^-[?=Aa]{0,1}[\s]*/,
 	optTxt 		: /^-[?=Aa]{0,1}[\s]*(.+)/,
+	qollMaster 	: /^#\s(.*)/m,
 	isNum		: function(text){return text.match(QollRegEx.num);},
 	isTxt		: function(text){return text.match(QollRegEx.txt);},
 	isQoll		: function(text){return text.match(QollRegEx.qoll);},
@@ -20,162 +21,45 @@ QollRegEx = {
 	isNote		: function(text){return text.match(QollRegEx.note);},
 	isFib		: function(text){return text.match(QollRegEx.fib);},
 	isOpt		: function(text){return text.match(QollRegEx.opt);},
-	parseQollTxt	: function(text) {return text.match(QollRegEx.qollTxt);},
+	parseQollTxt	: function(text) {return text.split(QollRegEx.qollTxt);},
 	parseHintTxt	: function(text) {return text.match(QollRegEx.hintTxt);},
 	parseNoteTxt	: function(text) {return text.match(QollRegEx.noteTxt);},
 	parseFibTxt		: function(text) {return text.match(QollRegEx.fibTxt);},
 	parseOptTxt		: function(text) {return text.match(QollRegEx.optTxt);},
-}
-
-QollParserTest = {
-	parseHtml : function(qollMaster) {
-
-		QollParserTest.isNumTest();
-		QollParserTest.isTxtTest();
-		QollParserTest.isQollTest();
-		QollParserTest.isHintTest();
-		QollParserTest.isNoteTest();
-		QollParserTest.isFibTest();
-		QollParserTest.isOptTest();
-		QollParserTest.parseQollTest();
-		QollParserTest.parseHintTest();
-		QollParserTest.parseNoteTest();
-		QollParserTest.parseFibTest();
-		QollParserTest.parseOptTest();
-	},
-	isNumTest : function(){
-		var tst = '1234.698';
-		var m = QollRegEx.isNum(tst);
-		if(m) {
-			qlog.info('SUCCESS the text is a number ... **' + m + '**', filename);
-		} else {
-			qlog.info('FAILURE The text is not a number ... **' + m + '**', filename);
-		}
-	},
-	isTxtTest : function(){
-		var tst = '12abcalskj34.69e8';
-		var m = QollRegEx.isTxt(tst);
-		if(m) { 
-			qlog.info('SUCCESS the text is a string literal sequence ... **' + m + '**', filename);
-		} else {
-			qlog.info('FAILURE The text is not a number ... **' + m + '**', filename);
-		}
-	},
-	isQollTest : function(){
-		var qoll = ['# This is a qoll text','#    This is qoll text two', '#This is qoll text three'];
-		qoll.map(function(q){
-			var m = QollRegEx.isQoll(q);
-			if(m) {
-				qlog.info('SUCCESS is-qoll: **' + m + '**', filename);
-			} else {
-				qlog.info('FAILURE is-qoll: **' + m + '**', filename);
-			}
-		});
-	},
-	isHintTest : function(){
-		var hint = ['hint: This is a hint', 'hint- this is another hint', 'Hint:=  Will this hint be captured', '  hint:-- This is last hint'];
-		hint.map(function(h){
-			var m = QollRegEx.isHint(h);
-			if(m) {
-				qlog.info('SUCCESS is-hint: **' + m + '**', filename);
-			} else {
-				qlog.info('FAILURE is-hint: **' + m + '**', filename);
-			}
-		});
-	},
-	isNoteTest : function(){
-		var note = ['note: this is note one', 'note:- This is note two', 'Note= this is note three', '  note is this a note'];
-		note.map(function(n){
-			var m = QollRegEx.isNote(n);
-			if(m) {
-				qlog.info('SUCCESS is-note: **' + m + '**', filename);
-			} else {
-				qlog.info('FAILURE is-note: **' + m + '**', filename);
-			}
-		});
-	},
-	isFibTest : function(){
-		var fib = ['This is a simple _fib_ text'];
-		fib.map(function(f){
-			var m = QollRegEx.isFib(f);
-			if(m) {
-				qlog.info('SUCCESS is-fib: **' + m + '**', filename);
-			} else {
-				qlog.info('FAILURE is-fib: **' + m + '**', filename);
-			}
-		});
-	},
-	isOptTest : function(){
-		var opt = ['- This is an option', '-a This option is the correct answer', '-A this option is also correct', 'Aa wrong answer'];
-		opt.map(function(o){
-			var m = QollRegEx.isOpt(o);
-			if(m) {
-				qlog.info('SUCCESS is-opt: **' + m + '**', filename);
-			} else {
-				qlog.info('FAILURE is-opt: **' + m + '**', filename);
-			}
-		});
-	},
-	parseQollTest : function() {
-		var qoll = ['# This is a qoll text','#    This is qoll text two', '#This is qoll text three'];
-		qoll.map(function(q){
-			var m = QollRegEx.parseQollTxt(q);
-			if(m) {
-				qlog.info('SUCCESS parse-qoll: ' + m[1], filename);
-			} else {
-				qlog.info('FAILURE parse-qoll: $$' + m + '$$', filename);
-			}
-		});
-	},
-	parseHintTest : function(){
-		var hint = ['hint: This is a hint', 'hint- this is another hint', 'Hint:=  Will this hint be captured', '  hint:-- This is last hint'];
-		hint.map(function(h){
-			var m = QollRegEx.parseHintTxt(h);
-			if(m) {
-				qlog.info('SUCCESS parse-hint: ' + m[1], filename);
-			} else {
-				qlog.info('FAILURE parse-hint: **' + m + '**', filename);
-			}
-		});
-	},
-	parseNoteTest : function(){
-		var note = ['note: this is note one', 'note:- This is note two', 'Note= this is note three', '  note is this a note'];
-		note.map(function(n){
-			var m = QollRegEx.parseNoteTxt(n);
-			if(m) {
-				qlog.info('SUCCESS parse-note: ' + m[1], filename);
-			} else {
-				qlog.info('FAILURE parse-note: **' + m + '**', filename);
-			}
-		});
-	},
-	parseFibTest : function(){
-		var fib = ['This is a simple _fill in the blank value_ text'];
-		fib.map(function(f){
-			var m = QollRegEx.parseFibTxt(f);
-			if(m) {
-				qlog.info('SUCCESS parse-fib: ' + m[1], filename);
-			} else {
-				qlog.info('FAILURE parse-fib: **' + m + '**', filename);
-			}
-		});
-	},
-	parseOptTest : function(){
-		var opt = ['- This is an option', '-a This option is the correct answer', '-A this option is also correct', 'Aa wrong answer'];
-		opt.map(function(o){
-			var m = QollRegEx.parseOptTxt(o);
-			if(m) {
-				qlog.info('SUCCESS parse-opt: ' + m[1], filename);
-			} else {
-				qlog.info('FAILURE parse-opt: **' + m + '**', filename);
-			}
-		});
-	},
+	parseQollMaster	: function(text) {return text.match(QollRegEx.qollMaster);},
 }
 
 QollParser = {
 	//Parse the qoll from html editor
-	parseHtml : function(qollMaster) {},
+	parseHtml : function(qollMaster) {
+		//The master qoll will be a group of qolls (least one qoll). Run a qoll parser and then count
+		//the number of qolls. Then iterate over each of them, and process the data
+		//qlog.info('Parsing: ' + qollMaster, filename);
+		var regExAnser = /^(a)\s+/;
+        var regExNoAnser = /^\s+/;
+        var qollId = new Array();
+        var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
+        qolls = qolls.slice(1);
+        qolls.map(function(q){
+        	//ACTIVATE: var qollRawId = Qolls.QollRawDb.insert({qollText: q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat});
+            var qs = q.split(/\n-\s+/);
+            var qoll = qs[0];
+            var opts = qs.slice(1, qs.length);
+			var qollType = QollConstants.QOLL_TYPE.MULTI; //multi is by default
+			//qlog.info('Parsing opts: ' + opts.join('\n\n\n'), filename);
+
+			if(QollRegEx.isFib(qoll)) {
+				qlog.info('SUCCESS: The qoll is fill in the blanks - ' + QollRegEx.isFib(qoll), filename);
+			} else qlog.info('FAILURE: The qoll is not fill in the blanks - ' + qoll, filename);
+			
+			opts.map(function(opt){
+				if(QollRegEx.isFib(opt)){ 
+					qlog.info('SUCCESS: The option is fill in the blanks - ' + QollRegEx.isFib(opt), filename);
+				} else qlog.info('FAILURE: The opts is not fill in the blanks - ' + opt, filename);
+			});
+        });
+
+	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
 	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat) {
@@ -261,8 +145,7 @@ QollParser = {
 	            	}
 	            });
 	        }
-	        qlog.info('<==========Printing final stars============>'+JSON.stringify(qollStarAttributes), filename);
-
+	        
 	        qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
 
 	        //Fetching and initializing all the qoll answers, with correct answers marked
@@ -324,7 +207,7 @@ QollParser = {
 		}
 
 		//If there are more than one correct answers, this is a multiple choice question
-        qlog.info('qoll: ' + qoll + ", types: " + types, filename);
+        //qlog.info('qoll: ' + qoll + ", types: " + types, filename);
 		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
 		qollAttributes.type = qollType;
 		qollAttributes.isMultiple = isMultiple;
@@ -335,3 +218,4 @@ QollParser = {
       qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
 	},
 };
+
