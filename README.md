@@ -13,24 +13,111 @@ qoll----
 		 ---client
 		| 		   |
 		| 		    ---lib
+		|				|____accounts
+		|				|____autocomplete
+		|				|____chart
+		|				|____datepicker
+		|				|____downtown
+		|				|____helpers
+		|				|____intro
+		|				|____meteor
 		| 		   |
 		| 		    ---stylesheets
 		| 		   |
 		| 		    ---views
 		|				|
+		|				|____admin
+		|				|____body
+		|				|____chart
+		|				|____common
+		|				|____contacts
 		|				|____editor
-		|						|
-		|						|____aceedit
-		|						|
-		|						|____ckedit
-		|								|
-		|								|____ckeditor (ckEditor library (js files) resides here)
-		|										|
-		|										|_____stylesheets (ckEditor stylesheets/skins, scayt is commented out)
+		|				|		|____aceedit
+		|				|		|____ckedit
+		|				|____edu
+		|				|____header
+		|				|____layout
+		|				|____mockups
+		|				|____qoll
+		|				|____questionaire
+		|				|____users
+		|
+		|
+		 ---collections
+		|
+		|
+		 ---db_docs
+		|
 		|
 		 ---lib
+		| 		   |
+		| 		    ---i18n
+		| 		   |
+		| 		    ---locales
 		|
-		 ---server
+		|		
+		 ---packages
+		| 		   |
+		| 		    ---accounts-ui-bootstrap-3-blaze
+		| 		   |
+		| 		    ---ace-embed		
+		| 		   |
+		| 		    ---animate-css
+		| 		   |
+		| 		    ---autocompletion
+		| 		   |
+		| 		    ---blaze-layout
+		| 		   |
+		| 		    ---bootstrap-3
+		| 		   |
+		| 		    ---chartjs
+		| 		   |
+		| 		    ---crypto-base
+		| 		   |
+		| 		    ---crypto-md5
+		| 		   |
+		| 		    ---fast-render
+		| 		   |
+		| 		    ---font-awesome
+		| 		   |
+		| 		    ---google-contacts
+		| 		   |
+		| 		    ---googleAnalytics
+		| 		   |
+		| 		    ---HTML5-History-API
+		| 		   |
+		| 		    ---inspector
+		| 		   |
+		| 		    ---iron-router
+		| 		   |
+		| 		    ---jquery-ui
+		| 		   |
+		| 		    ---mathjax
+		| 		   |
+		| 		    ---meteor-tomarkdown
+		| 		   |
+		| 		    ---module-loader
+		| 		   |
+		| 		    ---npm
+		| 		   |
+		| 		    ---page-js-ie-support
+		| 		   |
+		| 		    ---pince
+		| 		   |
+		| 		    ---wow
+		|
+		|
+		 ---public
+		| 			|
+		| 			 ---ckeditor
+		| 			|
+		| 			 ---img
+		|			|
+		|			 ---TeX
+		|
+		---server
+		|           |
+		| 			 ---admin
 		| 			|
 		| 			 ---config
 		| 			|
@@ -40,11 +127,7 @@ qoll----
 		| 			|
 		| 			 ---publish
 		|
-		 ---public
-		| 			|
-		| 			 ---img
-		|
-		 ---tests
+		 ---
 
 ```
 
