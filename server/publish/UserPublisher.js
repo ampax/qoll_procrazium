@@ -39,6 +39,9 @@ var privacyOptions = { // false means private
 //publish current user
 Meteor.publish('currentUser', function() {
   var user = Meteor.users.findOne(this.userId);
+
+  if(!user || user == undefined) return;
+
   var self= this;
   var user_email =UserUtil.getEmail(user);// user.emails[0].address;
   var gp_memberships=[];

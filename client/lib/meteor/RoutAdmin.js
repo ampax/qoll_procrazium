@@ -7,13 +7,13 @@ Router.map(function(){
 		waitOn: function(){
 			
 		},
-		before: [function(){
+		onBeforeAction: [function(){
 	
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
 		}],
-		after: function(){
+		onAfterAction: function(){
 			//TODO
 		}
 	});

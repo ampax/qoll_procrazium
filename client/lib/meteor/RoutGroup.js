@@ -29,13 +29,13 @@ Router.map(function(){
 		waitOn: function(){
 			Meteor.subscribe('RECIPIENTS_PUBLISHER');
 		},
-		before: [function(){
+		onBeforeAction: [function(){
 			Meteor.subscribe('RECIPIENTS_PUBLISHER');
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
 		}],
-		after: function(){
+		onAfterAction: function(){
 			//TODO
 		}
 	});
@@ -46,13 +46,13 @@ Router.map(function(){
 		waitOn: function(){
 			Meteor.subscribe('QOLLERS_PUBLISHER');
 		},
-		before: [function(){
+		onBeforeAction: [function(){
 			Meteor.subscribe('QOLLERS_PUBLISHER');
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
 		}],
-		after: function(){
+		onAfterAction: function(){
 			//TODO
 		}
 	});
@@ -63,13 +63,13 @@ Router.map(function(){
 		waitOn: function(){
 			//
 		},
-		before: [function(){
+		onBeforeAction: [function(){
 			//
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
 		}],
-		after: function(){
+		onAfterAction: function(){
 			//TODO
 		}
 	});
@@ -80,13 +80,13 @@ Router.map(function(){
 		waitOn: function(){
 			//
 		},
-		before: [function(){
+		onBeforeAction: [function(){
 			//
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
 		}],
-		after: function(){
+		onAfterAction: function(){
 			//TODO
 		}
 	});

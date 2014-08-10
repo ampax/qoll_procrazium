@@ -49,6 +49,7 @@ Login.logoutFromService = function() {
 			qlog.error('Failed to logout ...' + err, filename);
 	    } else {
 			qlog.info('Logged out user', filename);
+			Router.go('/'); //Go to homepage on logout
 	    }
 	});
 }

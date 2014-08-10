@@ -21,7 +21,8 @@
       "google-contacts": {},
       "accounts-ui-bootstrap-3-blaze": {},
       "meteor-tomarkdown": {},
-      "pince": {}
+      "pince": {},
+      "oauthjs": {}
     },
     "packages": {
       "font-awesome": {
@@ -123,6 +124,11 @@
         "git": "https://github.com/mad-eye/pince.git",
         "tag": "v0.0.5",
         "commit": "4524ecc0bdf043c49dc62e91bbd8a99c661081ed"
+      },
+      "oauthjs": {
+        "git": "https://github.com/nifticubes/meteor-oauthjs.git",
+        "tag": "v0.0.4",
+        "commit": "0dcf60d87bcd7dcf6d1d17f258682298ce4d06aa"
       },
       "module-loader": {
         "git": "https://github.com/apendua/module-loader.git",

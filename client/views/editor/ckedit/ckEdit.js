@@ -1,7 +1,18 @@
 var filename='client/views/ckedit/ckEdit.js';
 
-var test_qolls = 
-"<h1>Who is USA current president?</h1>" +
+var test_qolls =
+"<h1>This is a complex Qoll with _qoll option 1_, _qoll option 2_, _qoll option 3_</h1>"  +
+
+"<ol>"  +
+"	<li>complex qoll option one with _some fill in the blanks option_<br />"  +
+"	Hint: the value in the middle of underscores will change to fill in the blanks</li>"  +
+"	<li>complex qoll option two with more fill in the blanks _fill1_, _123.45_, _1,234.99_<br />"  +
+"	Hint: the values in the middle of underscores will change to fill in the blanks<br />"  +
+"	Note: the values in the middle of underscores are strongly typed also</li>"  +
+"	<li>complex qoll option three with fill in the blanks and multiple choice values _[1,2,3,4]_<br />"  +
+"	Note: the multiple options will change in a drop down or radio buttons depending on how many are there</li>"  +
+"</ol> "  + 
+"<h1>Who is USA current president?</h1>"  +
 
 "<ol>" +
 "	<li>Atal Bihari Bajpayee<br />" +
