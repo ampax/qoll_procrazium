@@ -21,6 +21,9 @@ Qolls.QollDb = {
 	insert : function(){},
 	update : function(){},
 	remove : function(){},
+	get		 : function (params){
+		return Qoll.findOne(params);
+	}
 };
 
 Qolls.QollMasterDb = {
@@ -84,3 +87,12 @@ Qolls.QollRegisterStatsDb = {
 	update : function(){},
 	remove : function(){},
 };
+
+
+
+
+// Exposing DB methods to client.
+Meteor.methods({
+	
+	getQollById: function (qollid) { return Qolls.QollDb.get({_id:qollid});}
+});
