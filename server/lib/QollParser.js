@@ -9,8 +9,8 @@ QollRegEx = {
 	hintTxt 	: /^[\s]*[Hh]int[:=-\s]*(.*)/,
 	note 		: /^[\s]*[Nn]ote[:=-\s]*/,
 	noteTxt 	: /^[\s]*[Nn]ote[:=-\s]*(.*)/,
-	fib 		: /\\_[\w\s,]+\\_/,
-	fibTxt 		: /\\_(,.+)\\_/,
+	fib 		: /\\_.+\\_/,
+	fibTxt 		: /\\_(.+)\\_/,
 	opt 		: /^-[?=Aa]{0,1}[\s]*/,
 	optTxt 		: /^-[?=Aa]{0,1}[\s]*(.+)/,
 	qollMaster 	: /^#\s(.*)/m,
@@ -49,7 +49,8 @@ QollParser = {
 			//qlog.info('Parsing opts: ' + opts.join('\n\n\n'), filename);
 
 			if(QollRegEx.isFib(qoll)) {
-				qlog.info('SUCCESS: The qoll is fill in the blanks - ' + QollRegEx.isFib(qoll), filename);
+				var fibs = QollRegEx.isFib(qoll);
+				qlog.info('SUCCESS: The qoll is fill in the blanks - ' + ', fibs - ' + fibs, filename);
 			} else qlog.info('FAILURE: The qoll is not fill in the blanks - ' + qoll, filename);
 			
 			opts.map(function(opt){
@@ -216,6 +217,7 @@ QollParser = {
         });
 
       qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
+      return qollId;
 	},
 };
 
