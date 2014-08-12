@@ -53,8 +53,12 @@ Template.recipient.events({
       Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
+          Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
         } else {
           qlog.info('Recieved message - ' + msg, filename);
+          Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+          $( 'textarea#editor' ).val('');
+      
         }
       });
 
@@ -103,8 +107,11 @@ Template.recipient.events({
       Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, function(error, msg){
         if(error) {
           qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
+          Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
         } else {
           qlog.info('Recieved message - ' + msg, filename);
+          Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+          $( 'textarea#editor' ).val('');
         }
       });
 

@@ -208,7 +208,7 @@ Meteor.methods({
 
 		var qollIds = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML);
 
-		return 'Successfully stored the html qoll';
+		return 'Successfully created ' + qollIds.length + ' qolls.';
 	}
 });
 
