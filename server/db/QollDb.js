@@ -21,7 +21,7 @@ Meteor.methods({
 		return qollId;
 	},
 	
-	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails, isparent, parentid, tags, attributes, qollStarAttributes, qollAttributes, qollFormat) {
+	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails, isparent, parentid, tags, attributes, qollStarAttributes, qollAttributes, qollFormat,qollIdtoUpdate) {
 		//qlog.info("GOOD Add qoll: " + qollText, filename);
 		var newQtype = {};
 		var i = 0, actualmails = [], actualgroups = [];
@@ -68,7 +68,23 @@ Meteor.methods({
 		if (parentid) {
 			qoll_to_insert.parentId = parentid;
 		}
-		var qollId = collection_forqoll.insert(qoll_to_insert);
+		var qollId;
+		if(!qollIdtoUpdate){
+			qlog.info('ABOUT to insert with updateid - ' + qollIdtoUpdate, filename);
+			qollId = collection_forqoll.insert(qoll_to_insert);
+		}
+		else{
+			qlog.info('ABOUT to inplace edit qoll with id - ' + qollIdtoUpdate, filename);
+			qoll_to_insert._id=qollIdtoUpdate;
+			qollId =qollIdtoUpdate;
+			collection_forqoll.update(qollIdtoUpdate,qoll_to_insert,{upsert:false},function(err,obj){
+				if(err)
+					qlog.info('recieved error - ' + err, filename);
+				if(!err){
+					qlog.info('SUCCESS inplace edit qoll with id - ' + obj._id, filename);
+				}
+			});
+		}
 
 		return qollId;
 	},
@@ -166,7 +182,7 @@ Meteor.methods({
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollMaster : function(qollText, emailsandgroups, tags, action) {
+	addQollMaster : function(qollText, emailsandgroups, tags, action,qollIdtoUpdate) {
 		qlog.info('Inserting into qoll master', filename);
 		var visibility = QollConstants.QOLL.VISIBILITY.PUB; //send this from the front end once we have it there
 		/**var qollMasterId = QollMaster.insert({
@@ -185,12 +201,12 @@ Meteor.methods({
 
 		var qollMasterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT});
 
-		var qollIds = QollParser.addQollsForMaster(qollText, qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT);
+		var qollIds = QollParser.addQollsForMaster(qollText, qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT,qollIdtoUpdate);
 
 		return qollMasterId;
 	},
 
-	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility){
+	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility,qollIdToUpdate){
 		var md = ToMarkdown.convert(html);
 
 		md = md.replace(/(\d+)\.\s+/g, '- ');
@@ -206,7 +222,7 @@ Meteor.methods({
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
 
-		var qollIds = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML);
+		var qollIds = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML,qollIdToUpdate);
 
 		return 'Successfully created ' + qollIds.length + ' qolls.';
 	}

@@ -63,7 +63,7 @@ QollParser = {
 	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
-	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat) {
+	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate) {
         var regExAnser = /^(a)\s+/;
         var regExNoAnser = /^\s+/;
         var qollId = new Array();
@@ -212,7 +212,9 @@ QollParser = {
 		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
 		qollAttributes.type = qollType;
 		qollAttributes.isMultiple = isMultiple;
-		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups, undefined, undefined,  tags, attributes, qollStarAttributes, qollAttributes, qollFormat);
+		
+		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups 
+				,undefined, undefined,  tags, attributes, qollStarAttributes, qollAttributes, qollFormat,qollIdtoUpdate);
 		qollId.push(qid);
         });
 
