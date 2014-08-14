@@ -6,7 +6,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 	var uuid = Meteor.uuid();
 	var initializing = true;
 	var handle;
-	qlog.info('Fetching all the qolls in desc order of creation; uuid: ' + uuid, filename);
+	qlog.info('Fetching all the qolls in desc order of creation; uuid -------> : ' + uuid + ', : ' + this.userId, filename);
 	if (this.userId) {//first publish specialized qolls to this user
 		var ufound = Meteor.users.find({
 			"_id" : this.userId
@@ -15,31 +15,22 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			//submitted by this user
-			handle = QBank.find({
-				'submittedBy' : this.userId,
-				'action' : {
-					$ne : 'archive'
-				}
-			}, {
-				'qollTitle' : 1,
-				'qollText' : 1,
-				'qollRawId' : 1,
-				'submittedOn' : 1
-			}, {
-				sort : {
-					'submittedOn' : -1
-				},
-				reactive : true
-			}).observe({
+			var handle = Qoll.find({$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
+				{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, reactive : true}
+			).observe({
 				added : function(item, idx) {
 					qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
 					var q = {
 						qollTitle : item.qollTitle,
-						qollText : item.qollText,
-						submittedOn : item.submittedOn,
-						viewContext : "createUsr",
-						_id : item._id,
-						qollRawId : item.qollRawId
+ 						qollText : item.qollText,
+ 						submittedOn : item.submittedOn,
+ 						viewContext : "createUsr",
+ 						_id : item._id,
+						qollRawId : item.qollRawId,
+						qollTypesX : item.qollTypesX,
+						attributes : item.attributes
 					};
 
 					self.added('qbank_summary', item._id, q);
@@ -49,11 +40,13 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 
 					var q = {
 						qollTitle : item.qollTitle,
-						qollText : item.qollText,
-						submittedOn : item.submittedOn,
-						viewContext : "createUsr",
-						_id : item._id,
-						qollRawId : item.qollRawId
+ 						qollText : item.qollText,
+ 						submittedOn : item.submittedOn,
+ 						viewContext : "createUsr",
+ 						_id : item._id,
+						qollRawId : item.qollRawId,
+						qollTypesX : item.qollTypesX,
+						attributes : item.attributes
 					};
 
 					self.changed('qbank_summary', item._id, q);
@@ -69,7 +62,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 		}
 
 	}
-	qlog.info('Done initializing the publisher: QBANK_PUBLISHER, uuid: ' + uuid, filename);
+	qlog.info('Done initializing the publisher: QBANK_SUMMARY_PUBLISHER, uuid: ' + uuid, filename);
 	initializing = false;
 	self.ready();
 	//self.flush();

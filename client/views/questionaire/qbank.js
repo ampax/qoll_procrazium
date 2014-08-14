@@ -131,4 +131,14 @@ Template.qollbank.events({
 		});
 
 	},
+	'click .qoll_selection' : function(event) {
+		//event.preventDefault();
+		var qollId = this._id;
+		var qollText = this.qollText;
+		var qollTypesX = this.qollTypesX;
+		var html = QollClientSide.previewQollHtml([{qollId : qollId, title : 'No title', qoll : qollText, types : qollTypesX}]);
+		qlog.info('The html is: ' + html, filename);
+		qlog.info('Printed the qoll-selection checkbox - ' + qollId + '/' + qollText + '/' + qollTypesX, filename);
+		$('div#content1').append(html);
+	},
 });

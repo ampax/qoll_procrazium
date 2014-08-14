@@ -1,8 +1,9 @@
 var filename='server/db/Qollstionnaire.js';
 
-/** New Set of methods tomanage qolls from new qoll-editor **/ /*
+/** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
 	addQollstionnaire : function(qollstionnaire) {
+		qlog.info('Storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
 		qollstionnaire.submittedBy = Meteor.userId();
 		qollstionnaire.submittedOn = new Date();
 
@@ -33,4 +34,4 @@ Meteor.methods({
 
 		return qollstionnaire_id;
 	}
-});*/
+});

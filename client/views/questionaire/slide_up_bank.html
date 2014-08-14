@@ -1,49 +1,39 @@
-<template name="qbank_opts1">
-	<div class="well well-sm">
-
-		<div class="input-group input-group-sm">
-
-			<input type="text" class="qollstionnaire-title form-control" placeholder="Enter Qollstionnaire title ..." default="Qollstionnaire title" >
-			<span class="input-group-btn">
-				<button type="button" class="btn btn-primary store-qollstionnaire"  >
-					Create
-				</button> </span>
+<template name="slide_up_bank">
+	
+	<div class="qbank_pop">
+		<div class='pop-nav'>
+			<div class='row'>
+			<div class='col-md-10'>New Questionnaire</div>
+			<div class='col-md-2 pop-nav-actions'>
+				<span class="glyphicon glyphicon-minus toggle"></span>
+				<span class="glyphicon glyphicon-remove"></span>
+			</div>
+			</div>
 		</div>
-		<span class="qbank-error-msg red"></span><br>
 
-		<div class="input-group input-group-sm">
-   	
-		   	<span class="input-group-btn">
-		     	<button type="button" class="btn btn-primary qollQbankToggle qoll-width-1">Qoll To:<sup class="red">*</sup></button>
-		    </span>
-	    
-			 <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1">
+		<div class="form-static">
 
-		</div><!-- /input-group --><br>
+			<div class="input-group input-group-sm fill_100_pct">
+				<input type="text" class="qollstionnaire-title form-control" placeholder="Enter Qollstionnaire title ..." default="Qollstionnaire title" >
+			</div>
 
-		<div class="input-group input-group-sm">
+			<div class="input-group input-group-sm minor-margin">
+				<span class="input-group-btn">
+			     	<button type="button" class="btn btn-primary qollQbankToggle qoll-width-1">Qoll To:<sup class="red">*</sup></button>
+			    </span>
+			    <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1">
+			</div>
 
-			 <span class="input-group-btn">
-		     	<button type="button" class="btn btn-primary qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
-		    </span>
-	    
-			 <input type="text" class="form-control" placeholder="Add Tags: Space separated tags ..." default="" id="add-tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1">
+			<div class="input-group input-group-sm minor-margin">
+				<span class="input-group-btn">
+			     	<button type="button" class="btn btn-primary qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
+			    </span>
+		    
+				 <input type="text" class="form-control" placeholder="Add Tags: Space separated tags ..." default="" id="add-tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1">
+			</div>
 
-		</div><!-- /input-group --><br>
-
-		<!--div class="input-group input-group-sm">
-
-			 <span class="input-group-btn">
-		     	<button type="button" class="btn btn-info qoll-width-1"  >Attributes:</button>
-		    </span>
-		    <div class="form-control red"></div>
-
-		</div--><!-- /input-group --><!--br-->
-
-
-
-		<!-- Add the times here -->
-		<div class="input-group input-group-sm">
+			<!-- Add the times here -->
+		<div class="input-group input-group-sm minor-margin col-md-12">
 			<span class="input-group-btn  ">
 				<button type="button" class="btn btn-info qoll-width-1"  >
 					Start Time
@@ -84,8 +74,8 @@
 					<option value="AM">AM</option>
 					<option value="PM">PM</option>
 				</select> </span>
-		</div><br><!-- /start-time input-group -->
-		<div class="input-group input-group-sm">
+		</div><!-- /start-time input-group -->
+		<div class="input-group input-group-sm minor-margin col-md-12">
 			<span class="input-group-btn  ">
 				<button type="button" class="btn btn-info qoll-width-1"  >
 					End Time
@@ -126,33 +116,20 @@
 					<option value="AM">AM</option>
 					<option value="PM">PM</option>
 				</select> </span>
-		</div><br><!-- /end-time input-group -->
-	</div>
+		</div><!-- /end-time input-group -->
 
-	<div class="well well-sm">
-    	<div class="input-group input-group-sm">
+		<br>
+		</div><!-- End: /form-static here -->
+		<div class="form-scroll">
+			<div class="input-group input-group-sm minor-margin col-md-12" id="content1"><!-- /Start of the content here -->
+				<p class='init-info'>Select by clicking the checkbox to craete a questionaire.</p>
+			</div><!-- /End of the content here -->
+		</div><!-- End: /form-scroll here -->
 
-			 <span class="input-group-btn">
-		     	<button type="button" class="btn btn-info qoll-width-1"  >Search With Tags: </button>
-		    </span>
-	    
-			 <input type="text" class="tags form-control" placeholder="Search: Start searching by typing tags ..." default="" id="search-tags" data-intro="Start searching by typing tags" data-step="1">
+		<div class='save-nav'>
+			<button type="button" class="btn btn-primary send-store">Send/Store</button>
+		</div>
 
-		</div><!-- /input-group -->
-	</div>
+	</div><!-- End: /qbank_pop here -->
 
-</template>
-
-<template name='qbank_opts'>
-	<div class="well well-sm">
-    	<div class="input-group input-group-sm">
-
-			 <span class="input-group-btn">
-		     	<button type="button" class="btn btn-info qoll-width-1"  >Search With Tags: </button>
-		    </span>
-	    
-			 <input type="text" class="tags form-control" placeholder="Search: Start searching by typing tags ..." default="" id="search-tags" data-intro="Start searching by typing tags" data-step="1">
-
-		</div><!-- /input-group -->
-	</div>
 </template>

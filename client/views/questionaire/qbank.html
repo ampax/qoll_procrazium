@@ -1,40 +1,38 @@
 <template name="qollbank">
 	{{> header_awesome}}
-	<p class="lead"></p>
+	<!-- p class="lead"></p -->
 	<div id="aceEditorContainer">
 
-		<center><h4>Create a questionnaire by selecting questions from QBank, providing title and specifying recipients.</h4></center>
+		<center><h4>Start selecting qolls to create ...</h4></center>
 
-		<div class="container" id="qbank-container-id">
+		<!-- Starting of the row for all qolls -->
+		<!-- {{> qbank_opts}} -->
+		<div class="row">
+			<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
 
-			<!-- Starting of the row for all qolls -->
-			<div class="row">
-				{{> qbank_opts}}
-			</div><br>
-			<!--div class="row" -->
-			<div class="well well-sm">
-					<span class="qbank-error-msg red"></span><br>
-				<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
-
-					<div class="col-md-9 col-xs-12">
-						Qoll Text  (Check boxes on the right to include questions in this questionnaire) 
-					</div>
-					<div class="col-md-1 col-xs-12">
-						Cmplx
-					</div>
-					<div class="col-md-1 col-xs-12">
-						Type
-					</div>
-					<div class="col-md-1 col-xs-12">
-						<input type="checkbox" class="qoll_selectall"/>
-					</div>
-				</div><!-- list-group-item list-group-item-heading -->
-			</div><!-- well well-sm -->
-			<div class="row">
-				{{#each QBankData}}
+				
+				<div class="col-md-1 col-xs-12">
+					<input type="checkbox" class="qoll_selectall"/>
+				</div>
+				<div class="col-md-5 col-xs-12">
+					<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
+				</div>
+				<div class='col-md-4 col-xs-0'>&nbsp;</div>
+				<div class="col-md-1 col-xs-12">
+					Cmplx
+				</div>
+				<div class="col-md-1 col-xs-12">
+					Type
+				</div>
+			</div><!-- list-group-item list-group-item-heading -->
+				{{#each QBankSumm}}
 				<!-- Start of Qoll Section -->
 				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success" id='qdiv_{{_id}}'>
 
+					
+					<div class="col-md-1 col-xs-12">
+						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
+					</div>
 					<div class="col-md-9 col-xs-12">
 						{{#mathjax}}{{{qollText}}}{{/mathjax}}
 					</div>
@@ -44,18 +42,13 @@
 					<div class="col-md-1 col-xs-12">
 						{{attributes.type}}
 					</div>
-					<div class="col-md-1 col-xs-12">
-						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
-					</div>
 				</div><!-- list-group-item list-group-item-success -->
 				<!-- End of Qoll Section here -->
 				{{/each}}
-			</div><!-- row -->
+		</div><!-- row -->
 			<!-- End of the row here -->
 
-			<div id="navbrand"></div>
-
-		</div>
+		{{> slide_up_bank}}
 	
 	</div>
 </template>
