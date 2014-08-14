@@ -6,32 +6,32 @@ Template.toolbar.events({
 		var editor = ace.edit("aceEditor");
 		bindToolBarForQoll(editor);
 	},
-	'click .addopti' : function() {
+	'click .addopti' : function(event) {
 		event.preventDefault()
 		var editor = ace.edit("aceEditor");
 		bindToolBarForOption(editor);
 	},
-	'click .addltxi' : function() {
+	'click .addltxi' : function(event) {
 		event.preventDefault()
 		var editor = ace.edit("aceEditor");
 		bindForLatexInline(editor);
 	},
-	'click .addltxb' : function() {
+	'click .addltxb' : function(event) {
 		event.preventDefault()
 		var editor = ace.edit("aceEditor");
 		bindForLatexBlock(editor);
 	},
-	'click .addcode' : function() {
+	'click .addcode' : function(event) {
 		event.preventDefault()
 		var editor = ace.edit("aceEditor");
 		bindForCode(editor);
 	},
-	'click .addbloc' : function() {
+	'click .addbloc' : function(event) {
 		event.preventDefault()
 		var editor = ace.edit("aceEditor");
 		bindForBlockQuotes(editor);
 	},
-	'click .sendqoll' : function() {
+	'click .sendqoll' : function(event) {
 		event.preventDefault()
 		console.log("Send qoll at this event ...");
 		var editor = ace.edit("aceEditor");
@@ -41,7 +41,7 @@ Template.toolbar.events({
 
 		storeEditorContents(editor, recips, tags, QollConstants.QOLL_ACTION_SEND);
 	},
-	'click .storqoll' : function() {
+	'click .storqoll' : function(event) {
 		event.preventDefault()
 		console.log("Store qoll at this event ...");
 		var editor = ace.edit("aceEditor");
@@ -83,7 +83,7 @@ Template.toolbar.events({
 		}
 
 	},
-	'click .checkqoll' : function() {
+	'click .checkqoll' : function(event) {
 		event.preventDefault()
 		console.log("Check correct item in qoll at this event ...");
 		var editor = ace.edit("aceEditor");
