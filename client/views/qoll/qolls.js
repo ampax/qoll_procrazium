@@ -503,7 +503,17 @@ Template.qolls.events({
 		Session.set('QollIdToEdit', qollId);
 		Session.set('QollRawIdToEdit', qollRawId);
 			$('#qollModalEditor-topdiv').modal('show');
-
+			
+		/*$('#qollModalEditor-topdiv').css({
+    "position":"absolute", 
+    "top": $('#'+qollId).offset().top + "px",
+    "left": $('#'+qollId).offset().left + "px",
+		});	
+		$('.modal-content').css({
+    "position":"absolute", 
+    "top": $('#'+qollId).offset().top + "px",
+    "left": $('#'+qollId).offset().left + "px",
+		});	*/
 	},
 	'click a.no' : function(event) {
 		event.preventDefault();

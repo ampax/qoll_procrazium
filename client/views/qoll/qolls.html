@@ -40,7 +40,7 @@
             <span class="pull-right resend-qoll-btn glossy"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
           {{/if}}          
           <span class="pull-right render-chart-btn glossy"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
-          <span class="pull-right edit-qoll-btn glossy"><i class="glyphicon glyphicon-edit red ios-enabled"></i></span>
+          {{#unless is_parent}} <span class="pull-right edit-qoll-btn glossy"><i class="glyphicon glyphicon-edit ios-enabled"></i></span>{{/unless}}
           <span class="pull-right archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
         {{/if}}
         {{#unless if_createusr}}
@@ -106,7 +106,6 @@
     {{/each}}
   </div>
   <!-- End of the row here -->
-
   <div id="navbrand"></div>
   {{#if nextPath}}
   <ul class="pager">
@@ -116,7 +115,7 @@
 
 </div>
 </p> 
-  {{> qollModalEditor}}
+ {{> qollModalEditor}} 
 </template>
 
 <template name="contextbtns">

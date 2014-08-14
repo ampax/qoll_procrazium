@@ -16,7 +16,6 @@ Template.qollModalEditor.events({
 			}
 		}); //QollRaw.findOne({id_:Session.get('QollRawIdToEdit')});
 		
-		qlog.info('Modal editor r:' + JSON.stringify( rawqoll));
 	}
 });
 Template.qollModalEditor.rendered = function() {
