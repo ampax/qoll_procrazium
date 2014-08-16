@@ -1,0 +1,1 @@
+var filename='client/views/questionaire/view_qollbank.js';

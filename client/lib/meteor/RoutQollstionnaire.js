@@ -54,6 +54,11 @@ Router.map(function() {
 		controller : QollstionnaireController,
 	});
 
+	this.route('view_qollbank', {
+		template : 'view_qollbank',
+		path : '/view_qollbank'
+	});
+
 	this.route('view_my_groups', {
 		template : 'my_groups',
 		path : '/view_my_groups',
