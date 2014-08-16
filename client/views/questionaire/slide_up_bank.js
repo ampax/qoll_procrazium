@@ -71,6 +71,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
     qlog.info('Will be storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
 
     Meteor.call("addQollstionnaire", qollstionnaire, function(err, qollMasterId) {
+      var target = jQuery(".qbank-error-msg");
       if (err) {
         qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);
         target.html("Failed, try again...");
@@ -80,6 +81,12 @@ var filename='client/views/questionaire/slide_up_bank.js';
         return -1;
       } else {
         qlog.info("Added qoll-master-content with id: " + qollMasterId, filename);
+        //Wipe out the values inserted in the slide-up editor now
+        jQuery("input#recipient_search").val('');
+        jQuery("input.qollstionnaire-title").val('');
+        jQuery("input#add-tags").val('');
+        $('span.qoll-container').remove();
+
         if ($("#qollsenddate").val() != '') {
           var actdt = new Date($("#qollsenddate").val());
           var hour = parseInt($('.qstion_send_hour').val());
@@ -129,6 +136,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
           //}, 800);
           qlog.info('Adding store-qoll button back: ' + store_html, filename);
         });
+        Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Stored questionaire ...');
         return qollMasterId;
       }
     });

@@ -6,7 +6,7 @@ QollClientSide = {
 		qlog.info('Printing preview qoll xxxx ============>' + qolls[0], filename);
 		var html = '';
 		qolls.map(function(qoll) {
-			html += "<span id='"+qoll.qollId+"_outer"+"'>";
+			html += "<span class='qoll-container' id='"+qoll.qollId+"_outer"+"'>";
 			html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator qoll' id='"+qoll.qollId+"'>";
 			html += "<span class='glyphicon glyphicon-remove red pull-right remove-qoll' id='"+qoll.qollId+"'></span>";
 
