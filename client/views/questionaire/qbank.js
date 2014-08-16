@@ -134,11 +134,30 @@ Template.qollbank.events({
 	'click .qoll_selection' : function(event) {
 		//event.preventDefault();
 		var qollId = this._id;
-		var qollText = this.qollText;
-		var qollTypesX = this.qollTypesX;
-		var html = QollClientSide.previewQollHtml([{qollId : qollId, title : 'No title', qoll : qollText, types : qollTypesX}]);
-		qlog.info('The html is: ' + html, filename);
-		qlog.info('Printed the qoll-selection checkbox - ' + qollId + '/' + qollText + '/' + qollTypesX, filename);
-		$('div#content1').append(html);
+		var isChecked = $("input[id='"+qollId+"']").prop('checked');
+		var cnt = Number($("span[id='cnt']").html());
+		qlog.info('Printing whether the checkbox is selected ' + isChecked, filename);
+		if(isChecked) {//If this is already selected, we are adding a new qoll
+			var qollText = this.qollText;
+			var qollTypesX = this.qollTypesX;
+			var html = QollClientSide.previewQollHtml([{qollId : qollId, title : 'No title', qoll : qollText, types : qollTypesX}]);
+			//qlog.info('The html is: ' + html, filename);
+			//qlog.info('Printed the qoll-selection checkbox - ' + qollId + '/' + qollText + '/' + qollTypesX, filename);
+			qlog.info('adding this qoll - ' + qollId, filename);
+			$('div#content1').append(html);
+			
+			//Set the appropriate count in the header here
+			cnt++;
+			$("span[id='cnt']").html(cnt);
+		} else {//If this is not already selected, we are removing the existing qoll
+			var target = $("span[id='"+qollId+"_outer']");
+		    qlog.info('removing this qoll - ' + qollId, filename);
+		    $("input[id='"+qollId+"']").prop('checked', false);;
+		    target.remove();
+		    
+		    //Set the appropriate count in the header here
+			cnt--;
+			$("span[id='cnt']").html(cnt);
+		}
 	},
 });

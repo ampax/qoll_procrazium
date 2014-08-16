@@ -134,6 +134,18 @@ var filename='client/views/questionaire/slide_up_bank.js';
     });
 
   },
+  'click .remove-qoll' : function(event) {
+    var qollId = event.currentTarget.id;
+    var target = $("span[id='"+qollId+"_outer']");
+    qlog.info('removing this qoll - ' + qollId, filename);
+    $("input[id='"+qollId+"']").prop('checked', false);;
+    target.remove();
+
+    //Set the appropriate count in the header here
+    var cnt = Number($("span[id='cnt']").html());
+    cnt--;
+    $("span[id='cnt']").html(cnt);
+  },
 
  });
 

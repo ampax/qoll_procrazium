@@ -50,7 +50,7 @@ span.toggle {
 	clear:both;
 	/**height:300px;*/
 	max-height: 190px;
-	width:515px;
+	width:545px;
 	border: 1px solid #ccc;
 	background:#fff;
 	padding:15px;
@@ -64,7 +64,7 @@ span.toggle {
 	clear:both;
 	/**height:300px;*/
 	max-height: 250px;
-	width:515px;
+	width:545px;
 	border-left : 1px solid #ccc;
 	border-right : 1px solid #ccc;
 	border-bottom:  : 1px solid #ccc;
@@ -78,7 +78,7 @@ span.toggle {
 
 div.qbank_pop > div.pop-nav {
 	height: 40px;
-	width: 515px;
+	width: 545px;
 	background: #404040;
 	color: white;
 	padding-top: 12px;
@@ -90,7 +90,7 @@ div.qbank_pop > div.pop-nav {
 
 div.qbank_pop > div.save-nav {
 	height: 40px;
-	width: 515px;
+	width: 545px;
 	background: #E6E6E6;
 	color: white;
 	padding-top: 12px;
