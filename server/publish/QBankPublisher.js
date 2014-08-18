@@ -15,8 +15,8 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			//submitted by this user
-			var handle = Qoll.find({$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
-										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
+			var handle = Qoll.find( 
+				getQuery(findoptions), 
 				{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
 				{sort : {'submittedOn' : -1}, reactive : true}
 			).observe({
@@ -130,6 +130,44 @@ Meteor.publish('GROUP_STATS_PUBLISHER', function(group_name) {
 
 	self.onStop(function() {
 		if(handle_group_stats) handle_group_stats.stop();
+	});
+});
+
+
+Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
+	var user_id = this.userId;
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var handle_questionaires;
+	if (user_id) {
+		//Check for existing user record
+		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		if (ufound.length > 0) {
+			Qollstionnaire.find();
+			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_SEND}}).observe({
+				added : function(item, idx){
+					self.added('sent-by-me-questionaire', item._id, 
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+				},
+				changed : function(item, idx) {
+					self.changed('sent-by-me-questionaire', item._id, 
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+				},
+				removed : function(item){
+					self.removed('sent-by-me-questionaire', item._id);
+				}
+			});
+		}
+	}
+
+	qlog.info('Done initializing the sent-by-me-questionaire: SENT_QUESTIONAIRE_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle_questionaires != undefined) handle_questionaires.stop();
 	});
 });
 
@@ -253,5 +291,29 @@ var getAnswer = function(ansHash) {
 var getUnitSelected = function(ansHash) {
 	return ansHash && ansHash.unitSelected ? ansHash.unitSelected : '';
 };
+
+var getQuery = function(findoptions) {
+	//Return default query if nothing specified for the type in the paramenters. Else return appropriate query parameter.
+	var query = {$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]};
+
+	if(findoptions && findoptions.query_type){
+		//Process for the type of data being queried
+		if(findoptions.query_type === 'inbox') {
+			//Return the data for inbox. This will be the data that the user has recieved and needs to respond.
+			//These will be two kinds - (1) Single qoll questionaire & (2) Multiple qoll questionaire
+		} else if(findoptions.query_type === 'sent') {
+			//This will be everything from the questionaire table that you have sent to anyone
+		} else if(findoptions.query_type === 'draft') {
+			//This is all the questionaire that you navigated away from the page without saving/storing
+		} else { 
+			//This is all the qolls created by me or public qolls
+			return query;
+		}
+	}
+
+	//Else return the default query for data
+	return query;
+}
 
 

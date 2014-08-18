@@ -1,4 +1,29 @@
 
+InboxController = RouteController.extend({
+	findOptions : function() {
+		return { sort : { submittedOn : -1 } };
+	},
+	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER'),
+		Meteor.subscribe('categories'),
+    	Meteor.subscribe('Settings'),
+    	Meteor.subscribe('currentUser')];
+	},
+	data : function() {
+		return {qolls: AllQolls.find()};
+	}
+});
+
+SentController = RouteController.extend({
+	findOptions : function() {
+		return { sort : { submittedOn : -1 } };
+	},
+	waitOn : function() {[Meteor.subscribe('SENT_QUESTIONAIRE_PUBLISHER', this.findOptions()),];
+	},
+	data : function() {
+		return {qolls: ISentQuestionaire.find()};
+	}
+});
+
 QollstionnaireController = RouteController.extend({
 	template : 'qolls',
 
@@ -57,6 +82,29 @@ Router.map(function() {
 	this.route('view_qollbank', {
 		template : 'view_qollbank',
 		path : '/view_qollbank'
+	});
+
+	this.route('view_inbox', {
+		template : 'view_inbox',
+		path : '/inbox',
+		controller : InboxController,
+	});
+
+	this.route('view_sent', {
+		template : 'view_sent',
+		path : '/sent',
+		controller : SentController,
+	});
+
+	this.route('view_draft', {
+		template : 'view_draft',
+		path : '/draft'
+	});
+
+	this.route('all_qolls', {
+		template : 'all_qolls',
+		path : '/all_qolls',
+		controller : QbankController,
 	});
 
 	this.route('view_my_groups', {

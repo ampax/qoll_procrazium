@@ -57,7 +57,7 @@ span.toggle {
 	/**overflow: auto;**/
 	z-index: 3;
 	position: relative;
-	/**display: none;**/
+	display: none;
 }
 
 .qbank_pop .form-scroll{

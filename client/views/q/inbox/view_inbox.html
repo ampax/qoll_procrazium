@@ -1,0 +1,63 @@
+<template name="view_inbox">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> qoll_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="content-header">
+	            <h1>
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                Inbox
+	            </h1>
+	        </div>
+			
+			<hr class='divider divider-bottom-0'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset inset-5">
+				<div class="row">
+	            	
+					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+
+						
+						<div class="col-md-1 col-xs-12">
+							<!--input type="checkbox" class="qoll_selectall"/-->&nbsp;
+						</div>
+						<div class="col-md-5 col-xs-12">
+							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
+						</div>
+						<div class='col-md-4 col-xs-0'>&nbsp;</div>
+						<div class="col-md-1 col-xs-12">
+							&nbsp;
+						</div>
+						<div class="col-md-1 col-xs-12">
+							&nbsp;
+						</div>
+					</div><!-- list-group-item list-group-item-heading -->
+					{{#each qolls}}
+				<!-- Start of Qoll Section -->
+				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success" id='qdiv_{{_id}}'>
+
+					
+					<div class="col-md-1 col-xs-12">
+						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
+					</div>
+					<div class="col-md-9 col-xs-12">
+						{{#mathjax}}{{{qollText}}}{{/mathjax}}
+					</div>
+					<div class="col-md-1 col-xs-12">
+						{{attributes.complexity}}
+					</div>
+					<div class="col-md-1 col-xs-12">
+						{{attributes.type}}
+					</div>
+				</div><!-- list-group-item list-group-item-success -->
+				<!-- End of Qoll Section here -->
+				{{/each}}
+				</div><!-- /row-->
+			</div>
+		</div>
+	</div>
+</template>

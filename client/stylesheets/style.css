@@ -39,6 +39,14 @@ body {
 label.control-label-1 { /** Align the radio buttons to the half line **/
     margin-top: 0.55em !important;
 }
+
+hr.divider-bottom-0 {
+    margin-bottom: 0px;
+}
+
+.inset-5 {
+    padding: 5px;
+}
 /* ============================== END:Body Bootstrap style override/define ================================ */
 
 hr .divider {
@@ -484,7 +492,7 @@ span.qoll-toolbar-plain {
 
 .list-group-item-heading {
 	color: #FFF;
-	background-color: rgba(50, 118, 177, 0.56);
+	background-color: #878787;/**rgba(50, 118, 177, 0.56);**/
 	border-color: rgba(9, 28, 80, 1);
 }
 
