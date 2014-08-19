@@ -15,6 +15,7 @@ Qollstionnaire = new Meteor.Collection("QOLLSTIONNAIRE");
 QbSummary = new Meteor.Collection("qbank_summary");
 Tags = new Meteor.Collection("tags");
 ISentQuestionaire = new Meteor.Collection("sent-by-me-questionaire");
+IStoredQuestionaire = new Meteor.Collection("stored-by-me-questionaire");
 
 //All published collections
 /****

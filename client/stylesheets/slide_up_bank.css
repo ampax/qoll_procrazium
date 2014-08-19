@@ -73,6 +73,22 @@ span.toggle {
 	overflow: auto;
 	z-index: 3;
 	position: relative;
+	display: none;
+}
+
+.qbank_pop .form-scroll-info {
+	clear:both;
+	/**height:300px;*/
+	max-height: 250px;
+	width:545px;
+	border-left : 1px solid #ccc;
+	border-right : 1px solid #ccc;
+	border-bottom:  : 1px solid #ccc;
+	background:#fff;
+	padding:15px;
+	overflow: auto;
+	z-index: 3;
+	position: relative;
 	/**display: none;**/
 }
 
