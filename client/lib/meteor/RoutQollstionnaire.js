@@ -24,6 +24,17 @@ SentController = RouteController.extend({
 	}
 });
 
+DraftController = RouteController.extend({
+	findOptions : function() {
+		return { sort : { submittedOn : -1 } };
+	},
+	waitOn : function() {[Meteor.subscribe('STORED_QUESTIONAIRE_PUBLISHER', this.findOptions()),];
+	},
+	data : function() {
+		return {qolls: IStoredQuestionaire.find()};
+	}
+});
+
 QollstionnaireController = RouteController.extend({
 	template : 'qolls',
 
@@ -98,7 +109,8 @@ Router.map(function() {
 
 	this.route('view_draft', {
 		template : 'view_draft',
-		path : '/draft'
+		path : '/draft',
+		controller : DraftController,
 	});
 
 	this.route('all_qolls', {
