@@ -1,3 +1,4 @@
+/**
 Template.search.helpers({
   searchQuery: function () {
     return Session.get("searchQuery");
@@ -41,3 +42,4 @@ var delay = (function(){
     timer = setTimeout(callback, ms);
   };
 })();
+**/

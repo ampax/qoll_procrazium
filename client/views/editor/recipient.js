@@ -11,6 +11,22 @@ Template.recipient.helpers({
 });
 
 //This will be used to convert the html to markdown in case it is ckEditor that user has selected
+/**
+	- store and send will both populate the Qoll table record
+	- store 
+		(1) Emails entered
+			(i)   Save the qoll in the Qoll table
+			(ii)  Create a new Questionnaire with status = draft
+			(iii) If it is a single qoll, set the mode single, if multiple, set the mode questionnaire
+		(2) Emails not entered (intention is to store the qolls and no questionnaire created)
+			(i) Save the qoll in the Qoll table, no questionnaire created
+
+	- send
+		(1) Emails entered
+			(i)   Save the qoll in the Qoll table
+			(ii)  Create new questionnaire with status = sent
+			(iii) If it is a single qoll, set the mode single, if multiple, set the mode questionnaire
+**/
 Template.recipient.events({
 	'click .store' : function(event) {
 		var content = 'undefined';
