@@ -230,6 +230,22 @@ a:hover, a:active {
     text-decoration: none !important;
 }
 
+.white-link {
+    color: white;
+}
+
+.white-link:hover {
+    color: #E6E6E6;
+}
+
+.black-link {
+    color: black;
+}
+
+.black-link:hover {
+    color: #19356C;
+}
+
 /** START: Glyph icon colors **/
 .bg-qoll {
     background-color: #F0F0F0;
@@ -477,6 +493,10 @@ span.qoll-toolbar-plain {
     border: none;
     width: 100%;
     text-align: center;
+}
+
+.make-clickable {
+    cursor: pointer; cursor: hand;
 }
 
 

@@ -95,10 +95,22 @@ Router.map(function() {
 		path : '/view_qollbank'
 	});
 
+	//inbox page and board templates/path
+	this.route('inboxView', {
+		template : 'view_inbox_board',
+		path : '/inbox_board/:_id',
+	});
+
 	this.route('view_inbox', {
 		template : 'view_inbox',
 		path : '/inbox',
 		controller : InboxController,
+	});
+
+	//sent page and board templates/path
+	this.route('sentView', {
+		template : 'view_sent_board',
+		path : '/sent_board/:_id',
 	});
 
 	this.route('view_sent', {
@@ -107,12 +119,19 @@ Router.map(function() {
 		controller : SentController,
 	});
 
+	//draft page and board templates/path
+	this.route('draftView', {
+		template : 'view_draft_board',
+		path : '/draft_board/:_id',
+	});
+	
 	this.route('view_draft', {
 		template : 'view_draft',
 		path : '/draft',
 		controller : DraftController,
 	});
 
+	//prepare the quiz template
 	this.route('all_qolls', {
 		template : 'all_qolls',
 		path : '/all_qolls',

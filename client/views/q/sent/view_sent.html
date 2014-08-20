@@ -44,8 +44,10 @@
 					<div class="col-md-1 col-xs-12">
 						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 					</div>
-					<div class="col-md-9 col-xs-12">
-						{{#mathjax}}{{{title}}}{{/mathjax}}
+					<div class="col-md-9 col-xs-12 make-clickable">
+						<a href="{{ pathFor 'sentView' }}" class='black-link'>
+							{{#mathjax}}{{{title}}}{{/mathjax}}
+						</a>
 					</div>
 					<div class="col-md-1 col-xs-12">
 						size &rarr; {{qoll_count}}
