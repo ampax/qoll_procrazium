@@ -60,6 +60,33 @@ QollstionnaireController = RouteController.extend({
 	}
 });
 
+IdLookUpController = RouteController.extend({
+template : 'view_inbox_board',
+	findOptions : function() {
+		console.log("looking for  id "+this.params._id );
+		return {
+			sort : {
+				submittedOn : -1
+			},
+			singleId : this.params._id 
+		};
+	},
+	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('RECIPIENTS_PUBLISHER')];
+	},
+	allqollsfun : function() {
+		//this.findOptions()
+		//console.log("found ndocs  for  id "+AllQolls.find({}, {}).count());
+		return AllQolls;
+	},
+	data : function() {
+
+		return {
+			qollList : this.allqollsfun(),
+			nextPath : null // no pagination
+		};
+	}
+});
+
 
 QollstGroupController = FastRender.RouteController.extend({
 	waitOn : function() {[Meteor.subscribe('QOLL_GROUP_PUBLISHER')];},
@@ -99,6 +126,7 @@ Router.map(function() {
 	this.route('inboxView', {
 		template : 'view_inbox_board',
 		path : '/inbox_board/:_id',
+		controller: IdLookUpController
 	});
 
 	this.route('view_inbox', {
