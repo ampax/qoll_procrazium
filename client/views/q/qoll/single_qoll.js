@@ -25,10 +25,11 @@ Template.single_qoll.helpers({
 		return this.enableEdit;
 	},
 	get_title : function(qollStarAttributes) {
-		return qollStarAttributes[QollConstants.EDU.TITLE];
+		return qollStarAttributes && qollStarAttributes[QollConstants.EDU.TITLE] ? qollStarAttributes[QollConstants.EDU.TITLE] : '';
 	},
 	get_units_html : function(qollStarAttributes) {
-		var unit_name = qollStarAttributes[QollConstants.EDU.UNIT_NAME], units = qollStarAttributes[QollConstants.EDU.UNITS];
+		var unit_name = qollStarAttributes ? qollStarAttributes[QollConstants.EDU.UNIT_NAME] : undefined, 
+		units = qollStarAttributes ? qollStarAttributes[QollConstants.EDU.UNITS] : undefined;
 
 		if (units == undefined || units && units.length === 0)
 			return '';
@@ -52,7 +53,7 @@ Template.single_qoll.helpers({
 		return units_html;
 	},
 	get_hint_html : function(qollStarAttributes) {
-		var hint = qollStarAttributes[QollConstants.EDU.HINT];
+		var hint = qollStarAttributes ? qollStarAttributes[QollConstants.EDU.HINT] : undefined;
 
 		if (hint == undefined)
 			return '';

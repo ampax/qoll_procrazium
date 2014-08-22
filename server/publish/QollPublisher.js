@@ -9,13 +9,20 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 	qlog.info('Publisher options' + JSON.stringify(findoptions));
 	//this hardcoding will never come to bite us later right?
 	var parentId = findoptions.parentId;
+	var myId = findoptions.singleId;
 	var parent_id_param = {
 		$exists : false
 	};
+	var my_id_param = {
+		$exists : true
+	};
+	
 	if (parentId)// params include parent id
 	{
 		parent_id_param = parentId;
-		// replace 1234 with parent id
+	}
+	if(myId){
+		my_id_param = myId;
 	}
 	var initializing = true;
 	
@@ -72,7 +79,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				'action' : {
 					$ne : 'archive'
 				},
-				parentId : parent_id_param
+				parentId : parent_id_param,
+				_id :my_id_param
 			}, {
 				sort : {
 					'submittedOn' : -1
@@ -180,8 +188,10 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 
 				}
 			});
-			qlog.info('looking for ' +JSON.stringify({'submittedTo' : UserUtil.getEmail(user), 'action' : 'send', parentId : parent_id_param}));
-			var handle = Qoll.find({ 'submittedTo' : UserUtil.getEmail(user), 'action' : 'send', parentId : parent_id_param }, 
+			qlog.info('looking for ' +JSON.stringify({'submittedTo' : UserUtil.getEmail(user), 'action' : 'send', parentId : parent_id_param,
+				_id :my_id_param}));
+			var handle = Qoll.find({ 'submittedTo' : UserUtil.getEmail(user), 'action' : 'send', parentId : parent_id_param,
+				_id :my_id_param }, 
 				{ sort : { 'submittedOn' : -1}, limit : lim, fields : { stats : 0 }, reactive : true }
 			).observe({
 				added : function(item, idx) {
@@ -259,7 +269,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				var handle = Qoll.find({
 					'$or' : allUserGroups,
 					'action' : 'send',
-					parentId : parent_id_param
+					parentId : parent_id_param,
+				_id :my_id_param
 				}, {
 					sort : {
 						'submittedOn' : -1
@@ -330,7 +341,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 	var handle = Qoll.find({
 		'submittedTo' : '',
 		'action' : 'send',
-		parentId : parent_id_param
+		parentId : parent_id_param,
+				_id :my_id_param
 	}, {
 		sort : {
 			'submittedOn' : -1

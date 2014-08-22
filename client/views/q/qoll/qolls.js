@@ -47,8 +47,11 @@ Template.qolls.created = function() {
 //});
 **/
 
-Template.qolls.helpers({
+Template.qolls_inner.helpers({
 	allQolls : function(event) {
+		if(this.qollList.find){
+			return this.qollList.find().fetch();
+		}
 		this.qollList.rewind();
 		return this.qollList.fetch();
 
@@ -264,7 +267,7 @@ Template.qolls.helpers({
 	}
 });
 
-Template.qolls.events({
+Template.qolls_inner.events({
 	/**'click': function(){
 	 qlog.info('Selected to qoll: ' + this._id + ', qollText: ' + qollText, filename);
 	 Session.set('selected_qoll_id', this._id);
@@ -552,7 +555,7 @@ Template.qolls.events({
 	}
 });
 
-Template.qolls.rendered = function() {
+Template.qolls_inner.rendered = function() {
 	jQuery(".selector").tabs({
 		active : 1
 	});

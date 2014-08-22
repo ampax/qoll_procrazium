@@ -3,12 +3,7 @@
 <p class="lead">
 <div class="container" id="qoll-container-id">
   <!-- Starting of the row for all qolls -->
-  <div class="row">
-    {{#each allQolls}}
-    <!-- Start of Qoll Section -->
-     		{{> single_qoll}}
-    {{/each}}
-  </div>
+{{> qolls_inner}}
   <!-- End of the row here -->
   <div id="navbrand"></div>
   {{#if nextPath}}
@@ -21,7 +16,14 @@
 </p> 
  {{> qollModalEditor}} 
 </template>
-
+<template name="qolls_inner">
+	  <div class="row">
+    {{#each allQolls}}
+    <!-- Start of Qoll Section -->
+     		{{> single_qoll}}
+    {{/each}}
+  </div>
+</template>
 <template name="contextbtns">
 	            {{#if if_inbox}}
             	<li><button type="button" class="btn btn-link information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">{{info_pref}}</span></button></li>

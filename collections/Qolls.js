@@ -17,6 +17,7 @@ Tags = new Meteor.Collection("tags");
 ISentQuestionaire = new Meteor.Collection("sent-by-me-questionaire");
 IStoredQuestionaire = new Meteor.Collection("stored-by-me-questionaire");
 IReceivedQuestionaire = new Meteor.Collection("recvd-questionaire");
+QollForQuestionaireId = new Meteor.Collection("qoll-for-questionaire-id");
 
 //All published collections
 /****
