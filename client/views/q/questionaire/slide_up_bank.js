@@ -72,7 +72,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
 
     qlog.info('Will be storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
 
-    Meteor.call("addQollstionnaire", qollstionnaire, function(err, qollMasterId) {
+    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, QollConstants.STATUS.STORED, allqollids, function(err, qollMasterId) {
       var target = jQuery(".qbank-error-msg");
       if (err) {
         qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);
@@ -199,7 +199,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
 
     qlog.info('Will be storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
 
-    Meteor.call("addQollstionnaire", qollstionnaire, function(err, qollMasterId) {
+    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, QollConstants.STATUS.SENT, allqollids, function(err, qollMasterId) {
       var target = jQuery(".qbank-error-msg");
       if (err) {
         qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);

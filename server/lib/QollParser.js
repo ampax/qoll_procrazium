@@ -221,5 +221,35 @@ QollParser = {
       qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
       return qollId;
 	},
+	parseEmailAndGroups : function(emailsandgroups) {
+		var i = 0, actualmails = [], actualgroups = [];
+
+		for ( i = 0; i < (emailsandgroups || []).length; i++) {
+			if (emailsandgroups[i].indexOf('@') > -1) {
+				actualmails.push(emailsandgroups[i]);
+			} else {
+				actualgroups.push(emailsandgroups[i]);
+			}
+		}
+
+		var eandg = {};
+		eandg.submittedTo = actualmails;
+		eandg.submittedToGroup = actualgroups;
+		return eandg;
+	},
+	mapQollsToEmail : function(emails, qollids) {
+		var qolls_to_email = {};
+
+		emails.forEach(function(email){
+			email = email.replace(/\./g,"&#46;");
+			qlog.info('Printing email =======> ' + email, filename);
+			qolls_to_email[email] = {};
+			qollids.forEach(function(qid){
+				qolls_to_email[email][qid] = '';
+			});
+		});
+
+		return qolls_to_email;
+	},
 };
 

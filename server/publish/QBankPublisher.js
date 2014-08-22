@@ -144,7 +144,7 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 		//Check for existing user record
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
-			Qollstionnaire.find();
+			
 			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT}).observe({
 				added : function(item, idx){
 					self.added('sent-by-me-questionaire', item._id, 
@@ -181,7 +181,7 @@ Meteor.publish('STORED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 		//Check for existing user record
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
-			Qollstionnaire.find();
+			
 			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.STORED}).observe({
 				added : function(item, idx){
 					self.added('stored-by-me-questionaire', item._id, 
@@ -208,7 +208,7 @@ Meteor.publish('STORED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 	});
 });
 
-Meteor.publish('QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
+Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 	var user_id = this.userId;
 	var self = this;
 	var uuid = Meteor.uuid();
@@ -218,15 +218,68 @@ Meteor.publish('QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 		//Check for existing user record
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
-			Qollstionnaire.find();
-			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.STORED}).observe({
+			var user = ufound[0];
+
+			//handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT})
+			
+			handle_questionaires = Qollstionnaire.find({ 'submittedTo' : UserUtil.getEmail(user), 'status' : QollConstants.STATUS.SENT }, 
+				{ sort : { 'submittedOn' : -1}, reactive : true }
+			).observe({
 				added : function(item, idx){
-					self.added('stored-by-me-questionaire', item._id, 
+					self.added('recvd-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
 				},
 				changed : function(item, idx) {
-					self.changed('stored-by-me-questionaire', item._id, 
+					self.changed('recvd-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+				},
+				removed : function(item){
+					self.removed('recvd-questionaire', item._id);
+				}
+			});
+		}
+	}
+
+	qlog.info('Done initializing the recvd-questionaire: STORED_QUESTIONAIRE_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle_questionaires != undefined) handle_questionaires.stop();
+	});
+});
+
+Meteor.publish('QUESTIONAIRE_QOLL_ID_PUBLISHER', function(findoptions) {
+	var user_id = this.userId;
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var handle_questionaires;
+	if (user_id) {
+		//Check for existing user record
+		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		if (ufound.length > 0) {
+			
+			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.STORED}).observe({
+				added : function(item, idx){
+					var qolls = [];
+					Qoll.find({_id : {$in : [item.qollids[0]]}}).map(function(q){
+						qolls.push(q);
+					});
+					qlog.info('Qolls ------------------------------------>>> ' + JSON.stringify(qolls), filename);
+					self.added('stored-by-me-questionaire', item._id, 
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
+							recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn, qolls : qolls});
+				},
+				changed : function(item, idx) {
+					var qolls = [];
+					Qoll.find({_id : {$in : [item.qollids[0]]}}).map(function(q){
+						qolls.push(q);
+					});
+					self.changed('stored-by-me-questionaire', item._id, 
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
+							recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn, qolls : qolls});
 				},
 				removed : function(item){
 					self.removed('stored-by-me-questionaire', item._id);
@@ -235,7 +288,7 @@ Meteor.publish('QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 		}
 	}
 
-	qlog.info('Done initializing the stored-by-me-questionaire: STORED_QUESTIONAIRE_PUBLISHER, uuid: ' + uuid, filename);
+	qlog.info('Done initializing the stored-by-me-questionaire: QUESTIONAIRE_QOLL_ID_PUBLISHER, uuid: ' + uuid, filename);
 	initializing = false;
 	self.ready();
 	//self.flush();

@@ -504,10 +504,14 @@ span.qoll-toolbar-plain {
     overflow: hidden !important;
     padding: 5px 5px !important;
     color: #000305;
-    background-color:rgba(191, 162, 219, 0.17);
+    background-color: #FFF1FF; /**rgba(191, 162, 219, 0.17); #FFE0F0;**/
     font-size: 12px !important;
     font-family: Arial, 'Lucida Sans Unicode' !important;
     text-align: left;
+}
+
+.list-group-item > .single {
+    background-color: #FFFFDB;
 }
 
 .list-group-item-heading {

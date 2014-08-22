@@ -12,7 +12,7 @@ Template.recipient.helpers({
 
 //This will be used to convert the html to markdown in case it is ckEditor that user has selected
 /**
-	- store and send will both populate the Qoll table record
+	- store and send will both populate the Qoll table record. Check QollDb.js for further info.
 	- store 
 		(1) Emails entered
 			(i)   Save the qoll in the Qoll table
@@ -43,8 +43,9 @@ Template.recipient.events({
 			Error.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
 			return;
 		}
+
+		var emailsandgroups = [];
 		if (!qollIdToEdit) {
-			var emailsandgroups = [];
 			$.each(recips.split(/;|,/), function(ix, email) {
 				email = $.trim(email);
 				if (email.length > 0) {
@@ -80,12 +81,11 @@ Template.recipient.events({
 			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-          Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+	          		Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
 				} else {
 					qlog.info('Recieved message - ' + msg, filename);
-          Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
-          $( 'textarea#editor' ).val('');
-      
+	          		Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+	          		$( 'textarea#editor' ).val('');
 				}
 			});
 
@@ -133,11 +133,11 @@ Template.recipient.events({
 			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-          Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+          			Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
 				} else {
 					qlog.info('Recieved message - ' + msg, filename);
-          Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
-          $( 'textarea#editor' ).val('');
+          			Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+          			$( 'textarea#editor' ).val('');
 				}
 			});
 

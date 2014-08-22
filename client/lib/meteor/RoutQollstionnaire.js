@@ -3,13 +3,13 @@ InboxController = RouteController.extend({
 	findOptions : function() {
 		return { sort : { submittedOn : -1 } };
 	},
-	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER'),
+	waitOn : function() {[Meteor.subscribe('RECVD_QUESTIONAIRE_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER'),
 		Meteor.subscribe('categories'),
     	Meteor.subscribe('Settings'),
     	Meteor.subscribe('currentUser')];
 	},
 	data : function() {
-		return {qolls: AllQolls.find()};
+		return {qolls: IReceivedQuestionaire.find()};
 	}
 });
 

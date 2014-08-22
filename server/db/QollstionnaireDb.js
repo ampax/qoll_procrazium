@@ -2,14 +2,22 @@ var filename='server/db/Qollstionnaire.js';
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollstionnaire : function(qollstionnaire) {
+	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids) {
 		qlog.info('Storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
-		qollstionnaire.submittedBy = Meteor.userId();
-		qollstionnaire.submittedOn = new Date();
+		var qollstionnaire = {};
+
+		var eandg = QollParser.parseEmailAndGroups(emailsandgroups);
+		qollstionnaire.submittedTo = eandg.submittedTo;
+		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
+
+		qollstionnaire.title = title;
+		qollstionnaire.tags = tags;
+		qollstionnaire.status = status;
+		qollstionnaire.qollids = qollids;
 
 
 		var qbankids = qollstionnaire.qollids;
-		var emails = qollstionnaire.emails;
+		var emails = qollstionnaire.submittedTo;
 
 		var qolls_to_email = {};
 		emails.forEach(function(email){
@@ -25,7 +33,7 @@ Meteor.methods({
 
 		qlog.info('Printing qollstionnaire - ' + JSON.stringify(qollstionnaire), filename);
 
-		var qollstionnaire_id = Qollstionnaire.insert(qollstionnaire);
+		var qollstionnaire_id = Qolls.QollstionnaireDb.insert(qollstionnaire);
 
 		if(qollstionnaire_id && qollstionnaire.tags) {
 			var err_msg = QollTagsDb.storeTags(qollstionnaire.tags);

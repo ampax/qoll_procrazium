@@ -46,14 +46,14 @@
 					</div>
 					<div class="col-md-9 col-xs-12 make-clickable">
 						<a href="{{ pathFor 'inboxView' }}" class='black-link'>
-							{{#mathjax}}{{{qollText}}}{{/mathjax}}
+							{{#mathjax}}{{{title}}}{{/mathjax}}
 						</a>
 					</div>
 					<div class="col-md-1 col-xs-12">
-						{{attributes.complexity}}
+						size &rarr; {{qoll_count}}
 					</div>
 					<div class="col-md-1 col-xs-12">
-						{{attributes.type}}
+						recips &rarr; {{recips_count}}
 					</div>
 				</div><!-- list-group-item list-group-item-success -->
 				<!-- End of Qoll Section here -->

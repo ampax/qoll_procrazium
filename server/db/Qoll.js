@@ -13,6 +13,8 @@ var filename="server/db/Qoll.js";
 		QollRegister - the table will keep all registered responses for a qoll
 
 		QollRegisterStats - the table will keep high level statistics for all the registered responses
+
+		Qollstionnaire - the table will keep all the questionnaires for intended responses, remember, this can be one or more qolls
 **/
 
 Qolls = {};
@@ -84,6 +86,27 @@ Qolls.QollRegisterDb = {
 
 Qolls.QollRegisterStatsDb = {
 	insert : function(){},
+	update : function(){},
+	remove : function(){},
+};
+
+Qolls.QollstionnaireDb = {
+	insert : function(qollstionnaire){
+		var questId = Qollstionnaire.insert({
+			title						: qollstionnaire.title,
+			submittedBy 				: Meteor.userId(),
+			submittedOn 				: new Date(),
+			qollids 					: qollstionnaire.qollids,
+			qolls_to_email 				: qollstionnaire.qolls_to_email,
+			tags 						: qollstionnaire.tags,
+			submittedTo 				: qollstionnaire.submittedTo,
+			submittedToGroup 			: qollstionnaire.submittedToGroup,
+			status 						: qollstionnaire.status,
+			visibility 					: qollstionnaire.visibility,
+		});
+
+		return questId;
+	},
 	update : function(){},
 	remove : function(){},
 };
