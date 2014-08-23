@@ -72,6 +72,18 @@ IdLookUpController = RouteController.extend({
 	}
 });
 
+QollController = RouteController.extend({
+	findOptions : function() {
+		console.log("looking for  id "+this.params._id );
+		return { sort : { submittedOn : -1 }, _id : this.params._id };
+	},
+	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_ID_PUBLISHER', this.findOptions())];
+	},
+	data : function() {
+		return { qollList : QollForQuestionaireId };
+	}
+});
+
 
 QollstGroupController = FastRender.RouteController.extend({
 	waitOn : function() {[Meteor.subscribe('QOLL_GROUP_PUBLISHER')];},
@@ -149,6 +161,12 @@ Router.map(function() {
 		template : 'all_qolls',
 		path : '/all_qolls',
 		controller : QbankController,
+	});
+
+	this.route('qollView', {
+		template : 'all_qolls_board',
+		path : '/qoll_board/:_id',
+		controller : QollController,
 	});
 
 	this.route('view_my_groups', {

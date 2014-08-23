@@ -44,8 +44,10 @@
 					<div class="col-md-1 col-xs-12">
 						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 					</div>
-					<div class="col-md-9 col-xs-12">
-						{{#mathjax}}{{{qollText}}}{{/mathjax}}
+					<div class="col-md-9 col-xs-12 make-clickable">
+						<a href="{{ pathFor 'qollView' }}" class='black-link'>
+							{{#mathjax}}{{{qollText}}}{{/mathjax}}
+						</a>
 					</div>
 					<div class="col-md-1 col-xs-12">
 						{{attributes.complexity}}
