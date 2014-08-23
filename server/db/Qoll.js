@@ -111,7 +111,12 @@ Qolls.QollstionnaireDb = {
 	remove : function(){},
 };
 
-
+Qolls.QollstionnaireDb.Util = {
+	//This method is simply to create the questionaire using the qollids passed to it together with other details
+	addQuestionaire : function() {
+		//TODO
+	}
+};
 
 
 // Exposing DB methods to client.
