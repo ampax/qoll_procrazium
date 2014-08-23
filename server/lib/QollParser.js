@@ -150,7 +150,7 @@ QollParser = {
 	        qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
 
 	        //Fetching and initializing all the qoll answers, with correct answers marked
-            var count =0;
+            var count =0; count=0;
             var types = new Array();
             var typesX = new Array();
             var attributes = {};
@@ -158,8 +158,9 @@ QollParser = {
             attributes.type = QollConstants.QOLL.TYPE.SINGLE;
             attributes.complexity = QollConstants.QOLL.DIFFICULTY.EASY;
             var isMultiple = false;
+            var ix =0; ix =0;
             qs.slice(1).map(function(type){
-                var x = {};
+                var x = {index:ix};ix =ix+1;
                 type = type.trim();
                 if(type.indexOf('(a) ') == 0) {
                     type = type.replace('(a) ', '');
@@ -177,6 +178,7 @@ QollParser = {
                 typesX.push(x);
             });
             if(count > 1) attributes.type = QollConstants.QOLL.TYPE.MULTIPLE; //isMultiple = true;
+            else attributes.type = QollConstants.QOLL.TYPE.SINGLE;
 		//If this is a single statement fill in the blanks
         if(qoll.indexOf("?==") != -1){
         	qollType = QollConstants.QOLL_TYPE.BLANK_DBL;

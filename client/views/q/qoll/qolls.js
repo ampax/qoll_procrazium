@@ -22,37 +22,12 @@ $.fn.outertxtonly = function() {
 	return str;
 };
 
-/**
-//Meteor.autosubscribe(function () {
-Template.qolls.created = function() {
-	QollRegist.find({}, {
-		reactive : true
-	}).observe({
-		added : function(v) {
-			qlog.debug("Getting qoll regs ......", filename);
-			//alert("gotqoll reg");
-			var qollId = v.qollId;
-			var qollTypeVal = v.qollTypeVal;
-			var qollTypeIx = v.qollTypeIndex;
-		},
-		changed : function(v, vold) {
-			qlog.debug("Getting qoll regs ......", filename);
-			//alert("gotqoll reg");
-			var qollId = v.qollId;
-			var qollTypeVal = v.qollTypeVal;
-			var qollTypeIx = v.qollTypeIndex;
-		}
-	});
-};
-//});
-**/
-
 Template.qolls_inner.helpers({
 	allQolls : function(event) {
-		if(this.qollList.find){
-			var found_qolls= this.qollList.findOne();
-			
-			return found_qolls&&found_qolls.qolls?found_qolls.qolls:undefined;
+		if (this.qollList.find) {
+			var found_qolls = this.qollList.findOne();
+
+			return found_qolls && found_qolls.qolls ? found_qolls.qolls : undefined;
 		}
 		this.qollList.rewind();
 		return this.qollList.fetch();
@@ -126,27 +101,27 @@ Template.qolls_inner.helpers({
 			return 'default';
 	},
 	qoll_type_abbr : function(idx) {
-		qlog.info('GOT IX 2'+ idx, filename);
+		qlog.info('GOT IX 2' + idx, filename);
 		return alphabetical[idx];
 	},
 	qoll_abbr_class : function(idx) {
-		qlog.info('GOT IX '+ idx, filename);
+		qlog.info('GOT IX ' + idx, filename);
 		return "class_" + idx;
 	},
 	check_selected : function(qollid, qollTypeIx) {
 		qlog.info('Testing responce for : ' + qollid + '/' + this._id + ' and index ' + qollTypeIx, filename);
 		var retval = '';
 		/**QollRegist.find({
-			qollId : this.parent._id,
-			qollTypeIndex : qollTypeIx
-		}, {
-			reactive : false
-		}).forEach(function(v) {
-			if(this.parent._id === 'bxcMmBCAhLcrMCLws')
-				qlog.info('FOUND responce for : ' + this.parent._id+' and index '+ JSON.stringify(v), filename);
-			if(v.qollTypeReg && v.qollTypeReg[qollTypeIx] === 1)
-				retval = 'border-selected';
-		});**/
+		 qollId : this.parent._id,
+		 qollTypeIndex : qollTypeIx
+		 }, {
+		 reactive : false
+		 }).forEach(function(v) {
+		 if(this.parent._id === 'bxcMmBCAhLcrMCLws')
+		 qlog.info('FOUND responce for : ' + this.parent._id+' and index '+ JSON.stringify(v), filename);
+		 if(v.qollTypeReg && v.qollTypeReg[qollTypeIx] === 1)
+		 retval = 'border-selected';
+		 });**/
 		return retval;
 	},
 	comma_seperate : function(thelist) {
@@ -170,7 +145,7 @@ Template.qolls_inner.helpers({
 	},
 	is_not_blank_type : function(qollAttributes) {
 		return true;
-		if(!HashUtil.checkHash(qollAttributes, 'type') && this.qollTypes && this.qollTypes.length > 1) {
+		if (!HashUtil.checkHash(qollAttributes, 'type') && this.qollTypes && this.qollTypes.length > 1) {
 			return true;
 		}
 
@@ -185,7 +160,7 @@ Template.qolls_inner.helpers({
 	},
 	get_qoll_txt : function(qollText, qollAttributes) {
 		//Handle the blank type of questions here
-		if(HashUtil.checkHash(qollAttributes, 'type') && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
+		if (HashUtil.checkHash(qollAttributes, 'type') && QollConstants.QOLL_TYPE.BLANK === qollAttributes.type) {
 			var fillVal, fillPow;
 			qollText = qollText.replace(/\?\=/g, getFillInTheBlanksSimpleHtml(fillVal, fillPow))
 		}
@@ -194,18 +169,18 @@ Template.qolls_inner.helpers({
 	},
 	get_qoll_type : function(qollType, qollAttributes, myAnswers) {
 		//qlog.info('Printing myAnswers - ' + JSON.stringify(myAnswers), filename);
-		if(HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK,QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
+		if (HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
 			var qollTypeVal = this.qollTypeVal;
 			var fillVal, fillPow;
-			if(qollTypeVal) {
+			if (qollTypeVal) {
 
 				fillVal = qollTypeVal.blankResponse;
 				fillPow = qollTypeVal.power;
 			}
 
-			if(qollType === "?==") {
+			if (qollType === "?==") {
 				qollType = qollType.replace(/\?\=\=/g, getFillInTheBlanksCmplxHtml(fillVal, fillPow));
-			} else if(qollType === "?=") {
+			} else if (qollType === "?=") {
 				qollType = qollType.replace(/\?\=/g, getFillInTheBlanksSimpleHtml(fillVal));
 			}
 		}
@@ -218,38 +193,39 @@ Template.qolls_inner.helpers({
 	get_title : function(qollStarAttributes) {
 		return qollStarAttributes[QollConstants.EDU.TITLE];
 	},
-	get_units_html : function (qollStarAttributes) {
-		var unit_name = qollStarAttributes[QollConstants.EDU.UNIT_NAME], 
-			units = qollStarAttributes[QollConstants.EDU.UNITS];
-		
-		if(units == undefined || units && units.length === 0) return '';
+	get_units_html : function(qollStarAttributes) {
+		var unit_name = qollStarAttributes[QollConstants.EDU.UNIT_NAME], units = qollStarAttributes[QollConstants.EDU.UNITS];
+
+		if (units == undefined || units && units.length === 0)
+			return '';
 
 		var qollTypeVal = this.qollTypeVal;
-		var unitSelected = qollTypeVal? qollTypeVal.unitSelected : '';
+		var unitSelected = qollTypeVal ? qollTypeVal.unitSelected : '';
 
-	  	var units_html = '<div class="input-group">';
-	  	if(unit_name) units_html += unit_name+': ';
-	  	else unit_name += 'Unit: ';
-	  	units.map(function(unit){
-	  		var checked = '';
-	  		if(unit === unitSelected) checked = 'checked';
-	    	units_html += '<input name="unit" value="'+unit+'" type="radio" '+checked+'>' + unit+'&nbsp;&nbsp;';
-	  	});
-	  	units_html += '</div>';
+		var units_html = '<div class="input-group">';
+		if (unit_name)
+			units_html += unit_name + ': ';
+		else
+			unit_name += 'Unit: ';
+		units.map(function(unit) {
+			var checked = '';
+			if (unit === unitSelected)
+				checked = 'checked';
+			units_html += '<input name="unit" value="' + unit + '" type="radio" ' + checked + '>' + unit + '&nbsp;&nbsp;';
+		});
+		units_html += '</div>';
 
-	  	return units_html;
+		return units_html;
 	},
-	get_hint_html : function (qollStarAttributes) {
+	get_hint_html : function(qollStarAttributes) {
 		var hint = qollStarAttributes[QollConstants.EDU.HINT];
 
-		if(hint == undefined) return '';
+		if (hint == undefined)
+			return '';
 
-	  	var hint_html = 
-	  	'<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip" data-placement="left" title="Partial credit will be deducted..." id="show_hint">' +
-	    	'Hint' +
-	  	'</button><div class="is-invisible red_1" id="hint">xyz</div>';
+		var hint_html = '<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip" data-placement="left" title="Partial credit will be deducted..." id="show_hint">' + 'Hint' + '</button><div class="is-invisible red_1" id="hint">xyz</div>';
 
-	  	return hint_html;
+		return hint_html;
 	},
 	show_hint : function(qollStarAttributes) {
 		var hint = qollStarAttributes[QollConstants.EDU.HINT];
@@ -257,14 +233,16 @@ Template.qolls_inner.helpers({
 		$('div#hint').removeClass('is-invisible');
 	},
 	fetch_my_response : function(myAnswers) {
-		if(myAnswers && myAnswers.qollTypeVal)
+		if (myAnswers && myAnswers.qollTypeVal)
 			return myAnswers.qollTypeVal;
-		else return '';
+		else
+			return '';
 	},
 	fetch_my_units : function(myAnswers) {
-		if(myAnswers && myAnswers.unitSelected)
+		if (myAnswers && myAnswers.unitSelected)
 			return myAnswers.unitSelected;
-		else return '';
+		else
+			return '';
 		return myAnswers.unitSelected;
 	}
 });
@@ -292,15 +270,8 @@ Template.qolls_inner.events({
 		event.preventDefault();
 		var chk = $(event.target);
 
-		/**var isChkSelected = false;
-		if (chk.hasClass('border-selected')) {
-			isChkSelected = false;
-		} else {
-			isChkSelected = true;
-		}**/
-
 		//If not a multiple choice question, remove the border-selected
-		qlog.info('Printing ooooif this is multiple - '  +this.parent+ '/' + this.parent.isMultiple);
+		qlog.info('Printing ooooif this is multiple - ' + this.parent + '/' + this.parent.isMultiple);
 		if (!this.parent.isMultiple) {
 			$(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem) {
 				$(this.parent).removeClass('border-selected');
@@ -314,137 +285,135 @@ Template.qolls_inner.events({
 			}
 		}
 
-		/**if (!isChkSelected) {
-			chk.addClass('border-selected');
-		}**/
-
-		/**var foundanswer=false;
-		 if(chk.hasClass('qoll-response-val')) {
-		 foundanswer=true;
-		 }
-		 if(!foundanswer){
-		 chk=$(event.target).parent();
-		 if(chk.hasClass('qoll-response-val')) {
-		 }
-		 foundanswer=true;
-		 }
-		 if(!foundanswer){
-		 chk=$(event.target).parent().parent();
-		 if(chk.hasClass('qoll-response-val')) {
-		 chk.siblings().removeClass('bg-orange');
-		 chk.addClass('bg-orange');
-		 }
-		 foundanswer=true;
-		 }**/
-
-		var qollId = this.parent._id;
-		var qoll = this.parent;
+		var qollId = this.parent.q._id;
+		var qollstionnaireId = this.parent.q._qollstionnaireid;
+		var qoll = this.parent.q;
 		var answerIndex = this.item.index;
 		var answerVal = this.item.value;
 
-		qlog.info('youclicked: ' + answerVal, filename);
+		qlog.info('youclicked: ' + qollstionnaireId, filename);
 		qlog.info('youclickedon: ' + event, filename);
 		qlog.info('youclickedid: ' + qollId, filename);
 		qlog.info('the aindex =' + answerVal + '/' + answerIndex, filename);
-		Meteor.call('registerQollCustom', qollId, answerVal, answerIndex, function(err, qollRegId) {
-			if (err) {
-				qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
-			} else {
-				qlog.info('Registered qoll with id: ' + qollRegId + answerVal, filename);
-				var saved_target = $('#'+qollId).find('span.saved-msg');
-			    saved_target.html('Response saved ...');
-			    saved_target.fadeOut( 6400, 'swing', function(){
-			    	saved_target.html('');
-			    	saved_target.removeAttr("style");
-			    });
-			    qlog.info('The target is ----->'+chk.attr('class'), filename);
-			}
-		});
-
+		if (qollstionnaireId) {
+			Meteor.call('AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, function(err, qollRegId) {
+				if (err) {
+					qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
+				} else {
+					qlog.info('Registered qoll with id: ' + qollRegId + answerVal, filename);
+					var saved_target = $('#' + qollId).find('span.saved-msg');
+					saved_target.html('Response saved ...');
+					saved_target.fadeOut(6400, 'swing', function() {
+						saved_target.html('');
+						saved_target.removeAttr("style");
+					});
+					qlog.info('The target is ----->' + chk.attr('class'), filename);
+				}
+			});
+		} else {
+			Meteor.call('registerQollCustom', qollId, answerVal, answerIndex, function(err, qollRegId) {
+				if (err) {
+					qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
+				} else {
+					qlog.info('Registered qoll with id: ' + qollRegId + answerVal, filename);
+					var saved_target = $('#' + qollId).find('span.saved-msg');
+					saved_target.html('Response saved ...');
+					saved_target.fadeOut(6400, 'swing', function() {
+						saved_target.html('');
+						saved_target.removeAttr("style");
+					});
+					qlog.info('The target is ----->' + chk.attr('class'), filename);
+				}
+			});
+		}
 		//$(event.target).closest("[class='qoll-response-val']").addClass('bg-orange');
 	},
 
 	'click span.register-blank' : function(event) {
 		event.preventDefault();
-		
+
 		var qollAttributes = this.qollAttributes;
 		var qollStarAttributes = this.qollStarAttributes;
 
 		var clk = $(event.target);
-		
+
 		var qollId = this._id;
 		var blank_resp = clk.parent().find('input#number').val();
 		var power = clk.parent().find('input#power').val();
-		var unit_selected = $('div#'+qollId+' input[name="unit"]:checked').val();
+		var unit_selected = $('div#' + qollId + ' input[name="unit"]:checked').val();
 		qlog.info('Will register the blank response here - ' + qollId + '/**' + blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
-		
+
 		var blankRespHash = {};
-		if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) {
+		if (qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) {
 			blankRespHash.blankResponse = Number(blank_resp);
 			blankRespHash.power = parseInt((power));
 			blankRespHash.unitSelected = unit_selected;
-		} else if(qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) {
+		} else if (qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) {
 			blankRespHash.blankResponse = blank_resp;
-			if(power) blankRespHash.unitSelected = Number(power);
-			if(unit_selected) blankRespHash.unitSelected = unit_selected;
+			if (power)
+				blankRespHash.unitSelected = Number(power);
+			if (unit_selected)
+				blankRespHash.unitSelected = unit_selected;
 		} else {
 			blankRespHash.blankResponse = blank_resp;
 			blankRespHash.power = Number(power);
 			blankRespHash.unitSelected = unit_selected;
 		}
 
-		/** 
-			blank answer wth no unit
-			blank-dbl answer with no unit
-			blank answer with unit
-			blank-dbl answer with unit
+		/**
+		 blank answer wth no unit
+		 blank-dbl answer with no unit
+		 blank answer with unit
+		 blank-dbl answer with unit
 		 **/
-		 var err_msgs = [];
-		 var units = qollStarAttributes[QollConstants.EDU.UNITS];
-		
+		var err_msgs = [];
+		var units = qollStarAttributes[QollConstants.EDU.UNITS];
+
 		//if(units == undefined || units && units.length === 0) return '';
 
-		if(units != undefined && units.length > 0 && qollAttributes && 
-			_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)
-			&& (unit_selected == undefined || blank_resp == undefined || blank_resp === '')) {
+		if (units != undefined && units.length > 0 && qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type) && (unit_selected == undefined || blank_resp == undefined || blank_resp === '')) {
 			//TODO: Handle units defined but no unit selected or no blank response provided or both case
-			if(unit_selected == undefined) err_msgs.push('Unit');
-			if(blank_resp == undefined || blank_resp === '') {
-				if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) err_msgs.push('Value');
-				if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) err_msgs.push('Coefficient');
+			if (unit_selected == undefined)
+				err_msgs.push('Unit');
+			if (blank_resp == undefined || blank_resp === '') {
+				if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK)
+					err_msgs.push('Value');
+				if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL)
+					err_msgs.push('Coefficient');
 			}
-		} else if((units == undefined || units && units.length == 0) && qollAttributes && 
-			_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)
-				&& (blank_resp == undefined || blank_resp === '')){
+		} else if ((units == undefined || units && units.length == 0) && qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type) && (blank_resp == undefined || blank_resp === '')) {
 			//TODO: Handle no units and blank responses issue here
-			if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) err_msgs.push('Value');
-			if(qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) err_msgs.push('Coefficient');
+			if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK)
+				err_msgs.push('Value');
+			if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL)
+				err_msgs.push('Coefficient');
 		}
 
-		if(err_msgs.length > 0) {
+		if (err_msgs.length > 0) {
 			var saved_target = clk.parent().find('span.err-msg');
-			var err_msg = err_msgs.length > 1? err_msgs.join(' & ') : err_msgs[0];
-			saved_target.html('Input '+err_msg+' to register response ...');
-		    saved_target.fadeOut( 8400, function(){
-		    	saved_target.html('');
-		    	saved_target.removeAttr("style");
-		    });
+			var err_msg = err_msgs.length > 1 ? err_msgs.join(' & ') : err_msgs[0];
+			saved_target.html('Input ' + err_msg + ' to register response ...');
+			saved_target.fadeOut(8400, function() {
+				saved_target.html('');
+				saved_target.removeAttr("style");
+			});
 			return;
 		}
 
-		if(isNaN(blankRespHash.power)) blankRespHash.power = 0;
-		
+		if (isNaN(blankRespHash.power))
+			blankRespHash.power = 0;
+
 		Meteor.call('registerQollBlankResponse', qollId, blankRespHash, function(err, qollRegId) {
 			if (err) {
 				qlog.error('Failed registering the blank-qoll: ' + qollId + ' : ' + err, filename);
 			} else {
 				qlog.info('Updated/Registered blank-qoll with id: ' + qollRegId + '/' + blank_resp, filename);
 				var saved_target = clk.parent().find('span.saved-msg');
-			    saved_target.html('Response saved ...');
-			    saved_target.fadeOut( 6400, function(){
-			    	saved_target.html('');
-			    	saved_target.removeAttr("style");
-			    });
+				saved_target.html('Response saved ...');
+				saved_target.fadeOut(6400, function() {
+					saved_target.html('');
+					saved_target.removeAttr("style");
+				});
 			}
 		});
 	},
@@ -453,7 +422,7 @@ Template.qolls_inner.events({
 		var qollId = this._id;
 		qlog.info('youclicked to send: ' + qollId, filename);
 		Meteor.call('modifyQollId', qollId, 'send', function(err, qollRegId) {
-			if(err) {
+			if (err) {
 				qlog.error('Failed while sending qoll - ' + qollId + '/' + err, filename);
 			} else {
 				qlog.info('SENT qoll with qollRegId: ' + qollRegId + '/qollId: ' + qollId, filename);
@@ -489,7 +458,7 @@ Template.qolls_inner.events({
 		if (choice) {
 			//qlog.info('youclicked to archiveyes: ' +qollId, filename);
 			Meteor.call('modifyQollId', qollId, 'archive', function(err, qollRegId) {
-				if(err) {
+				if (err) {
 					qlog.info('Failed while archiving the qoll - ' + qollId + '/' + err, filename);
 				} else {
 					qlog.info('archived qoll with id: ' + qollRegId + '/' + qollId, filename);
@@ -500,25 +469,25 @@ Template.qolls_inner.events({
 		}
 
 	},
-		'click .edit-qoll-btn' : function(event) {
+	'click .edit-qoll-btn' : function(event) {
 		event.preventDefault();
 		var qollId = this._id;
-		var qollRawId= this.qollRawId;
-		qlog.info('RAW %%%% qoll for: '+ qollRawId);
+		var qollRawId = this.qollRawId;
+		qlog.info('RAW %%%% qoll for: ' + qollRawId);
 		Session.set('QollIdToEdit', qollId);
 		Session.set('QollRawIdToEdit', qollRawId);
-			$('#qollModalEditor-topdiv').modal('show');
-			
+		$('#qollModalEditor-topdiv').modal('show');
+
 		/*$('#qollModalEditor-topdiv').css({
-    "position":"absolute", 
-    "top": $('#'+qollId).offset().top + "px",
-    "left": $('#'+qollId).offset().left + "px",
-		});	
-		$('.modal-content').css({
-    "position":"absolute", 
-    "top": $('#'+qollId).offset().top + "px",
-    "left": $('#'+qollId).offset().left + "px",
-		});	*/
+		 "position":"absolute",
+		 "top": $('#'+qollId).offset().top + "px",
+		 "left": $('#'+qollId).offset().left + "px",
+		 });
+		 $('.modal-content').css({
+		 "position":"absolute",
+		 "top": $('#'+qollId).offset().top + "px",
+		 "left": $('#'+qollId).offset().left + "px",
+		 });	*/
 	},
 	'click a.no' : function(event) {
 		event.preventDefault();
@@ -526,7 +495,7 @@ Template.qolls_inner.events({
 			var qollId = this._id;
 			qlog.info('Registering qoll for: ' + qollId + '/no', filename);
 			Meteor.call('registerQoll', qollId, 'no', function(err, qollRegId) {
-				if(err) {
+				if (err) {
 					qlog.error('Failed while answering the qoll: ' + qollId + '/' + err, filename);
 				} else {
 					qlog.info('Registered qoll with id: ' + qollRegId + '/' + qollId + '/no', filename);
@@ -625,11 +594,11 @@ Template.contextbtns.events({
 
 var getFillInTheBlanksSimpleHtml = function(fill_value) {
 	var border_selected = '';
-	if(fill_value != undefined) border_selected = 'border-selected';
-	else fill_value = '';
-	var html = '<div class="input-group">'+
-	'<input type="text" class="form-control '+border_selected+' blank_txt_input" id="number" placeholder="Fill in the blanks ..." value="'+fill_value+'">' +
-    '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
+	if (fill_value != undefined)
+		border_selected = 'border-selected';
+	else
+		fill_value = '';
+	var html = '<div class="input-group">' + '<input type="text" class="form-control ' + border_selected + ' blank_txt_input" id="number" placeholder="Fill in the blanks ..." value="' + fill_value + '">' + '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
 	return html;
 };
 
@@ -637,15 +606,14 @@ var getFillInTheBlanksSimpleHtml = function(fill_value) {
 var getFillInTheBlanksCmplxHtml = function(fill_value, fill_power) {
 	//qlog.info('<======' + fill_power +'==========>', filename);
 	var border_selected = '';
-	if(fill_value != undefined) border_selected = 'border-selected';
-	else fill_value = '';
+	if (fill_value != undefined)
+		border_selected = 'border-selected';
+	else
+		fill_value = '';
 
-	if(fill_power == undefined) fill_power = '';
-	
-	var html = '<div class="input-group">'+
-	'<input type="text" class="form-control '+border_selected+' maths_number_input" id="number" placeholder="coefficient" value="'+fill_value+'">' +
-	' $$ \\times 10^n,where\\,n=$$' +
-	'<input type="text" class="form-control '+border_selected+' maths_power_input" id="power" placeholder="power" value="'+fill_power+'">' +
-    '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
+	if (fill_power == undefined)
+		fill_power = '';
+
+	var html = '<div class="input-group">' + '<input type="text" class="form-control ' + border_selected + ' maths_number_input" id="number" placeholder="coefficient" value="' + fill_value + '">' + ' $$ \\times 10^n,where\\,n=$$' + '<input type="text" class="form-control ' + border_selected + ' maths_power_input" id="power" placeholder="power" value="' + fill_power + '">' + '</div>&nbsp;&nbsp;&nbsp;<span class="saved-msg green"></span><span class="err-msg red_1"></span>';
 	return html;
 };

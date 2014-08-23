@@ -323,7 +323,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							//totals 			: sumstats(q.stats),
 							viewContext 	: "createUsr",
 							isMultiple		: q.isMultiple,
-
+							_qollstionnaireid : findoptions._id,
 							_id : q._id,
 							qollRawId : q.qollRawId
 						};
@@ -357,7 +357,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							//totals 			: sumstats(q.stats),
 							viewContext 	: "createUsr",
 							isMultiple		: q.isMultiple,
-
+							_qollstionnaireid : findoptions._id,
 							_id : q._id,
 							qollRawId : q.qollRawId
 						};
