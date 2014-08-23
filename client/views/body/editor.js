@@ -21,7 +21,7 @@ Template.editorcore.helpers({
 
 
 Template.editor.rendered = function(){
-    qlog.info('Running post rendered code for editor', filename);
+    qlog.info('Running post rendered code for editor 00', filename);
     //Meteor.subscribe('user-prefs-byname', QollConstants.PREF_KEY.EDITOR_MODE);
 };
 
