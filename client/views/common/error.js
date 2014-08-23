@@ -30,7 +30,7 @@ Error = {
 };
 
 Template.error.rendered = function(){
-    qlog.info('Running post rendered code for editor', filename);
+    qlog.info('Running post rendered code for editor 888', filename);
     //Meteor.subscribe('user-prefs-byname', QollConstants.PREF_KEY.EDITOR_MODE);
     if(URLUtil.isDev()) {
 	    //Error.message(QollConstants.MSG_TYPE.ERROR, 'Use me to show error messages: Error.message(\'error\', msg);', 6000);

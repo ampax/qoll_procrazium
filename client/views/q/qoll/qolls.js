@@ -50,7 +50,8 @@ Template.qolls.created = function() {
 Template.qolls_inner.helpers({
 	allQolls : function(event) {
 		if(this.qollList.find){
-			return this.qollList.find().fetch();
+			var found_qolls= this.qollList.findOne();
+			return found_qolls.qolls;
 		}
 		this.qollList.rewind();
 		return this.qollList.fetch();

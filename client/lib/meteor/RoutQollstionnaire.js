@@ -65,7 +65,7 @@ IdLookUpController = RouteController.extend({
 		console.log("looking for  id "+this.params._id );
 		return { sort : { submittedOn : -1 }, _id : this.params._id };
 	},
-	waitOn : function() {[Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()), Meteor.subscribe('RECIPIENTS_PUBLISHER')];
+	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()), Meteor.subscribe('RECIPIENTS_PUBLISHER')];
 	},
 	data : function() {
 		return { qollList : QollForQuestionaireId };
