@@ -70,6 +70,8 @@ Template.recipient.events({
 				tags = " dummy";
 			});
 		}
+
+		qlog.info('Made editor choice - ' + editor_choice + '/' + QollConstants.EDITOR_MODE.TXT, filename);
 		if (editor_choice === QollConstants.EDITOR_MODE.HTML) {
 			content = $('textarea#editor').val();
 
@@ -89,9 +91,23 @@ Template.recipient.events({
 				}
 			});
 
+		} else if (editor_choice === QollConstants.EDITOR_MODE.TXT) {
+			//If the default choice is markdown editor, get the text from markdown editor and process it accordingly
+			var edtr = ace.edit("aceEditor");
+			var content = edtr.getValue();
+
+			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, function(error, msg) {
+				if (error) {
+					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
+		          	Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+				} else {
+					Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+					edtr.setValue('', 1);
+				}
+			});
 		}
+
 		qlog.info('Storing the qoll now - ' + content, filename);
-		qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
 	},
 	'click .send' : function(event) {
 		var content = 'undefined';
@@ -113,6 +129,11 @@ Template.recipient.events({
 				emailsandgroups.push(email);
 			}
 		});
+
+		if (emailsandgroups.length === 0) {
+			Error.message(QollConstants.MSG_TYPE.ERROR, 'Recipients is required for sending. Add at least one.');
+			return;
+		}
 
 		var tagArr = [];
 		$.each(tags.split(/;|,|\s/), function(ix, tag) {
@@ -141,7 +162,21 @@ Template.recipient.events({
 				}
 			});
 
+		} else if (editor_choice === QollConstants.EDITOR_MODE.TXT) {
+			//If the default choice is markdown editor, get the text from markdown editor and process it accordingly
+			var edtr = ace.edit("aceEditor");
+			var content = edtr.getValue();
+			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, function(error, msg) {
+				if (error) {
+					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
+		          	Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+				} else {
+					Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+					edtr.setValue('', 1);
+				}
+			});
 		}
+
 		qlog.info('Sending the qoll now - ' + content, filename);
 		qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
 	},

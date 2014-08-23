@@ -61,7 +61,6 @@ QollstionnaireController = RouteController.extend({
 });
 
 IdLookUpController = RouteController.extend({
-template : 'view_inbox_board',
 	findOptions : function() {
 		console.log("looking for  id "+this.params._id );
 		return { sort : { submittedOn : -1 }, _id : this.params._id };

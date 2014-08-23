@@ -189,31 +189,22 @@ Meteor.methods({
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollMaster : function(qollText, emailsandgroups, tags, action,qollIdtoUpdate) {
+	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate) {
 		qlog.info('Inserting into qoll master', filename);
-		var visibility = QollConstants.QOLL.VISIBILITY.PUB; //send this from the front end once we have it there
-		/**var qollMasterId = QollMaster.insert({
-			'qollText' : qollText,
-			'tags' : tags,
-			'submittedOn' : new Date(),
-			'updatedOn' : new Date(),
-			'submittedBy' : Meteor.userId(),
-			'submittedByEmail' : getCurrentEmail,
-			'visibility' : visibility
-		});**/
 
 		//Store the tags
 		var err_msg = QollTagsDb.storeTags(tags);
-		qlog.info('Printing tags return results - ' + err_msg, filename);
 
-		var qollMasterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT});
+		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT});
 
-		var qollIds = QollParser.addQollsForMaster(qollText, qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT,qollIdtoUpdate);
+		var qollids = QollParser.addQollsForMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate);
 
-		return qollMasterId;
+		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
+
+		return 'Successfully created ' + qollids.length + ' qolls.' + questinfo;
 	},
 
-	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility,qollIdToUpdate){
+	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate){
 		var md = ToMarkdown.convert(html);
 
 		md = md.replace(/(\d+)\.\s+/g, '- ');
@@ -229,66 +220,57 @@ Meteor.methods({
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
 
-		var qollids = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML,qollIdToUpdate);
+		var qollids = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML, qollIdToUpdate);
 
-
-		/**
-			- store and send will both populate the Qoll table record
-			- store 
-				(1) Emails entered
-					(i)   Save the qoll in the Qoll table
-					(ii)  Create a new Questionnaire with status = draft
-					(iii) If it is a single qoll, set the mode single, if multiple, set the mode questionnaire
-				(2) Emails not entered (intention is to store the qolls and no questionnaire created)
-					(i) Save the qoll in the Qoll table, no questionnaire created
-
-			- send
-				(1) Emails entered
-					(i)   Save the qoll in the Qoll table
-					(ii)  Create new questionnaire with status = sent
-					(iii) If it is a single qoll, set the mode single, if multiple, set the mode questionnaire
-		**/
-		var questId = undefined, questinfo = '';
-		if(emailsandgroups && emailsandgroups.length > 0) {
-
-			var qollstionnaire = {};
-			qollstionnaire.qollids = qollids;
-			qollstionnaire.visibility = visibility;
-
-			var eandg = QollParser.parseEmailAndGroups(emailsandgroups);
-			qollstionnaire.submittedTo = eandg.submittedTo;
-			qollstionnaire.submittedToGroup = eandg.submittedToGroup;
-
-			qollstionnaire.tags = tags;
-
-			qollstionnaire.qolls_to_email = QollParser.mapQollsToEmail(eandg.submittedTo, qollids);
-
-			qollstionnaire.title = 'Questionnaire for ' + tags.join(', ') + '.';
-
-
-			if(action === QollConstants.QOLL_ACTION_STORE) {
-				qollstionnaire.status = QollConstants.STATUS.DRAFT;
-			} else if(action === QollConstants.QOLL_ACTION_SEND) {
-				qollstionnaire.status = QollConstants.STATUS.SENT;
-			}
-
-			questId = Qolls.QollstionnaireDb.insert(qollstionnaire);
-			questinfo = ' Questionnaire with id - ' + questId;
-		}
+		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
 
 		return 'Successfully created ' + qollids.length + ' qolls.' + questinfo;
 	}
 });
 
-/**var addQollRaw = function(qollText, qollMasterId, tags, visibility) {
-	var qollRawId = QollRaw.insert({
-		'qollText' : qollText,
-		'qollMasterId' : qollMasterId,
-		'tags' : tags,
-		'submittedOn' : new Date(),
-		'submittedBy' : Meteor.userId(),
-		'submittedByEmail' : getCurrentEmail,
-		'visibility' : visibility
-	});
-	return qollRawId;
-};**/
+var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, action) {
+	/**
+		- store and send will both populate the Qoll table record
+		- store 
+			(1) Emails entered
+				(i)   Save the qoll in the Qoll table
+				(ii)  Create a new Questionnaire with status = draft
+				(iii) If it is a single qoll, set the mode single, if multiple, set the mode questionnaire
+			(2) Emails not entered (intention is to store the qolls and no questionnaire created)
+				(i) Save the qoll in the Qoll table, no questionnaire created
+
+		- send
+			(1) Emails entered
+				(i)   Save the qoll in the Qoll table
+				(ii)  Create new questionnaire with status = sent
+				(iii) If it is a single qoll, set the mode single, if multiple, set the mode questionnaire
+	**/
+	var questId = undefined, questinfo = '';
+	if(emailsandgroups && emailsandgroups.length > 0) {
+
+		var qollstionnaire = {};
+		qollstionnaire.qollids = qollids;
+		qollstionnaire.visibility = visibility;
+
+		var eandg = QollParser.parseEmailAndGroups(emailsandgroups);
+		qollstionnaire.submittedTo = eandg.submittedTo;
+		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
+
+		qollstionnaire.tags = tags;
+
+		qollstionnaire.qolls_to_email = QollParser.mapQollsToEmail(eandg.submittedTo, qollids);
+
+		qollstionnaire.title = 'Questionnaire for ' + tags.join(', ') + '.';
+
+
+		if(action === QollConstants.QOLL_ACTION_STORE) {
+			qollstionnaire.status = QollConstants.STATUS.DRAFT;
+		} else if(action === QollConstants.QOLL_ACTION_SEND) {
+			qollstionnaire.status = QollConstants.STATUS.SENT;
+		}
+
+		questId = Qolls.QollstionnaireDb.insert(qollstionnaire);
+		questinfo = ' Questionnaire with id - ' + questId;
+	}
+	return questinfo;
+};
