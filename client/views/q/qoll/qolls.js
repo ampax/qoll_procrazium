@@ -51,7 +51,8 @@ Template.qolls_inner.helpers({
 	allQolls : function(event) {
 		if(this.qollList.find){
 			var found_qolls= this.qollList.findOne();
-			return found_qolls.qolls;
+			
+			return found_qolls&&found_qolls.qolls?found_qolls.qolls:undefined;
 		}
 		this.qollList.rewind();
 		return this.qollList.fetch();

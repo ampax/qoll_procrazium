@@ -7,22 +7,25 @@ Template.single_qoll.helpers({
 		}
 	},
 	if_createusr : function() {
-		if (this.viewContext == 'createUsr') {
+	  if (this.q.viewContext == 'createUsr') {
 			Session.set('hasCreated', true);
 		}
-		return (this.viewContext == 'createUsr');
+		if(this.btns){
+			return this.btns.edit;
+		}
+		return (this.q.viewContext == 'createUsr');
 	},
 	if_stored : function() {
-		return (this.action == 'store');
+		return (this.q.action == 'store');
 	},
 	if_send : function() {
-		return (this.action == 'send');
+		return (this.q.action == 'send');
 	},
 	if_lock : function() {
-		return (this.action == 'lock');
+		return (this.q.action == 'lock');
 	},
 	if_edit : function() {
-		return this.enableEdit;
+		return this.q.enableEdit;
 	},
 	get_title : function(qollStarAttributes) {
 		return qollStarAttributes && qollStarAttributes[QollConstants.EDU.TITLE] ? qollStarAttributes[QollConstants.EDU.TITLE] : '';
