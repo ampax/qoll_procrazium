@@ -11,11 +11,24 @@ QollClientSide = {
 			html += "<span class='glyphicon glyphicon-remove red pull-right remove-qoll' id='"+qoll.qollId+"'></span>";
 
 
-			if (qoll.qoll_star_attributes && qoll.qoll_star_attributes[QollConstants.EDU.TITLE]) {
-				html += '<h4>' + qoll.qoll_star_attributes[QollConstants.EDU.TITLE] + '</h4>';
-			} else if(qoll.title) {
-				html += '<h4>' + qoll.title + '</h4>';
-			}
+            // CREATE ROW FOR QOLL TITLE & PTS
+            html += '<div class="row">';
+                html += '<div class="col-xs-8">';
+                if (qoll.qoll_star_attributes && qoll.qoll_star_attributes[QollConstants.EDU.TITLE]) {
+                    html += '<h4>' + qoll.qoll_star_attributes[QollConstants.EDU.TITLE] + '</h4>';
+                } else if(qoll.title) {
+                    html += '<h4>' + qoll.title + '</h4>';
+                }
+                html += '</div>';
+
+                html += '<div class="col-xs-1"><h4>Pts:</h4></div>';
+    
+                html += '<div class="col-xs-2"><input class="form-control input-small" type="text"></div>';
+
+                html += '<div class="col-xs-1">&nbsp;</div>';
+
+            // END OF ROW
+            html += '</div>';
 
 			html += '<h5>' + qoll['qoll'] + '</h5>';
 
