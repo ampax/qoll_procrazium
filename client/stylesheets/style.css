@@ -42,6 +42,7 @@ label.control-label-1 { /** Align the radio buttons to the half line **/
 
 hr.divider-bottom-0 {
     margin-bottom: 0px;
+    margin-top: 6px;
 }
 
 .inset-5 {

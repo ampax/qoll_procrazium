@@ -44,7 +44,7 @@
 						<div class="col-md-1 col-xs-12">
 							<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 						</div>
-						<div class="col-md-9 col-xs-12 make-clickable">
+						<div class="col-md-8 col-xs-12 make-clickable">
 							<a href="{{ pathFor 'draftView' }}" class='black-link'>
 								{{#mathjax}}{{{title}}}{{/mathjax}}
 							</a>
@@ -54,6 +54,10 @@
 						</div>
 						<div class="col-md-1 col-xs-12">
 							recips &rarr; {{recips_count}}
+						</div>
+						<div class="col-md-1 col-xs-12">
+							<span class="pull-left archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>&nbsp;
+							<span class="pull-left send-qoll-btn glossy"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
 						</div>
 					</div><!-- list-group-item list-group-item-success -->
 					<!-- End of Qoll Section here -->

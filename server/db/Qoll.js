@@ -107,20 +107,17 @@ Qolls.QollstionnaireDb = {
 
 		return questId;
 	},
-	update : function(){},
-	remove : function(){},
+	update : function(query, upd){
+		Qollstionnaire.update(query, {$set : upd});
+	},
+	remove : function(id){
+		Qollstionnaire.update({_id : id}, {$set : {status : QollConstants.STATUS.ARCHIVE}});
+	},
 };
-
-Qolls.QollstionnaireDb.Util = {
-	//This method is simply to create the questionaire using the qollids passed to it together with other details
-	addQuestionaire : function() {
-		//TODO
-	}
-};
-
 
 // Exposing DB methods to client.
 Meteor.methods({
-	
-	getQollById: function (qollid) { return Qolls.QollDb.get({_id:qollid});}
+	getQollById: function (qollid) { return Qolls.QollDb.get({_id:qollid});},
+	removeQuestionnaire : function(questid) { Qolls.QollstionnaireDb.update({_id : questid}, {status : QollConstants.STATUS.ARCHIVE});},
+	sendQuestionnaire : function(questid) { Qolls.QollstionnaireDb.update({_id : questid}, {status : QollConstants.STATUS.SENT});}
 });

@@ -145,14 +145,15 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
 			
-			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT}).observe({
+			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT}, 
+				{sort : {'submittedOn' : -1}, reactive : true}).observe({
 				added : function(item, idx){
 					self.added('sent-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				changed : function(item, idx) {
 					self.changed('sent-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				removed : function(item){
 					self.removed('sent-by-me-questionaire', item._id);
@@ -182,14 +183,15 @@ Meteor.publish('STORED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
 			
-			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.STORED}).observe({
+			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.STORED},
+					{ sort : { 'submittedOn' : -1}, reactive : true }).observe({
 				added : function(item, idx){
 					self.added('stored-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				changed : function(item, idx) {
 					self.changed('stored-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				removed : function(item){
 					self.removed('stored-by-me-questionaire', item._id);
@@ -227,11 +229,11 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 			).observe({
 				added : function(item, idx){
 					self.added('recvd-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				changed : function(item, idx) {
 					self.changed('recvd-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				removed : function(item){
 					self.removed('recvd-questionaire', item._id);
@@ -265,12 +267,12 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 				added : function(item, idx){
 					self.added('questionaire-for-id', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+							recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				changed : function(item, idx) {
 					self.changed('questionaire-for-id', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.qolls_to_email.length, submitted_on : item.submittedOn});
+							recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
 				},
 				removed : function(item){
 					self.removed('questionaire-for-id', item._id);
@@ -331,10 +333,11 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						qolls.push(q1);
 					});
 
+					var quest = {questTitle : item.title, questSize	: item.qollids.length};
+
 					qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
 
-					self.added('qoll-for-questionaire-id', item._id, 
-						{qolls : qolls});
+					self.added('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
 				},
 				changed : function(item, idx) {
 					var qolls = [];
@@ -365,10 +368,11 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						qolls.push(q1);
 					});
 
+					var quest = {questTitle : item.title, questSize	: item.qollids.length};
+
 					qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
 
-					self.changed('qoll-for-questionaire-id', item._id, 
-						{qolls : qolls});
+					self.changed('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
 				},
 				removed : function(item){
 					self.removed('qoll-for-questionaire-id', item._id);
