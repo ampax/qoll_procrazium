@@ -9,7 +9,7 @@ QollRegister = new Meteor.Collection("QOLL_REGISTER");
 QollRegisterStats = new Meteor.Collection("QOLL_REGISTER_STATS");
 QBank = new Meteor.Collection("QOLL_BANK");
 Qollstionnaire = new Meteor.Collection("QOLLSTIONNAIRE");
-
+QollstionnaireResponses = new Meteor.Collection("QOLLSTIONNAIRE_RESPONSES");
 
 // =============================== Add published collections here ================================ //
 QbSummary = new Meteor.Collection("qbank_summary");

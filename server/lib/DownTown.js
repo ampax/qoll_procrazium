@@ -118,14 +118,17 @@ Meteor.methods({
             qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
 
             var types = new Array();
+            var ix =0; ix =0;
             qs.slice(1).map(function(type){
-            	var x = {};
+            	var x = {index:ix};
+            	ix =ix+1;
             	type = type.trim();
 	            if(type.indexOf('(a)') == 0) {
 	                type = type.replace('(a)', '');
 	                type = DownTown.downtown(type, DownTownOptions.downtown_default());
 	                x.type = type;
 	                x.isCorrect = 1;
+	                
 	            } else {
 	                type = DownTown.downtown(type, DownTownOptions.downtown_default());
 	                x.type = type;

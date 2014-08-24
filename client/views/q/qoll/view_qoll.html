@@ -1,0 +1,48 @@
+<template name="view_qoll">
+    {{> header_awesome}}
+    <div id="wrapper">
+        <!-- Sidebar -->
+        {{> qoll_side_nav}}
+
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+            <div class="content-header">
+                <h1>
+                    <!-- Toggle on small screen -->
+                    <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+                    Qoll Details
+                </h1>
+            </div>
+
+            <hr class='divider divider-bottom-0'>
+            <!-- Keep all page content within the page-content inset div! -->
+            <div class="page-content inset inset-5">
+                <div class="row">
+
+                    <div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+
+
+                        <div class="col-md-1 col-xs-12">
+                            <a href="{{ pathFor 'all_qolls' }}" class='white-link make-clickable'>&larr; back</a>
+                        </div>
+                        <div class="col-md-5 col-xs-12">
+                            <input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
+                        </div>
+                        <div class='col-md-4 col-xs-0'>&nbsp;</div>
+                        <div class="col-md-1 col-xs-12">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-1 col-xs-12">
+                            &nbsp;
+
+                        </div>
+                    </div><!-- list-group-item list-group-item-heading -->
+                </div><!-- /row-->
+                {{> qolls_inner qollList = this.qollList  btns= qoll_btns }}
+            </div>
+        </div>
+    </div>
+</template>
+
+
+
