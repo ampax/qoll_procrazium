@@ -73,17 +73,16 @@ IdLookUpController = RouteController.extend({
 });
 
 QollController = RouteController.extend({
-	findOptions : function() {
-		console.log("looking for  id "+this.params._id );
-		return { sort : { submittedOn : -1 }, _id : this.params._id };
-	},
-	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_ID_PUBLISHER', this.findOptions())];
-	},
-	data : function() {
-		return { qollList : QollForQuestionaireId };
-	}
+    findOptions : function() {
+        console.log("looking for  id "+this.params._id );
+        return { sort : { submittedOn : -1 }, singleId : this.params._id };
+    },
+    waitOn : function() {return [Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions())];
+    },
+    data : function() {
+        return { qollList : AllQolls };
+    }
 });
-
 
 QollstGroupController = FastRender.RouteController.extend({
 	waitOn : function() {[Meteor.subscribe('QOLL_GROUP_PUBLISHER')];},
@@ -157,17 +156,17 @@ Router.map(function() {
 	});
 
 	//prepare the quiz template
-	this.route('all_qolls', {
-		template : 'all_qolls',
-		path : '/all_qolls',
-		controller : QbankController,
-	});
+    this.route('all_qolls', {
+        template : 'all_qolls',
+        path : '/all_qolls',
+        controller : QbankController,
+    });
 
-	this.route('qollView', {
-		template : 'all_qolls_board',
-		path : '/qoll_board/:_id',
-		controller : QollController,
-	});
+    this.route('qollView', {
+        template : 'view_qoll',
+        path : '/qoll_board/:_id',
+        controller : QollController,
+    });
 
 	this.route('view_my_groups', {
 		template : 'my_groups',

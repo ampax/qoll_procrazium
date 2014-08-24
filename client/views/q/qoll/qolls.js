@@ -24,14 +24,14 @@ $.fn.outertxtonly = function() {
 
 Template.qolls_inner.helpers({
 	allQolls : function(event) {
-		if (this.qollList.find) {
-			var found_qolls = this.qollList.findOne();
-
-			return found_qolls && found_qolls.qolls ? found_qolls.qolls : undefined;
-		}
+        if(this.qollList.find){
+            var found_qolls= this.qollList.find().fetch();
+            if(found_qolls && found_qolls.length ==1 && found_qolls.qolls )
+                return found_qolls.qolls;
+            return found_qolls;
+        }
 		this.qollList.rewind();
 		return this.qollList.fetch();
-
 	},
 	get_totals : function() {
 		if (Session.get('info_pref') == 'full' || Session.get('info_pref') == 'less') {
