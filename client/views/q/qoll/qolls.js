@@ -26,8 +26,8 @@ Template.qolls_inner.helpers({
 	allQolls : function(event) {
         if(this.qollList.find){
             var found_qolls= this.qollList.find().fetch();
-            if(found_qolls && found_qolls.length ==1 && found_qolls.qolls )
-                return found_qolls.qolls;
+            if(found_qolls && found_qolls.length ==1 && found_qolls[0].qolls )
+                return found_qolls[0].qolls;
             return found_qolls;
         }
 		this.qollList.rewind();
