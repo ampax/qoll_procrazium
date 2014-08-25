@@ -4,7 +4,7 @@ Meteor.publish('QOLL_TAG_PUBLISHER', function(tag) {
 	var self = this;
 	var uuid = Meteor.uuid();
 	var initializing = true;
-	qlog.info('Fetching all the qolls in desc order of creation; uuid: ' + uuid, filename);
+	qlog.info('Fetching all the QOLL_TAG_PUBLISHER in desc order of creation; uuid: ' + uuid, filename);
 	if (this.userId) {
 		//submitted by this user or public (default)
 		var handle = QollTags.find({}, {reactive : true}

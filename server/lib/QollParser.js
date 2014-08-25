@@ -155,7 +155,7 @@ QollParser = {
             var typesX = new Array();
             var attributes = {};
             attributes.visibility = visibility;
-            attributes.type = QollConstants.QOLL.TYPE.SINGLE;
+            qollType = QollConstants.QOLL.TYPE.SINGLE;
             attributes.complexity = QollConstants.QOLL.DIFFICULTY.EASY;
             var isMultiple = false;
             var ix =0; ix =0;
@@ -167,7 +167,7 @@ QollParser = {
                     type = DownTown.downtown(type, DownTownOptions.downtown_default());
                     x.type = type;
                     x.isCorrect = 1;
-                    count++;
+                    count=count+1;
                 } else {
                     type = DownTown.downtown(type, DownTownOptions.downtown_default());
                     x.type = type;
@@ -177,8 +177,9 @@ QollParser = {
                 types.push(type);
                 typesX.push(x);
             });
-            if(count > 1) attributes.type = QollConstants.QOLL.TYPE.MULTIPLE; //isMultiple = true;
-            else attributes.type = QollConstants.QOLL.TYPE.SINGLE;
+            qlog.info("counts for this qoll ---- "+ count);
+            if(count > 1) qollType = QollConstants.QOLL.TYPE.MULTIPLE; //isMultiple = true;
+            else qollType = QollConstants.QOLL.TYPE.SINGLE;
 		//If this is a single statement fill in the blanks
         if(qoll.indexOf("?==") != -1){
         	qollType = QollConstants.QOLL_TYPE.BLANK_DBL;

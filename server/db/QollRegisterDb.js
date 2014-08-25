@@ -172,7 +172,7 @@ Meteor.methods({
 			_id : qollId
 		});
 		var type = qoll.qollAttributes.type;
-		//?"Multiple":"Single"; //TODO: add fib
+		//?"Multiple":"Single"; //TODO: add fill in blanks
 
 		var iscorrect = false;
 		iscorrect = false;

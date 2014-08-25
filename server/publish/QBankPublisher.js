@@ -6,7 +6,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 	var uuid = Meteor.uuid();
 	var initializing = true;
 	var handle;
-	qlog.info('Fetching all the qolls in desc order of creation; uuid -------> : ' + uuid + ', : ' + this.userId, filename);
+	qlog.info('Fetching all the QBANK_SUMMARY_PUBLISHER in desc order of creation; uuid -------> : ' + uuid + ', : ' + this.userId, filename);
 	if (this.userId) {//first publish specialized qolls to this user
 		var ufound = Meteor.users.find({
 			"_id" : this.userId
@@ -17,7 +17,6 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			//submitted by this user
 			var handle = Qoll.find( 
 				getQuery(findoptions), 
-				{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
 				{sort : {'submittedOn' : -1}, reactive : true}
 			).observe({
 				added : function(item, idx) {
@@ -529,7 +528,7 @@ var getQuery = function(findoptions) {
 
 	//Else return the default query for data
 	return query;
-}
+};
 
 var translateToIndexedArray = function ( ar){
 		if(!ar) return [];
