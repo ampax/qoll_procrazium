@@ -519,6 +519,12 @@ span.qoll-toolbar-plain {
 	color: #FFF;
 	background-color: #878787;/**rgba(50, 118, 177, 0.56);**/
 	border-color: rgba(9, 28, 80, 1);
+    height: 45px;
+    padding-top: 10px;
+}
+
+.list-group-item-align {
+    padding-top: 7px;
 }
 
 /** Olive Color for Qollstionnaires **/
