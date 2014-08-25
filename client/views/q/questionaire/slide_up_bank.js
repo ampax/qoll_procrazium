@@ -197,7 +197,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
 
     qollstionnaire.qollids = allqollids;
 
-    qlog.info('Will be storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
+    qlog.info('Will be sending the questionaire - ' + JSON.stringify(qollstionnaire), filename);
 
     Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, QollConstants.STATUS.SENT, allqollids, function(err, qollMasterId) {
       var target = jQuery(".qbank-error-msg");
