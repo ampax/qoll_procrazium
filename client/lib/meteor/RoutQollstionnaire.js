@@ -70,7 +70,7 @@ IdLookUpController = RouteController.extend({
 								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
 	},
 	data : function() {
-		return { qollList : QollForQuestionaireId, questionaire : QuestionaireForId.find(this.params._id) };
+		return { qollList : QollForQuestionaireId};
 	}
 });
 
