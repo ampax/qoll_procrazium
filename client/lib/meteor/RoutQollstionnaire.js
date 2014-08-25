@@ -65,25 +65,26 @@ IdLookUpController = RouteController.extend({
 		console.log("looking for  id "+this.params._id );
 		return { sort : { submittedOn : -1 }, _id : this.params._id };
 	},
-	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()), Meteor.subscribe('RECIPIENTS_PUBLISHER')];
+	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()), 
+								Meteor.subscribe('RECIPIENTS_PUBLISHER'),
+								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
 	},
 	data : function() {
-		return { qollList : QollForQuestionaireId };
+		return { qollList : QollForQuestionaireId, questionaire : QuestionaireForId.find(this.params._id) };
 	}
 });
 
 QollController = RouteController.extend({
-	findOptions : function() {
-		console.log("looking for  id "+this.params._id );
-		return { sort : { submittedOn : -1 }, _id : this.params._id };
-	},
-	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_ID_PUBLISHER', this.findOptions())];
-	},
-	data : function() {
-		return { qollList : QollForQuestionaireId };
-	}
+    findOptions : function() {
+        console.log("looking for  id "+this.params._id );
+        return { sort : { submittedOn : -1 }, singleId : this.params._id };
+    },
+    waitOn : function() {return [Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions())];
+    },
+    data : function() {
+        return { qollList : AllQolls };
+    }
 });
-
 
 QollstGroupController = FastRender.RouteController.extend({
 	waitOn : function() {[Meteor.subscribe('QOLL_GROUP_PUBLISHER')];},
@@ -136,6 +137,7 @@ Router.map(function() {
 	this.route('sentView', {
 		template : 'view_sent_board',
 		path : '/sent_board/:_id',
+		controller: IdLookUpController,
 	});
 
 	this.route('view_sent', {
@@ -148,6 +150,7 @@ Router.map(function() {
 	this.route('draftView', {
 		template : 'view_draft_board',
 		path : '/draft_board/:_id',
+		controller: IdLookUpController,
 	});
 	
 	this.route('view_draft', {
@@ -157,17 +160,17 @@ Router.map(function() {
 	});
 
 	//prepare the quiz template
-	this.route('all_qolls', {
-		template : 'all_qolls',
-		path : '/all_qolls',
-		controller : QbankController,
-	});
+    this.route('all_qolls', {
+        template : 'all_qolls',
+        path : '/all_qolls',
+        controller : QbankController,
+    });
 
-	this.route('qollView', {
-		template : 'all_qolls_board',
-		path : '/qoll_board/:_id',
-		controller : QollController,
-	});
+    this.route('qollView', {
+        template : 'view_qoll',
+        path : '/qoll_board/:_id',
+        controller : QollController,
+    });
 
 	this.route('view_my_groups', {
 		template : 'my_groups',
