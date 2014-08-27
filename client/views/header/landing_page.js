@@ -95,7 +95,6 @@ Template.landing_page.events({
     
      qlog.info('User logout event happened', filename);
      Login.logoutFromService();
-     this.redirect('/')
     },
     'click #login-buttons-facebook' : function(event, tmpl) {
         Login.loginWithService('facebook');
