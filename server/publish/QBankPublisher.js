@@ -301,12 +301,17 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 		//Check for existing user record
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
-			
+			var resp = QollstionnaireResponses.findOne({
+				qollstionnaireid : findoptions._id,
+				usrid : this.userId
+			});
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
 					var qolls = [];
 					Qoll.find({_id : {$in : item.qollids}}).map(function(q){
-
+						var thisresponse; 
+						thisresponse = resp && resp.responses[q._id]? resp.responses[q._id].response:new Array(q.qollTypes?q.qollTypes.length:0) ;
+						qlog.info("found response this response "+thisresponse);
 						var q1 = {
 							qollTitle 		: q.qollTitle,
 							qollText 		: q.qollText,
@@ -320,6 +325,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							action 			: q.action,
 							enableEdit 		: q.action === 'store',
 							stats 			: q.stats,
+							myresponses: thisresponse,
 							//answers 		: fetch_answers(item),
 							//totals 			: sumstats(q.stats),
 							viewContext 	: "createUsr",

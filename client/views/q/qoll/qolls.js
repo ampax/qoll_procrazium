@@ -269,14 +269,13 @@ Template.qolls_inner.events({
 	'click .qoll-response-val' : function(event) {
 		event.preventDefault();
 		var chk = $(event.target);
-
+		var qoll =this.parent.q;
 		//If not a multiple choice question, remove the border-selected
-		qlog.info('Printing ooooif this is multiple - ' + this.parent + '/' + this.parent.isMultiple);
-		if (!this.parent.isMultiple) {
-			$(chk).closest('div.list-group-item').siblings().find('span.qoll-response-val').map(function(elem) {
-				$(this.parent).removeClass('border-selected');
-			});
-			chk.addClass('border-selected');
+		qlog.info('Printing ooooif this is multiple - ' + qoll + '/' + qoll.isMultiple);
+		if (!qoll.isMultiple) {
+			$(chk).parent().parent().parent().find('.border-selected').removeClass('border-selected');
+			$(chk).addClass('border-selected');
+			
 		} else {
 			if (chk.hasClass('border-selected')) {
 				chk.removeClass('border-selected');
@@ -287,7 +286,6 @@ Template.qolls_inner.events({
 
 		var qollId = this.parent.q._id;
 		var qollstionnaireId = this.parent.q._qollstionnaireid;
-		var qoll = this.parent.q;
 		var answerIndex = this.item.index;
 		var answerVal = this.item.value;
 

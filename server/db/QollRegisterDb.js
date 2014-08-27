@@ -162,16 +162,16 @@ Meteor.methods({
 		});
 		if (!qsnr)
 			return;
-		qlog.info(" emails in qsnr " + qsnr.qolls_to_email);
+		qlog.info(" Adding qollstionnaire response for  " + qsnrid);
 
 		var resp = QollstionnaireResponses.findOne({
 			qollstionnaireid : qsnrid,
-			userid : this.userId
+			usrid : this.userId
 		});
 		var qoll = Qoll.findOne({
 			_id : qollId
 		});
-		var type = qoll.qollAttributes.type;
+		var type;type = qoll.qollAttributes.type;
 		//?"Multiple":"Single"; //TODO: add fill in blanks
 
 		var iscorrect = false;
@@ -188,7 +188,8 @@ Meteor.methods({
 				}, false);
 			}
 			//create a new response
-			var newentry = {
+			var newentry;
+			newentry = {
 				qollstionnaireid : qsnrid,
 				usrid : usrid,
 				responses : {}
@@ -201,7 +202,69 @@ Meteor.methods({
 			};
 			return QollstionnaireResponses.insert(newentry);
 		} else {
+			var value_to_set;
+			if (resp.responses['' + qollId]) {//this qoll id exists
+				var new_responses;
+				new_responses = resp.responses['' + qollId].response;
 
+				if (type == QollConstants.QOLL.TYPE.SINGLE) {
+						new_responses = new Array(qoll.qollTypes.length);
+						new_responses[qollTypeIx] = true;
+				} else {
+					if ( typeof new_responses[qollTypeIx] == 'undefined') {
+						new_responses[qollTypeIx] = true;
+					} else {
+						new_responses[qollTypeIx] = !new_responses[qollTypeIx];
+					}
+				}
+
+				iscorrect = qoll.qollTypesX.reduce(function(previousValue, currentValue, index, array) {
+					if ((currentValue.isCorrect && new_responses[currentValue.index]) || (!currentValue.isCorrect && !new_responses[currentValue.index]))
+						return previousValue;
+					return false;
+				}, true);
+				var updatepaths;
+				updatepaths = {};
+				updatepaths['responses.' + qollId + '.response'] = new_responses;
+				updatepaths['responses.' + qollId + '.submittedOn'] = new Date();
+				updatepaths['responses.' + qollId + '.iscorrect'] = iscorrect;
+				return QollstionnaireResponses.update({
+					_id : resp._id
+				}, {
+					$set : updatepaths
+				});
+
+			} else {//this qollid doesnt exist
+
+				var resp_array;
+				resp_array = new Array(qoll.qollTypes.length);
+				resp_array[qollTypeIx] = true;
+
+				if (type == QollConstants.QOLL.TYPE.SINGLE) {
+					iscorrect = qoll.qollTypesX.reduce(function(previousValue, currentValue, index, array) {
+						if (currentValue.index == qollTypeIx && currentValue.isCorrect)
+							return true;
+						return previousValue;
+					}, false);
+				}
+				var newresponse;
+				newresponse = {};
+				newresponse = {
+					submittedOn : new Date(),
+					response : resp_array,
+					type : type,
+					iscorrect : iscorrect
+				};
+				var updatepaths;
+				updatepaths = {};
+				updatepaths['responses.' + qollId] = newresponse;
+				return QollstionnaireResponses.update({
+					_id : resp._id
+				}, {
+					$set : updatepaths
+				});
+
+			}
 		}
 	},
 

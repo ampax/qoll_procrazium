@@ -3,7 +3,7 @@
         <div class="col-md-10 col-xs-10 indent-littlebit" id="{{qollType.index}}">
           {{#if is_not_blank_type qoll.qollAttributes}}
           {{#with item=qollType parent=qoll}}
-          <span class="badge pull-left qoll-response-val {{qoll_abbr_class item.index}} {{is_chk_selected item.index}} 
+          <span class="badge pull-left qoll-response-val {{qoll_abbr_class item.index}} {{is_chk_selected item.index  parent.q }} 
           {{check_selected parent._id item.index}}  glossy">
           
             {{qoll_type_abbr item.index}}
