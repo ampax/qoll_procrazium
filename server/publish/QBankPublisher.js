@@ -16,7 +16,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 
 			//submitted by this user
 			var handle = Qoll.find( 
-				getQuery(findoptions), 
+				getQuery.call(this,findoptions), 
 				{sort : {'submittedOn' : -1}, reactive : true}
 			).observe({
 				added : function(item, idx) {
@@ -507,6 +507,8 @@ var getUnitSelected = function(ansHash) {
 
 var getQuery = function(findoptions) {
 	//Return default query if nothing specified for the type in the paramenters. Else return appropriate query parameter.
+	
+	
 	var query = {$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
 										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]};
 

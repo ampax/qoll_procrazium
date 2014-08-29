@@ -4,7 +4,7 @@
       <div class="col-md-10 col-xs-12">
         <h4>{{q.qoll_idx_title}} {{{get_title q.qollStarAttributes}}}</h4>
         {{#if q.is_parent}} 
-            <a href="/qid/{{_id}}"><h5>{{#mathjax}}{{{get_qoll_txt q.qollText q.qollAttributes}}}{{/mathjax}}</h5></a>
+            <a href="/qid/{{_id}}">{{#mathjax}}<h5>{{{get_qoll_txt q.qollText q.qollAttributes}}}</h5>{{/mathjax}}</a>
         {{/if}}
 
         {{#unless is_parent}} 
