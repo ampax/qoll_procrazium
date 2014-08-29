@@ -36,8 +36,42 @@
 						</div>
 					</div><!-- list-group-item list-group-item-heading -->
 				</div><!-- /row-->
+				<h4>Stats:- </h4>
+				{{> stats_table}}
+
 				{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
 			</div>
 		</div>
 	</div>
+</template>
+
+<template name="stats_table">
+	<table id="example" class="table" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+	            {{#each questionaire.stats_labels }}
+	            	<th>{{label}}</th>
+	            {{/each}}
+            </tr>
+        </thead>
+ 
+        <tfoot>
+            <tr>
+                {{#each questionaire.stats_labels }}
+	            	<th>{{label}}</th>
+	            {{/each}}
+            </tr>
+        </tfoot>
+ 
+        <tbody>
+        	{{#each questionaire.stats }}
+				<tr>
+	                <td>{{name}}</td>
+	                {{#each responses}}
+	                	<td>{{response}}</td>
+	                {{/each}}
+	            </tr>
+			{{/each}}
+        </tbody>
+    </table>
 </template>

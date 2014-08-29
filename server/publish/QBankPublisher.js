@@ -257,6 +257,7 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 	var uuid = Meteor.uuid();
 	var initializing = true;
 	var handle_questionaires;
+
 	if (user_id) {
 		//Check for existing user record
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
@@ -264,14 +265,28 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 			
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
-					self.added('questionaire-for-id', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
+							recips_count : item.submittedTo.length, submitted_on : item.submittedOn};
+
+					if(findoptions.stats){
+						var r = getQuestionnaireResponses(item);
+						questionaire.stats = r.stats;
+						questionaire.stats_labels = r.labels;
+					}
+
+					self.added('questionaire-for-id', item._id, questionaire);
 				},
 				changed : function(item, idx) {
-					self.changed('questionaire-for-id', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
+							recips_count : item.submittedTo.length, submitted_on : item.submittedOn};
+
+					if(findoptions.stats){
+						var r = getQuestionnaireResponses(item);
+						questionaire.stats = r.stats;
+						questionaire.stats_labels = r.labels;
+					}
+
+					self.changed('questionaire-for-id', item._id, questionaire);
 				},
 				removed : function(item){
 					self.removed('questionaire-for-id', item._id);
@@ -280,7 +295,7 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 		}
 	}
 
-	qlog.info('Done initializing the qoll-for-questionaire-id: QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER, uuid: ' + uuid, filename);
+	qlog.info('Done initializing the questionaire-for-id: QUESTIONAIRE_FOR_ID_PUBLISHER, uuid: ' + uuid, filename);
 	initializing = false;
 	self.ready();
 	//self.flush();
@@ -308,34 +323,19 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
 					var qolls = [];
-					Qoll.find({_id : {$in : item.qollids}}).map(function(q){
-						var thisresponse; 
-						thisresponse = resp && resp.responses[q._id]? resp.responses[q._id].response:new Array(q.qollTypes?q.qollTypes.length:0) ;
-						qlog.info("found response this response "+thisresponse);
-						var q1 = {
-							qollTitle 		: q.qollTitle,
-							qollText 		: q.qollText,
-							qollTypes 		: translateToIndexedArray(q.qollTypes),
-							qollTypesX 		: q.qollTypesX,
-							qollStarAttributes : q.qollStarAttributes ? q.qollStarAttributes : {},
-							qollAttributes 	: q.qollAttributes,
-							submittedOn 	: q.submittedOn,
-							submittedBy 	: q.submittedBy,
-							submittedTo 	: q.submittedTo,
-							action 			: q.action,
-							enableEdit 		: q.action === 'store',
-							stats 			: q.stats,
-							myresponses: thisresponse,
-							//answers 		: fetch_answers(item),
-							//totals 			: sumstats(q.stats),
-							viewContext 	: "createUsr",
-							isMultiple		: q.isMultiple,
-							_qollstionnaireid : findoptions._id,
-							_id : q._id,
-							qollRawId : q.qollRawId
-						};
-
-						qolls.push(q1);
+					var counter = 1;
+					item.qollids.map(function(qid){
+						
+						var q = Qoll.find({_id : qid}).map(function(t){
+							var thisresponse; 
+							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							
+							var q2 = extractQollDetails(t);
+							q2.myresponses = thisresponse;
+							q2._qollstionnaireid = findoptions._id;
+							q2.qoll_idx_title = 'Q'+counter++;
+							qolls.push(q2);
+						});
 					});
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length};
@@ -346,31 +346,19 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 				},
 				changed : function(item, idx) {
 					var qolls = [];
-					Qoll.find({_id : {$in : item.qollids}}).map(function(q){
+					var counter = 1;
+					item.qollids.map(function(qid){
 						
-						var q1 = {
-							qollTitle 		: q.qollTitle,
-							qollText 		: q.qollText,
-							qollTypes 		: translateToIndexedArray(q.qollTypes),
-							qollTypesX 		: q.qollTypesX,
-							qollStarAttributes : q.qollStarAttributes ? q.qollStarAttributes : {},
-							qollAttributes 	: q.qollAttributes,
-							submittedOn 	: q.submittedOn,
-							submittedBy 	: q.submittedBy,
-							submittedTo 	: q.submittedTo,
-							action 			: q.action,
-							enableEdit 		: q.action === 'store',
-							stats 			: q.stats,
-							//answers 		: fetch_answers(item),
-							//totals 			: sumstats(q.stats),
-							viewContext 	: "createUsr",
-							isMultiple		: q.isMultiple,
-							_qollstionnaireid : findoptions._id,
-							_id : q._id,
-							qollRawId : q.qollRawId
-						};
-
-						qolls.push(q1);
+						var q = Qoll.find({_id : qid}).map(function(t){
+							var thisresponse; 
+							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							
+							var q2 = extractQollDetails(t);
+							q2.myresponses = thisresponse;
+							q2._qollstionnaireid = findoptions._id;
+							q2.qoll_idx_title = 'Q'+counter++;
+							qolls.push(q2);
+						});
 					});
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length};
@@ -395,6 +383,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 		if(handle_questionaires != undefined) handle_questionaires.stop();
 	});
 });
+
 
 var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 	//qlog.info('<=======This is the qoll we will use for fill in the blanks========>' + JSON.stringify(q), filename);
@@ -543,5 +532,107 @@ var getQuery = function(findoptions) {
 var translateToIndexedArray = function ( ar){
 		if(!ar) return [];
 		return ar.map(function (item,ix){ return {index : ix, value : item};});
+};
+
+var extractQollDetails = function(q) {
+	return {
+		qollTitle 		: q.qollTitle,
+		qollText 		: q.qollText,
+		qollTypes 		: translateToIndexedArray(q.qollTypes),
+		qollTypesX 		: q.qollTypesX,
+		qollStarAttributes : q.qollStarAttributes ? q.qollStarAttributes : {},
+		qollAttributes 	: q.qollAttributes,
+		submittedOn 	: q.submittedOn,
+		submittedBy 	: q.submittedBy,
+		submittedTo 	: q.submittedTo,
+		action 			: q.action,
+		enableEdit 		: q.action === 'store',
+		stats 			: q.stats,
+		viewContext 	: "createUsr",
+		isMultiple		: q.isMultiple,
+		_id 			: q._id,
+		qollRawId 		: q.qollRawId
+	};
+};
+
+var getQuestionnaireResponses = function(item) {
+	var stats = [];
+	var labels = [];
+	var r = {};
+
+	//Initialize the labels here as we will show the table always, whether or not some one has attempted to answer
+	labels.push({label : 'Name'});
+	var counter = 1;
+	item.qollids.map(function(qid){
+		labels.push({label : 'Q' + counter++});
+	});
+
+	item.submittedTo.map(function(subTo){
+		var u1 = Meteor.users.find({'emails.address' : subTo}).fetch();
+		var stat = {}; //{name : 'Anoop Kaushik', responses : [{response : 'A'}, {response : 'B,C'}]}
+		var responses = [];
+		var name = undefined;
+		var resp = undefined;
+
+		if(u1.length > 0) { 
+			name = u1[0].profile.name;
+			resp = QollstionnaireResponses.findOne({ qollstionnaireid : item._id, usrid : u1[0]._id });
+		} else {
+			name = subTo;
+			resp = QollstionnaireResponses.findOne({ qollstionnaireid : item._id, email : subTo });
+		}
+
+		item.qollids.map(function(qid){
+			if(resp) {
+				var cnt1 = 0;
+				var attach_resp = [];
+				var rtmp = resp.responses[qid];
+				qlog.info('Printing user - ' + item._id + '//////' +u1[0]._id + '//////' + JSON.stringify(rtmp.response) + '//////' + qid, filename);
+				rtmp.response.map(function(tmp){
+					qlog.info('Printing response ------------>>>>>> ' + tmp + '////' + rtmp.type);
+					if(rtmp.type.toLowerCase() === QollConstants.QOLL_TYPE.MULTI || rtmp.type === QollConstants.QOLL.TYPE.SINGLE) {
+						if(tmp == true || tmp === 'true'){
+							attach_resp.push(IndexAbbreviations.alphabetical[cnt1]);
+						};
+						cnt1++;
+					}
+				});
+
+				responses.push({'response' : attach_resp.join(', ')});
+
+			} else {
+				responses.push({'response' : 'NA'});
+			}
+		});
+
+		/**if(resp) {
+			resp.responses.map(function(r){
+				qlog.info('Printing response - ' + JSON.stringify(r));
+				var attach_resp = [];
+				if(r.type === QollConstants.QOLL.TYPE.MULTIPLE || r.type === QollConstants.QOLL.TYPE.SINGLE) {
+					var cnt1 = 0;
+					r.response.map(function(tmp){
+						attach_resp.push(IndexAbbreviations.alphabetical[cnt1++]);
+					});
+				}
+
+				responses.push({'response' : attach_resp.join(', ')});
+			});
+		}**/
+
+		stat.name = name;
+		stat.responses = responses;
+
+		stats.push(stat);
+
+		qlog.info(filename, '===============>'+ subTo + '/' + name + '<===============');
+	});
+
+	r.stats = stats;
+	r.labels = labels;
+
+	qlog.info('===============>' + JSON.stringify(r) + '<===============');
+
+	return r;
 };
 

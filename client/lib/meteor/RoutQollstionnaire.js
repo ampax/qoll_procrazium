@@ -74,6 +74,19 @@ IdLookUpController = RouteController.extend({
 	}
 });
 
+IdLookUpSentController = RouteController.extend({
+	findOptions : function() {
+		console.log("looking for  id "+this.params._id );
+		return { sort : { submittedOn : -1 }, _id : this.params._id, stats : "yes" };
+	},
+	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
+								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
+	},
+	data : function() {
+		return { qollList : QollForQuestionaireId};
+	}
+});
+
 QollController = RouteController.extend({
     findOptions : function() {
         console.log("looking for  id "+this.params._id );
@@ -137,7 +150,7 @@ Router.map(function() {
 	this.route('sentView', {
 		template : 'view_sent_board',
 		path : '/sent_board/:_id',
-		controller: IdLookUpController,
+		controller: IdLookUpSentController,
 	});
 
 	this.route('view_sent', {

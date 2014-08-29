@@ -4,5 +4,15 @@ Template.view_sent_board.helpers({
 	},
 	questionaire : function() {
 		return QuestionaireForId.findOne();
-	}
+	},
 });
+
+Template.stats_table.helpers({
+	questionaire : function() {
+		return QuestionaireForId.findOne();
+	},
+});
+
+Template.stats_table.rendered = function() {
+	$('#example').dataTable();
+};
