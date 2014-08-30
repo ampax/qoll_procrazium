@@ -28,9 +28,12 @@
 						<div class="col-md-5 col-xs-12">
 							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
 						</div>
-						<div class='col-md-4 col-xs-0'>&nbsp;</div>
+						<div class='col-md-3 col-xs-12'>&nbsp;</div>
 						<div class="col-md-1 col-xs-12">
-							&nbsp;
+							Size
+						</div>
+						<div class="col-md-1 col-xs-12">
+							Rate
 						</div>
 						<div class="col-md-1 col-xs-12">
 							&nbsp;
@@ -38,7 +41,7 @@
 					</div><!-- list-group-item list-group-item-heading -->
 					{{#each qolls}}
 				<!-- Start of Qoll Section -->
-				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success" id='qdiv_{{_id}}'>
+				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
 
 					
 					<div class="col-md-1 col-xs-12">
@@ -50,10 +53,10 @@
 						</a>
 					</div>
 					<div class="col-md-1 col-xs-12">
-						size &rarr; {{qoll_count}}
+						{{qoll_count}}
 					</div>
 					<div class="col-md-1 col-xs-12">
-						recips &rarr; {{recips_count}}
+						{{respo_length}} / {{recips_count}}
 					</div>
 					<div class="col-md-1 col-xs-12">
 						<span class="pull-left archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>&nbsp;

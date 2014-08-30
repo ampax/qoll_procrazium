@@ -147,12 +147,18 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT}, 
 				{sort : {'submittedOn' : -1}, reactive : true}).observe({
 				added : function(item, idx){
+					var length_class = item.qollids.length == 1? 'single' : 'multiple';
+					var r = getQuestCompletionRate(item);
 					self.added('sent-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
+							submitted_on : item.submittedOn, length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				changed : function(item, idx) {
+					var length_class = item.qollids.length == 1? 'single' : 'multiple';
+					var r = getQuestCompletionRate(item);
 					self.changed('sent-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
+							submitted_on : item.submittedOn, length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				removed : function(item){
 					self.removed('sent-by-me-questionaire', item._id);
@@ -185,12 +191,14 @@ Meteor.publish('STORED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 			handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.STORED},
 					{ sort : { 'submittedOn' : -1}, reactive : true }).observe({
 				added : function(item, idx){
+					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					self.added('stored-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class});
 				},
 				changed : function(item, idx) {
+					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					self.changed('stored-by-me-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class});
 				},
 				removed : function(item){
 					self.removed('stored-by-me-questionaire', item._id);
@@ -227,12 +235,14 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 				{ sort : { 'submittedOn' : -1}, reactive : true }
 			).observe({
 				added : function(item, idx){
+					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					self.added('recvd-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class});
 				},
 				changed : function(item, idx) {
+					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					self.changed('recvd-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn});
+						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class});
 				},
 				removed : function(item){
 					self.removed('recvd-questionaire', item._id);
@@ -272,6 +282,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						var r = getQuestionnaireResponses(item);
 						questionaire.stats = r.stats;
 						questionaire.stats_labels = r.labels;
+						questionaire.respo_length = r.respo_length;
+						questionaire.recip_length = r.recip_length;
 					}
 
 					self.added('questionaire-for-id', item._id, questionaire);
@@ -284,6 +296,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						var r = getQuestionnaireResponses(item);
 						questionaire.stats = r.stats;
 						questionaire.stats_labels = r.labels;
+						questionaire.respo_length = r.respo_length;
+						questionaire.recip_length = r.recip_length;
 					}
 
 					self.changed('questionaire-for-id', item._id, questionaire);
@@ -557,10 +571,25 @@ var extractQollDetails = function(q) {
 	};
 };
 
+var getQuestCompletionRate = function(item) {
+	var r = {};
+	var counter = 0;
+
+	QollstionnaireResponses.find({ qollstionnaireid : item._id }).map(function(i){
+		counter++;
+	});
+
+	r.respo_length = counter;
+	r.recip_length = item.submittedTo.length;
+
+	return r;
+};
+
 var getQuestionnaireResponses = function(item) {
 	var stats = [];
 	var labels = [];
 	var r = {};
+	var respo_length = 0;
 
 	//Initialize the labels here as we will show the table always, whether or not some one has attempted to answer
 	labels.push({label : 'Name'});
@@ -575,6 +604,7 @@ var getQuestionnaireResponses = function(item) {
 		var responses = [];
 		var name = undefined;
 		var resp = undefined;
+		var resp_flag = false;
 
 		if(u1.length > 0) { 
 			name = u1[0].profile.name;
@@ -601,6 +631,10 @@ var getQuestionnaireResponses = function(item) {
 				});
 
 				responses.push({'response' : attach_resp.join(', ')});
+				if(!resp_flag) {
+					respo_length++;
+					resp_flag = true;
+				}
 
 			} else {
 				responses.push({'response' : 'NA'});
@@ -632,6 +666,8 @@ var getQuestionnaireResponses = function(item) {
 
 	r.stats = stats;
 	r.labels = labels;
+	r.respo_length = respo_length;
+	r.recip_length = item.submittedTo.length;
 
 	qlog.info('===============>' + JSON.stringify(r) + '<===============');
 
