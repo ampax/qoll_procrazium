@@ -114,7 +114,7 @@ Template.user_edit.events({
 			var msg;
 			if (err) {
 				cls = '.err-msg';
-				msg = 'Failed subscribing to the group: ' + group_name + '('+ author_email +') ...'
+				msg = 'Failed subscribing to the group: ' + group_name + '('+ author_email +') ...';
 				qlog.error('Failed subscribing to the group: ' + group_name + '('+ author_email +')' + err, filename);
 			} else {
 				if(HashUtil.checkHash(message, 'err_msg')) {
@@ -149,7 +149,7 @@ Template.user_edit.events({
 		if (!Meteor.user())
 			throwError(i18n.t('You must be logged in.'));
 
-    qlog.info('Printig e.target - ' + e.target, filename)
+    qlog.info('Printig e.target - ' + e.target, filename);
 
 		var $target = $(e.target);
 		var name = $target.find('[name=name]').val();
