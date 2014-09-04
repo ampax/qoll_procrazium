@@ -14,6 +14,21 @@ Accounts.ui.config({
 	passwordSignupFields: 'USERNAME_AND_EMAIL'
 });
 
+
+ Meteor.autorun(function() {
+    // Whenever this session variable changes, run this function.
+    var message = Session.get('displayMessage');
+    if (message) {
+      var stringArray = message.split('&amp;');
+      ui.notify(stringArray[0], stringArray[1])
+        .effect('slide')
+        .closable();
+
+      Session.set('displayMessage', null);
+    }
+  });
+  
+
 Login = {};
 
 /**
@@ -40,7 +55,20 @@ Login.loginWithService = function(service){
 	} else if(service === 'twitter'){
 		//login using twitter
 		loginWithTwitter();
-	}
+	} /**else if(service === 'password') {
+		qlog.info('Printing the options - '+JSON.stringify(opt), filename);
+		if(opt.email == undefined || opt.password == undefined) {
+			qlog.info('Enter login id and password to login', filename);
+			return;
+		}
+
+		Meteor.loginWithPassword(opt.email, opt.password, function (err) {
+		    if(err){
+		        //notify.show(i18n.translate('Signin error'), i18n.translate(err.reason));
+		        console.log(err)
+		    }
+		});
+	}**/
 }
 
 Login.logoutFromService = function() {

@@ -7,7 +7,6 @@
     "page-js-ie-support": {},
     "jquery-ui": {},
     "ace-embed": {},
-    "mathjax": {},
     "autocompletion": {},
     "wow": {},
     "animate-css": {},
@@ -15,11 +14,11 @@
     "fast-render": {},
     "crypto-md5": {},
     "iron-router": {},
-    "bootstrap-3": {},
-    "google-contacts": {},
-    "accounts-ui-bootstrap-3-blaze": {},
     "meteor-tomarkdown": {},
     "pince": {},
-    "oauthjs": {}
+    "mathjax": {},
+    "jquery-datatables": {},
+    "google-contacts": {},
+    "bootstrap-3": {}
   }
 }
