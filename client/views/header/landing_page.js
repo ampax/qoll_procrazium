@@ -35,10 +35,11 @@ Template.landing_page.rendered = function() {
     if(!Meteor.user()){
         $('.login-link-text').text(i18n.translate("Sign Up/Sign In"));
       }else{
+        qlog.info('Setting the extra byttons here', filename);
         var close = i18n.translate("Close");
         var edit_account = i18n.translate("Edit Account");
         var view_profile = i18n.translate("View Profile");
-        var chang_passwd = i18n.translate("Change Password");
+        var chang_passwd = i18n.translate("Change Password111");
         var sign_out = i18n.translate("Sign Out");
 
         //Change the text & Set the additional buttons for profile here
@@ -46,7 +47,7 @@ Template.landing_page.rendered = function() {
         $('div#login-buttons-open-change-password').text(chang_passwd);
         $('div#login-buttons-logout').text(sign_out);
         $('#login-buttons-logout').before('<a href="/users/'+Meteor.user().profile.slug+'" class="account-link login-button button">'+view_profile+'</a>');
-        //$('#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
+        $('#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
       }
 }
 
@@ -101,9 +102,21 @@ Template.landing_page.events({
     },
     'click #login-buttons-google' : function(event, tmpl) {
         Login.loginWithService('google', function(){});
-    }
+    },
+    /**'click #login-buttons-password' : function() {
+        var email_or_id = $('input#login-username-or-email').val();
+        var password = $('input#login-password').val();
+        Login.loginWithService('password', {email : email_or_id, password : password}, function(error){
+            if(error) {
+                qlog.info('Error occured while logging in with password - ' + error, filename);
+            } else {
+                qlog.info('Logging in with password', filename);
+            }
+        });
+    }**/
 
 });
+
 
 /**
  * Single Page Nav Plugin

@@ -27,17 +27,51 @@
 						<div class="col-md-5 col-xs-12 list-group-item-align">
 							Title: {{questionaire.title}} ({{questionaire.qoll_count}})
 						</div>
-						<div class='col-md-4 col-xs-0 list-group-item-align'>&nbsp;</div>
-						<div class="col-md-1 col-xs-12 list-group-item-align">
-							&nbsp;
+						<div class='col-md-3 col-xs-0 list-group-item-align'>&nbsp;</div>
+						<div class="col-md-2 col-xs-12 list-group-item-align">
+							Completion Rate &rarr; {{questionaire.respo_length}}/{{questionaire.recip_length}}
 						</div>
 						<div class="col-md-1 col-xs-12 list-group-item-align">
 							&nbsp;
 						</div>
 					</div><!-- list-group-item list-group-item-heading -->
 				</div><!-- /row-->
+				<h4>Stats:- </h4>
+				{{> stats_table}}
+
 				{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
 			</div>
 		</div>
 	</div>
+</template>
+
+<template name="stats_table">
+	<table id="example" class="table" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+	            {{#each questionaire.stats_labels }}
+	            	<th>{{label}}</th>
+	            {{/each}}
+            </tr>
+        </thead>
+ 
+        <tfoot>
+            <tr>
+                {{#each questionaire.stats_labels }}
+	            	<th>{{label}}</th>
+	            {{/each}}
+            </tr>
+        </tfoot>
+ 
+        <tbody>
+        	{{#each questionaire.stats }}
+				<tr>
+	                <td>{{name}}</td>
+	                {{#each responses}}
+	                	<td>{{response}}</td>
+	                {{/each}}
+	            </tr>
+			{{/each}}
+        </tbody>
+    </table>
 </template>

@@ -5,7 +5,7 @@ Template.forgot_password.events({
     options.email=$('#email').val();
     Accounts.forgotPassword(options, function(error){
       if(error){
-        console.log(error);
+        console.error(error);
       }else{
         throwError(i18n.t("Password reset link sent!"));
       }

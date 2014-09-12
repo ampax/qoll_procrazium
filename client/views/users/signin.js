@@ -6,7 +6,7 @@ Template.signin.events({
       qlog.info('Logging in with credentials - ' + username + '/' + password);
       Meteor.loginWithPassword(username, password, function(err){
         if(err){
-          console.log(err);
+          console.error(err);
           throwError(err.reason);
         }
       });

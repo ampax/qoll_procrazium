@@ -515,6 +515,14 @@ span.qoll-toolbar-plain {
     background-color: #FFFFDB;
 }
 
+.single {
+    background-color : #FFC2C2; /** this is default background color of single choice rows **/
+}
+
+.multiple {
+    background-color : #FFF1FF; /** this is default background color of single choice rows **/
+}
+
 .list-group-item-heading {
 	color: #FFF;
 	background-color: #878787;/**rgba(50, 118, 177, 0.56);**/

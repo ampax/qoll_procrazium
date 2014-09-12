@@ -28,9 +28,12 @@
 						<div class="col-md-5 col-xs-12">
 							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
 						</div>
-						<div class='col-md-4 col-xs-0'>&nbsp;</div>
+						<div class='col-md-3 col-xs-12'>&nbsp;</div>
 						<div class="col-md-1 col-xs-12">
-							&nbsp;
+							Size
+						</div>
+						<div class="col-md-1 col-xs-12">
+							Recips
 						</div>
 						<div class="col-md-1 col-xs-12">
 							&nbsp;
@@ -38,22 +41,25 @@
 					</div><!-- list-group-item list-group-item-heading -->
 					{{#each qolls}}
 				<!-- Start of Qoll Section -->
-				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success" id='qdiv_{{_id}}'>
+				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
 
 					
 					<div class="col-md-1 col-xs-12">
 						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 					</div>
-					<div class="col-md-9 col-xs-12 make-clickable">
+					<div class="col-md-8 col-xs-12 make-clickable">
 						<a href="{{ pathFor 'inboxView' }}" class='black-link'>
 							{{#mathjax}}{{{title}}}{{/mathjax}}
 						</a>
 					</div>
 					<div class="col-md-1 col-xs-12">
-						size &rarr; {{qoll_count}}
+						{{qoll_count}}
 					</div>
 					<div class="col-md-1 col-xs-12">
-						recips &rarr; {{recips_count}}
+						{{recips_count}}
+					</div>
+					<div class="col-md-1 col-xs-12">
+						&nbsp;
 					</div>
 				</div><!-- list-group-item list-group-item-success -->
 				<!-- End of Qoll Section here -->

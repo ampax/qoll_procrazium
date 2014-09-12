@@ -57,6 +57,14 @@
 	color : #FF6666;
 }
 
+.red_6 {
+	color : #FFC2C2;
+}
+
+.red_7 {
+	color : #FFF1FF;
+}
+
 .red_bg_1 {
 	background-color : #CC0000;
 }
@@ -75,6 +83,14 @@
 
 .red_bg_5 {
 	background-color : #FF6666;
+}
+
+.red_bg_6 {
+	background-color : #FFC2C2; /** this is default background color of single choice rows **/
+}
+
+.red_bg_7 {
+	background-color : #FFF1FF; /** this is default background color of rows **/
 }
 
 .green_1 {
