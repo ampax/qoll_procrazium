@@ -10,7 +10,7 @@
           </span>
           {{/with}}
           {{/if}}
-            &nbsp;{{{get_qoll_type qollType.value qoll.qollAttributes}}}
+            &nbsp;{{#mathjax}}<span>{{{get_qoll_type qollType.value qoll.qollAttributes}}}</span>{{/mathjax}}
           {{#if is_blank_type qoll.qollAttributes}}
           <span id="{{qoll._id}}" class="badge pull-left register-blank glossy green_bg_1">
             Submit

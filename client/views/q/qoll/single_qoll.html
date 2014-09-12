@@ -1,6 +1,6 @@
 <template name="single_qoll">
 	   <div class="col-md-12 col-xs-12 list-group-item qoll-seperator {{#if is_parent}} list-group-item-heading{{/if}} bg-qoll" id='{{_id}}'>
-
+      
       <div class="col-md-10 col-xs-12">
         <h4>{{{get_title q.qollStarAttributes}}}</h4>
         {{#if q.is_parent}} 
@@ -8,7 +8,7 @@
         {{/if}}
 
         {{#unless is_parent}} 
-            <h5>{{#mathjax}}{{{get_qoll_txt q.qollText q.qollAttributes}}}{{/mathjax}}</h5>
+            <h5>{{#mathjax}}<div>{{{get_qoll_txt q.qollText q.qollAttributes}}}</div>{{/mathjax}}</h5>
         {{/unless}}
 
         {{{get_units_html q.qollStarAttributes}}}
@@ -53,7 +53,7 @@
       </div>
       {{#unless q.is_parent}}
       <div class="col-md-2 col-xs-12">
-        
+        <div class="dummyclassfortest" style="display: none;">dummy $ x=z^5 $ text</div>
         <!--div class="col-md-12 col-xs-12"-->
           <canvas id="charts{{_id}}" width="100" height="100"></canvas>
           <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
