@@ -171,7 +171,7 @@ Meteor.methods({
 		var qoll = Qoll.findOne({
 			_id : qollId
 		});
-		var type;type = qoll.qollAttributes.type;
+		var type;type = qoll.cat;
 		//?"Multiple":"Single"; //TODO: add fill in blanks
 
 		var iscorrect = false;
@@ -267,7 +267,59 @@ Meteor.methods({
 			}
 		}
 	},
+	registerHint : function(qollId, qsnrid) {
+		//TODO: store the hint use with the 
+		var thisemail = UserUtil.getCurrentUserEmail();
+		var usrid = this.userId;
+		// find questionnaire
+		var qsnr = Qollstionnaire.findOne({ _id : qsnrid});
 
+		if (!qsnr)
+			return;
+
+		qlog.info(" Adding qollstionnaire response for  " + qsnrid);
+
+		var qoll = Qoll.findOne({ _id : qollId });
+		var type;type = qoll.cat;
+
+		var resp = QollstionnaireResponses.findOne({qollstionnaireid : qsnrid, usrid : this.userId});
+
+		if (!resp) {
+			createRespObject(qsnrid, usrid, type, qoll, undefined, true);
+		} else {
+			var updatepaths;
+			updatepaths = {};
+			if (resp.responses['' + qollId]) {
+				//TODO
+				updatepaths['responses.' + qollId + '.usedHint'] = iscorrect;
+				return QollstionnaireResponses.update({
+					_id : resp._id
+				}, {
+					$set : updatepaths
+				});
+			} else {
+				//TODO
+				var newresponse;
+				newresponse = {};
+				newresponse = {
+					submittedOn : new Date(),
+					response : [],
+					type : type,
+					iscorrect : undefined,
+					usedHint : true
+
+				};
+				
+				updatepaths['responses.' + qollId] = newresponse;
+				return QollstionnaireResponses.update({
+					_id : resp._id
+				}, {
+					$set : updatepaths
+				});
+			}
+			//Update the questionnaire and set usedHint flag for qoll
+		}
+	},
 	findQollRegisters : function(submittedBy, qollId) {
 		var q = QollRegister.findOne({
 			'submittedBy' : submittedBy,
@@ -284,47 +336,74 @@ Meteor.methods({
 			return CoreUtils.getUint8Array(0);
 		}
 	},
-	registerQollBlankResponse : function(qollId, qollBlankResponseHash) {
+	registerQollBlankResponse : function(qsnrid, qollId, fib) {
 		var userId = Meteor.userId();
-		var qollRegId;
-		qlog.info('In register custom qoll: ' + qollId + ', ' + qollBlankResponseHash + ', Meteor.userId ' + Meteor.userId(), filename);
-		var existQollReg = QollRegister.find({
-			qollId : qollId,
-			submittedBy : userId
-		}).fetch();
+		//TODO: populate the qollstionnaire table with fibs - new code
+		var thisemail = UserUtil.getCurrentUserEmail();
+		var usrid = this.userId;
+		// find questionnaire
+		var qsnr = Qollstionnaire.findOne({ _id : qsnrid});
 
-		if (this.userId) {
-			if (existQollReg.length > 0) {
-				qlog.debug('Size and object - ' + existQollReg.length, filename);
-				//Update the existing one
-				var existingQollTypeReg = existQollReg[0].qollTypeReg;
-				var qollTypeReg = [qollBlankResponseHash];
-				existingQollTypeReg.map(function(t) {
-					qollTypeReg.push(t);
-				});
-				qlog.info('Existing existingQollTypeReg =========>' + existingQollTypeReg + '/' + qollTypeReg, filename);
-				QollRegister.update({
-					_id : existQollReg[0]._id
-				}, {
-					$set : {
-						qollTypeVal : qollBlankResponseHash,
-						qollTypeReg : qollTypeReg,
-						'submittedOn' : new Date()
-					}
-				});
-				qollRegId = existQollReg[0]._id;
-			} else {
-				//Insert the new one
-				qollRegId = QollRegister.insert({
-					'qollId' : qollId,
-					'qollTypeVal' : qollBlankResponseHash,
-					'qollTypeReg' : [qollBlankResponseHash],
-					'submittedOn' : new Date(),
-					'submittedBy' : Meteor.userId()
-				});
+		if (!qsnr)
+			return;
+
+		qlog.info(" Adding qollstionnaire response for  " + qsnrid);
+
+		var qoll = Qoll.findOne({ _id : qollId });
+		var type;type = qoll.cat;
+
+		var iscorrect = [];
+		var cnt = 0;
+		qoll.fib.map(function(f){
+			if(f === fib[cnt]) iscorrect.push(true);
+			else iscorrect.push(false);
+		});
+
+		var resp = QollstionnaireResponses.findOne({qollstionnaireid : qsnrid, usrid : this.userId});
+
+		if (!resp) {
+			//create a new response
+			var newentry;
+			newentry = {
+				qollstionnaireid : qsnrid,
+				usrid : usrid,
+				responses : {}
+			};
+			newentry.responses['' + qoll._id + ''] = {
+				submittedOn : new Date(),
+				response : fib,
+				type : QollConstants.QOLL_TYPE.BLANK,
+				iscorrect : iscorrect
+			};
+
+			return QollstionnaireResponses.insert(newentry);
+		} else {
+			if (resp.responses['' + qollId]) {//this qoll id exists
+
+				var updatepaths;
+				updatepaths = {};
+				updatepaths['responses.' + qollId + '.response'] = fib;
+				updatepaths['responses.' + qollId + '.submittedOn'] = new Date();
+				updatepaths['responses.' + qollId + '.iscorrect'] = iscorrect;
+				return QollstionnaireResponses.update({ _id : resp._id }, { $set : updatepaths });
+
+			} else {//this qollid doesnt exist
+				var newresponse;
+				newresponse = {};
+				newresponse = {
+					submittedOn : new Date(),
+					response : fib,
+					type : QollConstants.QOLL_TYPE.BLANK,
+					iscorrect : iscorrect
+				};
+				var updatepaths;
+				updatepaths = {};
+				updatepaths['responses.' + qollId] = newresponse;
+				return QollstionnaireResponses.update({ _id : resp._id }, { $set : updatepaths });
+
 			}
 		}
-		return qollRegId;
+
 	},
 });
 
@@ -343,4 +422,37 @@ findQollRegisters = function(submittedBy, qollId) {
 	} else {
 		return CoreUtils.getUint8Array(0);
 	}
+};
+
+
+//Initialize 
+var createRespObject = function(qsnrid, usrid, type, qoll, qollTypeIx, usedHint) {
+	var iscorrect = undefined;
+	var resp_array;
+	resp_array = new Array(qoll.qollTypes.length);
+	if(qollTypeIx != undefined) resp_array[qollTypeIx] = true;
+	if (type == QollConstants.QOLL.TYPE.SINGLE) {
+		if(qollTypeIx!=undefined) {
+			iscorrect = qoll.qollTypesX.reduce(function(previousValue, currentValue, index, array) {
+				if (currentValue.index == qollTypeIx && currentValue.isCorrect)
+					return true;
+				return previousValue;
+			}, false);
+		}
+	}
+	//create a new response
+	var newentry;
+	newentry = {
+		qollstionnaireid : qsnrid,
+		usrid : usrid,
+		responses : {}
+	};
+	newentry.responses['' + qoll._id + ''] = {
+		submittedOn : new Date(),
+		response : resp_array,
+		type : type,
+		iscorrect : iscorrect,
+		usedHint : usedHint
+	};
+	return QollstionnaireResponses.insert(newentry);
 };

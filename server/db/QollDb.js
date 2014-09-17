@@ -21,60 +21,44 @@ Meteor.methods({
 		return qollId;
 	},
 	
-	addQoll : function(action, qollText, qollTypes, qollTypesX, isMultiple, qollRawId, qollMasterId, emails, isparent, parentid, tags, attributes, qollStarAttributes, qollAttributes, qollFormat,qollIdtoUpdate) {
-		/** Moved to questionnaire **
-		var newQtype = {};
-		var i = 0, actualmails = [], actualgroups = [];
+	/**
+	* Qoll Data will have the following attributes in the end
+	* qollData = ( QollConstants.EDU.FIB, QollConstants.EDU.CAT, QollConstants.EDU.TITLE, QollConstants.EDU.TEXT, QollConstants.EDU.FIB,
+	*						QollConstants.EDU.ANSWER, QollConstants.EDU.HINT, QollConstants.EDU.UNIT_NAME, QollConstants.EDU.UNITS,
+	*						types, typesX, visibility, complexity, isMultiple ) 
+	**/
+	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate) {
+		var collection_forqoll = Qoll; 
 
-		for ( i = 0; i < (emails || []).length; i++) {
-			if (emails[i].indexOf('@') > -1) {
-				actualmails.push(emails[i]);
-			} else {
-				actualgroups.push(emails[i]);
-			}
-		}
-		
-		var qollTypeIx = 0;
-		var stats = qollTypes.map(function(qtype) {
-			newQtype[qollTypeIx + ''] = 0;
-			qollTypeIx += 1;
-		});
-		**/
-
-		var collection_forqoll = Qoll; //Probably not required but keeping it for now
-		/** Moved to questionnaire **
-		if (actualmails.length == 1 && actualmails[0] == 'qbank@qoll.io') {
-			collection_forqoll = QBank;
-		}
-		**/
 		var qoll_to_insert = {
 			'action' : action,
-			'qollText' : qollText,
-			'isMultiple' : isMultiple,
-			'qollTypes' : qollTypes,
-			'qollTypesX' : qollTypesX,
-			'qollStarAttributes' : qollStarAttributes,
-			'qollAttributes' : qollAttributes,
-			//'stats' : newQtype, /** Stats at qoll level will be thought later **/
-			//'submittedToGroup' : actualgroups, /** Moved to questionnaire **/
+			'title' : qollData[QollConstants.EDU.TITLE],
+			'qollText' : qollData[QollConstants.EDU.TEXT],
+			'cat' : qollData[QollConstants.EDU.CAT],
+			'answer' : qollData[QollConstants.EDU.ANSWER],
+			'fib' : qollData[QollConstants.EDU.FIB],
+			'hint' : qollData[QollConstants.EDU.HINT],
+			'unit_name' : qollData[QollConstants.EDU.UNIT_NAME],
+			'unit' : qollData[QollConstants.EDU.UNITS],
+			//'qollText' : qollText,
+			'isMultiple' : qollData.isMultiple,
+			'qollTypes' : qollData.types,
+			'qollTypesX' : qollData.typesX,
+			'visibility' : qollData.visibility,
+			'complexity' : qollData.complexity,
+			//'qollStarAttributes' : qollStarAttributes,
+			//'qollAttributes' : qollAttributes,
 			'submittedOn' : new Date(),
 			'submittedBy' : Meteor.userId(),
 			'submittedByEmail' : getCurrentEmail,
-			//'submittedTo' : actualmails, /** Moved to questionnaire **/
 			'qollRawId' : qollRawId,
 			'qollMasterId' : qollMasterId,
 			'tags' : tags,
-			'attributes' : attributes,
+			//'attributes' : attributes,
 			'qollFormat' : qollFormat
 		};
-		/** Removing the circular relationship **
-		if (isparent) {
-			qoll_to_insert.is_parent = true;
-		}
-		if (parentid) {
-			qoll_to_insert.parentId = parentid;
-		}
-		**/
+
 		var qollId;
 		if(!qollIdtoUpdate){
 			qlog.info('ABOUT to insert with updateid - ' + qollIdtoUpdate, filename);
@@ -194,6 +178,8 @@ Meteor.methods({
 
 		//Store the tags
 		var err_msg = QollTagsDb.storeTags(tags);
+
+		qlog.info('This is the editor content - ' + qollText, filename);
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT});
 

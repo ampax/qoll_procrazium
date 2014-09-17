@@ -5,7 +5,6 @@
       "font-awesome": {},
       "inspector": {},
       "chartjs": {},
-      "HTML5-History-API": {},
       "page-js-ie-support": {},
       "jquery-ui": {},
       "ace-embed": {},
@@ -38,11 +37,6 @@
         "git": "https://github.com/donskifarrell/meteor-chartjs.git",
         "tag": "v0.0.6",
         "commit": "7999ee282dc6302806c421607ecd9248d160c6e7"
-      },
-      "HTML5-History-API": {
-        "git": "https://github.com/tmeasday/meteor-HTML5-History-API.git",
-        "tag": "v4.1.2",
-        "commit": "b5fca79f9ae8936e5f748a04f475295f4fa1cc7a"
       },
       "page-js-ie-support": {
         "git": "https://github.com/tmeasday/meteor-page-js-ie-support.git",

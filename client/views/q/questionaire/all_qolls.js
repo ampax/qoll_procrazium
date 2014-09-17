@@ -139,8 +139,9 @@ Template.all_qolls.events({
 		qlog.info('Printing whether the checkbox is selected ' + isChecked, filename);
 		if(isChecked) {//If this is already selected, we are adding a new qoll
 			var qollText = this.qollText;
+			var qollTitle = this.qollTitle;
 			var qollTypesX = this.qollTypesX;
-			var html = QollClientSide.previewQollHtml([{qollId : qollId, title : 'No title', qoll : qollText, types : qollTypesX}]);
+			var html = QollClientSide.previewQollHtml([{qollId : qollId, qollTitle : qollTitle, qollText : qollText, types : qollTypesX}]);
 			//qlog.info('The html is: ' + html, filename);
 			//qlog.info('Printed the qoll-selection checkbox - ' + qollId + '/' + qollText + '/' + qollTypesX, filename);
 			qlog.info('adding this qoll - ' + qollId, filename);

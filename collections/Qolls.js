@@ -19,6 +19,7 @@ IStoredQuestionaire = new Meteor.Collection("stored-by-me-questionaire");
 IReceivedQuestionaire = new Meteor.Collection("recvd-questionaire");
 QollForQuestionaireId = new Meteor.Collection("qoll-for-questionaire-id");
 QuestionaireForId = new Meteor.Collection("questionaire-for-id");
+QuestionaireProgress = new Meteor.Collection("questionaire-progress");
 
 //All published collections
 /****

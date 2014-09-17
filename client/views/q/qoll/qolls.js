@@ -330,33 +330,26 @@ Template.qolls_inner.events({
 	'click span.register-blank' : function(event) {
 		event.preventDefault();
 
-		var qollAttributes = this.qollAttributes;
-		var qollStarAttributes = this.qollStarAttributes;
+		//var qollAttributes = this.qollAttributes;
+		//var qollStarAttributes = this.qollStarAttributes;
 
 		var clk = $(event.target);
 
-		var qollId = this._id;
+		var qollId = this.q._id;
+		var qollstionnaireId = this.q._qollstionnaireid;
 		var blank_resp = clk.parent().find('input#number').val();
 		var power = clk.parent().find('input#power').val();
 		var unit_selected = $('div#' + qollId + ' input[name="unit"]:checked').val();
 		qlog.info('Will register the blank response here - ' + qollId + '/**' + blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
 
-		var blankRespHash = {};
-		if (qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL) {
-			blankRespHash.blankResponse = Number(blank_resp);
-			blankRespHash.power = parseInt((power));
-			blankRespHash.unitSelected = unit_selected;
-		} else if (qollAttributes && qollAttributes.type === QollConstants.QOLL_TYPE.BLANK) {
-			blankRespHash.blankResponse = blank_resp;
-			if (power)
-				blankRespHash.unitSelected = Number(power);
-			if (unit_selected)
-				blankRespHash.unitSelected = unit_selected;
-		} else {
-			blankRespHash.blankResponse = blank_resp;
-			blankRespHash.power = Number(power);
-			blankRespHash.unitSelected = unit_selected;
-		}
+		var fib = [];
+		clk.parent().find('input.textbox').each(function(indx){
+			fib.push($(this).val());
+		});
+
+		qlog.info('All the fibs are - ' + fib.join(' $ ') + ', qollId - ' + qollId + ', qollstionnaireId - ' + qollstionnaireId);
+
+		//return;
 
 		/**
 		 blank answer wth no unit
@@ -365,43 +358,8 @@ Template.qolls_inner.events({
 		 blank-dbl answer with unit
 		 **/
 		var err_msgs = [];
-		var units = qollStarAttributes[QollConstants.EDU.UNITS];
 
-		//if(units == undefined || units && units.length === 0) return '';
-
-		if (units != undefined && units.length > 0 && qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type) && (unit_selected == undefined || blank_resp == undefined || blank_resp === '')) {
-			//TODO: Handle units defined but no unit selected or no blank response provided or both case
-			if (unit_selected == undefined)
-				err_msgs.push('Unit');
-			if (blank_resp == undefined || blank_resp === '') {
-				if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK)
-					err_msgs.push('Value');
-				if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL)
-					err_msgs.push('Coefficient');
-			}
-		} else if ((units == undefined || units && units.length == 0) && qollAttributes && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type) && (blank_resp == undefined || blank_resp === '')) {
-			//TODO: Handle no units and blank responses issue here
-			if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK)
-				err_msgs.push('Value');
-			if (qollAttributes.type === QollConstants.QOLL_TYPE.BLANK_DBL)
-				err_msgs.push('Coefficient');
-		}
-
-		if (err_msgs.length > 0) {
-			var saved_target = clk.parent().find('span.err-msg');
-			var err_msg = err_msgs.length > 1 ? err_msgs.join(' & ') : err_msgs[0];
-			saved_target.html('Input ' + err_msg + ' to register response ...');
-			saved_target.fadeOut(8400, function() {
-				saved_target.html('');
-				saved_target.removeAttr("style");
-			});
-			return;
-		}
-
-		if (isNaN(blankRespHash.power))
-			blankRespHash.power = 0;
-
-		Meteor.call('registerQollBlankResponse', qollId, blankRespHash, function(err, qollRegId) {
+		Meteor.call('registerQollBlankResponse', qollstionnaireId, qollId, fib, function(err, qollRegId) {
 			if (err) {
 				qlog.error('Failed registering the blank-qoll: ' + qollId + ' : ' + err, filename);
 			} else {
@@ -521,6 +479,25 @@ Template.qolls_inner.events({
 		qlog.info('******************Generating chart now at location: ' + chart_id, filename);
 		var str = chartStats(this, ctx, "div.chartStats" + this._id);
 		return;
+	},
+	'click button#show_hint' : function(event) {
+		event.preventDefault();
+		var target = $(event.target);
+		qlog.info('show hint clicked', filename);
+		target.parent().find('div#hint').removeClass('is-invisible');
+
+		var qollId = this.q._id;
+		var qollstionnaireId = this.q._qollstionnaireid;
+
+		qlog.info('qollid/qollstionnaireId ' + qollId + '/' + qollstionnaireId);
+		
+		Meteor.call('registerHint', qollId, qollstionnaireId, function(err, qollstid) {
+			if (err) {
+				qlog.error('Failed registering hint: ' + qollId + ' : ' + err, filename);
+			} else {
+				qlog.info('Used hint for the qoll ... ', filename);
+			}
+		});
 	}
 });
 

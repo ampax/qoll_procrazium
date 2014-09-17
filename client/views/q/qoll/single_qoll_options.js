@@ -6,12 +6,23 @@ Template.single_qoll_options.helpers({
 		//qlog.info('GOT IX 2' + idx, filename);
 		return alphabetical[idx];
 	},
-	qoll_abbr_class : function(idx) {
+	qoll_abbr_class : function(idx, context) {
 		//qlog.info('GOT IX ' + idx, filename);
-		return "class_" + idx;
+		console.log(context);
+		if(context === QollConstants.CONTEXT.WRITE){
+			return "class_" + idx;
+		} else {
+			return 'white_bg_5';
+		}
+	},
+	get_qoll_resp_class : function(context) {
+		console.log(context);
+		if(context === QollConstants.CONTEXT.WRITE) {
+			return 'qoll-response-val';
+		} else return 'qoll-response-val-none';
 	},
 	check_selected : function(qollid, qollTypeIx) {
-		qlog.info('Testing responce for : ' + qollid + '/' + this._id + ' and index ' + qollTypeIx, filename);
+		//qlog.info('Testing responce for : ' + qollid + '/' + this._id + ' and index ' + qollTypeIx, filename);
 		var retval = '';
 		return retval;
 	},
@@ -33,15 +44,19 @@ Template.single_qoll_options.helpers({
 		if (qollTypeReg[idx] === 1)
 			return 'border-selected';
 	},
-	is_correct_answer : function(qollTypesX, idx) {
+	is_correct_answer : function(qollTypesX, idx, context) {
+		if(context === QollConstants.CONTEXT.WRITE) return false;
+
 		if (qollTypesX == undefined)
 			return false;
 		if (qollTypesX[idx].isCorrect) {
 			return true;
 		}
+		
 		return false;
 	},
-	is_not_blank_type : function(qollAttributes) {
+	is_not_blank_type : function(cat) {
+		//qlog.info('category ------------- ' + cat, filename);
 		return true;
 		if (!HashUtil.checkHash(qollAttributes, 'type') && this.qollTypes && this.qollTypes.length > 1) {
 			return true;
@@ -49,12 +64,34 @@ Template.single_qoll_options.helpers({
 
 		return HashUtil.checkHash(qollAttributes, 'type') && !_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
 	},
-	is_blank_type : function(qollAttributes) {
-		return HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type);
+	is_blank_type : function(cat) {
+		//console.info('hghghghghghghghgg -------- ' + cat, filename);
+		return _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], cat);
 	},
-	get_qoll_type : function(qollType, qollAttributes, myAnswers) {
+	transform_txt : function(txt, cat, myanswer) {
+		//return txt;
+		if(cat != QollConstants.QOLL_TYPE.BLANK)
+			return txt;
+
+		if(txt.match(QollRegEx.fib_transf))
+			qlog.info('hell this is printed', filename);
+
+		while (matches = QollRegEx.fib_transf.exec(txt)) {
+			//qlog.info('matches - ' + matches, filename);
+			var idx = matches[0].substring(1, matches[0].length-1);
+			idx = Number(idx)+1;
+            //qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+            txt = txt.replace(matches[0], '<input class="textbox fib" type="text" placeholder='+idx+':>');
+            //cntr++;
+            //qlog.info('##############=> ' + idx, filename);
+            //break;
+        }
+
+		return txt;
+	},
+	get_qoll_type : function(qollType, cat, myAnswers) {
 		//qlog.info('Printing myAnswers - ' + JSON.stringify(myAnswers), filename);
-		if (HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
+		/**if (HashUtil.checkHash(qollAttributes, 'type') && _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qollAttributes.type)) {
 			var qollTypeVal = this.qollTypeVal;
 			var fillVal, fillPow;
 			if (qollTypeVal) {
@@ -68,7 +105,7 @@ Template.single_qoll_options.helpers({
 			} else if (qollType === "?=") {
 				qollType = qollType.replace(/\?\=/g, getFillInTheBlanksSimpleHtml(fillVal));
 			}
-		}
+		}**/
 
 		return qollType;
 	},
@@ -77,7 +114,19 @@ Template.single_qoll_options.helpers({
 			//qlog.info("LOOKUP VALUE AT "+ JSON.stringify(obj) , filename);
 			return obj ? obj[val] : obj;
 		}
-	}
+	},
+	get_register_class : function(context) {
+		console.log(context);
+		if(context === QollConstants.CONTEXT.READ) {
+			return 'register-blank-none';
+		} else return 'register-blank';
+	},
+	get_register_bg_class : function(context) {
+		console.log(context);
+		if(context === QollConstants.CONTEXT.READ) {
+			return 'white_bg_5';
+		} else return 'green_bg_1';
+	},
 });
 
 

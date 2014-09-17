@@ -5,5 +5,23 @@ Template.view_inbox_board.helpers({
 	},
 	questionaire : function() {
 		return QuestionaireForId.findOne();
+	},
+	progress : function() {
+		return QuestionaireProgress.findOne();
 	}
 });
+
+
+Template.progress_bar.rendered = function(){
+	$( "#progressbar" ).progressbar({
+      value: 37
+    });
+
+    /**if ($(this).scrollTop() > 135) {
+	    $('#progressbar').addClass('fixed');
+	} else {
+	    $('#progressbar').removeClass('fixed');
+	}**/
+
+    //$("#progressbar").sticky({topSpacing:0})
+};

@@ -27,18 +27,24 @@
 						<div class="col-md-5 col-xs-12 list-group-item-align">
 							Title: {{questionaire.title}} ({{questionaire.qoll_count}})
 						</div>
-						<div class='col-md-4 col-xs-0 list-group-item-align'>&nbsp;</div>
-						<div class="col-md-1 col-xs-12 list-group-item-align">
+						<!--div class='col-md-6 col-xs-12 list-group-item-align'>{{> progress_bar}}</div-->
+						<div class="col-md-6 col-xs-12 list-group-item-align">
 							&nbsp;
 						</div>
-						<div class="col-md-1 col-xs-12 list-group-item-align">
+						<!--div class="col-md-1 col-xs-12 list-group-item-align">
 							&nbsp;
-						</div>
+						</div-->
 					</div><!-- list-group-item list-group-item-heading -->
+
+					<div class='col-md-12 col-xs-12 list-group-item-align'>{{> progress_bar}} - {{progress}}</div>
 
 				</div><!-- /row-->
 				{{> qolls_inner qollList = this.qollList  btns= inbox_board_btns }}
 			</div>
 		</div>
 	</div>
+</template>
+
+<template name="progress_bar">
+	<div id="progressbar"></div>
 </template>

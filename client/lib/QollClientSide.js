@@ -3,7 +3,7 @@ var filename='client/lib/QollClientSide.js';
 QollClientSide = {
 	//TODO
 	previewQollHtml : function(qolls) {
-		qlog.info('Printing preview qoll xxxx ============>' + qolls[0], filename);
+		qlog.info('Printing preview qoll xxxx ============>' + JSON.stringify(qolls[0]), filename);
 		var html = '';
 		qolls.map(function(qoll) {
 			html += "<span class='qoll-container' id='"+qoll.qollId+"_outer"+"'>";
@@ -14,11 +14,9 @@ QollClientSide = {
             // CREATE ROW FOR QOLL TITLE & PTS
             html += '<div class="row">';
                 html += '<div class="col-xs-8">';
-                if (qoll.qoll_star_attributes && qoll.qoll_star_attributes[QollConstants.EDU.TITLE]) {
-                    html += '<h4>' + qoll.qoll_star_attributes[QollConstants.EDU.TITLE] + '</h4>';
-                } else if(qoll.title) {
-                    html += '<h4>' + qoll.title + '</h4>';
-                }
+                if (qoll.qollTitle) {
+                    html += '<h4>' + qoll.qollTitle + '</h4>';
+                } 
                 html += '</div>';
 
                 html += '<div class="col-xs-1"><h4>Pts:</h4></div>';
@@ -30,7 +28,7 @@ QollClientSide = {
             // END OF ROW
             html += '</div>';
 
-			html += '<h5>' + qoll['qoll'] + '</h5>';
+			html += '<h5>' + qoll.qollText + '</h5>';
 
 			var types = qoll['types'];
 			var ans;

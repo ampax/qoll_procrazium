@@ -2,17 +2,27 @@
 	   <div class="col-md-12 col-xs-12 list-group-item qoll-seperator {{#if is_parent}} list-group-item-heading{{/if}} bg-qoll" id='{{_id}}'>
 
       <div class="col-md-10 col-xs-12">
-        <h4>{{q.qoll_idx_title}} {{{get_title q.qollStarAttributes}}}</h4>
-        {{#if q.is_parent}} 
-            <a href="/qid/{{_id}}">{{#mathjax}}<h5>{{{get_qoll_txt q.qollText q.qollAttributes}}}</h5>{{/mathjax}}</a>
+        <h4>{{q.qoll_idx_title}} {{{transform_txt q.qollTitle q.cat q.context q.fib}}}</h4>
+
+        <h5>{{#mathjax}}{{{transform_txt q.qollText q.cat q.context q.fib}}}{{/mathjax}}</h5>
+
+        {{{get_units_html q.unit_name q.units}}}
+        <!--{{{get_hint_html q.hint q.context}}}-->
+        {{#if q.hint}}
+          <button type="button" class="btn btn-warning pull-right" data-toggle="tooltip"
+            data-placement="left" title="Partial credit will be deducted..." id="show_hint">Hint
+          </button>
+          <div class="{{get_hint_visibility q.qoll_response.usedHint}} red_1" id="hint">
+            <h5>{{q.hint}} {{#if q.qoll_response.usedHint}} <u>(Already used hint)</u>{{/if}}</h5>
+          </div>
         {{/if}}
 
-        {{#unless is_parent}} 
-            <h5>{{#mathjax}}{{{get_qoll_txt q.qollText q.qollAttributes}}}{{/mathjax}}</h5>
-        {{/unless}}
-
-        {{{get_units_html q.qollStarAttributes}}}
-        {{{get_hint_html q.qollStarAttributes}}}
+        {{#if is_blank_type q.cat}}
+          <!--span id="{{q._id}}" class="badge pull-left register-blank glossy green_bg_1"-->
+          <span id="{{q._id}}" class="badge pull-left {{get_register_class q.context}} glossy {{get_register_bg_class q.context}}">
+            Submit
+          </span>
+        {{/if}}
         <span class="saved-msg green"></span>
       </div>
 
@@ -51,15 +61,6 @@
       {{/each}}
 
       </div>
-      {{#unless q.is_parent}}
-      <div class="col-md-2 col-xs-12">
-        
-        <!--div class="col-md-12 col-xs-12"-->
-          <canvas id="charts{{_id}}" width="100" height="100"></canvas>
-          <div class="chartStats{{_id}} chartStats" id="chartStats{{_id}}"></div>
-        <!--/div-->
-      </div>
-      {{/unless}}
     </div>
     <!-- End of qoll types here -->
  

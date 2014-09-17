@@ -1,34 +1,5 @@
 var filename='server/lib/QollParser.js';
 
-QollRegEx = {
-	num 		: /^[\d.,]+$/,
-	txt			: /^[\w\s.,:;"'=-_\\\(\)\[\]\{\}\^&#!@$*<>]+$/,
-	qoll 		: /^#[\s]*/,
-	qollTxt 	: /^[#\s]+(.*)/gm,
-	hint 		: /^[\s]*[Hh]int[:=-\s]*/,
-	hintTxt 	: /^[\s]*[Hh]int[:=-\s]*(.*)/,
-	note 		: /^[\s]*[Nn]ote[:=-\s]*/,
-	noteTxt 	: /^[\s]*[Nn]ote[:=-\s]*(.*)/,
-	fib 		: /\\_.+\\_/,
-	fibTxt 		: /\\_(.+)\\_/,
-	opt 		: /^-[?=Aa]{0,1}[\s]*/,
-	optTxt 		: /^-[?=Aa]{0,1}[\s]*(.+)/,
-	qollMaster 	: /^#\s(.*)/m,
-	isNum		: function(text){return text.match(QollRegEx.num);},
-	isTxt		: function(text){return text.match(QollRegEx.txt);},
-	isQoll		: function(text){return text.match(QollRegEx.qoll);},
-	isHint		: function(text){return text.match(QollRegEx.hint);},
-	isNote		: function(text){return text.match(QollRegEx.note);},
-	isFib		: function(text){return text.match(QollRegEx.fib);},
-	isOpt		: function(text){return text.match(QollRegEx.opt);},
-	parseQollTxt	: function(text) {return text.split(QollRegEx.qollTxt);},
-	parseHintTxt	: function(text) {return text.match(QollRegEx.hintTxt);},
-	parseNoteTxt	: function(text) {return text.match(QollRegEx.noteTxt);},
-	parseFibTxt		: function(text) {return text.match(QollRegEx.fibTxt);},
-	parseOptTxt		: function(text) {return text.match(QollRegEx.optTxt);},
-	parseQollMaster	: function(text) {return text.match(QollRegEx.qollMaster);},
-}
-
 QollParser = {
 	//Parse the qoll from html editor
 	parseHtml : function(qollMaster) {
@@ -64,6 +35,212 @@ QollParser = {
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
 	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate) {
+        var qollId = new Array();
+        var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
+        qolls = qolls.slice(1);
+
+        qolls.map(function(q){
+        	//qoll: {qollText: qollText, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat}
+            var qollRawId = Qolls.QollRawDb.insert({qollText: q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat});
+            
+
+            var qs = q.split(/\n-/);
+            var qoll = qs[0];
+			var qollType = QollConstants.QOLL_TYPE.MULTI; //multi is by default
+			var qoll_data = {};
+            var types = new Array();
+            var typesX = new Array();
+            qoll_data[QollConstants.EDU.FIB] = [];
+		
+
+			//fetch the qoll level attributes here. split the qoll string on * and then apply
+	        //qlog.info('<==============Printing qoll===============>'+qoll, filename);
+	        
+
+	        //fetch the qoll level attributes here. split the qoll string on * and then apply
+            var qoll_parts = qoll.split(/\n\s*\*/);
+            qlog.info('<==============***Printing qoll***===============>'+qoll + '/' + qoll_parts.length, filename);
+            var cntr =0;
+            var foundTitle=0;
+            qoll_parts.map(function(part){
+                //qlog.info('---------------------------> ' + part, filename);
+                if(foundTitle ==0) {
+                    foundTitle = 1;
+                    qlog.info('This is text/title -> ' + part, filename);
+                    part = part.replace(QollRegEx.qoll, '');
+
+                    if(part.match(QollRegEx.fib)) {
+                        var matches;
+                        qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
+                        while (matches = QollRegEx.fib.exec(part)) {
+                            qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+                            part = part.replace(QollRegEx.fib_replace, '{'+cntr+'}');
+                            cntr++;
+                            qlog.info('##############=> ' + cntr, filename);
+                        }
+                    }
+
+                    qoll_data[QollConstants.EDU.TITLE] = part;
+                    qoll_data[QollConstants.EDU.TEXT] = qoll_data[QollConstants.EDU.TITLE];
+                    qoll = qoll_data[QollConstants.EDU.TITLE];
+                } else if(part.match(QollRegEx.txt)) {
+                    qlog.info('This is text -> ' + part, filename);
+                    part = part.replace(QollRegEx.txt, '');
+
+                    if(part.match(QollRegEx.fib)) {
+                        var matches;
+                        qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
+                        while (matches = QollRegEx.fib.exec(part)) {
+                            qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+                            part = part.replace(QollRegEx.fib_replace, '{'+cntr+'}');
+                            cntr++;
+                            qlog.info('##############=> ' + cntr, filename);
+                        }
+                    }
+
+                    qoll_data[QollConstants.EDU.TEXT] = part;
+                } else if(part.match(QollRegEx.answer)) {
+                    qlog.info('This is answer -> ' + part, filename);
+                    qoll_data[QollConstants.EDU.ANSWER] = part.replace(QollRegEx.answer, '');
+                } else if(part.match(QollRegEx.hint)) {
+                    qlog.info('This is hint -> ' + part, filename);
+                    qoll_data[QollConstants.EDU.HINT] = part.replace(QollRegEx.hint, '');
+                } else if(part.match(QollRegEx.unit)) {
+                    part = part.replace(QollRegEx.unit, '');
+                    qlog.info('This is unit -> ' + part, filename);
+
+                    if(part.indexOf(":") != -1) {
+                        var tmp = part.split(":");
+                        qoll_data[QollConstants.EDU.UNIT_NAME] = tmp[0];
+                        part = tmp[1];
+                    }
+                    qoll_data[QollConstants.EDU.UNITS] = new Array();
+                    part.split(/(?:,| )+/).map(function(tmp1){
+                        if(tmp1.length > 0) qoll_data[QollConstants.EDU.UNITS].push(tmp1);
+                        qlog.info('############## unit => ' + tmp1, filename);
+                    });
+
+                    //qoll_star_attributes[QollConstants.EDU.UNITS] = part.replace(QollRegEx.unit, '');
+                } else {
+                    qlog.info('##############=> ' + part, filename);
+                }
+            });
+
+			var ix =0; ix =0;
+            qs.slice(1).map(function(type){
+                var x = {index:ix};
+                x.isCorrect = 0;
+                ix =ix+1;
+                type = type.trim();
+
+                if(type.match(QollRegEx.fib)) {
+                    var matches;
+                    while (matches = QollRegEx.fib.exec(type)) {
+                        qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+                        type = type.replace(QollRegEx.fib_replace, '{'+cntr+'}');
+                        cntr++;
+                        qlog.info('##############=> ' + cntr, filename);
+                    }
+                }
+
+                if(type.indexOf('(a)') == 0) {
+				    type = type.replace('(a)', '');
+				    type = DownTown.downtown(type, DownTownOptions.downtown_default());
+				    x.isCorrect = 1;
+				    qoll_data.answer_matched = 1;
+				    
+				} else {
+				    type = DownTown.downtown(type, DownTownOptions.downtown_default());
+				    if(qoll_data[QollConstants.EDU.ANSWER] && qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans)) {
+				        var index = -1;
+				        if(!qoll_data[QollConstants.EDU.ANSWER].match(/\d/)) {
+				            index = qoll_data[QollConstants.EDU.ANSWER].charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+				        } else {
+				            index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
+				        }
+				        
+				        if(index === ix) {
+				            x.isCorrect = 1;
+				            qoll_data.answer_matched = 1;
+				        }
+				    }
+				    else if(type === qoll_data[QollConstants.EDU.ANSWER]) {
+				        x.isCorrect = 1;
+				        qoll_data.answer_matched = 1;
+				    }
+				}
+
+                x.type = type;
+
+                types.push(type);
+                typesX.push(x);
+            });
+
+			qoll_data.types = types;
+			qoll_data.typesX = typesX;
+			qoll_data.visibility = visibility;
+			qoll_data.complexity = QollConstants.QOLL.DIFFICULTY.EASY;
+			qoll_data.isMultiple = false;
+
+			if(types && types.length === 2) {
+				var foundTrue = false, foundFalse = false;
+				types.map(function(t){
+					if(_.contains(['1', 'true', 'True', 'TRUE'], t.type))
+						foundTrue = true;
+
+					if(_.contains(['0', 'false', 'False', 'FALSE'], t.type))
+						foundFalse = true;
+				});
+
+				if(foundTrue && foundFalse)
+					qollType = QollConstants.QOLL_TYPE.BOOL;
+
+				qoll_data.isMultiple = true;
+			}
+            else if(types && types.length === 1) qollType = QollConstants.QOLL.TYPE.SINGLE;
+            else if(types && types.length > 1) {
+            	qollType = QollConstants.QOLL.TYPE.MULTIPLE; //isMultiple = true;
+            	qoll_data.isMultiple = true;
+            } else if(types && types.length === 0) qollType = QollConstants.QOLL_TYPE.NO_CHOICE;
+
+            if(qoll_data[QollConstants.EDU.CAT] === undefined)
+            	qoll_data[QollConstants.EDU.CAT] = qollType;
+
+            qlog.info('##########=>'+JSON.stringify(qoll_data), filename);
+
+			//var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups 
+			//	,undefined, undefined,  tags, attributes, qollStarAttributes, qollAttributes, qollFormat,qollIdtoUpdate);
+
+			/**
+			* Qoll Data will have the following attributes in the end
+			* qoll_data = ( QollConstants.EDU.FIB, QollConstants.EDU.CAT, QollConstants.EDU.TITLE, QollConstants.EDU.TEXT,
+			*						QollConstants.EDU.ANSWER, QollConstants.EDU.HINT, QollConstants.EDU.UNIT_NAME, QollConstants.EDU.UNITS,
+			*						types, typesX, visibility, complexity, isMultiple ) 
+			**/
+			//function(action, qollData qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate)
+			var qid = Meteor.call('addQoll', action, qoll_data, qollRawId, qollMasterId, emailsandgroups,
+										undefined, undefined,  tags, qollFormat, qollIdtoUpdate);
+			/**	qoll, 
+				types, 
+				typesX, 
+				isMultiple, 
+				qollRawId, qollMasterId, emailsandgroups 
+				,undefined, undefined,  tags, 
+				attributes, 
+				qollStarAttributes, 
+				qollAttributes, 
+				qollFormat, qollIdtoUpdate, qoll_star_attributes);**/
+
+			qollId.push(qid);
+
+
+			//**** Above this is the new code
+        });
+
+      qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
+      return qollId;
+	},
+	addQollsForMaster_bkp : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate) {
         var regExAnser = /^(a)\s+/;
         var regExNoAnser = /^\s+/;
         var qollId = new Array();

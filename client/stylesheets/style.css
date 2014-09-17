@@ -559,6 +559,10 @@ span.qoll-toolbar-plain {
     border-color: #006699;
 }
 
+.qoll-response-val {
+    cursor: pointer;
+}
+
 .qoll-response-val:hover {
     background-color: orange;
 }
@@ -679,5 +683,26 @@ text-overflow: ellipsis;
 
 .qoll-width-1 {
     width: 9.8em !important;
+}
+
+input.fib { 
+    height: 25px; 
+    width: 75px; 
+    background-color: transparent;  
+    border-style: solid;  
+    border-width: 0px 0px 1px 0px;  
+    border-color: #999999; /**darkred; **/
+    outline:0; 
+}
+
+input.fib_write {
+    color: #003366;
+    font-weight: bolder;
+}
+
+input.fib_correct {
+}
+
+input.fib_wrong {
 }
 /* End: Basic styling for html elements for Qoll */

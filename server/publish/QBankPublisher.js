@@ -22,14 +22,18 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 				added : function(item, idx) {
 					qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
 					var q = {
-						qollTitle : item.qollTitle,
- 						qollText : item.qollText,
- 						submittedOn : item.submittedOn,
- 						viewContext : "createUsr",
- 						_id : item._id,
-						qollRawId : item.qollRawId,
-						qollTypesX : item.qollTypesX,
-						attributes : item.attributes
+						qollTitle 		: item.title,
+ 						qollText 		: item.qollText,
+ 						submittedOn 	: item.submittedOn,
+ 						viewContext 	: "createUsr",
+ 						_id 			: item._id,
+						qollRawId 		: item.qollRawId,
+						qollTypesX 		: item.qollTypesX,
+						cat 			: item.cat,
+						unit_name 		: item.unit_name,
+						unit 			: item.unit,
+						visibility 		: item.visibility,
+						complexity 		: item.complexity,
 					};
 
 					self.added('qbank_summary', item._id, q);
@@ -38,14 +42,18 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 				changed : function(item, idx) {
 
 					var q = {
-						qollTitle : item.qollTitle,
- 						qollText : item.qollText,
- 						submittedOn : item.submittedOn,
- 						viewContext : "createUsr",
- 						_id : item._id,
-						qollRawId : item.qollRawId,
-						qollTypesX : item.qollTypesX,
-						attributes : item.attributes
+						qollTitle 		: item.title,
+ 						qollText 		: item.qollText,
+ 						submittedOn 	: item.submittedOn,
+ 						viewContext 	: "createUsr",
+ 						_id 			: item._id,
+						qollRawId 		: item.qollRawId,
+						qollTypesX 		: item.qollTypesX,
+						cat 			: item.cat,
+						unit_name 		: item.unit_name,
+						unit 			: item.unit,
+						visibility 		: item.visibility,
+						complexity 		: item.complexity,
 					};
 
 					self.changed('qbank_summary', item._id, q);
@@ -343,18 +351,30 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						var q = Qoll.find({_id : qid}).map(function(t){
 							var thisresponse; 
 							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
 							
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
-							q2.qoll_idx_title = 'Q'+counter++;
+							q2.qoll_idx_title = '(Q'+counter+++')';
+							q2.context = findoptions.context;
+							q2.qoll_response = response;
+
+							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
+								if(response != undefined)
+									q2.fib = response.response;
+								else q2.fib = [];
+							}
+
+							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
+
 							qolls.push(q2);
 						});
 					});
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length};
 
-					qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
+					//qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
 
 					self.added('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
 				},
@@ -366,18 +386,30 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						var q = Qoll.find({_id : qid}).map(function(t){
 							var thisresponse; 
 							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
 							
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
-							q2.qoll_idx_title = 'Q'+counter++;
+							q2.qoll_idx_title = '(Q'+counter+++')';
+							q2.context = findoptions.context;
+							q2.qoll_response = response;
+
+							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
+								if(response != undefined)
+									q2.fib = response.response;
+								else q2.fib = [];
+							}
+
+							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
+
 							qolls.push(q2);
 						});
 					});
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length};
 
-					qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
+					//qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
 
 					self.changed('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
 				},
@@ -398,6 +430,54 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 	});
 });
 
+Meteor.publish('QUESTIONAIRE_PROGRESS_PUBLISHER', function(findoptions) {
+	var user_id = this.userId;
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var handle_questionaires;
+
+	if (user_id) {
+		//Check for existing user record
+		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		if (ufound.length > 0) {
+			var counter = 0;
+			handle_questionaires = QollstionnaireResponses.find({ qollstionnaireid : findoptions._id, usrid : user_id }).observe({
+				added : function(item, idx){
+					counter++;
+					self.added('questionaire-progress', findoptions._id, {progress : counter});
+				}/**,
+				changed : function(item, idx) {
+					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
+							recips_count : item.submittedTo.length, submitted_on : item.submittedOn};
+
+					if(findoptions.stats){
+						var r = getQuestionnaireResponses(item);
+						questionaire.stats = r.stats;
+						questionaire.stats_labels = r.labels;
+						questionaire.respo_length = r.respo_length;
+						questionaire.recip_length = r.recip_length;
+					}
+
+					self.changed('questionaire-for-id', item._id, questionaire);
+				},
+				removed : function(item){
+					self.removed('questionaire-for-id', item._id);
+				}**/
+			});
+			//self.added('questionaire-progress', findoptions._id, {progress : counter});
+		}
+	}
+
+	qlog.info('Done initializing the questionaire-progress: QUESTIONAIRE_PROGRESS_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle_questionaires != undefined) handle_questionaires.stop();
+	});
+});
 
 var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 	//qlog.info('<=======This is the qoll we will use for fill in the blanks========>' + JSON.stringify(q), filename);
@@ -407,10 +487,13 @@ var fetchQollPublishDetails = function(qollSt, q, qollReg, user) {
 	stat['qollst'] = qollSt.qollText.length > 27 ? qollSt.qollText.substring(0,27) + '...' : qollSt.qollText;
 	stat['qoll_snip'] = q.qollText.length > 47 ? q.qollText.substring(0,47) + '...' : q.qollText;
 	stat['qoll'] = q.qollText;
-	stat['is_multiple'] = q.qollAttributes && q.qollAttributes.type ? 
-		(q.qollAttributes.type === QollConstants.QOLL_TYPE.MULTI ? true : false) : false;
-	stat['qoll_type'] = q.qollAttributes && q.qollAttributes.type ? q.qollAttributes.type : '';
-	stat['star_attributes'] = q.qollStarAttributes;
+	stat['is_multiple'] = q.cat ? (q.cat === QollConstants.QOLL_TYPE.MULTI ? true : false) : false;
+	stat['qoll_type'] = q.cat ? q.cat : '';
+	stat['cat'] = q.cat;
+	stat['unit_name'] = q.unit_name;
+	stat['unit'] = q.unit;
+	stat['visibility'] = q.visibility;
+	stat['complexity'] = q.complexity;
 
 	//Set the correct answers for the qolls (if assigned from the editor)
 	stat.correct_answers = new Array();
@@ -552,12 +635,21 @@ var translateToIndexedArray = function ( ar){
 
 var extractQollDetails = function(q) {
 	return {
-		qollTitle 		: q.qollTitle,
+		qollTitle 		: q.title,
 		qollText 		: q.qollText,
 		qollTypes 		: translateToIndexedArray(q.qollTypes),
 		qollTypesX 		: q.qollTypesX,
-		qollStarAttributes : q.qollStarAttributes ? q.qollStarAttributes : {},
-		qollAttributes 	: q.qollAttributes,
+
+		cat 			: q.cat,
+		answer 			: q.answer,
+		fib 			: q.fib,
+		hint 			: q.hint,
+		unit_name 		: q.unit_name,
+		unit 			: q.unit,
+		visibility 		: q.visibility,
+		complexity 		: q.complexity,
+		//qollStarAttributes : q.qollStarAttributes ? q.qollStarAttributes : {},
+		//qollAttributes 	: q.qollAttributes,
 		submittedOn 	: q.submittedOn,
 		submittedBy 	: q.submittedBy,
 		submittedTo 	: q.submittedTo,
@@ -620,15 +712,20 @@ var getQuestionnaireResponses = function(item) {
 				var attach_resp = [];
 				var rtmp = resp.responses[qid];
 				qlog.info('Printing user - ' + item._id + '//////' +u1[0]._id + '//////' + JSON.stringify(rtmp.response) + '//////' + qid, filename);
-				rtmp.response.map(function(tmp){
-					qlog.info('Printing response ------------>>>>>> ' + tmp + '////' + rtmp.type);
-					if(rtmp.type.toLowerCase() === QollConstants.QOLL_TYPE.MULTI || rtmp.type === QollConstants.QOLL.TYPE.SINGLE) {
-						if(tmp == true || tmp === 'true'){
-							attach_resp.push(IndexAbbreviations.alphabetical[cnt1]);
-						};
-						cnt1++;
-					}
-				});
+				
+				if(rtmp.type.toLowerCase() === QollConstants.QOLL_TYPE.MULTI || rtmp.type === QollConstants.QOLL.TYPE.SINGLE) {
+					rtmp.response.map(function(tmp){
+						qlog.info('Printing response ------------>>>>>> ' + tmp + '////' + rtmp.type);
+						
+							if(tmp == true || tmp === 'true'){
+								attach_resp.push(IndexAbbreviations.alphabetical[cnt1]);
+							};
+							cnt1++;
+						
+					});
+				} else if(rtmp.type.toLowerCase() === QollConstants.QOLL_TYPE.BLANK) {
+					attach_resp.push(rtmp.response);
+				}
 
 				responses.push({'response' : attach_resp.join(', ')});
 				if(!resp_flag) {

@@ -96,6 +96,9 @@ Template.recipient.events({
 			var edtr = ace.edit("aceEditor");
 			var content = edtr.getValue();
 
+			//qlog.info('This is markdown editor content - ' + content, filename);
+			//return;
+
 			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);

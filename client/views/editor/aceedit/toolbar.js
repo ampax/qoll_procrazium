@@ -222,45 +222,39 @@ var preparePreviewHtml = function(qolls) {
 	qolls.map(function(qoll) {
 		html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>";
 
-		if (qoll.qoll_star_attributes[QollConstants.EDU.TITLE]) {
-			html += '<h4>' + qoll.qoll_star_attributes[QollConstants.EDU.TITLE] + '</h4>';
+		if (qoll[QollConstants.EDU.TITLE]) {
+			html += '<h4>' + qoll[QollConstants.EDU.TITLE] + '</h4>';
 		}
 
-		html += '<h5>' + qoll['qoll'] + '</h5>';
+		if(qoll[QollConstants.EDU.TITLE] != qoll[QollConstants.EDU.TEXT])
+			html += '<h5>' + qoll[QollConstants.EDU.TEXT] + '</h5>';
 
 		var types = qoll['types'];
 		var ans;
-		if (qoll.qoll_star_attributes[QollConstants.EDU.ANSWER]) {
-			var answer = qoll.qoll_star_attributes[QollConstants.EDU.ANSWER]
-			if (Object.keys(answer).length === 2) {
-				//Base not provided, default to 10 - *answer 9.8 2 m/sec2
-				//ans = '$$'+answer.blankResponse + '\\times 10^' + answer.power + '\\,' + answer.unitSelected + '$$';
-				ans = answer.blankResponse + ' X 10^' + answer.power;
-			} else if (Object.keys(answer).length === 3) {
-				//Base not provided, default to 10 - *answer 9.8 2 m/sec2
-				//ans = '$$'+answer.blankResponse + '\\times 10^' + answer.power + '\\,' + answer.unitSelected + '$$';
-				ans = answer.blankResponse + ' X 10^' + answer.power + ' ' + answer.unitSelected;
-			} else if (Object.keys(answer).length === 4) {
-				//base provided
-				//ans = '$$'+answer.blankResponse + '\\times '+answer.exponentBase+'^' + answer.power + '\\,' + answer.unitSelected + '$$';
-				ans = answer.blankResponse + ' X ' + answer.exponentBase + '^' + answer.power + ' ' + answer.unitSelected;
-			} else {
-				//ans = '$$' + answer.blankResponse + '$$';
-				ans = answer.blankResponse;
-			}
-			html += '<h5 class="green_1">Answer: ' + ans + '</h5>';
+		if (qoll[QollConstants.EDU.ANSWER] || qoll[QollConstants.EDU.FIB] && qoll[QollConstants.EDU.FIB].length > 0) {
+			var ans_arr = [];
+			if(qoll[QollConstants.EDU.ANSWER])
+				ans_arr.push(qoll[QollConstants.EDU.ANSWER]);
+
+			var cnt = 0;
+			qoll[QollConstants.EDU.FIB].map(function(fb){
+				ans_arr.push('{'+ cnt++ +'} : ' + fb);
+			});
+
+			var ans_class = 'green_1';
+			if(qoll.answer_matched != 1) 
+				ans_class = 'red_1';
+			html += '<h5 class="'+ans_class+'">Answer: ' + ans_arr.join('; ') + '</h5>';
 		} else {
-			//show warning in red so that editor knows answer is not defined
-			if (_.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], qoll.qollType))
-				html += '<h5 class="red_1">Answer: Not Defined (please provide answer for auto-checking)</h5>';
+			html += '<h5 class="red_1">Answer: Not Defined (please provide answer for auto-checking)</h5>';
 		}
 
-		if (qoll.qoll_star_attributes[QollConstants.EDU.UNITS]) {
-			html += getUnitsHtml(qoll.qoll_star_attributes[QollConstants.EDU.UNIT_NAME], qoll.qoll_star_attributes[QollConstants.EDU.UNITS]);
+		if (qoll[QollConstants.EDU.UNITS]) {
+			html += getUnitsHtml(qoll[QollConstants.EDU.UNIT_NAME], qoll[QollConstants.EDU.UNITS]);
 		}
 
-		if (qoll.qoll_star_attributes[QollConstants.EDU.HINT]) {
-			html += getHintHtml(qoll.qoll_star_attributes[QollConstants.EDU.HINT]);
+		if (qoll[QollConstants.EDU.HINT]) {
+			html += getHintHtml(qoll[QollConstants.EDU.HINT]);
 		}
 
 		html += "</div>";
@@ -329,6 +323,7 @@ var getFillInTheBlanksCmplxHtml = function() {
 };
 
 var getUnitsHtml = function(unit_name, units) {
+	qlog.info('Unit name / units - ' + unit_name + '/' + units.join('---'), filename);
 	var units_html = '<div class="input-group">';
 	if (unit_name)
 		units_html += unit_name + ': ';

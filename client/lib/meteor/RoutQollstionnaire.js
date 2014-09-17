@@ -1,9 +1,11 @@
 
 InboxController = RouteController.extend({
 	findOptions : function() {
-		return { sort : { submittedOn : -1 } };
+		return { sort : { submittedOn : -1 }, context : QollConstants.CONTEXT.WRITE };
 	},
-	waitOn : function() {[Meteor.subscribe('RECVD_QUESTIONAIRE_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER'),
+	waitOn : function() {
+		[Meteor.subscribe('RECVD_QUESTIONAIRE_PUBLISHER', this.findOptions()), 
+		Meteor.subscribe('QOLL_REG_PUBLISHER'),
 		Meteor.subscribe('categories'),
     	Meteor.subscribe('Settings'),
     	Meteor.subscribe('currentUser')];
@@ -15,7 +17,7 @@ InboxController = RouteController.extend({
 
 SentController = RouteController.extend({
 	findOptions : function() {
-		return { sort : { submittedOn : -1 } };
+		return { sort : { submittedOn : -1 }, context : QollConstants.CONTEXT.READ };
 	},
 	waitOn : function() {[Meteor.subscribe('SENT_QUESTIONAIRE_PUBLISHER', this.findOptions()),];
 	},
@@ -26,7 +28,7 @@ SentController = RouteController.extend({
 
 DraftController = RouteController.extend({
 	findOptions : function() {
-		return { sort : { submittedOn : -1 } };
+		return { sort : { submittedOn : -1 }, context : QollConstants.CONTEXT.READ };
 	},
 	waitOn : function() {[Meteor.subscribe('STORED_QUESTIONAIRE_PUBLISHER', this.findOptions()),];
 	},
@@ -43,7 +45,8 @@ QollstionnaireController = RouteController.extend({
 			sort : {
 				submittedOn : -1
 			},
-			parentId : this.params.quesid 
+			parentId : this.params.quesid,
+			context : QollConstants.CONTEXT.READ
 		};
 	},
 	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('RECIPIENTS_PUBLISHER')];
@@ -60,12 +63,30 @@ QollstionnaireController = RouteController.extend({
 	}
 });
 
-IdLookUpController = RouteController.extend({
+IdLookUpInboxController = RouteController.extend({
 	findOptions : function() {
 		console.log("looking for  id "+this.params._id );
-		return { sort : { submittedOn : -1 }, _id : this.params._id };
+		return { sort : { submittedOn : -1 }, _id : this.params._id,
+					context : QollConstants.CONTEXT.WRITE  };
 	},
-	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()), 
+	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
+								Meteor.subscribe('QUESTIONAIRE_PROGRESS_PUBLISHER', this.findOptions()), 
+								Meteor.subscribe('RECIPIENTS_PUBLISHER'),
+								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
+	},
+	data : function() {
+		return { qollList : QollForQuestionaireId};
+	}
+});
+
+IdLookUpDraftController = RouteController.extend({
+	findOptions : function() {
+		console.log("looking for  id "+this.params._id );
+		return { sort : { submittedOn : -1 }, _id : this.params._id,
+					context : QollConstants.CONTEXT.READ  };
+	},
+	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
+								Meteor.subscribe('QUESTIONAIRE_PROGRESS_PUBLISHER', this.findOptions()), 
 								Meteor.subscribe('RECIPIENTS_PUBLISHER'),
 								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
 	},
@@ -77,7 +98,8 @@ IdLookUpController = RouteController.extend({
 IdLookUpSentController = RouteController.extend({
 	findOptions : function() {
 		console.log("looking for  id "+this.params._id );
-		return { sort : { submittedOn : -1 }, _id : this.params._id, stats : "yes" };
+		return { sort : { submittedOn : -1 }, _id : this.params._id, stats : "yes",
+					context : QollConstants.CONTEXT.READ };
 	},
 	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
 								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
@@ -90,7 +112,7 @@ IdLookUpSentController = RouteController.extend({
 QollController = RouteController.extend({
     findOptions : function() {
         console.log("looking for  id "+this.params._id );
-        return { sort : { submittedOn : -1 }, singleId : this.params._id };
+        return { sort : { submittedOn : -1 }, singleId : this.params._id, context : QollConstants.CONTEXT.READ };
     },
     waitOn : function() {return [Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions())];
     },
@@ -121,6 +143,26 @@ QollstPerformanceController = FastRender.RouteController.extend({
 	}
 });
 
+QbankController = FastRender.RouteController.extend({
+	waitOn: function(){
+		//Meteor.subscribe('QBANK_PUBLISHER');
+		Meteor.subscribe('QBANK_SUMMARY_PUBLISHER');
+	},
+	onBeforeAction: [function(){
+		[Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), Meteor.subscribe('RECIPIENTS_PUBLISHER'), Meteor.subscribe('QOLL_TAG_PUBLISHER')];
+	}, function(){
+		//this is next in line to the first subscribe function
+		//active_nav();
+	}],
+	onAfterAction: function(){
+		//TODO
+	},
+	data:function(){
+		qlog.info('Printing userid - ' + Meteor.userId(), filename);
+		return {qolls: QbSummary.find({})};
+	},
+});
+
 Router.map(function() {
 	this.route('qid', {
 		template : 'qolls',
@@ -137,7 +179,7 @@ Router.map(function() {
 	this.route('inboxView', {
 		template : 'view_inbox_board',
 		path : '/inbox_board/:_id',
-		controller: IdLookUpController
+		controller: IdLookUpInboxController
 	});
 
 	this.route('view_inbox', {
@@ -163,7 +205,7 @@ Router.map(function() {
 	this.route('draftView', {
 		template : 'view_draft_board',
 		path : '/draft_board/:_id',
-		controller: IdLookUpController,
+		controller: IdLookUpDraftController,
 	});
 	
 	this.route('view_draft', {
@@ -195,6 +237,13 @@ Router.map(function() {
 		template : 'group_performance',
 		path : '/group_performance/:name',
 		controller : QollstPerformanceController,
+	});
+
+	this.route('qollbank', {
+		template: 'qollbank',
+		path: '/qbank',
+		controller : QbankController,
+		
 	});
 
 });

@@ -30,10 +30,7 @@ Template.single_qoll.helpers({
 	get_title : function(qollStarAttributes) {
 		return qollStarAttributes && qollStarAttributes[QollConstants.EDU.TITLE] ? qollStarAttributes[QollConstants.EDU.TITLE] : '';
 	},
-	get_units_html : function(qollStarAttributes) {
-		var unit_name = qollStarAttributes ? qollStarAttributes[QollConstants.EDU.UNIT_NAME] : undefined, 
-		units = qollStarAttributes ? qollStarAttributes[QollConstants.EDU.UNITS] : undefined;
-
+	get_units_html : function(unit_name, units) {
 		if (units == undefined || units && units.length === 0)
 			return '';
 
@@ -55,15 +52,12 @@ Template.single_qoll.helpers({
 
 		return units_html;
 	},
-	get_hint_html : function(qollStarAttributes) {
-		var hint = qollStarAttributes ? qollStarAttributes[QollConstants.EDU.HINT] : undefined;
-
-		if (hint == undefined)
+	get_hint_visibility : function(usedHint, context, hint) {
+		if(usedHint) {
 			return '';
-
-		var hint_html = '<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip" data-placement="left" title="Partial credit will be deducted..." id="show_hint">' + 'Hint' + '</button><div class="is-invisible red_1" id="hint">xyz</div>';
-
-		return hint_html;
+		} else {
+			return 'is-invisible';
+		}
 	},
 	get_qoll_txt : function(qollText, qollAttributes) {
 		//Handle the blank type of questions here
@@ -73,5 +67,60 @@ Template.single_qoll.helpers({
 		}
 
 		return qollText;
-	}	
+	},
+	transform_txt : function(txt, cat, context, fib) {
+		qlog.info('Printing fill in the blanks - ' + fib, filename);
+		if(cat != QollConstants.QOLL_TYPE.BLANK)
+			return txt;
+
+		var disabled = '';
+		if(context === QollConstants.CONTEXT.READ)
+			disabled = 'DISABLED';
+
+		if(txt.match(QollRegEx.fib_transf))
+			qlog.info('hell this is printed', filename);
+
+		while (matches = QollRegEx.fib_transf.exec(txt)) {
+			//qlog.info('matches - ' + matches, filename);
+			var idx = matches[0].substring(1, matches[0].length-1);
+			idx = Number(idx)+1;
+
+            var placeholder = '';
+            var fib_val = '';
+            if(context === QollConstants.CONTEXT.READ) {
+            	//put the read only values for fib
+            	placeholder = idx + ':' + fib[idx-1];
+            } else {
+            	if(fib == undefined)
+            		fib_val = '';
+            	else fib_val = fib[idx-1] == undefined ? '' : fib[idx-1];
+            	placeholder ='';
+            }
+            
+            txt = txt.replace(matches[0], '<input class="textbox fib fib_write" type="text" placeholder="'+placeholder+ '" ' +disabled+' value="'+fib_val+'">');
+            //cntr++;
+            //qlog.info('##############=> ' + idx, filename);
+            //break;
+        }
+
+		return txt;
+	},
+	is_blank_type : function(cat) {
+		return _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], cat);
+	},
+	get_register_class : function(context) {
+		console.log(context);
+		if(context === QollConstants.CONTEXT.READ) {
+			return 'register-blank-none';
+		} else return 'register-blank';
+	},
+	get_register_bg_class : function(context) {
+		console.log(context);
+		if(context === QollConstants.CONTEXT.READ) {
+			return 'white_bg_5';
+		} else return 'green_bg_1';
+	},
 });
+
+//<input class="textbox"type="text">      http://html-generator.weebly.com/css-textbox-style.html
+
