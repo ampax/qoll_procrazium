@@ -705,4 +705,9 @@ input.fib_correct {
 
 input.fib_wrong {
 }
+
+span.title-qoll {
+    color : #1947A3;
+    font-size: 14px;
+}
 /* End: Basic styling for html elements for Qoll */

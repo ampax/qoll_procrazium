@@ -430,6 +430,137 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 	});
 });
 
+
+Meteor.publish('BATTLEG_QUESTIONAIRE_PUBLISHER', function(findoptions) {
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var lim = QollConstants.QOLL.PUBLISH_SIZE;
+	var targetDate = findoptions.submittedOn;
+	var groupName = findoptions.groupName;
+	var handle_my_active_qolls;
+
+	if(!targetDate) {
+		targetDate = new Date();
+		targetDate.setDate(targetDate.getDate() - QollConstants.BATTLEG.LOOKBACK);
+	}
+
+	qlog.info('Fetching all the qolls battle-ground: ' + uuid, filename);
+	if (this.userId) {
+		//Check for existing user record
+		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		if (ufound.length > 0) {
+			//User found, will publish different qolls to user now
+			var user = ufound[0];
+
+			//Publishing my own created qolls (in chunks of 100) --- (1) My own created qolls - all created by me, and not yet archived
+			//var counter = 1;
+			handle_questionaires = Qollstionnaire.find({ 'submittedTo' : UserUtil.getEmail(user), 'status' : QollConstants.STATUS.SENT, 
+				'submittedOn' : {$gt : targetDate}}, 
+				{ sort : { 'submittedOn' : -1}, reactive : true }
+			).observe({
+				added : function(item, idx){
+					//var qolls = [];
+					//var counter = 1;
+					
+					var resp = QollstionnaireResponses.findOne({
+						qollstionnaireid : item._id,
+						usrid : user._id
+					});
+
+					item.qollids.map(function(qid, idx){
+						
+						var q = Qoll.find({_id : qid}).map(function(t){
+							var thisresponse; 
+							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
+							
+							var q2 = extractQollDetails(t);
+							q2.myresponses = thisresponse;
+							q2._qollstionnaireid = item._id;
+							q2.qoll_idx_title = '(Q).';
+							q2.context = findoptions.context;
+							q2.qoll_response = response;
+
+							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
+								if(response != undefined)
+									q2.fib = response.response;
+								else q2.fib = [];
+							}
+
+							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib) + 
+								'/' + JSON.stringify(resp) + '/' + item._id + '/' + user._id, filename);
+
+							//qolls.push(q2);
+							self.added('battleground', qid, q2);
+						});
+					});
+
+					//var quest = {questTitle : item.title, questSize	: item.qollids.length};
+
+					//self.added('battleground', item._id, {qolls : qolls, questionaire : quest});
+				},
+				changed : function(item, idx) {
+					var qolls = [];
+					var counter = 1;
+					
+					var resp = QollstionnaireResponses.findOne({
+						qollstionnaireid : item._id,
+						usrid : this.userId
+					});
+
+					item.qollids.map(function(qid, idx){
+						
+						var q = Qoll.find({_id : qid}).map(function(t){
+							var thisresponse; 
+							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
+							
+							var q2 = extractQollDetails(t);
+							q2.myresponses = thisresponse;
+							q2._qollstionnaireid = item._id;
+							q2.qoll_idx_title = '(Q).';
+							q2.context = findoptions.context;
+							q2.qoll_response = response;
+
+							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
+								if(response != undefined)
+									q2.fib = response.response;
+								else q2.fib = [];
+							}
+
+							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
+
+							//qolls.push(q2);
+							self.changed('battleground', qid, q2);
+						});
+					});
+
+					//var quest = {questTitle : item.title, questSize	: item.qollids.length};
+
+					//self.changed('battleground', item._id, {qolls : qolls, questionaire : quest});
+				},
+				removed : function(item){
+					item.qollids.map(function(qid, idx){
+						self.removed('battleground', qid);
+					});
+				}
+			});
+			
+		}
+
+	}
+	qlog.info('Done initializing the publisher: BATTLEG_QOLL_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		handle_questionaires.stop();
+	});
+});
+
+
 Meteor.publish('QUESTIONAIRE_PROGRESS_PUBLISHER', function(findoptions) {
 	var user_id = this.userId;
 	var self = this;

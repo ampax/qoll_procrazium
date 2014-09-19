@@ -7,15 +7,19 @@ QollsController = RouteController.extend({
 		return parseInt(this.params.qollsLimit) || this.increment;
 	},
 	findOptions : function() {
-		return { sort : { submittedOn : -1 }, limit : this.limit() };
+		return { sort : { submittedOn : -1 }, limit : this.limit(), context : QollConstants.CONTEXT.WRITE };
 	},
-	waitOn : function() {[Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), Meteor.subscribe('QOLL_REG_PUBLISHER'),
-	  Meteor.subscribe('categories'),
-    Meteor.subscribe('Settings'),
-    Meteor.subscribe('currentUser')];
+	waitOn : function() {
+		[//Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), 
+		Meteor.subscribe('BATTLEG_QUESTIONAIRE_PUBLISHER', this.findOptions()),
+		Meteor.subscribe('QOLL_REG_PUBLISHER'),
+	  	Meteor.subscribe('categories'),
+    	Meteor.subscribe('Settings'),
+    	Meteor.subscribe('currentUser')];
 	},
 	allqollsfun : function() {
-		return AllQolls.find();
+		//return AllQolls.find();
+		return Battleground.find();
 	},
 	data : function() {
 		var hasMore = this.allqollsfun().count() === this.limit();

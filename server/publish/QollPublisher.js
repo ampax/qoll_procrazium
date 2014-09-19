@@ -92,12 +92,22 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					lim -= 1;
 
 					var q = {
-						qollTitle 		: item.qollTitle,
+						qollTitle 		: item.title,
 						qollText 		: item.qollText,
 						qollTypes 		: translateToIndexedArray(item.qollTypes),
 						qollTypesX 		: item.qollTypesX,
-						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-						qollAttributes 	: item.qollAttributes,
+
+						cat 			: item.cat,
+						answer 			: item.answer,
+						fib 			: item.fib,
+						hint 			: item.hint,
+						unit_name 		: item.unit_name,
+						unit 			: item.unit,
+						visibility 		: item.visibility,
+						complexity 		: item.complexity,
+
+						//qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+						//qollAttributes 	: item.qollAttributes,
 						submittedOn 	: item.submittedOn,
 						submittedBy 	: item.submittedBy,
 						submittedTo 	: item.submittedTo,
@@ -107,6 +117,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						//answers 		: fetch_answers(item),
 						totals 			: sumstats(item.stats),
 						viewContext 	: "createUsr",
+						context 		: findoptions.context,
 						isMultiple		: item.isMultiple,
 
 						_id : item._id,
@@ -138,12 +149,22 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				changed : function(item, idx) {
 
 					var q = {
-						qollTitle 			: item.qollTitle,
+						qollTitle 			: item.title,
 						qollText 			: item.qollText,
 						qollTypes 			: translateToIndexedArray(item.qollTypes),
 						qollTypesX 			: item.qollTypesX,
-						qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-						qollAttributes 		: item.qollAttributes,
+
+						cat 				: item.cat,
+						answer 				: item.answer,
+						fib 				: item.fib,
+						hint 				: item.hint,
+						unit_name 			: item.unit_name,
+						unit 				: item.unit,
+						visibility 			: item.visibility,
+						complexity 			: item.complexity,
+
+						//qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+						//qollAttributes 		: item.qollAttributes,
 						submittedOn 		: item.submittedOn,
 						submittedBy 		: item.submittedBy,
 						submittedTo 		: item.submittedTo,
@@ -153,6 +174,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						//answers 			: fetch_answers(item),
 						totals 				: sumstats(item.stats),
 						viewContext 		: "createUsr",
+						context 			: findoptions.context,
 						isMultiple			: item.isMultiple,
 
 						_id : item._id,
@@ -203,17 +225,28 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					if (usentby.length > 0)
 						sentby = UserUtil.getEmail(usentby[0]);
 					var q = {
-						qollTitle 			: item.qollTitle,
+						qollTitle 			: item.title,
 						qollText 			: item.qollText,
 						qollTypes 			: translateToIndexedArray(item.qollTypes),
-						qollStarAttributes 	: item.qollStarAttributes ? item.qollStarAttributes : {},
-						qollAttributes 		: item.qollAttributes,
+
+						cat 				: item.cat,
+						answer 				: item.answer,
+						fib 				: [],//item.fib,
+						hint 				: item.hint,
+						unit_name 			: item.unit_name,
+						unit 				: item.unit,
+						visibility 			: item.visibility,
+						complexity 			: item.complexity,
+
+						//qollStarAttributes 	: item.qollStarAttributes ? item.qollStarAttributes : {},
+						//qollAttributes 		: item.qollAttributes,
 						submittedOn 		: item.submittedOn,
 						submittedBy 		: item.submittedBy,
 						sendingUser 		: sentby,
 						submittedTo 		: item.submittedTo,
 						action 				: item.action,
 						viewContext 		: "recieveUsr",
+						context 			: findoptions.context,
 						isMultiple			: item.isMultiple,
 
 						_id : item._id
@@ -290,20 +323,31 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						if (usentby.length > 0)
 							sentby = UserUtil.getEmail(usentby[0]);
 						var q = {
-							qollTitle : item.qollTitle,
-							qollText : item.qollText,
-							qollTypes : translateToIndexedArray(item.qollTypes),
-							qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-							qollAttributes 	: item.qollAttributes,
-							submittedOn : item.submittedOn,
-							submittedBy : item.submittedBy,
-							sendingUser : sentby,
-							submittedTo : item.submittedTo,
-							action : item.action,
-							viewContext : "recieveUsr",
+							qollTitle 		: item.title,
+							qollText 		: item.qollText,
+							qollTypes 		: translateToIndexedArray(item.qollTypes),
+
+							cat 			: item.cat,
+							answer 			: item.answer,
+							fib 			: [],//item.fib,
+							hint 			: item.hint,
+							unit_name 		: item.unit_name,
+							unit 			: item.unit,
+							visibility 		: item.visibility,
+							complexity 		: item.complexity,
+
+							//qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+							//qollAttributes 	: item.qollAttributes,
+							submittedOn 	: item.submittedOn,
+							submittedBy 	: item.submittedBy,
+							sendingUser 	: sentby,
+							submittedTo 	: item.submittedTo,
+							action 			: item.action,
+							viewContext 	: "recieveUsr",
+							context 		: findoptions.context,
 							isMultiple		: item.isMultiple,
 
-							_id : item._id
+							_id 			: item._id
 						};
 						if (item.is_parent)
 							q.is_parent = true;
@@ -356,18 +400,29 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 		added : function(item, idx) {
 			lim -= 1;
 			var q = {
-				qollTitle : item.qollTitle,
-				qollText : item.qollText,
-				qollTypes : translateToIndexedArray(item.qollTypes),
-				qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-				qollAttributes 	: item.qollAttributes,
-				submittedOn : item.submittedOn,
-				submittedBy : item.submittedBy,
-				submittedTo : item.submittedTo,
-				action : item.action,
-				viewContext : "publicQolls",
+				qollTitle 		: item.title,
+				qollText 		: item.qollText,
+				qollTypes 		: translateToIndexedArray(item.qollTypes),
+
+				cat 			: item.cat,
+				answer 			: item.answer,
+				fib 			: [],//item.fib,
+				hint 			: item.hint,
+				unit_name 		: item.unit_name,
+				unit 			: item.unit,
+				visibility 		: item.visibility,
+				complexity 		: item.complexity,
+
+				//qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+				//qollAttributes 	: item.qollAttributes,
+				submittedOn 	: item.submittedOn,
+				submittedBy 	: item.submittedBy,
+				submittedTo 	: item.submittedTo,
+				action 			: item.action,
+				viewContext 	: "publicQolls",
+				context 		: findoptions.context,
 				isMultiple		: item.isMultiple,
-				_id : item._id
+				_id 			: item._id
 			};
 			if (item.is_parent)
 				q.is_parent = true;
@@ -438,21 +493,30 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 			added : function(item, idx) {
 
 				var q = {
-					qollTitle : item.qollTitle,
-					qollText : item.qollText,
-					qollTypes : translateToIndexedArray(item.qollTypes),
-					qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-					qollAttributes 	: item.qollAttributes,
-					submittedOn : item.submittedOn,
-					submittedBy : item.submittedBy,
-					submittedTo : item.submittedTo,
-					action : item.action,
-					stats : item.stats,
-					totals : sumstats(item.stats),
-					viewContext : "createUsr",
+					qollTitle 		: item.title,
+					qollText 		: item.qollText,
+					qollTypes 		: translateToIndexedArray(item.qollTypes),
+
+					cat 			: item.cat,
+					answer 			: item.answer,
+					fib 			: item.fib,
+					hint 			: item.hint,
+					unit_name 		: item.unit_name,
+					unit 			: item.unit,
+					visibility 		: item.visibility,
+					complexity 		: item.complexity,
+					//qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+					//qollAttributes 	: item.qollAttributes,
+					submittedOn 	: item.submittedOn,
+					submittedBy 	: item.submittedBy,
+					submittedTo 	: item.submittedTo,
+					action 			: item.action,
+					stats 			: item.stats,
+					totals 			: sumstats(item.stats),
+					viewContext 	: "createUsr",
 					isMultiple		: item.isMultiple,
 
-					_id : item._id
+					_id 			: item._id
 				};
 
 				//get qoll registers
@@ -478,21 +542,30 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 			changed : function(item, idx) {
 
 				var q = {
-					qollTitle : item.qollTitle,
-					qollText : item.qollText,
-					qollTypes : translateToIndexedArray(item.qollTypes),
-					qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
-					qollAttributes 	: item.qollAttributes,
-					submittedOn : item.submittedOn,
-					submittedBy : item.submittedBy,
-					submittedTo : item.submittedTo,
-					action : item.action,
-					stats : item.stats,
-					totals : sumstats(item.stats),
-					viewContext : "createUsr",
+					qollTitle 		: item.title,
+					qollText 		: item.qollText,
+					qollTypes 		: translateToIndexedArray(item.qollTypes),
+
+					cat 			: item.cat,
+					answer 			: item.answer,
+					fib 			: item.fib,
+					hint 			: item.hint,
+					unit_name 		: item.unit_name,
+					unit 			: item.unit,
+					visibility 		: item.visibility,
+					complexity 		: item.complexity,
+					//qollStarAttributes : item.qollStarAttributes ? item.qollStarAttributes : {},
+					//qollAttributes 	: item.qollAttributes,
+					submittedOn 	: item.submittedOn,
+					submittedBy 	: item.submittedBy,
+					submittedTo 	: item.submittedTo,
+					action 			: item.action,
+					stats 			: item.stats,
+					totals 			: sumstats(item.stats),
+					viewContext 	: "createUsr",
 					isMultiple		: item.isMultiple,
 
-					_id : item._id
+					_id 			: item._id
 				};
 
 				//get qoll registers
@@ -722,7 +795,7 @@ Meteor.publish('QOLL_PUBLISHER', function(findoptions) {
 
 var fetchConciseQollInfo = function(item) {
 	return {
-				qollTitle : item.qollTitle,
+				qollTitle : item.title,
 				qollText : item.qollText,
 				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
@@ -737,7 +810,7 @@ var fetchConciseQollInfo = function(item) {
 
 var fetchMyConciseQollInfo = function(item) {
 	return {
-				qollTitle : item.qollTitle,
+				qollTitle : item.title,
 				qollText : item.qollText,
 				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
@@ -753,7 +826,7 @@ var fetchMyConciseQollInfo = function(item) {
 
 var fetchMyRecConciseQollInfo = function(item) {
 	return {
-				qollTitle : item.qollTitle,
+				qollTitle : item.title,
 				qollText : item.qollText,
 				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
