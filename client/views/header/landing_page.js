@@ -1,7 +1,11 @@
 var filename = "client/views/header/landing_page.js";
 
+// for convenience
+//var loginButtonsSession = Accounts._loginButtonsSession;
+
 Template.landing_page.rendered = function() {
-    new WOW().init();
+    qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................', filename);
+    //new WOW().init();
     
     /*$('.collapse-onclick').each(function() {
         $(this).on("click", function () {
@@ -35,7 +39,7 @@ Template.landing_page.rendered = function() {
     if(!Meteor.user()){
         $('.login-link-text').text(i18n.translate("Sign Up/Sign In"));
       }else{
-        qlog.info('Setting the extra byttons here', filename);
+        qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................', filename);
         var close = i18n.translate("Close");
         var edit_account = i18n.translate("Edit Account");
         var view_profile = i18n.translate("View Profile");
@@ -46,8 +50,8 @@ Template.landing_page.rendered = function() {
         $('a.login-close-text').text(close);
         $('div#login-buttons-open-change-password').text(chang_passwd);
         $('div#login-buttons-logout').text(sign_out);
-        $('#login-buttons-logout').before('<a href="/users/'+Meteor.user().profile.slug+'" class="account-link login-button button">'+view_profile+'</a>');
-        $('#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
+        $('div#login-buttons-logout').before('<a href="/users/'+Meteor.user().profile.slug+'" class="account-link login-button button">'+view_profile+'</a>');
+        $('div#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
       }
 }
 
@@ -106,14 +110,24 @@ Template.landing_page.events({
     /**'click #login-buttons-password' : function() {
         var email_or_id = $('input#login-username-or-email').val();
         var password = $('input#login-password').val();
-        Login.loginWithService('password', {email : email_or_id, password : password}, function(error){
+        Meteor.loginWithPassword(email_or_id, password, function (err, val) {
+            if(err){
+                //notify.show(i18n.translate('Signin error'), i18n.translate(err.reason));
+                console.log(err);
+                console.log(val);
+            } else {
+                console.log(val);
+            }
+        });**/
+
+        /**Login.loginWithService(user : email_or_id, password : password}, function(error, val){
             if(error) {
                 qlog.info('Error occured while logging in with password - ' + error, filename);
             } else {
-                qlog.info('Logging in with password', filename);
+                qlog.info('Logging in with password - ' + val, filename);
             }
-        });
-    }**/
+        });**/
+    //},
 
 });
 

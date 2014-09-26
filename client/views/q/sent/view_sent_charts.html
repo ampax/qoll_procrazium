@@ -1,0 +1,19 @@
+<template name="bar_charts">
+	<div>
+		<svg id="bar_charts" width="1200px" height="500px">
+			{{#each bars}}
+				{{> bar_chart}}
+			{{/each}}
+		</svg>
+	</div>
+
+	<div>
+		<svg id="treemap" width="1200px" height="620px">
+
+		</svg>
+	</div>
+</template>
+
+<template name="bar_chart">
+	{{bar}}
+</template>

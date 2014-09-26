@@ -1,6 +1,8 @@
 var filename = "client/views/header/header_awesome.js";
-Template.header_awesome.rendered = function()
-{// Close bootstrap's dropdown menu after clicking
+
+Template.header_awesome.rendered = function() {
+    // Close bootstrap's dropdown menu after clicking
+    qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................', filename);
     $('.collapse-onclick').each(function() {
         $(this).on("click", function () {
             var $obj = $($(this).parents('.in')[0]);
@@ -28,11 +30,16 @@ Template.header_awesome.rendered = function()
         var sign_out = i18n.translate("Sign Out");
 
         //Change the text & Set the additional buttons for profile here
+        qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................1', filename);
         $('a.login-close-text').text(close);
+        qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................2', filename);
         $('div#login-buttons-open-change-password').text(chang_passwd);
+        qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................3', filename);
         $('div#login-buttons-logout').text(sign_out);
-        $('#login-buttons-logout').before('<a href="/users/'+Meteor.user().profile.slug+'" class="account-link login-button button">'+view_profile+'</a>');
-        //$('#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
+        qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................4', filename);
+        $('div#login-buttons-logout').before('<a href="/users/'+Meteor.user().profile.slug+'" class="account-link login-button button">'+view_profile+'</a>');
+        qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................5', filename);
+        $('div#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
       }
 
     //$('#login-buttons').append(SOMETHING CUSTOM).append('Some other custom thing');login-buttons-open-change-password

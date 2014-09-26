@@ -7,7 +7,7 @@ DownTown.downtown = function(data, option, escape_mathjax){
 		data = escape_mathjax(data);
 	}
 
-	var marked = Meteor.require('marked');
+	var marked = Meteor.npmRequire('marked');
 	var renderer = new marked.Renderer();
 
 	renderer.paragraph = function(text) {

@@ -604,6 +604,60 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 
 
 
+Meteor.publish('BATTLEG_QOLL_PUBLISHER', function(findoptions) {
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var lim = QollConstants.QOLL.PUBLISH_SIZE;
+	var targetDate = findoptions.submittedOn;
+	var groupName = findoptions.groupName;
+	var handle_my_active_qolls;
+
+	if(!targetDate) {
+		targetDate = new Date();
+		targetDate.setDate(targetDate.getDate() - QollConstants.BATTLEG.LOOKBACK);
+	}
+
+	qlog.info('Fetching all the qolls battle-ground: ' + uuid, filename);
+	if (this.userId) {
+		//Check for existing user record
+		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		if (ufound.length > 0) {
+			//User found, will publish different qolls to user now
+			var user = ufound[0];
+
+			//Publishing my own created qolls (in chunks of 100) --- (1) My own created qolls - all created by me, and not yet archived
+			handle_my_active_qolls = Qoll.find(
+				{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}, 'submittedOn' : {$lt : targetDate}}, 
+				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, limit : lim, reactive : true}
+			).observe({
+				added : function(item, idx){
+					self.added('my_active_qolls', item._id, fetchMyConciseQollInfo(item));
+				},
+				changed : function(item, idx){
+					self.added('my_active_qolls', item._id, fetchMyConciseQollInfo(item));
+				},
+				removed : function(item){
+					self.removed('my_active_qolls', item._id);
+				}
+			});
+			
+		}
+
+	}
+	qlog.info('Done initializing the publisher: BATTLEG_QOLL_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		handle_my_active_qolls.stop();
+	});
+});
+
+
+
 /************************************************** NEW QOLL PUBLISHER ****************************************/
 //Publish qolls in set of QollConstants.QOLL.PUBLISH_SIZE (set to 100)
 /****
@@ -735,47 +789,7 @@ Meteor.publish('QOLL_PUBLISHER', function(findoptions) {
 					self.removed('my_qollstionnaires', item._id);
 				}
 			});
-			/**var handle_group_qolls = Qoll.find({$or: [{'submittedBy' : this.userId, 'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
-				{'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
-				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
-				{sort : {'submittedOn' : -1}, limit : lim, reactive : true}
-			).observe({
-				added : function(item, idx){
-					self.added('my_qollstionnaires', item._id, fetchConciseQollInfo(item));
-				},
-				changed : function(item, idx){
-					self.added('my_qollstionnaires', item._id, fetchConciseQollInfo(item));
-				},
-				removed : function(item){
-					self.removed('my_qollstionnaires', item._id);
-				}
-			}); **/
-
-
-			//submitted by this user or public (default)
-			//({$or: [{'submittedBy': 'RsZQXSSqLm8WjZAWg'},{'visibility': 'public'}]})
-			/**var handle = Qoll.find({$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
-										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]}, 
-			{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
-			{sort : {'submittedOn' : -1}, reactive : true}
-			).observe({
-				added : function(item, idx) {
-
-					self.added('qbank_summary', item._id, {});
-
-				},
-				changed : function(item, idx) {
-
-					self.changed('qbank_summary', item._id, {});
-
-				},
-				removed : function(item) {
-
-					self.removed('qbank_summary', item._id);
-					qlog.info('Removed item with id: ' + item._id);
-
-				}
-			});**/
+			
 		}
 
 	}

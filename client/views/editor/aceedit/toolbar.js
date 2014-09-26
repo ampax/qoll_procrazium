@@ -1,10 +1,20 @@
-var filename = "toolbarEventHandler.js";
+var filename = "toolbar.js";
 
 Template.toolbar.events({
 	'click .addqoll' : function(event) {
 		event.preventDefault();
 		var editor = ace.edit("aceEditor");
 		bindToolBarForQoll(editor);
+	},
+	'click .addqoll-fib' : function(event) {
+		event.preventDefault();
+		var editor = ace.edit("aceEditor");
+		bindToolBarForQollFib(editor);
+	},
+	'click .addqoll-multi' : function(event) {
+		event.preventDefault();
+		var editor = ace.edit("aceEditor");
+		bindToolBarForQollMulti(editor);
 	},
 	'click .addopti' : function(event) {
 		event.preventDefault()
@@ -139,7 +149,7 @@ var storeEditorContents = function(editor, recips, tags, action) {
 	var qollIdToEdit = Session.get('QollIdToEdit');
 	if (!qollIdToEdit) {
 		if ($.trim(recips) === '' && action === QollConstants.QOLL_ACTION_SEND || $.trim(tags) === '') {
-			var err_target = jQuery(".toolbar-error-msg");
+			var err_target = jQuery("span.toolbar-error-msg");
 			var err_msg1 = '', err_msg2 = '', err_separator = '';
 			if ($.trim(recips) === '' && action === QollConstants.QOLL_ACTION_SEND)
 				err_msg1 = 'recipients';

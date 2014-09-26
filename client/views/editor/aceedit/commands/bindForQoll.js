@@ -29,6 +29,37 @@ bindToolBarForQoll = function(editor) {
 };
 
 
+bindToolBarForQollFib = function(editor) {
+	console.log('Initializing for qoll');
+	editor.navigateFileEnd();
+	editor.insert("\n# (Title must start with #)\n");
+	editor.insert("* Hint Starts with * Hint\n");
+	//editor.insert("* Note Starts with * Note\n");
+	editor.insert("* Text _fill_ in the _blanks_\n");
+
+	// Calculate total number of lines
+	var len = editor.session.getLength();
+	console.log("Total number of lines in the editor: " + len);
+	editor.focus();
+};
+
+bindToolBarForQollMulti = function(editor) {
+	console.log('Initializing for qoll');
+	editor.navigateFileEnd();
+	editor.insert("\n# (Title must start with #)\n");
+	editor.insert("* Hint Starts with * Hint\n");
+	editor.insert("* Text Additional text can be provided starting with '* text'\n");
+	editor.insert("*answer 3\n");
+	editor.insert("- A\n");
+	editor.insert("- B\n");
+	editor.insert("- C\n");
+
+	// Calculate total number of lines
+	var len = editor.session.getLength();
+	console.log("Total number of lines in the editor: " + len);
+	editor.focus();
+};
+
 bindToolBarForOption = function(editor) {
 	console.log('Initializing for option');
 	//editor.getSession().setMode("ace/mode/text");

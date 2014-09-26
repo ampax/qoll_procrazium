@@ -10,5 +10,14 @@
     <!-- This is dirty trick till someone fixes the ckeditor load by meteor only when required -->
     <script src="/ckeditor/ckeditor.js"></script>
     <script src="/ckeditor/adapters/jquery.js"></script>
+    <script type="text/javascript"
+   src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+    <script type="text/x-mathjax-config">
+     
+      MathJax.Hub.Config({
+        TeX: { equationNumbers: { autoNumber: "AMS" } }
+      });
+    </script>
 </head>
 

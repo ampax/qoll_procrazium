@@ -26,12 +26,7 @@ var test_qolls =
 "- George Washington\n\n"+
 
 "\# _mercury_ liquid metal element is named after the noble winning scientist Madam Curie\n"+
-"*hint it is liquid metal\n"+
-
-"\# Based on the following paragraph, fill in the blanks the following questions - \n"+
-"* txt Mercury dissolves many other metals such as gold and silver to form amalgams. Iron is an exception, and iron flasks have been traditionally used to trade mercury. Several other first row transition metals with the exception of manganese, copper and zinc are reluctant to form amalgams. Other elements that do not readily form amalgams with mercury include platinum and a few other metals. Sodium amalgam is a common reducing agent in organic synthesis, and is also used in high-pressure sodium lamps.\n"+
-"- Mercury is the only _liquid metal_ elements\n"+
-"- Mercury was invented by _Madam Curie_\n";
+"*hint it is liquid metal\n";
 
 Template.aceEditor.rendered = function() {
   var editor = ace.edit("aceEditor");

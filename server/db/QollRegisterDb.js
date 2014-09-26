@@ -291,7 +291,7 @@ Meteor.methods({
 			updatepaths = {};
 			if (resp.responses['' + qollId]) {
 				//TODO
-				updatepaths['responses.' + qollId + '.usedHint'] = iscorrect;
+				updatepaths['responses.' + qollId + '.usedHint'] = true; //iscorrect
 				return QollstionnaireResponses.update({
 					_id : resp._id
 				}, {

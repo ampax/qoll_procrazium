@@ -36,7 +36,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
 
     //recipients is a required field
     if ($.trim(recips) === '' || $.trim(title) === '' || allqollids.length == 0) {
-      Error.message(QollConstants.MSG_TYPE.ERROR, 'Select questions, add recipients and title to create qollstionnaire ...');
+      QollError.message(QollConstants.MSG_TYPE.ERROR, 'Select questions, add recipients and title to create qollstionnaire ...');
       return;
     }
 
@@ -139,7 +139,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
           //}, 800);
           qlog.info('Adding store-qoll button back: ' + store_html, filename);
         });
-        Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Stored questionaire ...');
+        QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Stored questionaire ...');
         return qollMasterId;
       }
     });
@@ -163,7 +163,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
 
     //recipients is a required field
     if ($.trim(recips) === '' || $.trim(title) === '' || allqollids.length == 0) {
-      Error.message(QollConstants.MSG_TYPE.ERROR, 'Select questions, add recipients and title to create qollstionnaire ...');
+      QollError.message(QollConstants.MSG_TYPE.ERROR, 'Select questions, add recipients and title to create qollstionnaire ...');
       return;
     }
 
@@ -266,7 +266,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
           //}, 800);
           qlog.info('Adding store-qoll button back: ' + store_html, filename);
         });
-        Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Stored questionaire ...');
+        QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Stored questionaire ...');
         return qollMasterId;
       }
     });

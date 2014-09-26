@@ -11,23 +11,9 @@ Accounts.ui.config({
 	requestOfflineToken: {
 		google: true
 	},
-	passwordSignupFields: 'USERNAME_AND_EMAIL'
+	passwordSignupFields: 'USERNAME_AND_EMAIL',
+	//sendVerificationEmail: true,
 });
-
-
- Meteor.autorun(function() {
-    // Whenever this session variable changes, run this function.
-    var message = Session.get('displayMessage');
-    if (message) {
-      var stringArray = message.split('&amp;');
-      ui.notify(stringArray[0], stringArray[1])
-        .effect('slide')
-        .closable();
-
-      Session.set('displayMessage', null);
-    }
-  });
-  
 
 Login = {};
 
@@ -139,6 +125,8 @@ var loginWithGoogle = function(){
 		}, function(err){
 		    if(err) {
 				qlog.error('Error occured while logging in with google ...' + err, filename);
+				 Session.set('errorMessage', err.reason || 'Unknown error');
+				 return;
 		    } else {
 				qlog.info('Logged in with google. Refreshing the contacts now.', filename);
 				/**if ( ! Meteor.loggingIn()){

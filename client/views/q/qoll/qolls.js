@@ -26,6 +26,7 @@ Template.qolls_inner.helpers({
 	allQolls : function(event) {
         if(this.qollList.find){
             var found_qolls= this.qollList.find().fetch();
+            console.log(found_qolls);
             if(found_qolls && found_qolls.length ==1 && found_qolls[0].qolls )
                 return found_qolls[0].qolls;
             return found_qolls;
@@ -272,6 +273,7 @@ Template.qolls_inner.events({
 		var qoll =this.parent.q;
 		//If not a multiple choice question, remove the border-selected
 		qlog.info('Printing ooooif this is multiple - ' + qoll + '/' + qoll.isMultiple);
+		//return;
 		if (!qoll.isMultiple) {
 			$(chk).parent().parent().parent().find('.border-selected').removeClass('border-selected');
 			$(chk).addClass('border-selected');
@@ -340,8 +342,10 @@ Template.qolls_inner.events({
 		var blank_resp = clk.parent().find('input#number').val();
 		var power = clk.parent().find('input#power').val();
 		var unit_selected = $('div#' + qollId + ' input[name="unit"]:checked').val();
-		qlog.info('Will register the blank response here - ' + qollId + '/**' + blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
+		qlog.info('Will register the blank response here - ' + qollId + '/**' + qollstionnaireId + '/**' 
+			+ blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
 
+		//return;
 		var fib = [];
 		clk.parent().find('input.textbox').each(function(indx){
 			fib.push($(this).val());
@@ -502,9 +506,9 @@ Template.qolls_inner.events({
 });
 
 Template.qolls_inner.rendered = function() {
-	jQuery(".selector").tabs({
+	/**jQuery(".selector").tabs({
 		active : 1
-	});
+	});**/
 	//jQuery(".selector" ).tabs({ "Primary", "active", 1 });
 
 	$("i.lock-btn").hover(function() {

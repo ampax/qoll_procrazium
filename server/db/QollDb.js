@@ -191,11 +191,16 @@ Meteor.methods({
 	},
 
 	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate){
-		var md = ToMarkdown.convert(html);
+		//var md = ToMarkdown.convert(html);
 
-		md = md.replace(/(\d+)\.\s+/g, '- ');
+		var md = html;
 
-		md = md.replace(/\*\s+/g, '- ');
+		md = md.replace(/(\d+)\.\s+/g, '- ');//needs to be removed
+
+		md = md.replace(/\*\s+/g, '- ');//needs to be removed
+
+		qlog.info('Printing markdown text --------------------------------- ', filename);
+		qlog.info(md, filename);
 
 		/** Testing the qoll functions here **/
 		//QollParserTest.parseHtml(md);

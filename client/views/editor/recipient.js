@@ -40,7 +40,7 @@ Template.recipient.events({
 			tags = " dummy";
 		}
 		if (tags == undefined || tags === '') {
-			Error.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
+			QollError.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
 			return;
 		}
 
@@ -83,10 +83,10 @@ Template.recipient.events({
 			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-	          		Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+	          		QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
 				} else {
 					qlog.info('Recieved message - ' + msg, filename);
-	          		Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+	          		QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
 	          		$( 'textarea#editor' ).val('');
 				}
 			});
@@ -102,9 +102,9 @@ Template.recipient.events({
 			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-		          	Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
 				} else {
-					Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+					QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
 					edtr.setValue('', 1);
 				}
 			});
@@ -121,7 +121,7 @@ Template.recipient.events({
 		var editor_choice = $('input[name=editorPref]:checked').val();
 
 		if (tags == undefined || tags === '') {
-			Error.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
+			QollError.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
 			return;
 		}
 
@@ -134,7 +134,7 @@ Template.recipient.events({
 		});
 
 		if (emailsandgroups.length === 0) {
-			Error.message(QollConstants.MSG_TYPE.ERROR, 'Recipients is required for sending. Add at least one.');
+			QollError.message(QollConstants.MSG_TYPE.ERROR, 'Recipients is required for sending. Add at least one.');
 			return;
 		}
 
@@ -157,10 +157,10 @@ Template.recipient.events({
 			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-          			Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+          			QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
 				} else {
 					qlog.info('Recieved message - ' + msg, filename);
-          			Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+          			QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
           			$( 'textarea#editor' ).val('');
 				}
 			});
@@ -172,9 +172,9 @@ Template.recipient.events({
 			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-		          	Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
 				} else {
-					Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+					QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
 					edtr.setValue('', 1);
 				}
 			});

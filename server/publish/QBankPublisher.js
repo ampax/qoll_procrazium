@@ -478,6 +478,8 @@ Meteor.publish('BATTLEG_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = item._id;
+							q2.status = item.status;
+							q2.action = item.status;
 							q2.qoll_idx_title = '(Q).';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
@@ -519,6 +521,8 @@ Meteor.publish('BATTLEG_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = item._id;
+							q2.status = item.status;
+							q2.action = item.status;
 							q2.qoll_idx_title = '(Q).';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;

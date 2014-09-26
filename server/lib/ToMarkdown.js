@@ -3,7 +3,7 @@ var filename="server/lib/ToMarkdown.js";
 ToMarkdown = {};
 
 ToMarkdown.convert = function(html){
-	var md = Meteor.require('html-md');
+	var md = Meteor.npmRequire('html-md');
 	var val = md(html);
 	qlog.info('Converted html to md : => ' + val, filename);
 	return val;

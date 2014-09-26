@@ -1,6 +1,6 @@
-var filename='client/views/common/error.js';
+var filename='client/views/common/qoll_error.js';
 
-Error = {
+QollError = {
 	error : function(err_msg) {
 		//if(timeout === undefined) timeout = 8400;
 		var cls = '.err-msg';
@@ -23,13 +23,13 @@ Error = {
 	},
 	message : function(msg_typ, content, timeout) {
 		if(QollConstants.MSG_TYPE.ERROR === msg_typ)
-			Error.error(content, timeout);
+			QollError.error(content, timeout);
 		else if(QollConstants.MSG_TYPE.SUCCESS === msg_typ)
-			Error.success(content, timeout);
+			QollError.success(content, timeout);
 	}
 };
 
-Template.error.rendered = function(){
+Template.qoll_error.rendered = function(){
     qlog.info('Running post rendered code for editor 888', filename);
     //Meteor.subscribe('user-prefs-byname', QollConstants.PREF_KEY.EDITOR_MODE);
     if(URLUtil.isDev()) {

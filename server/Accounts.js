@@ -3,6 +3,9 @@ var filename = 'server/Accounts.js';
 QollAccounts = {};
 
 Accounts.onCreateUser(function(options, user){
+
+  //qlog.info('Printing flag .................................................');
+
   var userProperties = {
     profile: options.profile || {},
     karma: 0,
@@ -68,6 +71,41 @@ Accounts.onCreateUser(function(options, user){
 
   return user;
 });
+
+
+Accounts.validateLoginAttempt(function(attempt){
+    if (attempt.error){
+        var reason = attempt.error.reason;
+        qlog.info('Will be increasing the count here ... ' + attempt.error.reason, filename);
+        if (reason === "User not found" || reason === "Incorrect password"){
+            qlog.info('Incorrect pasword or user not found .... throwing error ... ' + reason);
+            //throw new Meteor.Error(403, "Login forbidden 123");
+            //throw new Error("Login forbidden 123");
+            throw new Meteor.Error(403, reason);
+            //throw "Login forbidden 123";
+            //return false;
+        }
+    }
+    return true;
+});
+
+
+
+/**Accounts.onLoginFailure(function(attempt){
+  qlog.info('Will be increasing the count here ... ' + attempt.error.reason, filename);
+    if (attempt.user && attempt.error.reason === "Login forbidden") {
+        // Increments the number of failed login attempts
+        //Meteor.users.update(attempt.user._id, {$inc: {failedLogins: 1}});
+        qlog.info('Will be increasing the count here ...', filename);
+        throw new Meteor.Error(500, "Login forbidden", "details", "more details");
+    }
+
+    else if(attempt.user && attempt.error.reason) 
+      throw new Meteor.Error(500, attempt.error.reason, "details", "more details");
+});**/
+
+
+//Accounts.emailTemplates.from = "MySiteName <username@yourDomain.com>";
 
 getEmailHash = function(user){
   // todo: add some kind of salt in here
