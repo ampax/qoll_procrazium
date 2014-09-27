@@ -69,12 +69,17 @@ Meteor.methods({
                     if(part.match(QollRegEx.fib)) {
                         var matches;
                         qoll_star_attributes[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
-                        while (matches = QollRegEx.fib.exec(part)) {
+                        var fib_replace = [];
+
+                        while ((matches = QollRegEx.fib.exec(part)) != null) {
                             qoll_star_attributes[QollConstants.EDU.FIB].push(matches[1]);
-                            part = part.replace(QollRegEx.fib_replace, '{'+cntr+'}');
-                            cntr++;
-                            qlog.info('##############=> ' + cntr, filename);
+                            fib_replace.push(matches[0]);
                         }
+
+                        fib_replace.map(function(fr, idx){
+                            part = part.replace(fr, '{'+cntr+'}');
+                            cntr++;
+                        });
                     }
 
                     qoll_star_attributes[QollConstants.EDU.TITLE] = part;
@@ -87,12 +92,17 @@ Meteor.methods({
                     if(part.match(QollRegEx.fib)) {
                         var matches;
                         qoll_star_attributes[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
-                        while (matches = QollRegEx.fib.exec(part)) {
+                        var fib_replace = [];
+
+                        while ((matches = QollRegEx.fib.exec(part)) != null) {
                             qoll_star_attributes[QollConstants.EDU.FIB].push(matches[1]);
-                            part = part.replace(QollRegEx.fib_replace, '{'+cntr+'}');
-                            cntr++;
-                            qlog.info('##############=> ' + cntr, filename);
+                            fib_replace.push(matches[0]);
                         }
+
+                        fib_replace.map(function(fr, idx){
+                            part = part.replace(fr, '{'+cntr+'}');
+                            cntr++;
+                        });
                     }
 
                     qoll_star_attributes[QollConstants.EDU.TEXT] = part;
@@ -130,13 +140,17 @@ Meteor.methods({
                 type = type.trim();
 
                 if(type.match(QollRegEx.fib)) {
-                    var matches;
-                    while (matches = QollRegEx.fib.exec(type)) {
+                    var fib_replace = [];
+
+                    while ((matches = QollRegEx.fib.exec(type)) != null) {
                         qoll_star_attributes[QollConstants.EDU.FIB].push(matches[1]);
-                        type = type.replace(QollRegEx.fib_replace, '{'+cntr+'}');
-                        cntr++;
-                        qlog.info('##############=> ' + cntr, filename);
+                        fib_replace.push(matches[0]);
                     }
+
+                    fib_replace.map(function(fr, idx){
+                        type = type.replace(fr, '{'+cntr+'}');
+                        cntr++;
+                    });
                 }
 
                 if(type.indexOf('(a)') == 0) {

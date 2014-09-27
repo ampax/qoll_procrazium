@@ -70,14 +70,23 @@ QollParser = {
                     part = part.replace(QollRegEx.qoll, '');
 
                     if(part.match(QollRegEx.fib)) {
-                        var matches;
+                        //var matches;
                         qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
-                        while (matches = QollRegEx.fib.exec(part)) {
-                            qoll_data[QollConstants.EDU.FIB].push(matches[1]);
-                            part = part.replace(QollRegEx.fib_replace, '{'+cntr+'}');
-                            cntr++;
-                            qlog.info('##############=> ' + cntr, filename);
-                        }
+                        var fib_replace = [];
+
+                        while ((matches = QollRegEx.fib.exec(part)) != null) {
+							qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+							fib_replace.push(matches[0]);
+						}
+
+						fib_replace.map(function(fr, idx){
+							part = part.replace(fr, '{'+cntr+'}');
+							cntr++;
+						});
+
+						qlog.info('##############1234=> ' + fib_replace, filename);
+						qlog.info('##############4567=> ' + qoll_data[QollConstants.EDU.FIB], filename);
+						qlog.info('##############8911=> ' + part, filename);
                     }
 
                     qoll_data[QollConstants.EDU.TITLE] = part;
@@ -90,12 +99,17 @@ QollParser = {
                     if(part.match(QollRegEx.fib)) {
                         var matches;
                         qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
-                        while (matches = QollRegEx.fib.exec(part)) {
-                            qoll_data[QollConstants.EDU.FIB].push(matches[1]);
-                            part = part.replace(QollRegEx.fib_replace, '{'+cntr+'}');
-                            cntr++;
-                            qlog.info('##############=> ' + cntr, filename);
-                        }
+                        var fib_replace = [];
+
+                        while ((matches = QollRegEx.fib.exec(part)) != null) {
+							qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+							fib_replace.push(matches[0]);
+						}
+
+						fib_replace.map(function(fr, idx){
+							part = part.replace(fr, '{'+cntr+'}');
+							cntr++;
+						});
                     }
 
                     qoll_data[QollConstants.EDU.TEXT] = part;
@@ -135,12 +149,17 @@ QollParser = {
 
                 if(type.match(QollRegEx.fib)) {
                     var matches;
-                    while (matches = QollRegEx.fib.exec(type)) {
-                        qoll_data[QollConstants.EDU.FIB].push(matches[1]);
-                        type = type.replace(QollRegEx.fib_replace, '{'+cntr+'}');
-                        cntr++;
-                        qlog.info('##############=> ' + cntr, filename);
-                    }
+                    var fib_replace = [];
+
+                    while ((matches = QollRegEx.fib.exec(type)) != null) {
+						qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+						fib_replace.push(matches[0]);
+					}
+
+					fib_replace.map(function(fr, idx){
+						type = type.replace(fr, '{'+cntr+'}');
+						cntr++
+					});
                 }
 
                 if(type.indexOf('(a)') == 0) {

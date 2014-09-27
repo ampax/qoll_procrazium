@@ -193,8 +193,6 @@ Meteor.methods({
 	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate){
 		var md = ToMarkdown.convert(html);
 
-		//var md = html;
-
 		md = md.replace(/(\d+)\.\s+/g, '- ');//needs to be removed
 
 		md = md.replace(/\*\s+/g, '- ');//needs to be removed
@@ -202,19 +200,16 @@ Meteor.methods({
 		qlog.info('Printing markdown text --------------------------------- ', filename);
 		qlog.info(md, filename);
 
-		/** Testing the qoll functions here **/
-		//QollParserTest.parseHtml(md);
-		//QollParser.parseHtml(md);
 		//return;
 
 		var err_msg = QollTagsDb.storeTags(tags);
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
-
+		
 		var qollids = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML, qollIdToUpdate);
 
 		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
-
+		
 		return 'Successfully created ' + qollids.length + ' qolls.' + questinfo;
 	}
 });
