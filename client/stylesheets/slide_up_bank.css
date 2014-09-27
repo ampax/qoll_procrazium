@@ -17,8 +17,8 @@ span.toggle {
 
 
 .qbank_pop{
-	position:absolute;
-	right:54px;
+	position:fixed;
+	right:24px;
 	bottom:0px;
 	/*height: 300px;
 	max-height: 500px;*/
