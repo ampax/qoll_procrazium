@@ -46,6 +46,13 @@ Template.header_awesome.rendered = function() {
     //$('#login-buttons-open-change-password').append('Some other custom thing');
 };
 
+
+Template.header_awesome.helpers({
+    my_profile : function(event) {
+        return '/users/'+Meteor.user().profile.slug;
+    },
+});
+
 Template.header_awesome.events({
     'click #login-buttons-logout' : function(event, tmpl) {
     
