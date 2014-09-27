@@ -68,7 +68,7 @@
 				<tr>
 	                <td>{{name}}</td>
 	                {{#each responses}}
-	                	<td>{{response}}</td>
+	                	<td>{{response}}{{#if usedHint}},<span class='red_1'>Hint</span>{{/if}}</td>
 	                {{/each}}
 	            </tr>
 			{{/each}}

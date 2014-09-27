@@ -75,7 +75,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 
 			//submitted by this user
 			var handle = Qoll.find({
-				'submittedBy' : this.userId,
+				//'submittedBy' : this.userId,
 				'action' : {
 					$ne : 'archive'
 				},

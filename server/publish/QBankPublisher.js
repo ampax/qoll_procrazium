@@ -34,6 +34,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						unit 			: item.unit,
 						visibility 		: item.visibility,
 						complexity 		: item.complexity,
+						isOwner			: item.submittedBy == user._id,
 					};
 
 					self.added('qbank_summary', item._id, q);
@@ -54,6 +55,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						unit 			: item.unit,
 						visibility 		: item.visibility,
 						complexity 		: item.complexity,
+						isOwner			: item.submittedBy == user._id,
 					};
 
 					self.changed('qbank_summary', item._id, q);
@@ -352,6 +354,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							var thisresponse; 
 							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
 							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
+							var used_hint = resp && resp.responses[qid] ? resp.responses[qid].usedHint : undefined;
 							
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
@@ -571,17 +574,23 @@ Meteor.publish('QUESTIONAIRE_PROGRESS_PUBLISHER', function(findoptions) {
 	var uuid = Meteor.uuid();
 	var initializing = true;
 	var handle_questionaires;
+	var counter = 0;
 
 	if (user_id) {
 		//Check for existing user record
 		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
 		if (ufound.length > 0) {
-			var counter = 0;
-			handle_questionaires = QollstionnaireResponses.find({ qollstionnaireid : findoptions._id, usrid : user_id }).observe({
+			handle_questionaires = QollstionnaireResponses.find({ qollstionnaireid : findoptions._id, usrid : user_id }, { reactive : true }).observe({
 				added : function(item, idx){
 					counter++;
-					self.added('questionaire-progress', findoptions._id, {progress : counter});
-				}/**,
+					
+					if (!initializing)
+						self.changed('questionaire-progress', findoptions._id, {progress : counter});
+				},
+				changed : function(item, idx){
+					counter++;
+					self.changed('questionaire-progress', findoptions._id, {progress : counter});
+				},/**,
 				changed : function(item, idx) {
 					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
 							recips_count : item.submittedTo.length, submitted_on : item.submittedOn};
@@ -595,10 +604,11 @@ Meteor.publish('QUESTIONAIRE_PROGRESS_PUBLISHER', function(findoptions) {
 					}
 
 					self.changed('questionaire-for-id', item._id, questionaire);
-				},
+				},**/
 				removed : function(item){
-					self.removed('questionaire-for-id', item._id);
-				}**/
+					counter--;
+					self.changed('questionaire-progress', findoptions._id, {progress : counter});
+				}
 			});
 			//self.added('questionaire-progress', findoptions._id, {progress : counter});
 		}
@@ -742,7 +752,7 @@ var getQuery = function(findoptions) {
 	
 	
 	var query = {$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
-										   {'attributes.visibility': QollConstants.QOLL.VISIBILITY.PUB}]};
+										   {'visibility': QollConstants.QOLL.VISIBILITY.PUB}]};
 
 	if(findoptions && findoptions.query_type){
 		//Process for the type of data being queried
@@ -862,7 +872,7 @@ var getQuestionnaireResponses = function(item) {
 					attach_resp.push(rtmp.response);
 				}
 
-				responses.push({'response' : attach_resp.join(', ')});
+				responses.push({'response' : attach_resp.join(', '), 'usedHint' : rtmp.usedHint});
 				if(!resp_flag) {
 					respo_length++;
 					resp_flag = true;

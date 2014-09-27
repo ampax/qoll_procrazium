@@ -16,6 +16,26 @@ Template.all_qolls.events({
 		checkBoxes.prop("checked", my_checked);
 
 	},
+	'click .archive-qoll-btn' : function(event) {
+		event.preventDefault();
+		var qollId = this._id;
+
+		var choice = confirm("Archive this qoll?", filename);
+		
+		if (choice) {
+			//qlog.info('youclicked to archiveyes: ' +qollId, filename);
+			Meteor.call('modifyQollId', qollId, 'archive', function(err, qollRegId) {
+				if (err) {
+					qlog.info('Failed while archiving the qoll - ' + qollId + '/' + err, filename);
+				} else {
+					qlog.info('archived qoll with id: ' + qollRegId + '/' + qollId, filename);
+				}
+			});
+		} else {
+			//qlog.info('youclicked to no: ' +qollId, filename);
+		}
+
+	},
 	'click .store-qollstionnaire' : function(event) {
 		var recips = jQuery("input#recipient_search").val();
 		var title = jQuery(".qollstionnaire-title").val();
