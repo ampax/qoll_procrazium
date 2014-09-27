@@ -752,7 +752,7 @@ var getQuery = function(findoptions) {
 	
 	
 	var query = {$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
-										   {'visibility': QollConstants.QOLL.VISIBILITY.PUB}]};
+						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}]};
 
 	if(findoptions && findoptions.query_type){
 		//Process for the type of data being queried
