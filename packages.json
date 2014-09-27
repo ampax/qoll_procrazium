@@ -4,5 +4,6 @@
   "fbgraph": "0.2.11",
   "googleapis": "1.0.14",
   "fibers": "1.0.2",
-  "html-md": "3.0.2"
+  "html-md": "3.0.2",
+  "to-markdown": "0.0.2"
 }

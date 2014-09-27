@@ -191,9 +191,9 @@ Meteor.methods({
 	},
 
 	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate){
-		//var md = ToMarkdown.convert(html);
+		var md = ToMarkdown.convert(html);
 
-		var md = html;
+		//var md = html;
 
 		md = md.replace(/(\d+)\.\s+/g, '- ');//needs to be removed
 
