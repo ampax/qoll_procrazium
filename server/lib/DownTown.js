@@ -46,7 +46,14 @@ Meteor.methods({
     	var qolls = data.split(/\#\s/);
         qolls = qolls.slice(1);
         qolls.map(function(q){
-            var qs = q.split(/\n-/);
+            var qs = q.split(QollRegEx.gen_opt);//q.split(/\n-/);
+            //var q11 = QollRegEx.gen_opt.exec(q);
+            /**qlog.info('<==============***Printing qoll***===============>@@@ '+ q.split(QollRegEx.gen_opt)[0] + ' @@@<==================================>', filename);
+            
+            while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
+                qlog.info('<==============***Printing qoll***===============>' +q11[2] + '<==================================>', filename);
+            }**/
+            //var qs = QollRegEx.gen_opt.exec(q);
             var qoll = qs[0];
             var qollType = QollConstants.QOLL_TYPE.MULTI;
             var qoll_star_attributes = {};
@@ -56,7 +63,7 @@ Meteor.methods({
 
             //fetch the qoll level attributes here. split the qoll string on * and then apply
             var qoll_parts = qoll.split(/\n\s*\*/);
-            qlog.info('<==============***Printing qoll***===============>'+qoll + '/' + qoll_parts.length, filename);
+            //qlog.info('<==============***Printing qoll***===============>'+qoll + '/' + qoll_parts.length, filename);
             var cntr =0;
             var foundTitle=0;
             qoll_parts.map(function(part){
@@ -134,7 +141,13 @@ Meteor.methods({
             });
             
             var ix =0; ix =0;
-            qs.slice(1).map(function(type){
+            while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
+                qlog.info('<==============***Printing qoll***===============>' +q11[2] + '<==================================>', filename);
+            }
+
+            while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
+                type = q11[2];
+            //qs.slice(2).map(function(type){
                 var x = {index:ix};
                 ix =ix+1;
                 type = type.trim();
@@ -183,7 +196,8 @@ Meteor.methods({
                 x.type = type;
 
                 types.push(x);
-            });
+            };
+            //);
 
             if(qoll_star_attributes[QollConstants.EDU.FIB].length > 0)
                 qoll_star_attributes.answer_matched = 1;

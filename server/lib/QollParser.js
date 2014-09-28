@@ -44,7 +44,7 @@ QollParser = {
             var qollRawId = Qolls.QollRawDb.insert({qollText: q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat});
             
 
-            var qs = q.split(/\n-/);
+            var qs = q.split(QollRegEx.gen_opt);//q.split(/\n-/);
             var qoll = qs[0];
 			var qollType = QollConstants.QOLL_TYPE.MULTI; //multi is by default
 			var qoll_data = {};
@@ -141,7 +141,9 @@ QollParser = {
             });
 
 			var ix =0; ix =0;
-            qs.slice(1).map(function(type){
+			while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
+                type = q11[2];
+            //qs.slice(1).map(function(type){
                 var x = {index:ix};
                 x.isCorrect = 0;
                 ix =ix+1;
@@ -193,7 +195,7 @@ QollParser = {
 
                 types.push(type);
                 typesX.push(x);
-            });
+            };//);
 
 			qoll_data.types = types;
 			qoll_data.typesX = typesX;
