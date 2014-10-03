@@ -32,6 +32,26 @@ QollParser = {
         });
 
 	},
+	parseTex : function(d) {
+		if(d.txt.match(QollRegEx.tex)) {
+			var cntr = d.tex_arr.length;
+            //var matches;
+            //qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
+            var tex_replace = [];
+            d.txt = d.txt.replace(/\\/, "");
+
+            while ((matches = QollRegEx.tex.exec(d.txt)) != null) {
+				d.tex_arr.push(matches[1].substring(0, matches[1].length-1));
+				tex_replace.push(matches[0]);
+			}
+
+			tex_replace.map(function(fr, idx){
+				d.txt = d.txt.replace(/<span[^>]*>([^<]*)<\/span>/, '{TEX:'+cntr+'}');
+				cntr++;
+			});
+        }
+        return {'txt' : d.txt, 'tex_arr' : d.tex_arr};
+	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
 	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate) {
@@ -51,6 +71,7 @@ QollParser = {
             var types = new Array();
             var typesX = new Array();
             qoll_data[QollConstants.EDU.FIB] = [];
+            qoll_data[QollConstants.EDU.TEX] = [];
 		
 
 			//fetch the qoll level attributes here. split the qoll string on * and then apply
@@ -59,16 +80,23 @@ QollParser = {
 
 	        //fetch the qoll level attributes here. split the qoll string on * and then apply
             var qoll_parts = qoll.split(/\n\s*\*/);
-            qlog.info('<==============***Printing qoll***===============>'+qoll + '/' + qoll_parts.length, filename);
+            //qlog.info('<==============***Printing qoll***===============>'+qoll + '/' + qoll_parts.length, filename);
             var cntr =0;
             var foundTitle=0;
             qoll_parts.map(function(part){
-                //qlog.info('---------------------------> ' + part, filename);
+                qlog.info('---------------------------> ' + part, filename);
+                part = part.replace(/&nbsp;/g, ' ');
+                //* Start: Find and replace TEX expressions *//
+                var tmp = QollParser.parseTex({'txt' : part, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]});
+                part = tmp.txt;
+                //* End: Find and replace TEX expressions *//
+
                 if(foundTitle ==0) {
                     foundTitle = 1;
-                    qlog.info('This is text/title -> ' + part, filename);
+                    //qlog.info('This is text/title -> ' + part, filename);
                     part = part.replace(QollRegEx.qoll, '');
 
+                    //* Start: Find and replace Fill-In-The-Blanks *//
                     if(part.match(QollRegEx.fib)) {
                         //var matches;
                         qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
@@ -84,10 +112,11 @@ QollParser = {
 							cntr++;
 						});
 
-						qlog.info('##############1234=> ' + fib_replace, filename);
-						qlog.info('##############4567=> ' + qoll_data[QollConstants.EDU.FIB], filename);
-						qlog.info('##############8911=> ' + part, filename);
+						//qlog.info('##############1234=> ' + fib_replace, filename);
+						//qlog.info('##############4567=> ' + qoll_data[QollConstants.EDU.FIB], filename);
+						//qlog.info('##############8911=> ' + part, filename);
                     }
+                    //* End: Find and replace Fill-In-The-Blanks *//
 
                     qoll_data[QollConstants.EDU.TITLE] = part;
                     qoll_data[QollConstants.EDU.TEXT] = qoll_data[QollConstants.EDU.TITLE];
@@ -96,6 +125,7 @@ QollParser = {
                     qlog.info('This is text -> ' + part, filename);
                     part = part.replace(QollRegEx.txt, '');
 
+                    //* Start: Find and replace Fill-In-The-Blanks *//
                     if(part.match(QollRegEx.fib)) {
                         var matches;
                         qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
@@ -111,6 +141,7 @@ QollParser = {
 							cntr++;
 						});
                     }
+                    //* End: Find and replace Fill-In-The-Blanks *//
 
                     qoll_data[QollConstants.EDU.TEXT] = part;
                 } else if(part.match(QollRegEx.answer)) {
@@ -143,12 +174,19 @@ QollParser = {
 			var ix =0; ix =0;
 			while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
                 type = q11[2];
+                type = type.replace(/&nbsp;/g, ' ');
             //qs.slice(1).map(function(type){
                 var x = {index:ix};
                 x.isCorrect = 0;
                 ix =ix+1;
                 type = type.trim();
 
+                //* Start: Find and replace TEX expressions *//
+                var tmp = QollParser.parseTex({'txt' : type, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]});
+                type = tmp.txt;
+                //* End: Find and replace TEX expressions *//
+
+                //* Start: Find and replace Fill-In-The-Blanks *//
                 if(type.match(QollRegEx.fib)) {
                     var matches;
                     var fib_replace = [];
@@ -163,6 +201,7 @@ QollParser = {
 						cntr++
 					});
                 }
+                //* End: Find and replace Fill-In-The-Blanks *//
 
                 if(type.indexOf('(a)') == 0) {
 				    type = type.replace('(a)', '');

@@ -38,6 +38,7 @@ Meteor.methods({
 			'cat' : qollData[QollConstants.EDU.CAT],
 			'answer' : qollData[QollConstants.EDU.ANSWER],
 			'fib' : qollData[QollConstants.EDU.FIB],
+			'tex' : qollData[QollConstants.EDU.TEX],
 			'hint' : qollData[QollConstants.EDU.HINT],
 			'unit_name' : qollData[QollConstants.EDU.UNIT_NAME],
 			'unit' : qollData[QollConstants.EDU.UNITS],

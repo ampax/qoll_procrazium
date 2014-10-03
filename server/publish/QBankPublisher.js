@@ -20,7 +20,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 				{sort : {'submittedOn' : -1}, reactive : true}
 			).observe({
 				added : function(item, idx) {
-					qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
+					//qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
 					var q = {
 						qollTitle 		: item.title,
  						qollText 		: item.qollText,
@@ -36,6 +36,8 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						complexity 		: item.complexity,
 						isOwner			: item.submittedBy == user._id,
 					};
+
+					q = QollKatexUtil.populateIfTex(q, item);
 
 					self.added('qbank_summary', item._id, q);
 
@@ -57,6 +59,8 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						complexity 		: item.complexity,
 						isOwner			: item.submittedBy == user._id,
 					};
+
+					q = QollKatexUtil.populateIfTex(q, item);
 
 					self.changed('qbank_summary', item._id, q);
 
@@ -369,6 +373,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 								else q2.fib = [];
 							}
 
+							q2 = QollKatexUtil.populateIfTex(q2, t);
+
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
 							qolls.push(q2);
@@ -403,6 +409,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 									q2.fib = response.response;
 								else q2.fib = [];
 							}
+
+							q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
@@ -915,4 +923,3 @@ var getQuestionnaireResponses = function(item) {
 
 	return r;
 };
-

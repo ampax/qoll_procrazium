@@ -21,8 +21,9 @@ long:google-contacts
 
 npm-container
 mizzao:jquery-ui
-mrt:mathjax
 mrt:ace-embed
 mrt:datatables
 accounts-facebook
 natestrauser:font-awesome
+sashko:katex
+

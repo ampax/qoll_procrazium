@@ -131,17 +131,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					q.qollTypeReg = reg.qollTypeReg;
 					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
-					/**Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
-						if (err) {
-							qlog.error('Error happened while getting registers' + err, filename);
-						} else {
-							qlog.info('Found qoll regs. Processing now ' + JSON.stringify(reg), filename);
-							if (reg != undefined) {
-								q.qollTypeReg = reg.qollTypeReg;
-								q.myAnswers = reg;
-							}
-						}
-					});**/
+					
+
+					q = QollKatexUtil.populateIfTex(q, item);
 
 					self.added('all-qolls', item._id, q);
 
@@ -188,17 +180,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					q.qollTypeReg = reg.qollTypeReg;
 					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
-					/** Meteor.call('findQollRegisters', q.submittedBy, item._id, function(err, reg) {
-						if (err) {
-							qlog.error('Error happened while getting registers' + err, filename);
-						} else {
-							qlog.info('Found qoll regs. Processing now ' + JSON.stringify(reg), filename);
-							if (reg != undefined) {
-								q.qollTypeReg = reg.qollTypeReg;
-								q.myAnswers = reg;
-							}
-						}
-					}); **/
+					
+					q = QollKatexUtil.populateIfTex(q, item);
 
 					self.changed('all-qolls', item._id, q);
 
@@ -259,15 +242,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					q.qollTypeReg = reg.qollTypeReg;
 					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
-					/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
-						if (err) {
-							qlog.error('Error happened while getting registers' + err, filename);
-						} else {
-							qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
-							if (qollTypeReg != undefined)
-								q.qollTypeReg = qollTypeReg;
-						}
-					});**/
+					
+					q = QollKatexUtil.populateIfTex(q, item);
 
 					self.added('all-qolls', item._id, q);
 					//qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
@@ -357,15 +333,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						q.qollTypeReg = reg.qollTypeReg;
 						q.qollTypeVal = reg.qollTypeVal;
 						q.myAnswers = reg;
-						/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
-							if (err) {
-								qlog.error('Error happened while getting registers' + err, filename);
-							} else {
-								qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
-								if (qollTypeReg != undefined)
-									q.qollTypeReg = qollTypeReg;
-							}
-						});**/
+						
+						q = QollKatexUtil.populateIfTex(q, item);
 
 						self.added('all-qolls', item._id, q);
 						//qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
@@ -432,15 +401,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 			q.qollTypeReg = reg.qollTypeReg;
 			q.qollTypeVal = reg.qollTypeVal;
 			q.myAnswers = reg;
-			/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
-				if (err) {
-					qlog.error('Error happened while getting registers' + err, filename);
-				} else {
-					qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
-					if (qollTypeReg != undefined)
-						q.qollTypeReg = qollTypeReg;
-				}
-			});**/
+			
+			q = QollKatexUtil.populateIfTex(q, item);
 
 			self.added('all-qolls', item._id, q);
 
@@ -525,15 +487,8 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				q.qollTypeReg = reg.qollTypeReg;
 				q.qollTypeVal = reg.qollTypeVal;
 				q.myAnswers = reg;
-				/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
-					if (err) {
-						qlog.error('Error happened while getting registers' + err, filename);
-					} else {
-						qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
-						if (qollTypeReg != undefined)
-							q.qollTypeReg = qollTypeReg;
-					}
-				});**/
+				
+				q = QollKatexUtil.populateIfTex(q, item);
 
 				self.added('all-open-qolls', item._id, q);
 				//qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
@@ -574,15 +529,8 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				q.qollTypeReg = reg.qollTypeReg;
 				q.qollTypeVal = reg.qollTypeVal;
 				q.myAnswers = reg;
-				/**Meteor.call('findQollRegisters', this.userId, item._id, function(err, qollTypeReg) {
-					if (err) {
-						qlog.error('Error happened while getting registers' + err, filename);
-					} else {
-						qlog.info('Found qoll regs. Processing now ' + qollTypeReg, filename);
-						if (qollTypeReg != undefined)
-							q.qollTypeReg = qollTypeReg;
-					}
-				});**/
+				
+				q = QollKatexUtil.populateIfTex(q, item);
 
 				self.changed('all-open-qolls', item._id, q);
 				//qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
@@ -808,7 +756,7 @@ Meteor.publish('QOLL_PUBLISHER', function(findoptions) {
 });
 
 var fetchConciseQollInfo = function(item) {
-	return {
+	var q = {
 				qollTitle : item.title,
 				qollText : item.qollText,
 				qollTypes : translateToIndexedArray(item.qollTypes),
@@ -819,11 +767,15 @@ var fetchConciseQollInfo = function(item) {
 				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
 				_id : item._id
 			};
+
+	q = QollKatexUtil.populateIfTex(q, item);
+
+	return q;
 };
 
 
 var fetchMyConciseQollInfo = function(item) {
-	return {
+	var q = {
 				qollTitle : item.title,
 				qollText : item.qollText,
 				qollTypes : translateToIndexedArray(item.qollTypes),
@@ -836,10 +788,14 @@ var fetchMyConciseQollInfo = function(item) {
 				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
 				_id : item._id
 			};
+			
+	q = QollKatexUtil.populateIfTex(q, item);
+
+	return q;
 };
 
 var fetchMyRecConciseQollInfo = function(item) {
-	return {
+	var q = {
 				qollTitle : item.title,
 				qollText : item.qollText,
 				qollTypes : translateToIndexedArray(item.qollTypes),
@@ -852,6 +808,10 @@ var fetchMyRecConciseQollInfo = function(item) {
 				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
 				_id : item._id
 			};
+
+	q = QollKatexUtil.populateIfTex(q, item);
+
+	return q;
 };
 
 var fetchConciseQolstInfo = function(item) {

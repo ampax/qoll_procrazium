@@ -4,9 +4,17 @@
       <div class="col-md-10 col-xs-12">
         <h4>{{q.qoll_idx_title}} {{{transform_txt q.qollTitle q.cat q.context q.fib}}}</h4>
 
-        <h5>{{#mathjax}}{{{transform_txt q.qollText q.cat q.context q.fib}}}{{/mathjax}}</h5>
+        <h5>{{{transform_txt q.qollText q.cat q.context q.fib}}}</h5>
 
         {{{get_units_html q.unit_name q.units}}}
+        
+        {{#if q.unit}}
+          <div class="input-group">{{#if q.unit_name}}{{q.unit_name}}: {{else}}Unit: {{/if}}
+            {{#each q.unit}} 
+                <input name="unit" value="{{this}}" type="radio"> {{this}}
+            {{/each}}
+          </div>
+        {{/if}}
         <!--{{{get_hint_html q.hint q.context}}}-->
         {{#if q.hint}}
           <button type="button" class="btn btn-warning pull-right" data-toggle="tooltip"
