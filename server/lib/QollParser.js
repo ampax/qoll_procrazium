@@ -61,8 +61,10 @@ QollParser = {
 
         qolls.map(function(q){
         	//qoll: {qollText: qollText, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat}
-            var qollRawId = Qolls.QollRawDb.insert({qollText: q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat});
-            
+            var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat});
+            q = ToMarkdown.convert(q);
+
+            qlog.info('Markdown converted qoll is - ' + q, filename);
 
             var qs = q.split(QollRegEx.gen_opt);//q.split(/\n-/);
             var qoll = qs[0];

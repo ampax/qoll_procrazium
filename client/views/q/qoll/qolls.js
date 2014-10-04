@@ -431,8 +431,9 @@ Template.qolls_inner.events({
 	},
 	'click .edit-qoll-btn' : function(event) {
 		event.preventDefault();
-		var qollId = this._id;
-		var qollRawId = this.qollRawId;
+		console.log(this);
+		var qollId = this.q._id;
+		var qollRawId = this.q.qollRawId;
 		qlog.info('RAW %%%% qoll for: ' + qollRawId);
 		Session.set('QollIdToEdit', qollId);
 		Session.set('QollRawIdToEdit', qollRawId);

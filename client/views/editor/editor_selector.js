@@ -2,14 +2,14 @@ var filename='client/views/editor/editor_selector.js';
 
 Template.editor_selector.helpers({
 	is_adv : function(){
-		return checkEditorMode(QollConstants.EDITOR_MODE.ADV) ? 'checked' : '';
+		return QollEditorUtil.checkEditorMode(QollConstants.EDITOR_MODE.ADV) ? 'checked' : '';
 	},
 	is_basic : function(){
-		return checkEditorMode(QollConstants.EDITOR_MODE.BASIC) ? 'checked' : '';
+		return QollEditorUtil.checkEditorMode(QollConstants.EDITOR_MODE.BASIC) ? 'checked' : '';
 		
 	},
 	is_html : function() {
-		return checkEditorMode(QollConstants.EDITOR_MODE.HTML) ? 'checked' : '';
+		return QollEditorUtil.checkEditorMode(QollConstants.EDITOR_MODE.HTML) ? 'checked' : '';
 	}
 });
 
@@ -49,11 +49,3 @@ Template.editor_selector.events({
 Template.editor_selector.rendered = function() {
 }
 
-
-var checkEditorMode = function(mode) {
-	settings = Settings.find({'userId' : Meteor.userId()}).fetch()[0];
-	qlog.info('printing settings - ' + JSON.stringify(settings) + ', userId - ' + Meteor.userId(), filename);
-	var flag = settings ? settings.editor_mode && settings.editor_mode === mode : false;
-	qlog.info('is_adv - ' + flag);
-	return settings ? settings.editor_mode && settings.editor_mode === mode : false;
-}

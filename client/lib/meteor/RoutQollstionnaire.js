@@ -149,7 +149,12 @@ QbankController = FastRender.RouteController.extend({
 		Meteor.subscribe('QBANK_SUMMARY_PUBLISHER');
 	},
 	onBeforeAction: [function(){
-		[Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), Meteor.subscribe('RECIPIENTS_PUBLISHER'), Meteor.subscribe('QOLL_TAG_PUBLISHER')];
+		[
+		Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), 
+		Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
+		Meteor.subscribe('QOLL_TAG_PUBLISHER'),
+		Meteor.subscribe('Settings'),
+		];
 	}, function(){
 		//this is next in line to the first subscribe function
 		//active_nav();

@@ -61,8 +61,10 @@
 					<div class="col-md-1 col-xs-12">
 						{{#if isOwner}}
 						<span class="pull-left archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+						<span class="pull-right edit-qoll-btn glossy"><i class="glyphicon glyphicon-edit ios-enabled"></i></span>
 						{{/if}}
 					</div>
+					{{> qollModalEditor}}
 				</div><!-- list-group-item list-group-item-success -->
 				<!-- End of Qoll Section here -->
 				{{/each}}

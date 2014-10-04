@@ -36,9 +36,8 @@ Template.recipient.events({
 		var tags = jQuery("input.tags").val();
 		var editor_choice = $('input[name=editorPref]:checked').val();
 		var qollIdToEdit = Session.get('QollIdToEdit');
-		if (qollIdToEdit) {
-			tags = " dummy";
-		}
+		
+		
 		if (tags == undefined || tags === '') {
 			QollError.message(QollConstants.MSG_TYPE.ERROR, 'Tags is required. Start typing the tags to autofill and select to continue.');
 			return;

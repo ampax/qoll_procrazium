@@ -82,6 +82,14 @@ A:hover {
     margin: 0 auto;
 }
 
+.q-right {
+    float: right;
+}
+
+.q-left {
+    float: left;
+}
+
 #navbrand {
     margin:3px;
 }

@@ -3,7 +3,27 @@ var filename = "client/views/qoll/all_qolls.js";
 Template.all_qolls.rendered = function() {
 	Session.set('disable_sendtoQbank', true);
 	$('.hasDatepicker').datepicker();
-	
+
+	/**qlog.info("jdjdjdjdjdjdjdjdjdjdjdjddjdjdjdj", filename);
+
+	$("div.tex").each(function() {
+	  qlog.info("jdjdjdjdjdjdjdjdjdjdjdjddjdjdjdj ---->" + ": " + $( this ).text() );
+	  katex.render($( this ).innerHTML, $( this )); 
+	});
+
+	$("span.title-qoll").each(function( index ) {
+	  qlog.info("jdjdjdjdjdjdjdjdjdjdjdjddjdjdjdj ---->"+ index + ": " + $( this ).text() );
+	});
+
+	Array.prototype.forEach.call(
+		document.getElementsByTagName("tex"),
+		function(el) {
+			try {
+				qlog.info('Priniting the internal - ' + el.innerHTML, filename);
+				katex.render(el.innerHTML, el); 
+			} catch (e) { console.log('error happened ---- '+e); }
+		}
+	);**/
 
 };
 $.fn.toggleCheckbox = function() {
@@ -180,5 +200,26 @@ Template.all_qolls.events({
 			cnt--;
 			$("span[id='cnt']").html(cnt);
 		}
+	},
+	'click .edit-qoll-btn' : function(event) {
+		event.preventDefault();
+		console.log(this);
+		var qollId = this._id;//this.q._id;
+		var qollRawId = this.qollRawId;//this.q.qollRawId;
+		qlog.info('RAW %%%% qoll for: ' + qollRawId);
+		Session.set('QollIdToEdit', qollId);
+		Session.set('QollRawIdToEdit', qollRawId);
+		$('#qollModalEditor-topdiv').modal('show');
+
+		/*$('#qollModalEditor-topdiv').css({
+		 "position":"absolute",
+		 "top": $('#'+qollId).offset().top + "px",
+		 "left": $('#'+qollId).offset().left + "px",
+		 });
+		 $('.modal-content').css({
+		 "position":"absolute",
+		 "top": $('#'+qollId).offset().top + "px",
+		 "left": $('#'+qollId).offset().left + "px",
+		 });	*/
 	},
 });

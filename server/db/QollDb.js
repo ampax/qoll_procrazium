@@ -4,6 +4,7 @@ QollTimerAction = new Meteor.Collection("QOLL_TIMER_ACTION");
 /** Database insert method for qolls  **/
 Meteor.methods({
 	getRawQoll: function(qollrawid){
+		qlog.info('Finding raw-qoll for the qollrawid: ' + qollrawid, filename);
 		var rawqo= QollRaw.findOne({_id:qollrawid});
 		return rawqo;
 	},
@@ -178,7 +179,8 @@ Meteor.methods({
 		qlog.info('Inserting into qoll master', filename);
 
 		//Store the tags
-		var err_msg = QollTagsDb.storeTags(tags);
+		if(tags != undefined)
+			var err_msg = QollTagsDb.storeTags(tags);
 
 		qlog.info('This is the editor content - ' + qollText, filename);
 
@@ -192,18 +194,19 @@ Meteor.methods({
 	},
 
 	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate){
-		var md = ToMarkdown.convert(html);
+		//md = md.replace(/(\d+)\.\s+/g, '- ');//needs to be removed
 
-		md = md.replace(/(\d+)\.\s+/g, '- ');//needs to be removed
+		//md = md.replace(/\*\s+/g, '- ');//needs to be removed
 
-		md = md.replace(/\*\s+/g, '- ');//needs to be removed
+		var md = html;
 
 		qlog.info('Printing markdown text --------------------------------- ', filename);
 		qlog.info(md, filename);
 
 		//return;
 
-		var err_msg = QollTagsDb.storeTags(tags);
+		if(tags != undefined) 
+			var err_msg = QollTagsDb.storeTags(tags);
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
 		

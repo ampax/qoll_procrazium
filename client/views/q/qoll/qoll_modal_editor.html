@@ -7,7 +7,8 @@
         <h4 class="modal-title">Modal title</h4>
       </div -->
       <div class="modal-body">
-          {{> editorcore}}
+          {{> qoll_error}}
+          {{> model_editor}}
         
       </div>
       <!-- div class="modal-footer">
@@ -17,4 +18,45 @@
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
+</template>
+
+<template name="model_editor">
+  <br>
+  <div class="row">
+    <div class="col-md-10 col-xs-12">
+      <div class="input-group input-group-sm">
+        <span class="input-group-btn">
+            <button type="button" class="btn btn-info qoll-width-1"  >Tags:<sup class="red">*</sup></button>
+          </span>
+        
+         <input type="text" class="tags form-control" placeholder="Add Tags: Space separated tags ..." default="" id="tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1">
+       </div>
+    </div>
+    <div class="col-md-2 col-xs-12 q-right">
+      <div class="input-group input-group-sm">
+        <button type="button" id="store" class="btn btn-primary btn-md store">Store</button> &nbsp;
+      </div>
+    </div>
+  </div>
+  <div class='row'>
+    <div class="col-md-12 col-xs-12"><hr class='divider'></div>
+  </div>
+    <!-- If the editor selection is markdown then this one will work -->
+  {{#if is_adv}}
+    {{> qolleditor_adv}}
+  {{/if}}
+
+  <!-- If the editor selection is html then this one will work -->
+  {{#if is_html}}
+    <div id='ckEditor'>
+      <textarea class="ckeditor" name="editor" id="editor">
+        {{get_html_content}}
+      </textarea>
+    </div>
+  {{/if}}
+
+  <!-- If the editor selection is basic then this one will work -->
+  {{#if is_basic}}
+    {{> newqoll}}
+  {{/if}}
 </template>
