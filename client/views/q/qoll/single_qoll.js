@@ -30,7 +30,13 @@ Template.single_qoll.helpers({
 	get_title : function(qollStarAttributes) {
 		return qollStarAttributes && qollStarAttributes[QollConstants.EDU.TITLE] ? qollStarAttributes[QollConstants.EDU.TITLE] : '';
 	},
-	get_units_html : function(unit_name, units) {
+	is_unit_selected : function(unit_selected) {
+		return this.toString() === unit_selected ? 'checked' : '';
+	},
+	get_units_html : function(q) {
+		var unit_name = undefined, units = undefined;
+		qlog.info('Printing unit values - ' + unit_name, + ' **/** ' + units, filename);
+		console.log(q);
 		if (units == undefined || units && units.length === 0)
 			return '';
 

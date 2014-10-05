@@ -1,5 +1,5 @@
 <template name="single_qoll">
-	   <div class="col-md-12 col-xs-12 list-group-item qoll-seperator {{#if is_parent}} list-group-item-heading{{/if}} bg-qoll" id='{{_id}}'>
+	   <div class="col-md-12 col-xs-12 list-group-item qoll-seperator {{#if is_parent}} list-group-item-heading{{/if}} bg-qoll" id='{{q._id}}'>
       
       <div class="col-md-10 col-xs-12">
         <h4>{{q.qoll_idx_title}} {{{transform_txt q.qollTitle q.cat q.context q.fib}}}</h4>
@@ -11,7 +11,7 @@
         {{#if q.unit}}
           <div class="input-group">{{#if q.unit_name}}{{q.unit_name}}: {{else}}Unit: {{/if}}
             {{#each q.unit}} 
-                <input name="unit" value="{{this}}" type="radio"> {{this}}
+                <input name="unit" value="{{this}}" type="radio" {{is_unit_selected ../q.qoll_response.unit}}> {{this}}
             {{/each}}
           </div>
         {{/if}}

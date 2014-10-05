@@ -880,14 +880,14 @@ var getQuestionnaireResponses = function(item) {
 					attach_resp.push(rtmp.response);
 				}
 
-				responses.push({'response' : attach_resp.join(', '), 'usedHint' : rtmp.usedHint});
+				responses.push({'response' : attach_resp.join(', '), 'usedHint' : rtmp.usedHint, 'unit_selected' : rtmp.unit});
 				if(!resp_flag) {
 					respo_length++;
 					resp_flag = true;
 				}
 
 			} else {
-				responses.push({'response' : 'NA'});
+				responses.push({'response' : 'NA', 'unit_selected' : undefined});
 			}
 		});
 

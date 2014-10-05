@@ -341,7 +341,7 @@ Template.qolls_inner.events({
 		var qollstionnaireId = this.q._qollstionnaireid;
 		var blank_resp = clk.parent().find('input#number').val();
 		var power = clk.parent().find('input#power').val();
-		var unit_selected = $('div#' + qollId + ' input[name="unit"]:checked').val();
+		var unit_selected = $('div#' + qollId).find('input[name="unit"]:checked').val();
 		qlog.info('Will register the blank response here - ' + qollId + '/**' + qollstionnaireId + '/**' 
 			+ blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
 
@@ -363,7 +363,7 @@ Template.qolls_inner.events({
 		 **/
 		var err_msgs = [];
 
-		Meteor.call('registerQollBlankResponse', qollstionnaireId, qollId, fib, function(err, qollRegId) {
+		Meteor.call('registerQollBlankResponse', qollstionnaireId, qollId, fib, unit_selected, function(err, qollRegId) {
 			if (err) {
 				qlog.error('Failed registering the blank-qoll: ' + qollId + ' : ' + err, filename);
 			} else {

@@ -336,7 +336,7 @@ Meteor.methods({
 			return CoreUtils.getUint8Array(0);
 		}
 	},
-	registerQollBlankResponse : function(qsnrid, qollId, fib) {
+	registerQollBlankResponse : function(qsnrid, qollId, fib, unit_selected) {
 		var userId = Meteor.userId();
 		//TODO: populate the qollstionnaire table with fibs - new code
 		var thisemail = UserUtil.getCurrentUserEmail();
@@ -373,7 +373,8 @@ Meteor.methods({
 				submittedOn : new Date(),
 				response : fib,
 				type : QollConstants.QOLL_TYPE.BLANK,
-				iscorrect : iscorrect
+				iscorrect : iscorrect,
+				unit 	: unit_selected
 			};
 
 			return QollstionnaireResponses.insert(newentry);
@@ -385,6 +386,7 @@ Meteor.methods({
 				updatepaths['responses.' + qollId + '.response'] = fib;
 				updatepaths['responses.' + qollId + '.submittedOn'] = new Date();
 				updatepaths['responses.' + qollId + '.iscorrect'] = iscorrect;
+				updatepaths['responses.' + qollId + '.unit'] = unit_selected;
 				return QollstionnaireResponses.update({ _id : resp._id }, { $set : updatepaths });
 
 			} else {//this qollid doesnt exist
@@ -394,7 +396,8 @@ Meteor.methods({
 					submittedOn : new Date(),
 					response : fib,
 					type : QollConstants.QOLL_TYPE.BLANK,
-					iscorrect : iscorrect
+					iscorrect : iscorrect,
+					unit 	: unit_selected
 				};
 				var updatepaths;
 				updatepaths = {};
