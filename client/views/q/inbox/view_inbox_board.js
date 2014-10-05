@@ -11,6 +11,14 @@ Template.view_inbox_board.helpers({
 	}
 });
 
+Template.view_inbox.rendered = function(){
+	$('li#inbox').css('background-color', 'firebrick');
+};
+
+Template.view_inbox_board.rendered = function(){
+	//set the background of the selected box
+	$('li#inbox').css('background-color', 'firebrick');
+};
 
 Template.progress_bar.rendered = function(){
 	$( "#progressbar" ).progressbar({

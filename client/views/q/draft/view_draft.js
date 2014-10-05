@@ -28,3 +28,8 @@ Template.view_draft.events({
 		});
 	}
 });
+
+Template.view_draft.rendered = function(){
+	//set background of the rendered box
+	$('li#draft').css('background-color', 'firebrick');
+};

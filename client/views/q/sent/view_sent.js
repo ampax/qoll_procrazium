@@ -8,10 +8,15 @@ Template.view_sent.events({
 		
 		Meteor.call("removeQuestionnaire", questid, function(error, msg) {
 			if (error) {
-				Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: Error occured while remove the questionaire. Please try again or contact help.');
+				QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: Error occured while remove the questionaire. Please try again or contact help.');
 			} else {
-				Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: Removed questionaire.');
+				QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: Removed questionaire.');
 			}
 		});
 	}
 });
+
+Template.view_sent.rendered = function(){
+	//set the background of the selected box.
+	$('li#sent').css('background-color', 'firebrick');
+};

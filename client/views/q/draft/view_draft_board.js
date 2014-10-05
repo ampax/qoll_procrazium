@@ -6,3 +6,8 @@ Template.view_draft_board.helpers({
 		return QuestionaireForId.findOne();
 	}
 });
+
+Template.view_draft_board.rendered = function(){
+	//set the background of the rendered box
+	$('li#draft').css('background-color', 'firebrick');
+};

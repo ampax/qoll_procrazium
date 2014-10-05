@@ -4,31 +4,15 @@ Template.all_qolls.rendered = function() {
 	Session.set('disable_sendtoQbank', true);
 	$('.hasDatepicker').datepicker();
 
-	/**qlog.info("jdjdjdjdjdjdjdjdjdjdjdjddjdjdjdj", filename);
-
-	$("div.tex").each(function() {
-	  qlog.info("jdjdjdjdjdjdjdjdjdjdjdjddjdjdjdj ---->" + ": " + $( this ).text() );
-	  katex.render($( this ).innerHTML, $( this )); 
-	});
-
-	$("span.title-qoll").each(function( index ) {
-	  qlog.info("jdjdjdjdjdjdjdjdjdjdjdjddjdjdjdj ---->"+ index + ": " + $( this ).text() );
-	});
-
-	Array.prototype.forEach.call(
-		document.getElementsByTagName("tex"),
-		function(el) {
-			try {
-				qlog.info('Priniting the internal - ' + el.innerHTML, filename);
-				katex.render(el.innerHTML, el); 
-			} catch (e) { console.log('error happened ---- '+e); }
-		}
-	);**/
+	//Set the background color of the selected box
+	$('li#qollshop').css('background-color', 'firebrick');
 
 };
+
 $.fn.toggleCheckbox = function() {
 	this.attr('checked', !this.attr('checked'));
 };
+
 Template.all_qolls.events({
 	'click .qoll_selectall' : function(event) {
 		var my_checked = $('.qoll_selectall').prop("checked");
