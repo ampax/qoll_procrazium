@@ -10,12 +10,17 @@ QollKatexUtil = {
 			q.hint = KatexUtil.toHtml(q.hint, item.tex);
 
 			//qollTypes - map over and do the reverse-parsing here
+            //qlog.info('Printing the qoll iiiiiiiiiiiid - ' + JSON.stringify(item), filename);
+            //qlog.info('qollTypes ==============>' + item.qollTypes, filename);
 			var qollTypesT = [];
-			/**q.qollTypes.each(function(type){
-				qlog.info('==============>' + type + '/' + item._id, filename);
+			item.qollTypes.map(function(type){
+				//qlog.info('==============>' + type['value'] + '/' + item._id, filename);
 				type = KatexUtil.toHtml(type, item.tex);
 				qollTypesT.push(type);
-			});**/
+			});
+
+            //qlog.info('qollTypesT ==============>' + qollTypesT, filename);
+            q.qollTypes = CoreUtils.translateToIndexedArray(qollTypesT);
 
 			/**_.each(q.qollTypes, function(type){
 				qlog.info('==============>' + JSON.stringify(type) + '/' + type['value'] +'/' + item._id, filename);
@@ -26,9 +31,11 @@ QollKatexUtil = {
 			q.qollTypes = qollTypesT;**/
 
 			//qollTypesX - map over and do the reverse-parsing here
-			//q.qollTypesX.map(function(t){
-			//	t.type = KatexUtil.toHtml(t.type, item.tex);
-			//});
+            //qlog.info('Printing the qoll iiiiiiiiiiiid - ' + JSON.stringify(q.qollTypesX), filename);
+			q.qollTypesX.map(function(t){
+				t.type = KatexUtil.toHtml(t.type, item.tex);
+			});
+            //qlog.info('Printing the qoll iiiiiiiiiiiid - ' + JSON.stringify(q.qollTypesX), filename);
 		}
 
 		return q;
