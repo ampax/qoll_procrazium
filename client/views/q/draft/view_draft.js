@@ -8,9 +8,9 @@ Template.view_draft.events({
 		
 		Meteor.call("removeQuestionnaire", questid, function(error, msg) {
 			if (error) {
-				Eror.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: Error occured while remove the questionaire. Please try again or contact help.');
+				QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: Error occured while remove the questionaire. Please try again or contact help.');
 			} else {
-				Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: Removed questionaire from draft.');
+				QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: Removed questionaire from draft.');
 			}
 		});
 	},
@@ -21,9 +21,9 @@ Template.view_draft.events({
 		//return;
 		Meteor.call("sendQuestionnaire", questid, function(error, msg) {
 			if (error) {
-				Error.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: Error occured while sending the questionaire. Please try again or contact help.');
+				QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: Error occured while sending the questionaire. Please try again or contact help.');
 			} else {
-				Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: Removed questionaire from draft.');
+				QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: Removed questionaire from draft.');
 			}
 		});
 	}
