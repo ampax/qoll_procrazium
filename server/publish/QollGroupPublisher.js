@@ -86,31 +86,52 @@ Meteor.publish('PUBLISH_GROUPS_OF_USER_1', function(){
         var uuid = Meteor.uuid();
         var initializing = true;
 
-        //qlog.info('=======>Group-publish; uuid: ' + uuid + ", this.userid:<======= " + this.userId, filename);
+        qlog.info('=======>Group-publish; uuid: ' + uuid + ", this.userid:<======= " + this.userId, filename);
         var handle = undefined;
 
         //if(this.userId) {
 			//handle= QollGroups.find({fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
 			//handle= QollGroups.find();
-			handle= QollGroups.find({}, {$sort: {'groupName':-1}});
-			
-			handle.forEach(function (grp){
-				var handle_usr= Meteor.users.findOne(grp.submittedBy);
+      var handle = QollGroups.find({}, {$sort: {'groupName':-1}, reactive : true }).observe({
+        added : function(grp, idx){
+          var handle_usr= Meteor.users.findOne(grp.submittedBy);
 
-				/** Need to fix the users instead of bypassing it here **/
-				if(handle_usr == undefined || handle_usr.username == undefined)
-					return;
+          /** Need to fix the users instead of bypassing it here **/
+          if(handle_usr == undefined || handle_usr.username == undefined)
+            return;
 
-				grp.author_name = handle_usr.username;
+          grp.author_name = handle_usr.username;
 
-				grp.author_email = UserUtil.getEmail(handle_usr);
-				self.added('user-groups', grp._id, grp);
-			});
+          grp.author_email = UserUtil.getEmail(handle_usr);
+          qlog.info('============> Publishing group to user - ' + JSON.stringify(grp), filename);
+          self.added('user-groups', grp._id, grp);
+        },
+        changed : function(grp, idx) {
+          var handle_usr= Meteor.users.findOne(grp.submittedBy);
+
+          /** Need to fix the users instead of bypassing it here **/
+          if(handle_usr == undefined || handle_usr.username == undefined)
+            return;
+
+          grp.author_name = handle_usr.username;
+
+          grp.author_email = UserUtil.getEmail(handle_usr);
+          qlog.info('Publishing group to user - ' + JSON.stringify(grp), filename);
+          self.changed('user-groups', grp._id, grp);
+        },
+        removed : function(grp){
+          self.removed('user-groups', grp._id);
+        }
+    });
 		//}
 		
-        qlog.info('Done initializing the publisher: PUBLISH_GROUPS_OF_USER_1, uuid: ' + uuid, filename);
-        initializing = false;
-        self.ready();
+    qlog.info('Done initializing the publisher: PUBLISH_GROUPS_OF_USER_1, uuid: ' + uuid, filename);
+    initializing = false;
+    self.ready();
+
+    self.onStop(function() {
+      if(handle != undefined) handle.stop();
+    });
 });
 
 /** Publish all the groups that the user has subscribed to **/

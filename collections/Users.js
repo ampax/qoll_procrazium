@@ -22,3 +22,17 @@ Meteor.users.allow({
   	return UserUtil.isAdminById(userId) || userId == doc._id;
   }
 });
+
+
+
+QollGroups.allow({
+  insert: function(userId, doc) {
+  	return doc && Meteor.userId;
+  },
+  update: function(userId, doc) {
+  	return doc && Meteor.userId && userId == doc.userId;
+  },
+  remove: function(userId, doc) {
+  	return doc && Meteor.userId && userId == doc.userId;
+  }
+});

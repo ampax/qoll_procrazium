@@ -34,8 +34,6 @@ Accounts.onCreateUser(function(options, user){
     replies: true
   }
 
-  // create slug from username
-  user.slug = URLUtil.slugify(UserUtil.getUserName(user));
   // add slug to the profile
   if (!user.profile.slug)
     user.profile.slug = user.slug;
@@ -68,6 +66,18 @@ Accounts.onCreateUser(function(options, user){
     setTimeout(Ggl.SocialFunGoogle(user), 500);
   }
 
+  //The following two blocks are important when you login with facebook or google, coz slug and username will not be populated
+  if(user.slug != undefined && user.slug != null) {
+    user.profile.slug = user.slug;
+  } else if ((user.profile.slug == undefined || user.profile.slug == null) && UserUtil.getEmail(user)) {
+    //slugify the email-id
+    user.slug = UserUtil.getEmail(user).match(/^([^@]*)@/)[1];
+    user.profile.slug = user.slug;
+  }
+
+  if(user.username == undefined || user.username == null) {
+    user.username = user.slug;
+  }
 
   return user;
 });

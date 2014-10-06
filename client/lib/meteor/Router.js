@@ -36,6 +36,7 @@ UserPageController = FastRender.RouteController.extend({
     Meteor.subscribe('singleUser', this.params._idOrSlug);
     Meteor.subscribe('currentUser');
     Meteor.subscribe('USER_SUBSCRIPT_GROUPS');
+    Meteor.subscribe('PUBLISH_GROUPS_OF_USER_1');
   },
   data: function() {
     var findById = Meteor.users.findOne(this.params._idOrSlug);

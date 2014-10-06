@@ -80,6 +80,8 @@ Meteor.methods({
 			'userEmails' : userEmails,
 			'createdOn' : new Date(),
 			'createdBy' : Meteor.userId(),
+            'submittedOn' : new Date(),
+            'submittedBy' : Meteor.userId(),
             'role' : QollConstants.GROUPS.ROLE.OWNER
 		});
 		userEmails.map(function(userEmail) {

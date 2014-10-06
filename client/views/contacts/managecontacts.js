@@ -14,8 +14,9 @@ Template.managecontacts.events({
 
 
         qlog.info('Sending the following emails for group updated: ' + emails + ', @group: ' + groupName, filename);
+        //&& emails.length > 0
 
-        if(groupName && emails.length > 0){
+        if(groupName){
             //SEND to server for updating user profiles
             qlog.info('Sending to server ' + groupName + ', ' + emails, filename);
             
