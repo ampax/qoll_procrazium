@@ -6,8 +6,32 @@ var filename='client/views/questionaire/slide_up_bank.js';
  * On submit button will send the data to a php script
  *
  */
+
+ Template.slide_up_bank.rendered = function() {
+  qlog.info("Initializing autocomplete ... ", filename);
+  Meteor.subscribe('RECIPIENTS_PUBLISHER');
+  QollAutoComplete.init("input#recipient_search");
+  QollAutoComplete.enableLogging = false;
+};
+
  Template.slide_up_bank.events({
 
+  'keyup .recipient' : function() {
+
+    QollAutoComplete.autocomplete({
+      element : 'input#recipient_search', // DOM identifier for the element
+      collection : Recipients, // MeteorJS collection object (published object)
+      field : 'groupName', // Document field name to search for
+      limit : 0, // Max number of elements to show
+      sort : {
+        groupName : 1
+      },
+      mode : 'multi',
+      delimiter : ';'
+    });
+    // Sort object to filter results with
+    //filter: { 'gender': 'female' }}); // Additional filtering
+  },
   'click div.slider' : function() {
     qlog.info('Clicked on the slider div');
     $( "div.slider" ).slideToggle();
