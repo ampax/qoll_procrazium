@@ -8,8 +8,6 @@ iron:router
 meteorhacks:fast-render
 jquery
 jparker:crypto-md5
-mrt:font-awesome-sass
-reywood:font-awesome-sass
 meteorhacks:npm
 mizzao:bootstrap-3
 accounts-base
@@ -26,4 +24,5 @@ mrt:datatables
 accounts-facebook
 natestrauser:font-awesome
 sashko:katex
+pfafman:font-awesome-4
 

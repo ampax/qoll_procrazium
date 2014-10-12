@@ -9,6 +9,15 @@ Meteor.methods({
 		var eandg = QollParser.parseEmailAndGroups(emailsandgroups);
 		qollstionnaire.submittedTo = eandg.submittedTo;
 		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
+		qollstionnaire.submittedToGroup.map(function(grp){
+			var qg = QollGroups.findOne({'groupName' : grp, 'createdBy' : Meteor.userId()});
+			if(qg && qg.userEmails && qg.userEmails.length > 0) {
+				qg.userEmails.map(function(eml){
+					if(_.indexOf(eml) == -1) 
+						qollstionnaire.submittedTo.push(eml);
+				});
+			}
+		});
 
 		qollstionnaire.title = title;
 		qollstionnaire.tags = tags;
