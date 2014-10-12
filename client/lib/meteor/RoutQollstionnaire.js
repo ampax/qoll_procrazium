@@ -1,3 +1,4 @@
+IReceivedQuestionaire = new Meteor.Collection("recvd-questionaire");
 
 InboxController = RouteController.extend({
 	findOptions : function() {
