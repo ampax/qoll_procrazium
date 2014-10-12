@@ -15,6 +15,7 @@ Template.editor_selector.helpers({
 
 Template.editor_selector.events({
 	"click input[name = 'editorPref']" : function(event) {
+		event.preventDefault();
 		var editor_choice = $('input[name=editorPref]:checked').val();
 		if(editor_choice == undefined || editor_choice == '') {
 			editor_choice = QollConstants.EDITOR_MODE.BASIC; //default the editor choice to basic

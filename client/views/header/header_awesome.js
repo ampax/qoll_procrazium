@@ -48,7 +48,7 @@ Template.header_awesome.rendered = function() {
 
 
 Template.header_awesome.helpers({
-    my_profile : function(event) {
+    my_profile : function() {
         return '/users/'+Meteor.user().profile.slug;
     },
 });

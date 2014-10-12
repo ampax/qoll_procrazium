@@ -183,6 +183,7 @@ Template.recipient.events({
 		qlog.info('Storing the qoll now (markdown) - ' + markdown, filename);
 	},
 	"click input[name = 'attribute_access']" : function(event) {
+		event.preventDefault();
 		var access_mode = $("input:radio[name=attribute_access]:checked").val();
 		if (access_mode == undefined || access_mode == '') {
 			access_mode = QollConstants.QOLL.VISIBILITY.PUB;
