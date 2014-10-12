@@ -373,6 +373,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 								else q2.fib = [];
 							}
 
+							q2 = QollRandomizer.randomize(q2);
+
 							q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
@@ -409,6 +411,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 									q2.fib = response.response;
 								else q2.fib = [];
 							}
+
+							q2 = QollRandomizer.randomize(q2);
 
 							q2 = QollKatexUtil.populateIfTex(q2, t);
 
@@ -860,11 +864,10 @@ var getQuestionnaireResponses = function(item) {
 		}
 
 		item.qollids.map(function(qid){
-			if(resp) {
+			if(resp && resp.responses[qid]) {
 				var cnt1 = 0;
 				var attach_resp = [];
 				var rtmp = resp.responses[qid];
-				qlog.info('Printing user - ' + item._id + '//////' +u1[0]._id + '//////' + JSON.stringify(rtmp.response) + '//////' + qid, filename);
 				
 				if(rtmp.type.toLowerCase() === QollConstants.QOLL_TYPE.MULTI || rtmp.type === QollConstants.QOLL.TYPE.SINGLE) {
 					rtmp.response.map(function(tmp){
