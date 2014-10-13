@@ -32,9 +32,11 @@ QollKatexUtil = {
 
 			//qollTypesX - map over and do the reverse-parsing here
             //qlog.info('Printing the qoll iiiiiiiiiiiid - ' + JSON.stringify(q.qollTypesX), filename);
-			q.qollTypesX.map(function(t){
-				t.type = KatexUtil.toHtml(t.type, item.tex);
-			});
+            if(q.qollTypesX){
+    			q.qollTypesX.map(function(t){
+    				t.type = KatexUtil.toHtml(t.type, item.tex);
+    			});
+            }
             //qlog.info('Printing the qoll iiiiiiiiiiiid - ' + JSON.stringify(q.qollTypesX), filename);
 		}
 
