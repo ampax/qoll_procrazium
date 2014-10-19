@@ -54,7 +54,7 @@ QollParser = {
 	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
-	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate) {
+	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups) {
         var qollId = new Array();
         var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
         qolls = qolls.slice(1);
@@ -281,7 +281,7 @@ QollParser = {
 			**/
 			//function(action, qollData qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate)
 			var qid = Meteor.call('addQoll', action, qoll_data, qollRawId, qollMasterId, emailsandgroups,
-										undefined, undefined,  tags, qollFormat, qollIdtoUpdate);
+										undefined, undefined,  tags, qollFormat, qollIdtoUpdate, accessGroups);
 			/**	qoll, 
 				types, 
 				typesX, 

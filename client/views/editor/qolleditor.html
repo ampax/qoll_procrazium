@@ -1,14 +1,15 @@
-<template name="editor">
+<template name='qolleditor'>
 	{{> header_awesome}}
-	{{> editor_selector}}
-	{{#unless is_basic}}
-		{{> recipient}}
-	{{/unless}}
-	{{> editorcore}}
+	<br>
 
-</template>
-<template name="editorcore">
-		<!-- If the editor selection is markdown then this one will work -->
+	<div id="aceEditorContainer">
+
+	<!--div class='dummy_class'>Click me!</div-->
+	{{> editor_selector}}
+
+	{{> recipient}}
+
+	<!-- If the editor selection is markdown then this one will work -->
 	{{#if is_adv}}
 		{{> qolleditor_adv}}
 	{{/if}}
@@ -22,4 +23,7 @@
 	{{#if is_basic}}
 		{{> newqoll}}
 	{{/if}}
+
+	</div>
+
 </template>

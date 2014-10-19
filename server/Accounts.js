@@ -79,6 +79,11 @@ Accounts.onCreateUser(function(options, user){
     user.username = user.slug;
   }
 
+  //Initialize user settings
+  Settings.insert({'userId' : user._id, 
+    'editor_mode': QollConstants.EDITOR_MODE.HTML, 
+    'access_mode' : QollConstants.QOLL.VISIBILITY.PUB});
+
   return user;
 });
 

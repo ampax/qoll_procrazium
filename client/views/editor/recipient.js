@@ -2,12 +2,15 @@ var filename = "client/views/editor/recipient.js";
 
 Template.recipient.helpers({
 	is_pub : function() {
-		return checkDefaultAccessMode(QollConstants.QOLL.VISIBILITY.PUB) ? 'checked' : '';
+		return QollEditorUtil.checkAccessMode(QollConstants.QOLL.VISIBILITY.PUB) ? 'checked' : '';
 	},
 	is_pvt : function() {
-		return checkDefaultAccessMode(QollConstants.QOLL.VISIBILITY.PVT) ? 'checked' : '';
+		return QollEditorUtil.checkAccessMode(QollConstants.QOLL.VISIBILITY.PVT) ? 'checked' : '';
 
 	},
+	is_group_enabled : function() {
+		return QollEditorUtil.checkAccessMode(QollConstants.QOLL.VISIBILITY.PVT);
+	}
 });
 
 //This will be used to convert the html to markdown in case it is ckEditor that user has selected
@@ -29,10 +32,12 @@ Template.recipient.helpers({
 **/
 Template.recipient.events({
 	'click .store' : function(event) {
+		event.preventDefault();
 		var content = 'undefined';
 		var markdown = 'undefined';
 		var access = $("input:radio[name=attribute_access]:checked").val();
 		var recips = jQuery("input#recipient_search").val();
+		var recips_grp = jQuery("input#recipient_search_grp").val();
 		var tags = jQuery("input.tags").val();
 		var editor_choice = $('input[name=editorPref]:checked').val();
 		var qollIdToEdit = Session.get('QollIdToEdit');
@@ -44,11 +49,20 @@ Template.recipient.events({
 		}
 
 		var emailsandgroups = [];
+		var accessGroups = [];
 		if (!qollIdToEdit) {
 			$.each(recips.split(/;|,/), function(ix, email) {
 				email = $.trim(email);
 				if (email.length > 0) {
 					emailsandgroups.push(email);
+				}
+			});
+
+			if(!recips_grp) recips_grp = '';
+			$.each(recips_grp.split(/;|,/), function(ix, email) {
+				email = $.trim(email);
+				if (email.length > 0) {
+					accessGroups.push(email);
 				}
 			});
 
@@ -79,7 +93,7 @@ Template.recipient.events({
 			//Convert the value on the server
 			markdown = toMarkdown(content);
 
-			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, function(error, msg) {
+			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
 	          		QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
@@ -98,7 +112,7 @@ Template.recipient.events({
 			//qlog.info('This is markdown editor content - ' + content, filename);
 			//return;
 
-			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, function(error, msg) {
+			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
 		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
@@ -116,6 +130,7 @@ Template.recipient.events({
 		var markdown = 'undefined';
 		var access = $("input:radio[name=attribute_access]:checked").val();
 		var recips = jQuery("input#recipient_search").val();
+		var recips_grp = jQuery("input#recipient_search_grp").val();
 		var tags = jQuery("input.tags").val();
 		var editor_choice = $('input[name=editorPref]:checked').val();
 
@@ -137,6 +152,15 @@ Template.recipient.events({
 			return;
 		}
 
+		var accessGroups = [];
+		if(!recips_grp) recips_grp = '';
+		$.each(recips_grp.split(/;|,/), function(ix, email) {
+			email = $.trim(email);
+			if (email.length > 0) {
+				accessGroups.push(email);
+			}
+		});
+
 		var tagArr = [];
 		$.each(tags.split(/;|,|\s/), function(ix, tag) {
 			tag = $.trim(tag);
@@ -153,7 +177,7 @@ Template.recipient.events({
 			//Convert the value on the server
 			markdown = toMarkdown(content);
 			var qollIdToEdit = Session.get('QollIdToEdit');
-			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, function(error, msg) {
+			Meteor.call("processStoreHtmlQoll", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, accessGroups, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
           			QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
@@ -168,7 +192,7 @@ Template.recipient.events({
 			//If the default choice is markdown editor, get the text from markdown editor and process it accordingly
 			var edtr = ace.edit("aceEditor");
 			var content = edtr.getValue();
-			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, function(error, msg) {
+			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, accessGroups, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
 		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
@@ -228,6 +252,7 @@ Template.recipient.rendered = function() {
 	qlog.info("Initializing autocomplete ... ", filename);
 	Meteor.subscribe('RECIPIENTS_PUBLISHER');
 	QollAutoComplete.init("input#recipient_search");
+	QollAutoComplete.init("input#recipient_search_grp");
 	QollAutoComplete.enableLogging = true;
 };
 
@@ -236,6 +261,22 @@ Template.recipient.events({
 
 		QollAutoComplete.autocomplete({
 			element : 'input#recipient_search', // DOM identifier for the element
+			collection : Recipients, // MeteorJS collection object (published object)
+			field : 'groupName', // Document field name to search for
+			limit : 0, // Max number of elements to show
+			sort : {
+				groupName : 1
+			},
+			mode : 'multi',
+			delimiter : ';'
+		});
+		// Sort object to filter results with
+		//filter: { 'gender': 'female' }}); // Additional filtering
+	},
+	'keyup .recipient_grp' : function() {
+
+		QollAutoComplete.autocomplete({
+			element : 'input#recipient_search_grp', // DOM identifier for the element
 			collection : Recipients, // MeteorJS collection object (published object)
 			field : 'groupName', // Document field name to search for
 			limit : 0, // Max number of elements to show
