@@ -29,7 +29,7 @@ Meteor.methods({
 	*						types, typesX, visibility, complexity, isMultiple ) 
 	**/
 	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
-	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate) {
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups) {
 		var collection_forqoll = Qoll; 
 
 		var qoll_to_insert = {
@@ -49,6 +49,7 @@ Meteor.methods({
 			'qollTypesX' : qollData.typesX,
 			'visibility' : qollData.visibility,
 			'complexity' : qollData.complexity,
+			'accessToGroups' : accessGroups,
 			//'qollStarAttributes' : qollStarAttributes,
 			//'qollAttributes' : qollAttributes,
 			'submittedOn' : new Date(),
@@ -175,7 +176,7 @@ Meteor.methods({
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate) {
+	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups) {
 		qlog.info('Inserting into qoll master', filename);
 
 		//Store the tags
@@ -186,14 +187,14 @@ Meteor.methods({
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT});
 
-		var qollids = QollParser.addQollsForMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate);
+		var qollids = QollParser.addQollsForMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups);
 
 		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
 
 		return 'Successfully created ' + qollids.length + ' qolls.' + questinfo;
 	},
 
-	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate){
+	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate, accessGroups){
 		//md = md.replace(/(\d+)\.\s+/g, '- ');//needs to be removed
 
 		//md = md.replace(/\*\s+/g, '- ');//needs to be removed
@@ -210,7 +211,7 @@ Meteor.methods({
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
 		
-		var qollids = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML, qollIdToUpdate);
+		var qollids = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML, qollIdToUpdate, accessGroups);
 
 		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
 		

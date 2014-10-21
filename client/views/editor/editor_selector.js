@@ -15,6 +15,7 @@ Template.editor_selector.helpers({
 
 Template.editor_selector.events({
 	"click input[name = 'editorPref']" : function(event) {
+		console.info('ddddddddddddidnt get this ... grrrrrrrr');
 		event.preventDefault();
 		var editor_choice = $('input[name=editorPref]:checked').val();
 		if(editor_choice == undefined || editor_choice == '') {
@@ -42,7 +43,7 @@ Template.editor_selector.events({
 	        }
 	      });
 	    } else {
-	        Settings.insert({'userId' : Meteor.userId(), 'editor_mode': QollConstants.EDITOR_MODE.BASIC});
+	        Settings.insert({'userId' : Meteor.userId(), 'editor_mode': editor_choice});
 	    }
 	}
 });

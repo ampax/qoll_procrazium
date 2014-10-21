@@ -15,10 +15,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			//submitted by this user
-			var handle = Qoll.find( 
-				getQuery.call(this,findoptions), 
-				{sort : {'submittedOn' : -1}, reactive : true}
-			).observe({
+			var handle = Qoll.find( getQuery.call(this,findoptions), {sort : {'submittedOn' : -1}, reactive : true} ).observe({
 				added : function(item, idx) {
 					//qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
 					var q = {
@@ -761,10 +758,22 @@ var getUnitSelected = function(ansHash) {
 
 var getQuery = function(findoptions) {
 	//Return default query if nothing specified for the type in the paramenters. Else return appropriate query parameter.
+
+	var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+	var user = ufound[0];
+	var groups = QollGroups.find({'userEmails' : UserUtil.getEmail(user)})
+	var grps = [];
+	groups.map(function(gr){
+		grps.push(gr.groupName);
+	});
+
+	qlog.info('Pushed groups before making the query =============>>>> ' + grps, filename);
 	
-	
-	var query = {$or: [{'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
-						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}]};
+	var query = {$or: [ {'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}},
+						{'visibility': QollConstants.QOLL.VISIBILITY.PVT,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
+							accessToGroups : {$in : grps}}
+					]};
 
 	if(findoptions && findoptions.query_type){
 		//Process for the type of data being queried

@@ -70,6 +70,11 @@ Template.qollModalEditor.events({
 		}); //QollRaw.findOne({id_:Session.get('QollRawIdToEdit')});
 		
 	},
+	'hidden.bs.modal' : function() {
+		qlog.info('Hiding the modal here ................................', filename);
+		Session.set('QollIdToEdit', undefined);
+		Session.set('QollRawIdToEdit', undefined);
+	},
 	'click .store' : function(event) {
 		var content = 'undefined';
 		var markdown = 'undefined';

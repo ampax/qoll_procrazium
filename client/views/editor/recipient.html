@@ -1,5 +1,5 @@
 <template name="recipient">
-	<div class="well well-sm">
+	<div class="col-md-12 col-xs-12 well well-sm">
 
 		<div class="input-group input-group-sm">
    	
@@ -15,6 +15,10 @@
 					<label class="radio-inline">
 					  <input type="radio" name="attribute_access" id="private" value="private" {{is_pvt}}> Private
 					</label>
+
+					{{#if is_group_enabled}}
+					&nbsp;&nbsp;&nbsp;<input type="text" class="recipient_grp add-group textbox" placeholder="Add groups for sharing (no emails) ..." default="self" id="recipient_search_grp" data-intro="Search and add groups to qolls created ..." data-step="1">
+					{{/if}}
 				</div><!-- controls -->
 			</div><!-- control-group -->
 

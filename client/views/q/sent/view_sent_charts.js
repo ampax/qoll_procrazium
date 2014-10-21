@@ -6,7 +6,7 @@ Template.bar_charts.events({
   //TODO
 });
 
-Template.bar_chart.bar = function() {
+/** Template.bar_chart.bar = function() {
   //TODO
   var margin = {top: 20, right: 20, bottom: 30, left: 40},
       width = 960 - margin.left - margin.right,
@@ -126,4 +126,4 @@ d3.selection.prototype.size = function() {
 var type = function(d) {
   d.frequency = +d.frequency;
   return d;
-};
+};**/

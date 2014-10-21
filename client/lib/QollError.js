@@ -1,6 +1,6 @@
-var filename='client/views/common/qoll_error.js';
+var filename='client/lib/QollError.js';
 
-/**QollError = {
+QollError = {
 	error : function(err_msg) {
 		//if(timeout === undefined) timeout = 8400;
 		var cls = '.err-msg';
@@ -26,14 +26,5 @@ var filename='client/views/common/qoll_error.js';
 			QollError.error(content, timeout);
 		else if(QollConstants.MSG_TYPE.SUCCESS === msg_typ)
 			QollError.success(content, timeout);
-	}
-}; **/
-
-Template.qoll_error.rendered = function(){
-    qlog.info('Running post rendered code for editor 888', filename);
-    //Meteor.subscribe('user-prefs-byname', QollConstants.PREF_KEY.EDITOR_MODE);
-    if(URLUtil.isDev()) {
-	    //Error.message(QollConstants.MSG_TYPE.ERROR, 'Use me to show error messages: Error.message(\'error\', msg);', 6000);
-	    //Error.message(QollConstants.MSG_TYPE.SUCCESS, 'Use me to show success messages: Error.message(\'success\', msg);', 6000);
 	}
 };

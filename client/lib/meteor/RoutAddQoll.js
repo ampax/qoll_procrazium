@@ -1,5 +1,15 @@
 var filename = 'client/lib/meteor/RoutAddQoll.js';
 
+EditorXXXController = RouteController.extend({
+	waitOn: function(){
+		qlog.info('In the controller XXX', filename);
+		[Meteor.subscribe('QOLL_GROUP_PUBLISHER'), Meteor.subscribe('Settings')];
+	},
+	onAfterAction: function(){
+		//TODO
+	}
+});
+
 Router.map(function(){
 	this.route('editor', {
 		template: 'editor',
@@ -70,6 +80,24 @@ Router.map(function(){
 		}],
 		onAfterAction: function(){
 			Session.set("qollRawId", null);
+		}
+	});
+
+	this.route('qolleditor', {
+		template: 'qolleditor',
+		path: '/qolleditor',
+		waitOn: function(){
+			qlog.info('In the controller code for xxx template', filename);
+			Meteor.subscribe('Settings');
+		},
+		onBeforeAction: [function(){
+			qlog.info('Before for qoll-editor ...', filename);
+		}, function(){
+			//this is next in line to the first subscribe function
+			//active_nav();
+		}],
+		onAfterAction: function(){
+			//TODO
 		}
 	});
 });

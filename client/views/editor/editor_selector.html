@@ -4,11 +4,12 @@
   QollConstants.EDITOR_MODE.HTML - html
 -->
 <template name="editor_selector">
-	<div class="col-md-4 col-xs-4 text-right" id="aceEditorContainer">
+	<div class="col-md-12 col-xs-12 text-right">
 		<label class="control-label">&nbsp; Editor :&rarr;</label>
-		<label class="radio-inline">
+		<!-- Basic does not work today properly from look and feel perspective :(-->
+		<!-- label class="radio-inline">
 		  <input type="radio" name="editorPref" id="simple" value="basic" {{is_basic}}> Simple
-		</label>
+		</label -->
 		<label class="radio-inline">
 		  <input type="radio" name="editorPref" id="markdown" value="markdown" {{is_adv}}> Text
 		</label>
