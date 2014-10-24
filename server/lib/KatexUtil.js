@@ -3,6 +3,10 @@
 KatexUtil = {};
 
 KatexUtil.toHtml = function(txt, katext_arr) {
+    //Return if txt is undefined or null.
+    if(txt == undefined || txt == null)
+        return txt;
+
 	if(txt.match(QollRegEx.tex_transf))
 		qlog.info('hell this is printed', filename);
 
