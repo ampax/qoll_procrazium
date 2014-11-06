@@ -90,6 +90,12 @@ A:hover {
  COLOR: green /*The color of the mouseover or 'hover' link*/
 /**}**/
 
+.qoll-brand-style {
+    font-size: 10px;
+    font-family: Garamond, 'Times New Roman', sans-serif;
+    color: firebrick;
+}
+
 .centered {
     margin: 0 auto;
 }
@@ -630,6 +636,11 @@ text-overflow: ellipsis;
     border-width: medium !important;
     border-style: solid !important;
     border-color: #00FF00 !important;
+}
+
+.h1q1 {
+    font-size: 1.5em;
+    font-family: arial, 'Lucida Sans Unicode';
 }
 
 @media (max-width: 900px) {

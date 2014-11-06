@@ -61,7 +61,42 @@ Meteor.methods({
         qlog.info("Getting avatar for: " + Meteor.userId(), filename);
         return Meteor.users.find({_id : Meteor.userId()}).profile.avatar_url;
     },
-    
+    updateCreateUserGroup : function(groupName, groupDesc, userEmails, domainSpec, groupAccess, inviteOnly, groupSize, closedOrOpen) {
+        qlog.info('================ Printing group info ===================', filename);
+        qlog.info('groupName: ' +groupName+', groupDesc: '+ groupDesc+', userEmails: '+ userEmails+', domainSpec: '+ domainSpec+
+            ', groupAccess: '+ groupAccess+', inviteOnly: '+ inviteOnly+', groupSize: '+ groupSize+', closedOrOpen: '+ closedOrOpen, filename);
+        
+        var gpId = QollGroups.insert({
+            'groupName' : groupName,
+            'groupDesc' : groupDesc,
+            'userEmails' : userEmails,
+            'domainSpec' : domainSpec,
+            'groupAccess'  : groupAccess,
+            'pubOrPvt'  : groupAccess,
+            'inviteOnly' : inviteOnly,
+            'groupSize' : groupSize,
+            'closedOrOpen' : closedOrOpen,
+            
+            'createdOn' : new Date(),
+            'createdBy' : Meteor.userId(),
+            'submittedOn' : new Date(),
+            'submittedBy' : Meteor.userId(),
+            'role' : QollConstants.GROUPS.ROLE.OWNER,
+            'status'    : QollConstants.STATUS.ACTIVE
+        });
+
+        userEmails.map(function(userEmail) {
+            updateUserGroupWithEmail(gpId, groupName, userEmail);
+        });
+
+        updateUserGroupsCreated(gpId, groupName);
+
+        return gpId;
+    },
+    removeUserGroup : function(groupId) {
+        qlog.info('Removing group with id - ' + groupId, filename);
+        QollGroups.update({ '_id' : groupId }, { $set : { updatedBy : Meteor.userId(), updatedOn : new Date(), status : QollConstants.STATUS.ARCHIVE } });
+    },
 	updateUserGroup: function(groupName, userEmails) {
         var size = userEmails.length;
         var groupSize = QollConstants.GROUPS.SM;
@@ -84,6 +119,7 @@ Meteor.methods({
             'submittedBy' : Meteor.userId(),
             'role' : QollConstants.GROUPS.ROLE.OWNER
 		});
+
 		userEmails.map(function(userEmail) {
 			//qlog.info('Updating the user for groups: *' + userEmail + '*, groupName: ' + groupName, filename);
 			//Mongo Query: - db.users.find({'emails.address': {$regex:'abc',$options:'i'}});
@@ -111,12 +147,98 @@ Meteor.methods({
 			}
 		}
 		return false;
-	}
+	},
+    connectWithQollUser : function(friend_id) {
+        //QollFriends
+        if(this.userId) {
+            var friend_handle = QollFriends.findOne({user_id : this.userId, friend_id : friend_id});
+            if(friend_handle) {
+                //Friend already exists. Don't do anything.
+            } else {
+                //Let us initiate a request to the user for qoll-friendship
+                QollFriends.insert({
+                    user_id         : this.userId,
+                    friend_id       : friend_id,
+                    status          : QollConstants.STATUS.PENDING,
+                    initiated_on    : new Date(),
+                    //confirmed_on  : when_confirmed,
+                });
+            }
+        }
+    },
+    deleteQollConnection : function(friend_id) {
+        //QollFriends
+        if(this.userId) {
+            QollFriends.remove({user_id : this.userId, friend_id : friend_id}, function(err){
+                if(!err) {
+                    return 'Successfully removed the connection.';
+                }
+            });
+        }
+    },
+    confirmRecQollConnectReq : function(friend_id) {
+        //QollFriends
+        if(this.userId) {
+            QollFriends.update({ friend_id: this.userId, user_id : friend_id}, {$set: {status : QollConstants.STATUS.CONFIRMED, confirmed_on : new Date()}}, function(error){
+                if(error){
+                    qlog.error('Error happened while connecting with user: ' + friend_id + ', ERROR: ' + error, filename);
+                } else {
+                    qlog.info('Connected with friend ' + friend_id, filename);
+                    var friend_handle = QollFriends.findOne({user_id : this.userId, friend_id : friend_id});
+                    if(friend_handle) {
+                        //Friend already exists. Don't do anything.
+                    } else {
+                        //Let us initiate a request to the user for qoll-friendship
+                        qlog.info('===========Creating cross connect record=============', filename);
+                        QollFriends.insert({
+                            user_id         : this.userId,
+                            friend_id       : friend_id,
+                            status          : QollConstants.STATUS.CONFIRMED,
+                            initiated_on    : new Date(),
+                            confirmed_on    : new Date(),
+                            //confirmed_on  : when_confirmed,
+                        });
+                    }
+                }
+            });
+        }
+    },
+    declineRecQollConnectReq: function(friend_id) {
+        //QollFriends
+        if(this.userId) {
+            QollFriends.update({friend_id: this.userId, user_id : friend_id}, {$set: {status : QollConstants.STATUS.DECLINED}}, function(error){
+                if(error){
+                    qlog.error('Error happened while connecting with user: ' + friend_id + ', ERROR: ' + error, filename);
+                } else {
+                    qlog.info('Connected with friend ' + friend_id, filename);
+                }
+            });
+        }
+    },
+    deleteSentQollConnectReq: function(friend_id) {
+        //QollFriends
+        if(this.userId) {
+            QollFriends.remove({user_id : this.userId, friend_id : friend_id}, function(error){
+                if(error){
+                    qlog.error('Error happened while connecting with user: ' + friend_id + ', ERROR: ' + error, filename);
+                } else {
+                    qlog.info('Connected with friend ' + friend_id, filename);
+                }
+            });
+        }
+    },
+    inviteSocialContactToJoinQoll: function(friend_id) {
+        //QollFriends
+        if(this.userId) {
+            //Sent an email to connect with Qoll to a non-Qoll user
+            QollMailer.sendContactUsEmail('webmaster@qoll.io', 'kaushik.anoop@gmail.com', 'Join me on Qoll', 'This is join me on qoll message.');
+        }
+    },
 
 });
 
 
-updateUserGroupWithEmail = function(groupName, userEmail){
+updateUserGroupWithEmail = function(groupId, groupName, userEmail){
     var user=Meteor.users.findOne({ "profile.email" : userEmail });
     if(!user) {
         user=Meteor.users.findOne({ "emails.address" : userEmail });
@@ -131,6 +253,7 @@ updateUserGroupWithEmail = function(groupName, userEmail){
 
     var groupInfo = {};
     groupInfo['groupOwner'] = Meteor.userId();
+    groupInfo['groupId'] = groupId;
     groupInfo['groupName'] = groupName;
 
     if(user._id) {
@@ -147,17 +270,21 @@ updateUserGroupWithEmail = function(groupName, userEmail){
 }
 
 
-updateUserGroupsCreated = function(groupName) {
+updateUserGroupsCreated = function(groupId, groupName) {
     var currUser = Meteor.users.findOne({_id : Meteor.userId()});
     if(!currUser.groupsCreated) {
         currUser.groupsCreated = [];
     }
 
-    Meteor.users.update({ _id : Meteor.userId() }, {$push: {groupsCreated : groupName}}, function(error){
+    var groupInfo = {};
+    groupInfo['groupId'] = groupId;
+    groupInfo['groupName'] = groupName;
+
+    Meteor.users.update({ _id : Meteor.userId() }, {$push: {groupsCreated : groupInfo}}, function(error){
         if(error){
             qlog.error('Error happened while pushing owner groups for user: ' + currUser._id + ', group: ' + groupName + ', ERROR: ' + error, filename);
         } else {
-            qlog.info('Done pushing owner group: ' + groupName , filename);
+            qlog.info('Done pushing owner group: ' + groupName + '/' + groupId , filename);
         }
     });
 }

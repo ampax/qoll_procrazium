@@ -1,0 +1,33 @@
+<template name="my_social">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> social_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="content-header">
+	            <h1>
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                Social
+	            </h1>
+	        </div>
+			
+			<hr class='divider divider-bottom-0'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset inset-5 container">
+				<div class="row">
+					<div class="col-md-12 col-xs-12">
+	            	
+					
+					Social contents here<p>&nbsp;</p>
+					{{> list_card contacts=friends btn_ctx='my_social' }}
+					</div><!-- /column-->
+				</div><!-- /row-->
+			</div>
+
+			{{> slide_up_group}}
+		</div>
+	</div>
+</template>

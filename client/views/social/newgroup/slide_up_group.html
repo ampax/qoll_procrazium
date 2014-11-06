@@ -1,0 +1,115 @@
+<template name="slide_up_group">
+	
+	<div class="group_pop">
+		<div class='pop-nav'>
+			<div class='row'>
+			<div class='col-md-11'>New Group</div>
+			<div class='col-md-1 pop-nav-actions'>
+				<span class="glyphicon glyphicon-remove toggle"></span>&nbsp;
+			</div>
+			</div>
+		</div>
+
+		<div class="form-static">
+
+			<div class="input-group input-group-sm fill_100_pct">
+				<span class="input-group-btn">
+			     	<button type="button" class="btn btn-primary qoll-width-1"  >Desc:<sup class="red">*</sup></button>
+			    </span>
+				<input type="text" class="group-desc form-control" placeholder="Group Description ..." default="Group desc" >
+			</div>
+
+			<div class="input-group input-group-sm minor-margin">
+				<span class="input-group-btn">
+			     	<button type="button" class="btn btn-primary qoll-width-1"  >Group Name:<sup class="red">*</sup></button>
+			    </span>
+		    
+				 <input type="text" class="form-control" placeholder="Group Name ..." default="" id="group-name" data-intro="Add a new group name ..." data-step="1">
+			</div>
+
+			<div class="input-group input-group-sm minor-margin">
+				<span class="input-group-btn">
+			     	<button type="button" class="btn btn-info qollQbankToggle qoll-width-1">Members: </button>
+			    </span>
+			    <input type="text" class="members form-control" placeholder="Add group members ..." default="procrazium@gmail.com" id="members" data-intro="Add group members" data-step="1">
+			</div>
+
+			<div class="input-group input-group-sm minor-margin">
+				<span class="input-group-btn">
+			     	<button type="button" class="btn btn-info qollQbankToggle qoll-width-1">Domain Spec: </button>
+			    </span>
+			    <input type="text" class="domain form-control" placeholder="Add domain (@domain) ..." default="" id="domain" data-intro="Add domain" data-step="1">
+			</div>
+
+			<!-- Add the times here -->
+		<br>
+		</div><!-- End: /form-static here -->
+		<div class="form-scroll">
+			<!-- div class="input-group input-group-sm minor-margin col-md-12" id="content1">
+				<p class='init-info'>Attributes ...</p>
+			</div -->
+			Attributes ...
+			<div class="input-group input-group-sm minor-margin col-md-12" id="content1"><!-- /Start of the content here -->
+				<div class="control-group">
+				  	<div class="controls">
+				  		<label class="control-label control-label-1">&nbsp; Access<sup class="red">*</sup> :&rarr;</label>
+					    <label class="radio-inline">
+						  <input type="radio" name="attribute_access" id="public" value="public" {{is_pub}}> Public
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_access" id="private" value="private" {{is_pvt}}> Restricted
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_access" id="anonymous" value="anonymous" {{is_pvt}}> Anonymous
+						</label>
+
+					</div><!-- controls -->
+
+					<div class='controls'>
+						<label class="control-label control-label-1">&nbsp; Invite Only<sup class="red">*</sup> :&rarr;</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_invt" id="yes" value="yes" {{is_pub}}> Yes
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_invt" id="no" value="no" {{is_pub}}> No
+						</label>
+					</div><!-- controls -->
+
+					<div class="controls">
+						<label class="control-label control-label-1">&nbsp; Size :&rarr;</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_size" id="100" value="100" {{is_pub}}> 100-
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_size" id="1000" value="1000" {{is_pub}}> 1000-
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_size" id="1000" value="1000" {{is_pub}}> 1000+
+						</label>
+
+					</div><!-- controls -->
+
+					<div class='controls'>
+						<label class="control-label control-label-1">&nbsp; Ended<sup class="red">*</sup> :&rarr;</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_ended" id="open" value="open" {{is_pub}}> Open
+						</label>
+						<label class="radio-inline">
+						  <input type="radio" name="attribute_ended" id="closed" value="closed" {{is_pub}}> Closed
+						</label>
+					</div>
+				</div>
+			</div><!-- /End of the content here -->
+		</div><!-- End: /form-scroll here -->
+
+		<!-- div class="form-scroll-info">
+			<p class='init-info'>Input details ...xxx</p>
+		</div --><!-- End: /form-scroll here -->
+
+		<div class='save-nav'>
+			<button type="button" class="btn btn-primary create">Create</button>
+		</div>
+
+	</div><!-- End: /qbank_pop here -->
+
+</template>

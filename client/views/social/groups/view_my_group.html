@@ -1,0 +1,66 @@
+<template name="view_my_group">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> social_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="content-header">
+	            
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                <span class='h1q1'>{{groupName}}</span>
+	            
+	        </div>
+			
+			<hr class='divider divider-bottom-0'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset inset-5">
+
+				<div class="row">
+					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+						
+						<div class="col-md-1 col-xs-12 list-group-item-align">
+							<a href="{{ pathFor 'social_my_groups' }}" class='white-link make-clickable'>&larr; back</a>
+						</div>
+						<div class="col-md-11 col-xs-12 list-group-item-align">
+							{{groupDesc}}
+						</div>
+						<!--div class='col-md-6 col-xs-12 list-group-item-align'>{{> progress_bar}}</div>
+						<div class="col-md-6 col-xs-12 list-group-item-align">
+							&nbsp;
+						</div-->
+						<!--div class="col-md-1 col-xs-12 list-group-item-align">
+							&nbsp;
+						</div-->
+					</div><!-- list-group-item list-group-item-heading -->
+
+					<!-- div class='col-md-12 col-xs-12 list-group-item-align'>{{> progress_bar}} - {{progress}}</div -->
+
+					<div class='active col-md-4'><u>Group Name:</u> {{groupName}}</div>
+					<div class='active col-md-4'>Created On: {{group.createdOn}}</div>
+					<div class='active col-md-4'>Type: {{group.closedOrOpen}}</div>
+
+					<div class='success col-md-4'>Author Name: {{group.author_name}}</div>
+					<div class='success col-md-4'>Size: {{group.groupSize}}</div>
+					<div class='success col-md-4'>&nbsp;</div>
+
+					<div class='warning col-md-4'>Author Email: {{group.author_email}}</div>
+					<div class='warning col-md-4'>Public or Restricted: {{group.pubOrPvt}}</div>
+					<div class='warning col-md-4'>&nbsp;</div>
+					<div class='col-md-12'><br>
+						Add users: &nbsp;<input type="text" class="recipient_grp add-group textbox" placeholder="Add users to the group ..." default="self" id="add_usrs_to_grp" data-intro="Search and add users ..." data-step="1">
+						<a href="#" class="search add" title="Add users to the group .." aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-plus green"></span></a>
+					</div>
+				</div><!-- /row-->
+
+				<hr class='divider'>
+				Members ...<p>&nbsp;</p>
+				{{> list_card contacts=members}}
+
+				
+			</div>
+		</div>
+	</div>
+</template>

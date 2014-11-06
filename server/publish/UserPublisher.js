@@ -156,3 +156,424 @@ Meteor.publish('allFriends', function() { //filterBy, sortBy, limit
     }
     self.ready();
 });
+
+
+Meteor.publish('ALL_FRIENDS', function() {
+  var self= this;
+  var uuid = Meteor.uuid();
+
+  if (this.userId) {
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var user_email = UserUtil.getEmail(user);// user.emails[0].address;
+      SocialFriends.find({ user_id : this.userId, active : 1 }, { reactive : true }).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= SocialConnect.findOne({_id : contact.friend_id});
+          connect = collectContactInfo(connect);
+          connect.social_ctx = 'my_social';
+          //qlog.info('Pushing connect to the client - ' + JSON.stringify(connect), filename);
+          self.added('all-my-friends', connect._id, connect);
+        },
+        changed : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= SocialConnect.findOne({_id : contact.friend_id});
+          connect = collectContactInfo(connect);
+          connect.social_ctx = 'my_social';
+          //qlog.info('Pushing connect to the client - ' + JSON.stringify(connect), filename);
+          self.changed('all-my-friends', connect._id, connect);
+        },
+        removed : function(contact){
+          var connect= SocialConnect.findOne({_id : contact.friend_id});
+          qlog.info('Removed connect-item with id: ' + connect._id);
+          self.removed('all-my-friends', connect._id);
+        }
+      });
+    }
+  }
+
+  qlog.info('Done initializing the new-friends: ALL_FRIENDS, uuid: ' + uuid, filename);
+});
+
+
+Meteor.publish('ALL_QOLL_USERS', function() {
+  var self= this;
+  var uuid = Meteor.uuid();
+
+  if (this.userId) {
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      
+      Meteor.users.find({}).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(quser, idx){
+          //populate the user and publish
+          quser = collectQollUserInfo(quser);
+          var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
+          quser.social_ctx = 'social-qoll-user';
+
+          if(qoll_friend) {
+            quser.friend_request_status = qoll_friend.status;
+            quser.friend_request_initiated_on = qoll_friend.initiated_on;
+            quser.social_ctx = 'social-qoll-user-req-sent';
+          }
+
+          qlog.info('Publishing connect to client - ' +user._id + '////' + JSON.stringify(quser), filename);
+
+          if(qoll_friend && qoll_friend.status != QollConstants.STATUS.CONFIRMED || !qoll_friend) {
+            self.added('all-qoll-users', quser._id, quser);
+          }
+        },
+        changed : function(quser, idx){
+          quser = collectQollUserInfo(quser);
+          var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
+          quser.social_ctx = 'social-qoll-user';
+
+          if(qoll_friend) {
+            quser.friend_request_status = qoll_friend.status;
+            quser.friend_request_initiated_on = qoll_friend.initiated_on;
+            quser.social_ctx = 'social-qoll-user-req-sent';
+          }
+
+          qlog.info('Publishing connect to client - ' + JSON.stringify(quser), filename);
+
+          if(qoll_friend && qoll_friend.status != QollConstants.STATUS.CONFIRMED || !qoll_friend) {
+            self.changed('all-qoll-users', quser._id, quser);
+          }
+        },
+        removed : function(quser){
+          self.removed('all-qoll-users', quser._id);
+        }
+      });
+    }
+  }
+
+  qlog.info('Done initializing the qoll-users: ALL_QOLL_USERS, uuid: ' + uuid, filename);
+});
+
+Meteor.publish('MY_QOLL_CONNECTS', function() {
+  var self= this;
+  var uuid = Meteor.uuid();
+
+  if (this.userId) { 
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var user_email = UserUtil.getEmail(user);// user.emails[0].address;
+
+      qoll_friend = QollFriends.find({user_id : user._id, status : QollConstants.STATUS.CONFIRMED}, { reactive : true }).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= Meteor.users.findOne({_id : contact.friend_id});
+          connect = collectQollUserInfo(connect);
+
+          connect.friend_request_status = contact.status;
+          connect.friend_request_initiated_on = contact.initiated_on;
+          connect.social_ctx = 'my-social-connects';
+
+          qlog.info('Pushing qoll-connect to the client - ' + JSON.stringify(connect), filename);
+          self.added('my-qoll-connects', connect._id, connect);
+        },
+        changed : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= Meteor.users.findOne({_id : contact.friend_id});
+          connect = collectQollUserInfo(connect);
+
+          connect.friend_request_status = contact.status;
+          connect.friend_request_initiated_on = contact.initiated_on;
+          connect.social_ctx = 'my-social-connects';
+
+          qlog.info('Pushing qoll-connect to the client - ' + JSON.stringify(connect), filename);
+          self.changed('my-qoll-connects', connect._id, connect);
+        },
+        removed : function(contact){
+          qlog.info('Removed connect-item with id: ' + contact.friend_id);
+          self.removed('my-qoll-connects', contact.friend_id);
+        }
+      });
+    }
+  }
+
+  qlog.info('Done initializing the qoll-friends: MY_QOLL_CONNECTS, uuid: ' + uuid, filename);
+});
+
+Meteor.publish('MY_QOLL_CONNECTS_OP_REQS', function() {
+  var self= this;
+  var uuid = Meteor.uuid();
+
+  if (this.userId) { 
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var user_email = UserUtil.getEmail(user);// user.emails[0].address;
+
+      //sent requests
+      qoll_friend = QollFriends.find({user_id : user._id, status : QollConstants.STATUS.PENDING}, { reactive : true }).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= Meteor.users.findOne({_id : contact.friend_id});
+          connect = collectQollUserInfo(connect);
+
+          connect.friend_request_status = contact.status;
+          connect.friend_request_initiated_on = contact.initiated_on;
+          connect.is_receiver = true;
+          connect.social_ctx = 'my-qoll-connects-open-reqs';
+
+          qlog.info('Pushing my-qoll-connects-open-reqs to the client - ' + JSON.stringify(connect), filename);
+          self.added('my-qoll-connects-open-reqs', connect._id, connect);
+        },
+        changed : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= Meteor.users.findOne({_id : contact.friend_id});
+          connect = collectQollUserInfo(connect);
+
+          connect.friend_request_status = contact.status;
+          connect.friend_request_initiated_on = contact.initiated_on;
+          connect.is_receiver = true;
+          connect.social_ctx = 'my-qoll-connects-open-reqs';
+
+          qlog.info('Pushing my-qoll-connects-open-reqs to the client - ' + JSON.stringify(connect), filename);
+          self.changed('my-qoll-connects-open-reqs', connect._id, connect);
+        },
+        removed : function(contact){
+          qlog.info('Removed my-qoll-connects-open-reqs with id: ' + contact.friend_id);
+          self.removed('my-qoll-connects-open-reqs', contact.friend_id);
+        }
+      });
+
+      //received requests
+      qoll_friend_rec = QollFriends.find({friend_id : user._id, status : QollConstants.STATUS.PENDING}, { reactive : true }).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= Meteor.users.findOne({_id : contact.user_id});
+          connect = collectQollUserInfo(connect);
+
+          connect.friend_request_status = contact.status;
+          connect.friend_request_initiated_on = contact.initiated_on;
+          connect.is_receiver = false;
+          connect.social_ctx = 'my-qoll-connects-open-rec-reqs';
+
+          qlog.info('Pushing my-qoll-connects-open-rec-reqs to the client - ' + JSON.stringify(connect), filename);
+          self.added('my-qoll-connects-open-rec-reqs', connect._id, connect);
+        },
+        changed : function(contact, idx){
+          //populate the group with creaters information and publish
+          var connect= Meteor.users.findOne({_id : contact.user_id});
+          connect = collectQollUserInfo(connect);
+
+          connect.friend_request_status = contact.status;
+          connect.friend_request_initiated_on = contact.initiated_on;
+          connect.is_receiver = false;
+          connect.social_ctx = 'my-qoll-connects-open-rec-reqs';
+
+          qlog.info('Pushing my-qoll-connects-open-rec-reqs to the client - ' + JSON.stringify(connect), filename);
+          self.changed('my-qoll-connects-open-rec-reqs', connect._id, connect);
+        },
+        removed : function(contact){
+          qlog.info('Removed my-qoll-connects-open-reqs with id: ' + contact.friend_id);
+          self.removed('my-qoll-connects-open-rec-reqs', contact.user_id);
+        }
+      });
+    }
+  }
+
+  qlog.info('Done initializing the qoll-friends: MY_QOLL_CONNECTS, uuid: ' + uuid, filename);
+});
+
+
+Meteor.publish('MEMBERS_FOR_GROUP_ID_1', function(options) {
+  var self= this;
+  var uuid = Meteor.uuid();
+
+  if (this.userId) { 
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var user_email = UserUtil.getEmail(user);// user.emails[0].address;
+
+      var grp = QollGroups.findOne({_id : options._id})
+      var userEmails = grp.userEmails;
+
+      var userIds = [];
+      userEmails.map(function(email){
+        var user=Meteor.users.findOne({ "profile.email" : email });
+        if(!user) {
+            user=Meteor.users.findOne({ "emails.address" : email });
+        }
+
+        userIds.push(user._id);
+      })
+
+      Meteor.users.find({_id : {$in : userIds}}).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(quser, idx){
+          //populate the user and publish
+          quser = collectQollUserInfo(quser);
+          quser.social_ctx = options.ctx;
+          quser.ctx = options.ctx;
+
+          qlog.info('Publishing connect to client - ' +user._id + '////' + JSON.stringify(quser), filename);
+
+          self.added('members-for-group-id', quser._id, quser);
+        },
+        changed : function(quser, idx){
+          quser = collectQollUserInfo(quser);
+          quser.social_ctx = options.ctx;
+          quser.ctx = options.ctx;
+          
+          qlog.info('Publishing connect to client - ' + JSON.stringify(quser), filename);
+
+          self.changed('members-for-group-id', quser._id, quser);
+        },
+        removed : function(quser){
+          self.removed('members-for-group-id', quser._id);
+        }
+      });
+    }
+  }
+
+  qlog.info('Done initializing the members-for-group-id: MEMBERS_FOR_GROUP_ID, uuid: ' + uuid, filename);
+});
+
+Meteor.publish('MEMBERS_FOR_GROUP_ID', function(options) {
+  var self= this;
+  var uuid = Meteor.uuid();
+
+  if (this.userId) { 
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var user_email = UserUtil.getEmail(user);// user.emails[0].address;
+
+      //var grp = 
+      QollGroups.find({_id : options._id}, { reactive : true }).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(grp, idx){
+          var userEmails = grp.userEmails;
+
+          var userIds = [];
+          userEmails.map(function(email){
+            var user=Meteor.users.findOne({ "profile.email" : email });
+            if(!user) {
+                user=Meteor.users.findOne({ "emails.address" : email });
+            }
+
+            userIds.push(user._id);
+          })
+
+          var usrs = Meteor.users.find({_id : {$in : userIds}});
+
+          usrs.map(function(quser){
+            //populate the user and publish
+            quser = collectQollUserInfo(quser);
+            quser.social_ctx = options.ctx;
+            quser.ctx = options.ctx;
+
+            qlog.info('Publishing connect to client - ' +quser._id + '////' + JSON.stringify(quser), filename);
+
+            self.added('members-for-group-id', quser._id, quser);
+          });
+        },
+        changed : function(grp, idx){
+          var userEmails = grp.userEmails;
+
+          var userIds = [];
+          userEmails.map(function(email){
+            var user=Meteor.users.findOne({ "profile.email" : email });
+            if(!user) {
+                user=Meteor.users.findOne({ "emails.address" : email });
+            }
+
+            userIds.push(user._id);
+          })
+
+          var usrs = Meteor.users.find({_id : {$in : userIds}});
+
+          usrs.map(function(quser){
+            //populate the user and publish
+            quser = collectQollUserInfo(quser);
+            quser.social_ctx = options.ctx;
+            quser.ctx = options.ctx;
+
+            qlog.info('Publishing connect to client - ' +quser._id + '////' + JSON.stringify(quser), filename);
+
+            self.changed('members-for-group-id', quser._id, quser);
+          });
+        },
+        removed : function(grp){
+          var userEmails = grp.userEmails;
+
+          var userIds = [];
+          userEmails.map(function(email){
+            var user=Meteor.users.findOne({ "profile.email" : email });
+            if(!user) {
+                user=Meteor.users.findOne({ "emails.address" : email });
+            }
+
+            userIds.push(user._id);
+          })
+
+          var usrs = Meteor.users.find({_id : {$in : userIds}});
+
+          usrs.map(function(quser){
+            //populate the user and publish
+            quser = collectQollUserInfo(quser);
+            quser.social_ctx = options.ctx;
+            quser.ctx = options.ctx;
+
+            qlog.info('Removing connect from the client - ' +quser._id + '////' + JSON.stringify(quser), filename);
+
+            self.removed('members-for-group-id', quser._id);
+          });
+        }
+      });
+    }
+  }
+
+  qlog.info('Done initializing the members-for-group-id: MEMBERS_FOR_GROUP_ID, uuid: ' + uuid, filename);
+});
+
+
+var collectContactInfo = function(connect) {
+  
+  if(connect.social_type === 'facebook') {
+    qlog.info('initializing facebook connect - ' + connect.first_name + ' ' 
+      + connect.last_name + ' ' + connect.gender, filename);
+    connect['name'] = connect.first_name + ' ' + connect.last_name;
+    connect['email'] = '<not-provided@email.com>';
+  } 
+
+  return connect;
+};
+
+var collectQollUserInfo = function(user) {
+  return {
+    _id           :   user._id,
+    createdAt     :   user.createdAt,
+    groups        :   user.groups,
+    groupsCreated :   user.groupsCreated,
+    facebook      :   user.profile.facebook,
+    google        :   user.profile.google,
+    twitter       :   user.profile.twitter,
+    email         :   user.profile.email,
+    name          :   user.profile.name,
+    name_slug     :   user.profile.name_slug,
+    slug          :   user.profile.slug,
+    sex           :   user.profile.sex,
+    social_type   :   'qoll',
+  };
+}
+
