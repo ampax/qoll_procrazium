@@ -87,6 +87,7 @@ Meteor.methods({
 		if(!_.contains(just_groups, group_name)) {
 			//Update the user and the groups table now
 			var handle_gp = QollGroups.findOne({'submittedBy': author_id, 'groupName' : group_name});
+			new_group.groupId = handle_gp._id;
 			//QollGroups.find({'submittedBy': author_id, 'groupName' : group_name});
 			//qlog.info('Printing the group ---------->' + JSON.stringify(handle_gp) + '/' + author_id + '/' + handle_me.profile.email, filename);
 			var userEmails = handle_gp.userEmails;
@@ -102,5 +103,112 @@ Meteor.methods({
 			Meteor.users.update({_id : my_id}, {$set: {groups : groups_me}});
 		}
 		return {scs_msg : 'Successfully Subscribed to - ' + group_name + ", " + author_email};
+	},
+	addUserToGroup : function(group_id, user_email) {
+		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
+		/** Fix adding the group of legacy users **/
+		var handle_usr = Meteor.users.findOne({'profile.email' : user_email});
+		if(!handle_usr || !handle_usr._id) {
+			return {err_msg : 'There are issues with - '+group_id+'\'s author - '+user_email+'. Contact the group-owner to fix it please.'};
+		}
+
+		var handle_gp = QollGroups.findOne({_id : group_id});
+
+		var my_id = handle_usr._id;
+		var author_id = handle_gp.submittedBy;
+		var handle_usr = Meteor.users.findOne(my_id);
+		var groups_usr = handle_usr.groups;
+
+		var just_groups = [];
+
+		if(HashUtil.checkArray(groups_usr)) {
+			groups_usr.map(function(g){
+				just_groups.push(g.groupName);
+			});
+		} else {
+			groups_usr = new Array();
+		}
+
+
+		var new_group = {"groupOwner" : author_id, "groupName" : handle_gp.groupName, groupId : handle_gp._id};
+		qlog.info("-------------------->" + just_groups + '' + new_group.groupName);
+		if(!_.contains(just_groups, handle_gp.groupName)) {
+			//Update the user and the groups table now
+			var userEmails = handle_gp.userEmails;
+			if(!_.contains(userEmails, handle_usr.profile.email)) {
+			qlog.info('Pusing to the usermeials - ' + userEmails + '/' + handle_usr.profile.email);
+			userEmails.push(handle_usr.profile.email);
+			QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmails}});
+			} else {
+				qlog.info('Not Pusing to the usermeials - ' + userEmails + '/' + handle_usr.profile.email);
+			}
+
+			groups_usr.push(new_group);
+			Meteor.users.update({_id : my_id}, {$set: {groups : groups_usr}});
+		}
+		return {scs_msg : 'Successfully Subscribed to - ' + handle_gp.groupName + ", " + author_id};
+	},
+	removeUserFromGroup : function(group_id, user_email) {
+		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
+		/** Fix adding the group of legacy users **/
+		qlog.info('Called with parameters - ' + group_id + '/' + user_email, filename);
+		var handle_usr = Meteor.users.findOne({'profile.email' : user_email});
+		if(!handle_usr || !handle_usr._id) {
+			return {err_msg : 'There are issues with - '+group_id+'\'s author - '+user_email+'. Contact the group-owner to fix it please.'};
+		}
+
+		var handle_gp = QollGroups.findOne({_id : group_id});
+
+		var my_id = handle_usr._id;
+		var author_id = handle_gp.submittedBy;
+		var handle_usr = Meteor.users.findOne(my_id);
+		var groups_usr = handle_usr.groups;
+
+		qlog.info('groups -------------- ' + groups_usr + ', emails ---------- ' + handle_gp.userEmails, filename);
+
+		var just_groups = [];
+
+		var splice_ctr = -1;
+		if(HashUtil.checkArray(groups_usr)) {
+			groups_usr.map(function(g, idx){
+				qlog.info('-------------------'+JSON.stringify( g) + '/'+idx, filename);
+				if(g.group_id && group_id === g.groupId) {
+					splice_ctr = idx;
+					qlog.info('-------------------'+splice_ctr, filename);
+					return false;
+				} else if(handle_gp.groupName === g.groupName) {
+					splice_ctr = idx;
+					qlog.info('-------------------'+splice_ctr, filename);
+					return false;
+				}
+			});
+		}
+
+		if(splice_ctr === -1) { 
+			return {err_msg : 'User is not part of the group - ' + handle_gp.groupName};
+		}
+
+		groups_usr.splice(splice_ctr, 1);
+		splice_ctr = -1;
+
+		var userEmails = handle_gp.userEmails;
+		if(_.contains(userEmails, handle_usr.profile.email)) {
+			userEmails.map(function(email, idx){
+				if(user_email === email) {
+					splice_ctr = idx;
+					return false;
+				}
+			});
+		}
+
+		userEmails.splice(splice_ctr, 1);
+		qlog.info('groups --- ' + groups_usr + ', emails --- ' + userEmails, filename);
+		/* Update the tables to remove the user from the group now */
+		//Remove user-email from the group
+		QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmails}});
+		//Remove group from the user
+		Meteor.users.update({_id : my_id}, {$set: {groups : groups_usr}});
+
+		return {scs_msg : 'Successfully un-subscribed from - ' + handle_gp.groupName + ", user - " + handle_usr.profile.name};
 	},
 });

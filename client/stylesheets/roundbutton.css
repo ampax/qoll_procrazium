@@ -1,0 +1,50 @@
+
+.round-margin {
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+.round-button {
+    display:block;
+    width:32px;
+    height:32px;
+    line-height:30px;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color:#f5f5f5;
+    text-align:center;
+    vertical-align: middle;
+    text-decoration:none;
+    text-indent: 0px;
+    background: firebrick;
+    box-shadow: 0 0 3px gray;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.round-button:hover {
+    background: #FF4D4D;
+}
+
+
+.round-button-clear-sm {
+    display:block;
+    width:32px;
+    height:32px;
+    line-height:30px;
+    border: 2px solid #f5f5f5;
+    border-radius: 50%;
+    color:#f5f5f5;
+    text-align:center;
+    vertical-align: middle;
+    text-decoration:none;
+    text-indent: 0px;
+    background: #E6E6E6;
+    box-shadow: 0 0 3px gray;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.round-button-clear-sm:hover {
+    background: #B2B2B2;
+}

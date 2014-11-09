@@ -1,0 +1,71 @@
+<template name='link_button'>
+	<a href="#" class="search link" title="Edit group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-link red"></span></a>
+</template>
+
+<template name='unlink_button'>
+	<a href="#" class="search" title="Edit group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-link red"></span></a>
+</template>
+
+<template name='add_button'>
+	<a href="#" class="search add" title="Edit group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-plus green"></span></a>
+</template>
+
+<template name='disabled_add_button'>
+	<a href="#" class="search disabled_add" title="Initiated request" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-warning-sign orange"></span></a>
+</template>
+
+<template name='delete_button'>
+	<a href="#" class="search remove" title="Delete connect" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-remove red"></span></a>
+</template>
+
+<template name='delete_button_my_connects'>
+	<a href="#" class="search remove" title="Delete connect" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-remove red"></span></a>
+</template>
+
+<template name='accept_button'>
+	<a href="#" class="search accept" title="Accept the invite" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-ok green"></span></a>
+</template>
+
+<template name='edit_button'>
+	<a href="#" class="search" title="Edit group" aria-role="button"><span aria-hidden="true" class="glyphicon glyphicon-link red"></span></a>
+</template>
+
+
+<template name='sel_button'>
+	{{#if my_groups contact=.. }}
+		{{> link_button }}
+	{{/if}}
+
+	{{#if social_connects contact=.. }}
+		{{> add_button }}
+	{{/if}}
+
+	{{#if disabled_social_connects contact=..}}
+		{{> disabled_add_button }}
+	{{/if}}
+
+	{{#if qoll_social_connects contact=..}}
+		{{> delete_button_my_connects }}
+	{{/if}}
+
+	{{#if social_connects_open_rec_reqs contact=..}}
+		{{> delete_button }}
+		{{> accept_button }}
+	{{/if}}
+
+	{{#if social_connects_open_reqs contact=..}}
+		{{> delete_button }}
+	{{/if}}
+
+	{{#if my_social contact=.. }}
+		{{> link_button }}
+	{{/if}}
+
+	{{#if group_members contact=.. }}
+		{{> delete_button }}
+	{{/if}}
+
+	{{#if no_button contact=.. }}
+		<!-- Nothing to be shown for this kind -->
+	{{/if}}
+</template>

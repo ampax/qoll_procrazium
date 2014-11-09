@@ -1,0 +1,99 @@
+<template name="social_my_groups">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> social_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="content-header">
+	            <h1>
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                My Groups
+	            </h1>
+	        </div>
+			
+			<hr class='divider divider-bottom-0'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset inset-5 container">
+					
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs bs-tab-margin-top-0" role="tablist">
+					  <li class="active"><a href="#owner" role="tab" data-toggle="tab">Owner</a></li>
+					  <li><a href="#subscriber" role="tab" data-toggle="tab">Subscriber</a></li>
+					  <!-- li><a href="#open_requests" role="tab" data-toggle="tab">Open Requests</a></li -->
+					</ul>
+
+					<!-- Tab panes -->
+					<div class="tab-content">
+					  <div class="tab-pane active" id="owner">
+					  	Owner ...
+					  	{{> owned_templ groups=groups }}
+					  </div>
+					  <div class="tab-pane" id="subscriber">
+					  	Subscriber ...
+						  {{> subsc_templ groups=subsc_groups }}
+						</div>
+					  <div class="tab-pane" id="open_requests">Open Requests ...</div>
+					</div>
+
+			</div>
+
+			{{> slide_up_group}}
+		</div>
+	</div>
+</template>
+
+<template name='owned_templ'>
+	<div class='row'>
+		{{#each groups}}
+		<div class='list-group-item list-group-item-success list-group-social'>
+	  		<div class="col-md-7 col-xs-12 make-clickable">
+	  			<a href="{{ pathFor 'ownedGroupView' }}" class='black-link'>
+			  		<span class='title-qoll'>{{groupName}}</span> - {{groupDesc}}
+			  	</a>
+		  	</div>
+
+		  	<div class="col-md-2 col-xs-6">
+		  		Size : {{groupSize}}<br> Access : {{pubOrPvt}}<br>  Author : {{author_email}}
+		  	</div>
+
+		  	<div class="col-md-2 col-xs-6">
+		  		&nbsp;
+		  	</div>
+
+		  	<div class="col-md-1 col-xs-1">
+		  		<span class="pull-left archive-grp round-button-clear-sm"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+		  	</div>
+		  </div>
+	  	{{/each}}
+	</div>
+</template>
+
+<template name='subsc_templ'>
+	<div class='row'>
+		{{#each groups}}
+		<div class='list-group-item list-group-item-success list-group-social'>
+	  		<div class="col-md-7 col-xs-12 make-clickable">
+	  			<a href="{{ pathFor 'subscGroupView' }}" class='black-link'>
+			  		<span class='title-qoll'>{{groupName}}</span> - {{groupDesc}}
+			  	</a>
+		  	</div>
+
+		  	<div class="col-md-2 col-xs-6">
+		  		Size : {{groupSize}}<br> Access : {{pubOrPvt}}<br>  Author : {{author_email}}
+		  	</div>
+
+		  	<div class="col-md-2 col-xs-6">
+		  		&nbsp;
+		  	</div>
+
+		  	<div class="col-md-1 col-xs-1">
+		  		<span class="pull-left archive-grp round-button-clear-sm"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+		  	</div>
+		  </div>
+	  	{{/each}}
+	</div>
+</template>
+

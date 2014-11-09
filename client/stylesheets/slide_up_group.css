@@ -1,0 +1,140 @@
+div.slider {
+	background: #3d9a44;
+	margin: 3px;
+	width: 80px;
+	height: 40px;
+	float: left;
+}
+
+span.toggle {
+	/**background: #006699;*/
+	color: white;
+	margin: 2px;
+	/**width: 80px; 
+	height: 40px;
+	float: left;*/
+}
+
+
+.group_pop{
+	position:fixed;
+	right:24px;
+	bottom:0px;
+	/*height: 300px;
+	max-height: 500px;*/
+	overflow: visible;
+	z-index: 3;
+	display: none;
+	/*resize:both;*/
+}
+
+.group_pop a {
+	display:block;
+	height:20px;
+	width:100px;
+	text-align:center;
+	background:red;
+	border: 1px solid #ccc;
+	outline:1px solid #a1a1a1;	
+	padding:0px;
+	float:left;
+	cursor:pointer;
+	box-shadow: rgba(0,0,0,0.2) 0 2px 6px;
+	
+	/*Font
+	color:#FFF;
+	font-weight:bold;
+	font-size:18px;*/
+}
+
+.group_pop .form-static{
+	clear:both;
+	/**height:300px;*/
+	max-height: 190px;
+	width:545px;
+	border: 1px solid #ccc;
+	background:#fff;
+	padding:15px;
+	/**overflow: auto;**/
+	z-index: 3;
+	position: relative;
+	/** display: none; **/
+}
+
+.group_pop .form-scroll{
+	clear:both;
+	/**height:300px;*/
+	max-height: 250px;
+	width:545px;
+	border-left : 1px solid #ccc;
+	border-right : 1px solid #ccc;
+	border-bottom:  : 1px solid #ccc;
+	background:#fff;
+	padding:15px;
+	overflow: auto;
+	z-index: 3;
+	position: relative;
+	/** display: none; **/
+}
+
+.group_pop .form-scroll-info {
+	clear:both;
+	/**height:300px;*/
+	max-height: 250px;
+	width:545px;
+	border-left : 1px solid #ccc;
+	border-right : 1px solid #ccc;
+	border-bottom:  : 1px solid #ccc;
+	background:#fff;
+	padding:15px;
+	overflow: auto;
+	z-index: 3;
+	position: relative;
+	/**display: none;**/
+}
+
+div.group_pop > div.pop-nav {
+	height: 40px;
+	width: 545px;
+	background: #404040;
+	color: white;
+	padding-top: 12px;
+	padding-left: 7px;
+	padding-bottom: 0px;
+	font-weight:100;
+	display: block;
+}
+
+div.group_pop > div.save-nav {
+	height: 40px;
+	width: 545px;
+	background: #E6E6E6;
+	color: white;
+	padding-top: 12px;
+	padding-left: 7px;
+	padding-bottom: 0px;
+	font-weight:100;
+	display: block;
+}
+
+div.group_pop > div.pop-nav > div.pop-nav-title {
+	width: 80%;
+	position: relative;
+}
+
+div.pop-nav-actions {
+	padding-left: 10px;
+}
+
+div.minor-margin {
+	margin-top: 1px !important;
+}
+
+div.fill_100_pct {
+	width: 100%;
+}
+
+div#content1 {
+	overflow:scroll;
+}
+
