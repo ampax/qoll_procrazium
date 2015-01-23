@@ -6,12 +6,22 @@ Router.map(function(){
 	});
 	this.route('landing', {
 		template : 'landing_page',
+		path: '/',
+		
+	});
+
+	/**
+	this.route('landing', {
+		template : 'landing_page',
 		path: '/landing',
 		
 	});
+	**/
 });
 
+/**
 Router.map(function() {
 	this.route('landing_page', {path: '/'});
 	//this.route('dashboard');
 });
+**/

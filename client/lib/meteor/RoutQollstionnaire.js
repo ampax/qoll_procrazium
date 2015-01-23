@@ -122,14 +122,14 @@ QollController = RouteController.extend({
     }
 });
 
-QollstGroupController = FastRender.RouteController.extend({
+QollstGroupController = RouteController.extend({
 	waitOn : function() {[Meteor.subscribe('QOLL_GROUP_PUBLISHER')];},
 	data : function() {
 		return { 'groups' : QollGps.find()};
 	}
 });
 
-QollstPerformanceController = FastRender.RouteController.extend({
+QollstPerformanceController = RouteController.extend({
 	waitOn : function() {[Meteor.subscribe('GROUP_STATS_PUBLISHER', this.params.name), Meteor.subscribe('QOLL_GROUP_PUBLISHER')];},
 	data : function() {
 		var dt = GroupStats.find(this.params.name);
@@ -144,22 +144,16 @@ QollstPerformanceController = FastRender.RouteController.extend({
 	}
 });
 
-QbankController = FastRender.RouteController.extend({
+QbankController = RouteController.extend({
 	waitOn: function(){
 		//Meteor.subscribe('QBANK_PUBLISHER');
-		Meteor.subscribe('QBANK_SUMMARY_PUBLISHER');
-	},
-	onBeforeAction: [function(){
-		[
-		Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), 
-		Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
-		Meteor.subscribe('QOLL_TAG_PUBLISHER'),
-		Meteor.subscribe('Settings'),
+		return [ Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), 
+			Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
+			Meteor.subscribe('QOLL_TAG_PUBLISHER'),
+			Meteor.subscribe('Settings'),
 		];
-	}, function(){
-		//this is next in line to the first subscribe function
-		//active_nav();
-	}],
+		//Meteor.subscribe('QBANK_SUMMARY_PUBLISHER');
+	},
 	onAfterAction: function(){
 		//TODO
 	},

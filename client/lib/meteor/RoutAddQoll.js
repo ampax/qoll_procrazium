@@ -32,14 +32,14 @@ Router.map(function(){
 			Meteor.subscribe('QOLL_GROUP_PUBLISHER');
 			Meteor.subscribe('Settings');
 		},
-		onBeforeAction: [function(){
+		/**onBeforeAction: [function(){
 			qlog.info('Subscribing to OPEN_QOLL_PUBLISHER ...', filename);
 			Meteor.subscribe('OPEN_QOLL_PUBLISHER');
 			Meteor.subscribe('QOLL_GROUP_PUBLISHER');
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
-		}],
+		}],**/
 		onAfterAction: function(){
 			//TODO
 		}
@@ -51,12 +51,12 @@ Router.map(function(){
 		waitOn: function(){
 			Meteor.subscribe('Settings');
 		},
-		onBeforeAction: [function(){
+		/**onBeforeAction: [function(){
 			qlog.info('Before for qoll-editor ...', filename);
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
-		}],
+		}],**/
 		onAfterAction: function(){
 			//TODO
 		}
@@ -72,12 +72,12 @@ Router.map(function(){
 		waitOn: function(){
 
 		},
-		onBeforeAction: [function(){
+		/**onBeforeAction: [function(){
 			qlog.info('Before for qolleditor_adv_edit ...', filename);
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
-		}],
+		}],**/
 		onAfterAction: function(){
 			Session.set("qollRawId", null);
 		}
@@ -90,12 +90,12 @@ Router.map(function(){
 			qlog.info('In the controller code for xxx template', filename);
 			Meteor.subscribe('Settings');
 		},
-		onBeforeAction: [function(){
+		/**onBeforeAction: [function(){
 			qlog.info('Before for qoll-editor ...', filename);
 		}, function(){
 			//this is next in line to the first subscribe function
 			//active_nav();
-		}],
+		}],**/
 		onAfterAction: function(){
 			//TODO
 		}

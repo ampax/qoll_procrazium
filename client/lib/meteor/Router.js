@@ -30,7 +30,7 @@ checkSessionAndSendToHome = function() {
 //--------------------------------------------------------------------------------------------------//
 // Controller for user pages
 
-UserPageController = FastRender.RouteController.extend({
+UserPageController = RouteController.extend({
   waitOn: function() {
   	qlog.info('before subscribing to singleUser - ' + this.params._idOrSlug, filename);
     Meteor.subscribe('singleUser', this.params._idOrSlug);

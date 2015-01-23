@@ -5,7 +5,7 @@ var filename = 'client/lib/meteor/RoutGroup.js';
 //--------------------------------------------------------------------------------------------------//
 // Controller for group pages
 
-GroupPageController = FastRender.RouteController.extend({
+GroupPageController = RouteController.extend({
   waitOn: function() {
   	qlog.info('before subscribing to allFriends', filename);
     Meteor.subscribe('allFriends');

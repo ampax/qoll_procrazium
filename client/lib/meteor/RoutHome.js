@@ -1,3 +1,4 @@
+/**
 Router.map(function(){
 	this.route('header_awesome', {
 		template : 'header_awesome',
@@ -10,3 +11,4 @@ Router.map(function(){
 		
 	});
 });
+**/
