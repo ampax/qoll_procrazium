@@ -206,4 +206,17 @@ Template.all_qolls.events({
 		 "left": $('#'+qollId).offset().left + "px",
 		 });	*/
 	},
+	'click .facebook' : function(event) {
+		event.preventDefault();
+		var qollId = this._id;
+		qlog.info('Posting the qoll to facebook ... ' + qollId, filename);
+
+		Meteor.call('postOnWall', qollId, function(err, data) {
+			if (err) {
+				qlog.info('Failed posting on the wall - ' + qollId + '/' + err, filename);
+			} else {
+				qlog.info('Posting on the wall - ' + qollId + ', message - ' + data, filename);
+			}
+		});
+	},
 });

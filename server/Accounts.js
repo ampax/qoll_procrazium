@@ -59,7 +59,12 @@ Accounts.onCreateUser(function(options, user){
   if(user.services.facebook) {
     if(!user.profile.email)
       user.profile.email = user.services.facebook.email;
-    var friends = FB.SocialFunFacebook(user);
+    user.profile.fb_id = user.services.facebook.username;
+    user.profile.fb_link = user.services.facebook.link;
+    user.profile.gender = user.services.facebook.gender;
+    user.profile.locale = user.services.facebook.locale;
+    /**user.profile.access_token = user.services.facebook.accessToken;**/
+    var friends = QFB.SocialFunFacebook(user);
   } else if(user.services.google) {
     if(!user.profile.email)
       user.profile.email = user.services.google.email;

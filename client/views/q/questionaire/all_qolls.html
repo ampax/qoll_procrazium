@@ -29,15 +29,9 @@
 							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
 						</div>
 						<div class='col-md-3 col-xs-0'>&nbsp;</div>
-						<div class="col-md-1 col-xs-12">
-							Cmplx
-						</div>
-						<div class="col-md-1 col-xs-12">
-							Type
-						</div>
-						<div class="col-md-1 col-xs-12">
-							&nbsp;
-						</div>
+						<div class="col-md-1 col-xs-12">&nbsp;</div>
+						<div class="col-md-1 col-xs-12">&nbsp;</div>
+						<div class="col-md-1 col-xs-12">&nbsp;</div>
 					</div><!-- list-group-item list-group-item-heading -->
 					{{#each qolls}}
 				<!-- Start of Qoll Section -->
@@ -53,7 +47,11 @@
 						</a>
 					</div>
 					<div class="col-md-1 col-xs-12">
-						{{complexity}}
+						<!-- i class="fa fa-lg fa-facebook fa-border btn-primary"></i -->
+						<span class="fa-stack fa-lg facebook">
+						  <i class="fa fa-square-o fa-stack-2x"></i>
+						  <i class="fa fa-facebook fa-stack-1x"></i>
+						</span>
 					</div>
 					<div class="col-md-1 col-xs-12">
 						{{cat}}
