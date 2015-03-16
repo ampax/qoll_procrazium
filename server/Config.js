@@ -4,10 +4,10 @@ var MeteorInitialize = new Meteor.Collection("MeteorInitialize");
 
 Meteor.startup(function(){
 	qlog.info('Site url: '+URLUtil.SITE_URL, filename);
-	qlog.info('Site url: ' + process.env.ROOT_URL, filename);
-
+	
 	//if(SITE_URL.startsWith('http://localhost')){
 	if( 'http://localhost:3000/' == URLUtil.SITE_URL ){
+		qlog.info('Site url: ' + process.env.ROOT_URL, filename);
 		//Initialize localhost for login with github
 		initWithGitDev();
 		initWithFacebookDev();
@@ -24,10 +24,22 @@ Meteor.startup(function(){
 			}
 		});  **/
 	} else if(URLUtil.SITE_URL === 'http://qoll.io/'){
+		qlog.info('Site url: ' + process.env.ROOT_URL, filename);
 		//Initialize localhost for login with github
 		initWithGitServer();
 		initWithFacebookServer();
 		initWithGoogleServer();
 	}
 
+});
+
+
+// in server code
+Meteor.startup(function() {
+	qlog.info('Starting up the mandrill connection now .....', filename);
+    return Meteor.Mandrill.config({
+    	username: "procrazium@gmail.com", // username: "YOUR_MANDRILL_USERNAME",
+	    key: "RG5hQXbJ1JZry6yMPCGchQ", // key: "YOUR_MANDRILL_API_KEY"
+        
+    });
 });

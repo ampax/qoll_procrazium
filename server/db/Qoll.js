@@ -103,6 +103,7 @@ Qolls.QollstionnaireDb = {
 			submittedToGroup 			: qollstionnaire.submittedToGroup,
 			status 						: qollstionnaire.status,
 			visibility 					: qollstionnaire.visibility,
+			quuid						: qollstionnaire.quuid,
 		});
 
 		return questId;

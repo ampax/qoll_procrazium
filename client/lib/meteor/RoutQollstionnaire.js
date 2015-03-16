@@ -164,6 +164,26 @@ QbankController = RouteController.extend({
 });
 
 Router.map(function() {
+	if (Meteor.isCordova) {
+	    this.route('view_inbox_cordova', {
+			template : 'view_inbox_cordova',
+			path : '/inbox_cordova',
+			controller : InboxController,
+		});
+	  }
+
+	  if (Meteor.isClient) {
+	    this.route('view_inbox', {
+			template : 'view_inbox',
+			path : '/inbox',
+			controller : InboxController,
+		});
+	  }
+
+
+
+
+
 	this.route('qid', {
 		template : 'qolls',
 		path : '/qid/:quesid',
@@ -182,11 +202,7 @@ Router.map(function() {
 		controller: IdLookUpInboxController
 	});
 
-	this.route('view_inbox', {
-		template : 'view_inbox',
-		path : '/inbox',
-		controller : InboxController,
-	});
+	
 
 	//sent page and board templates/path
 	this.route('sentView', {

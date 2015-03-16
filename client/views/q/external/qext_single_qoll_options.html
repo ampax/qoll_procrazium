@@ -1,0 +1,29 @@
+<template name="qext_single_qoll_options">
+	      <div class="col-md-12 col-xs-12 list-group-item">
+        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{qollType.index}}">
+          {{#if is_not_blank_type qoll.q.cat}}
+          {{#with item=qollType parent=qoll}}
+          <span class="badge pull-left {{get_qoll_resp_class ../qoll.q.context}} {{qoll_abbr_class item.index ../qoll.q.context}} {{is_chk_selected item.index  parent.q }} 
+          {{check_selected parent._id item.index}}  glossy">
+          
+            {{qoll_type_abbr item.index}}
+          </span>
+          {{/with}}
+          {{/if}}
+            &nbsp;<span>{{{transform_txt qollType.value qoll.cat}}}</span>
+        </div>
+        <div class="col-md-2 col-xs-2">
+            {{#if is_correct_answer qoll.q.qollTypesX qollType.index qoll.q.context}}
+              <i class="glyphicon glyphicon-check green"></i>
+            {{/if}}
+            <span class="badge pull-right fulltoggle">{{value_at qoll.stats qollType.index}}</span>
+        </div>
+        {{#with  value_at qoll.answers qollType.index}}
+        <div class="col-md-12 col-xs-12  list-group-item-info">
+            
+            Answered By:  {{comma_seperate this}}
+           
+        </div>
+         {{/with}}
+      </div>
+</template>

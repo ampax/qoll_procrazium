@@ -49,13 +49,12 @@ long:google-contacts@0.2.0
 meteor@1.1.4
 meteor-platform@1.2.1
 meteorhacks:async@1.0.0
-meteorhacks:fast-render@2.3.0
-meteorhacks:inject-data@1.2.1
+meteorhacks:fast-render@2.3.1
+meteorhacks:inject-data@1.2.2
 meteorhacks:npm@1.2.2
 meteorhacks:picker@1.0.1
 minifiers@1.1.3
 minimongo@1.0.6
-mizzao:bootstrap-3@3.3.1_1
 mizzao:build-fetcher@0.2.0
 mizzao:jquery-ui@1.11.2
 mobile-status-bar@1.0.2
@@ -68,7 +67,7 @@ oauth@1.1.3
 oauth2@1.1.2
 observe-sequence@1.0.4
 ordered-dict@1.0.2
-pfafman:font-awesome-4@4.2.0_4
+pfafman:font-awesome-4@4.3.0
 random@1.0.2
 reactive-dict@1.0.5
 reactive-var@1.0.4
@@ -85,8 +84,10 @@ spacebars-compiler@1.0.4
 srp@1.0.2
 templating@1.0.11
 tracker@1.0.5
+twbs:bootstrap@3.3.2
 ui@1.0.5
 underscore@1.0.2
 url@1.0.3
 webapp@1.1.6
 webapp-hashing@1.0.2
+wylio:mandrill@0.2.1

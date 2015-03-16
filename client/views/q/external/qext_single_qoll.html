@@ -1,0 +1,76 @@
+<template name="qext_single_qoll">
+	   <div class="col-md-12 col-xs-12 list-group-item qoll-seperator {{#if is_parent}} list-group-item-heading{{/if}} bg-qoll" id='{{q._id}}'>
+      
+      <div class="col-md-10 col-xs-12">
+        <h4>{{q.qoll_idx_title}} {{{transform_txt q.qollTitle q.cat q.context q.fib}}}</h4>
+
+        <h5>{{{transform_txt q.qollText q.cat q.context q.fib}}}</h5>
+
+        {{{get_units_html q.unit_name q.units}}}
+        
+        {{#if q.unit}}
+          <div class="input-group">{{#if q.unit_name}}{{q.unit_name}}: {{else}}Unit: {{/if}}
+            {{#each q.unit}} 
+                <input name="unit" value="{{this}}" type="radio" {{is_unit_selected ../q.qoll_response.unit}}> {{this}}
+            {{/each}}
+          </div>
+        {{/if}}
+        <!--{{{get_hint_html q.hint q.context}}}-->
+        {{#if q.hint}}
+          <button type="button" class="btn btn-warning pull-right" data-toggle="tooltip"
+            data-placement="left" title="Partial credit will be deducted..." id="show_hint">Hint
+          </button>
+          <div class="{{get_hint_visibility q.qoll_response.usedHint}} red_1" id="hint">
+            <h5>{{{q.hint}}} {{#if q.qoll_response.usedHint}} <u>(Already used hint)</u>{{/if}}</h5>
+          </div>
+        {{/if}}
+
+        {{#if is_blank_type q.cat}}
+          <!--span id="{{q._id}}" class="badge pull-left register-blank glossy green_bg_1"-->
+          <span id="{{q._id}}" class="badge pull-left {{get_register_class q.context}} glossy {{get_register_bg_class q.context}}">
+            Submit
+          </span>
+        {{/if}}
+        <span class="saved-msg green"></span>
+      </div>
+
+      <div class="col-md-2 col-xs-12">
+
+        {{#if if_createusr}}
+        	<span class="pull-left badge lesstoggle">{{get_totals}}</span>
+          {{#if if_stored}}
+          <span class="pull-right send-qoll-btn glossy"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
+          {{/if}}
+          {{#if if_send}}
+            <span class="pull-right lock-qoll-btn glossy"><i class="glyphicon glyphicon-off orange lock-btn ios-enabled"></i></span>
+          {{/if}}
+          {{#if if_edit}}
+            <!-- span class="pull-right glossy"><a href="qolleditor_adv_edit"><i class="glyphicon glyphicon-pencil blue ios-enabled"></i></a></span-->
+          {{/if}} 
+          {{#if if_lock}}
+            <span class="pull-right resend-qoll-btn glossy"><i class="glyphicon glyphicon-refresh blue resend-btn ios-enabled"></i></span>
+          {{/if}}          
+          <span class="pull-right render-chart-btn glossy"><i class="glyphicon glyphicon-stats green ios-enabled"></i></span>
+          {{#unless is_parent}} <span class="pull-right edit-qoll-btn glossy"><i class="glyphicon glyphicon-edit ios-enabled"></i></span>{{/unless}}
+          <span class="pull-right archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+        {{/if}}
+        {{#unless if_createusr}}
+        	<span class="badge pull-right sender-badge">{{sendingUser}}</span>
+        {{/unless}}
+      </div>
+    </div>
+    <!-- End of Qoll Section here -->
+    
+    <!-- Starting of qoll-types for the Qoll -->
+    <div class="row">
+      <div class="col-md-10 col-xs-12">
+      {{#each q.qollTypes}}
+     		{{> qext_single_qoll_options qollType=this qoll=.. }}
+      {{/each}}
+
+      </div>
+    </div>
+    <!-- End of qoll types here -->
+ 
+
+</template>

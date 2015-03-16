@@ -219,4 +219,17 @@ Template.all_qolls.events({
 			}
 		});
 	},
+	'click .sendemail' : function(event) {
+		event.preventDefault();
+		var qollId = this._id;
+		qlog.info('Sending this qoll to email recipients ...' + qollId, filename);
+		
+		Meteor.call('sendQollMail', 'kaushik.anoop@gmail.com', qollId, function(err, data) {
+			if (err) {
+				qlog.info('Failed sending the email - ' + qollId + '/' + err, filename);
+			} else {
+				qlog.info('Sent the email - ' + qollId + ', message - ' + data, filename);
+			}
+		});
+	},
 });

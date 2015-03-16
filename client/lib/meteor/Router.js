@@ -100,9 +100,9 @@ Router.map(function() {
 // notification does not included here since it is not much critical and 
 // it might have considerable amount of docs
 if(Meteor.isServer) {
-  FastRender.onAllRoutes(function() {
+  /** FastRender.onAllRoutes(function() {
     this.subscribe('categories');
     this.subscribe('Settings');
     this.subscribe('currentUser');
-  });
+  }); **/
 }

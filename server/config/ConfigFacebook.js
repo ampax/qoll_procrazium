@@ -21,7 +21,7 @@ initWithFacebookServer = function(){
 
 	Accounts.loginServiceConfiguration.insert({
 		service : "facebook",
-	    appId : "197724483746371",
-	    secret : "6fdd6c2dd3e55b7eed947aca322e1415"
+	    appId : "660855753966370",
+	    secret : "9c8f724f320faa387eca277cd472c33c"
 	});
 }

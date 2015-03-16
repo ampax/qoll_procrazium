@@ -4,7 +4,7 @@ QollAccounts = {};
 
 Accounts.onCreateUser(function(options, user){
 
-  //qlog.info('Printing flag .................................................');
+  qlog.info('Printing flag .................................................', filename);
 
   var userProperties = {
     profile: options.profile || {},
@@ -94,14 +94,16 @@ Accounts.onCreateUser(function(options, user){
 
 
 Accounts.validateLoginAttempt(function(attempt){
+  qlog.info('Validating login attempt - ' + JSON.stringify(attempt), filename);
     if (attempt.error){
         var reason = attempt.error.reason;
         qlog.info('Will be increasing the count here ... ' + attempt.error.reason, filename);
-        if (reason === "User not found" || reason === "Incorrect password"){
+        if (reason === "User not found" || reason === "Incorrect password" || 
+            reason === "Username already exists." || reason === 'Email already exists.' ){
             qlog.info('Incorrect pasword or user not found .... throwing error ... ' + reason);
             //throw new Meteor.Error(403, "Login forbidden 123");
             //throw new Error("Login forbidden 123");
-            throw new Meteor.Error(403, reason);
+            throw new Meteor.Error(403, reason, 'Incorrect password or user not found error happened [' + reason +']');
             //throw "Login forbidden 123";
             //return false;
         }
@@ -111,7 +113,7 @@ Accounts.validateLoginAttempt(function(attempt){
 
 
 
-/**Accounts.onLoginFailure(function(attempt){
+Accounts.onLoginFailure(function(attempt){
   qlog.info('Will be increasing the count here ... ' + attempt.error.reason, filename);
     if (attempt.user && attempt.error.reason === "Login forbidden") {
         // Increments the number of failed login attempts
@@ -122,7 +124,7 @@ Accounts.validateLoginAttempt(function(attempt){
 
     else if(attempt.user && attempt.error.reason) 
       throw new Meteor.Error(500, attempt.error.reason, "details", "more details");
-});**/
+});
 
 
 //Accounts.emailTemplates.from = "MySiteName <username@yourDomain.com>";

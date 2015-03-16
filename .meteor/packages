@@ -9,7 +9,6 @@ meteorhacks:fast-render
 jquery
 jparker:crypto-md5
 meteorhacks:npm
-mizzao:bootstrap-3
 accounts-base
 accounts-ui
 accounts-password
@@ -24,5 +23,7 @@ mrt:datatables
 accounts-facebook
 sashko:katex
 pfafman:font-awesome-4
-email
 
+wylio:mandrill
+email
+twbs:bootstrap

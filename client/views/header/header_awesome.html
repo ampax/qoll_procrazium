@@ -14,8 +14,8 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
           <ul class="nav navbar-nav">
-            <li id="mob-only" class="qoll-login auth-buttons">{{> loginButtons align="right"}}</li>
             <li><a href="/"><span class="glyphicon glyphicon-home"> {{i18n "Home"}}</span></a></li>
+            <li id="mob-only" class="qoll-login auth-buttons">{{> loginButtons align="right"}}</li>
             {{#if currentUser}}
             <li><a href="/inbox"><span class="fa fa-cloud"> {{i18n "QBank"}} </span></a></li>
             <!-- li><a href="/dashboard"><span class="glyphicon glyphicon-list"> {{i18n "QBox"}}</span></a></li -->

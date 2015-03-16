@@ -19,7 +19,9 @@ Meteor.methods({
 		ReactiveDataSource.refresh('qollstat' + qollId);
 		return qollRegId;
 	},
-	registerQollCustom : function(qollId, qollTypeVal, qollTypeIx) {
+	registerQollCustom : function(qollId, qollTypeVal, qollTypeIx, qollPortal) {
+		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
+
 		var userId = Meteor.userId();
 		qlog.info('In register custom qoll: ' + qollId + ', ' + qollTypeVal + ', Meteor.userId ' + Meteor.userId(), filename);
 		var existQollReg = QollRegister.find({
@@ -135,7 +137,8 @@ Meteor.methods({
 							'qollTypeIndex' : qollTypeIx,
 							'qollTypeReg' : qollTypeReg,
 							'submittedOn' : new Date(),
-							'submittedBy' : Meteor.userId()
+							'submittedBy' : Meteor.userId(),
+							'qollPortal'  : qollPortal,
 						});
 						Qoll.update({
 							_id : qollId
@@ -153,7 +156,9 @@ Meteor.methods({
 		qlog.info('OUTOF register custom qoll: ' + qollRegId + ' canans: ' + canans, filename);
 		return qollRegId;
 	},
-	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx) {
+	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal) {
+		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
+
 		var thisemail = UserUtil.getCurrentUserEmail();
 		var usrid = this.userId;
 		// find questionnaire
@@ -192,6 +197,7 @@ Meteor.methods({
 			newentry = {
 				qollstionnaireid : qsnrid,
 				usrid : usrid,
+				qollPortal : qollPortal,
 				responses : {}
 			};
 			newentry.responses['' + qollId + ''] = {
@@ -336,7 +342,9 @@ Meteor.methods({
 			return CoreUtils.getUint8Array(0);
 		}
 	},
-	registerQollBlankResponse : function(qsnrid, qollId, fib, unit_selected) {
+	registerQollBlankResponse : function(qsnrid, qollId, fib, unit_selected, qollPortal) {
+		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
+
 		var userId = Meteor.userId();
 		//TODO: populate the qollstionnaire table with fibs - new code
 		var thisemail = UserUtil.getCurrentUserEmail();
@@ -367,6 +375,7 @@ Meteor.methods({
 			newentry = {
 				qollstionnaireid : qsnrid,
 				usrid : usrid,
+				qollPortal : qollPortal,
 				responses : {}
 			};
 			newentry.responses['' + qoll._id + ''] = {

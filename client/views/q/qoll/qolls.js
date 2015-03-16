@@ -1,4 +1,4 @@
-var filename = "client/views/qoll/qolls.js";
+var filename = "client/views/qoll/qolls_inner.js";
 
 Handlebars.registerHelper('include', function(options) {
 	var context = {}, mergeContext = function(obj) {

@@ -1,0 +1,36 @@
+<template name="qext_qolls">
+    {{> header_awesome}}
+<p class="lead">
+<div class="container" id="qoll-container-id">
+  <!-- Starting of the row for all qolls -->
+{{> qext_qolls_inner}}
+  <!-- End of the row here -->
+  <div id="navbrand"></div>
+  {{#if nextPath}}
+  <ul class="pager">
+    <li><a class="load-more" href="{{nextPath}}">Load More &darr;</a></li>
+  </ul>
+  {{/if}}
+
+</div>
+</p> 
+</template>
+
+
+<template name="qext_qolls_inner">
+	  <!--div class="row" -->
+    Email - {{user_email_id}} / {{qoll_portal}}
+    {{#each allQolls}}
+    <!-- Start of Qoll Section -->
+     		{{> qext_single_qoll q= this user_email_id= ../user_email_id qoll_portal= ../qoll_portal btns= ../btns}}
+    {{/each}}
+  <!--/div-->
+</template>
+
+
+<template name="qext_contextbtns">
+	            {{#if if_inbox}}
+            	<li><button type="button" class="btn btn-link information-toggle"><span class="glyphicon glyphicon-volume-up information-toggle-txt">{{info_pref}}</span></button></li>
+            {{/if}}
+	
+</template>

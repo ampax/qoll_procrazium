@@ -40,6 +40,9 @@ Meteor.methods({
 
 		qollstionnaire.qolls_to_email = qolls_to_email;
 
+		// add uuid to the questionnaire
+		qollstionnaire.quuid = CoreUtils.generateUUID();
+
 		qlog.info('Printing qollstionnaire - ' + JSON.stringify(qollstionnaire), filename);
 
 		var qollstionnaire_id = Qolls.QollstionnaireDb.insert(qollstionnaire);

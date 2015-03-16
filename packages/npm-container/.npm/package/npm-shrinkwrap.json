@@ -99,10 +99,10 @@
       }
     },
     "fibers": {
-      "version": "1.0.2"
+      "version": "1.0.5"
     },
     "googleapis": {
-      "version": "1.0.14",
+      "version": "1.1.5",
       "dependencies": {
         "async": {
           "version": "0.9.0"
@@ -186,22 +186,49 @@
             }
           }
         },
-        "multipart-stream": {
-          "version": "1.0.0",
-          "dependencies": {
-            "sandwich-stream": {
-              "version": "0.0.4"
-            },
-            "inherits": {
-              "version": "2.0.1"
-            }
-          }
-        },
         "request": {
-          "version": "2.40.0",
+          "version": "2.51.0",
           "dependencies": {
-            "qs": {
-              "version": "1.0.2"
+            "bl": {
+              "version": "0.9.4",
+              "dependencies": {
+                "readable-stream": {
+                  "version": "1.0.33",
+                  "dependencies": {
+                    "core-util-is": {
+                      "version": "1.0.1"
+                    },
+                    "isarray": {
+                      "version": "0.0.1"
+                    },
+                    "string_decoder": {
+                      "version": "0.10.31"
+                    },
+                    "inherits": {
+                      "version": "2.0.1"
+                    }
+                  }
+                }
+              }
+            },
+            "caseless": {
+              "version": "0.8.0"
+            },
+            "forever-agent": {
+              "version": "0.5.2"
+            },
+            "form-data": {
+              "version": "0.2.0",
+              "dependencies": {
+                "mime-types": {
+                  "version": "2.0.9",
+                  "dependencies": {
+                    "mime-db": {
+                      "version": "1.7.0"
+                    }
+                  }
+                }
+              }
             },
             "json-stringify-safe": {
               "version": "5.0.0"
@@ -209,55 +236,39 @@
             "mime-types": {
               "version": "1.0.2"
             },
-            "forever-agent": {
-              "version": "0.5.2"
-            },
             "node-uuid": {
-              "version": "1.4.1"
+              "version": "1.4.3"
+            },
+            "qs": {
+              "version": "2.3.3"
+            },
+            "tunnel-agent": {
+              "version": "0.4.0"
             },
             "tough-cookie": {
               "version": "0.12.1",
               "dependencies": {
                 "punycode": {
-                  "version": "1.3.1"
+                  "version": "1.3.2"
                 }
               }
-            },
-            "form-data": {
-              "version": "0.1.4",
-              "dependencies": {
-                "combined-stream": {
-                  "version": "0.0.5",
-                  "dependencies": {
-                    "delayed-stream": {
-                      "version": "0.0.5"
-                    }
-                  }
-                },
-                "mime": {
-                  "version": "1.2.11"
-                }
-              }
-            },
-            "tunnel-agent": {
-              "version": "0.4.0"
             },
             "http-signature": {
-              "version": "0.10.0",
+              "version": "0.10.1",
               "dependencies": {
                 "assert-plus": {
-                  "version": "0.1.2"
+                  "version": "0.1.5"
                 },
                 "asn1": {
                   "version": "0.1.11"
                 },
                 "ctype": {
-                  "version": "0.5.2"
+                  "version": "0.5.3"
                 }
               }
             },
             "oauth-sign": {
-              "version": "0.3.0"
+              "version": "0.5.0"
             },
             "hawk": {
               "version": "1.1.1",
@@ -281,6 +292,22 @@
             },
             "stringstream": {
               "version": "0.0.4"
+            },
+            "combined-stream": {
+              "version": "0.0.7",
+              "dependencies": {
+                "delayed-stream": {
+                  "version": "0.0.5"
+                }
+              }
+            }
+          }
+        },
+        "string-template": {
+          "version": "0.2.0",
+          "dependencies": {
+            "js-string-escape": {
+              "version": "1.0.0"
             }
           }
         }
@@ -489,16 +516,16 @@
       }
     },
     "marked": {
-      "version": "0.3.2"
+      "version": "0.3.3"
     },
     "nodemailer": {
-      "version": "1.3.0",
+      "version": "1.3.2",
       "dependencies": {
         "buildmail": {
-          "version": "1.2.0",
+          "version": "1.2.1",
           "dependencies": {
             "addressparser": {
-              "version": "0.3.1"
+              "version": "0.3.2"
             },
             "libbase64": {
               "version": "0.1.0"
@@ -509,21 +536,62 @@
           }
         },
         "hyperquest": {
-          "version": "0.3.0",
+          "version": "1.0.1",
           "dependencies": {
-            "through": {
-              "version": "2.2.7"
+            "duplexer2": {
+              "version": "0.0.2",
+              "dependencies": {
+                "readable-stream": {
+                  "version": "1.1.13",
+                  "dependencies": {
+                    "core-util-is": {
+                      "version": "1.0.1"
+                    },
+                    "isarray": {
+                      "version": "0.0.1"
+                    },
+                    "string_decoder": {
+                      "version": "0.10.31"
+                    },
+                    "inherits": {
+                      "version": "2.0.1"
+                    }
+                  }
+                }
+              }
             },
-            "duplexer": {
-              "version": "0.1.1"
+            "through2": {
+              "version": "0.6.3",
+              "dependencies": {
+                "readable-stream": {
+                  "version": "1.0.33",
+                  "dependencies": {
+                    "core-util-is": {
+                      "version": "1.0.1"
+                    },
+                    "isarray": {
+                      "version": "0.0.1"
+                    },
+                    "string_decoder": {
+                      "version": "0.10.31"
+                    },
+                    "inherits": {
+                      "version": "2.0.1"
+                    }
+                  }
+                },
+                "xtend": {
+                  "version": "4.0.0"
+                }
+              }
             }
           }
         },
         "libmime": {
-          "version": "0.1.5",
+          "version": "0.1.7",
           "dependencies": {
             "iconv-lite": {
-              "version": "0.4.4"
+              "version": "0.4.7"
             },
             "libbase64": {
               "version": "0.1.0"
@@ -534,28 +602,28 @@
           }
         },
         "nodemailer-direct-transport": {
-          "version": "1.0.0",
+          "version": "1.0.2",
           "dependencies": {
             "smtp-connection": {
-              "version": "0.1.7"
+              "version": "1.2.0"
             }
           }
         },
         "nodemailer-smtp-transport": {
-          "version": "0.1.12",
+          "version": "1.0.2",
           "dependencies": {
             "nodemailer-wellknown": {
-              "version": "0.1.2"
+              "version": "0.1.5"
             },
             "smtp-connection": {
-              "version": "0.1.7"
+              "version": "1.2.0"
             }
           }
         }
       }
     },
     "to-markdown": {
-      "version": "0.0.2",
+      "version": "0.0.3",
       "dependencies": {
         "he": {
           "version": "0.5.0"
