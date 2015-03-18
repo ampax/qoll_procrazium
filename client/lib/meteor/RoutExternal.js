@@ -31,4 +31,3 @@ Router.map(function() {
 	});
 
 });
-

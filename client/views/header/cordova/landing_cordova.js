@@ -101,11 +101,15 @@ Template.register_qoll_cordova.events({
 	          // login attempt has failed. 
 	          console.info('Not registering the user since error occured .... ' + err.message);
 	          $('div.error-message').html(err.reason);
+            Meteor.startup(function () {
+              navigator.notification.alert("Error: " + err.reason, function() {});
+            });
 	        } else {
 		          // The user has been logged in.
 		        console.info('Registering in .... ');
 		        $('div.error-message').html('User registered + ' + result);
 		        // http://localhost:5000/inbox
+            Router.go('go_home_cordova');
 		    }
       	});
       }

@@ -205,7 +205,7 @@ Template.all_qolls.events({
 		 "top": $('#'+qollId).offset().top + "px",
 		 "left": $('#'+qollId).offset().left + "px",
 		 });	*/
-	},
+	},/*
 	'click .facebook' : function(event) {
 		event.preventDefault();
 		var qollId = this._id;
@@ -231,5 +231,5 @@ Template.all_qolls.events({
 				qlog.info('Sent the email - ' + qollId + ', message - ' + data, filename);
 			}
 		});
-	},
+	},*/
 });

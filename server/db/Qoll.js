@@ -114,6 +114,9 @@ Qolls.QollstionnaireDb = {
 	remove : function(id){
 		Qollstionnaire.update({_id : id}, {$set : {status : QollConstants.STATUS.ARCHIVE}});
 	},
+	get	: function (params){
+		return Qollstionnaire.findOne(params);
+	}
 };
 
 // Exposing DB methods to client.
