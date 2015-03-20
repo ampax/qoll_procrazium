@@ -13,7 +13,20 @@ Template.view_sent.events({
 				QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: Removed questionaire.');
 			}
 		});
-	}
+	},
+	'click .sendemail' : function(event) {
+		//event.preventDefault();
+		var questid = this._id;
+		qlog.info('Clicked to resend email this questionnaire ' + questid, filename);
+		// Will be sending the emails on the server side
+		Meteor.call('sendQollstionnaireMail', questid, function(err, data) {
+          if (err) {
+            qlog.info('Failed sending the email - ' + questid + '/' + err, filename);
+          } else {
+            qlog.info('Sent the email - ' + questid + ', message - ' + data, filename);
+          }
+        });
+	},
 });
 
 Template.view_sent.rendered = function(){

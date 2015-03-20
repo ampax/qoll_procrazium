@@ -7,14 +7,22 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 	var initializing = true;
 	var handle_questionaires;
 	var extUserEmailId = findoptions.user_email_id;
+	var userQUUID = findoptions.user_q_uuid;
 
 	var user=Meteor.users.findOne({ "profile.email" : extUserEmailId });
     if(!user) {
         user=Meteor.users.findOne({ "emails.address" : extUserEmailId });
     }
 
+    var q = Qolls.QollstionnaireDb.get({_id : findoptions._id});
+
+    if(q.submittedToUUID[CoreUtils.encodeEmail(extUserEmailId)] !== userQUUID) q = undefined;
+    // submittedToUUID[CoreUtils.encodeEmail(extUserEmailId)] : userQUUID
+
+    qlog.info('Found questionnaire =====> ' + JSON.stringify(q), filename);
+
     if(user) qlog.info('Fetched user with email - ' + extUserEmailId + ' ::: ' + JSON.stringify(user), filename);
-	//if (user_id) {
+	if (q) {
 		//Check for existing user record
 			var resp = undefined;
 			if (user) {
@@ -117,7 +125,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 				}
 			});
 		//}
-	// }
+	}
 
 	qlog.info('Done initializing the ext-qoll-for-questionaire-id: EXT_QUESTIONAIRE_PUBLISHER, uuid: ' + uuid, filename);
 	initializing = false;

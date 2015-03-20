@@ -100,6 +100,7 @@ Qolls.QollstionnaireDb = {
 			qolls_to_email 				: qollstionnaire.qolls_to_email,
 			tags 						: qollstionnaire.tags,
 			submittedTo 				: qollstionnaire.submittedTo,
+			submittedToUUID				: qollstionnaire.submittedToUUID,
 			submittedToGroup 			: qollstionnaire.submittedToGroup,
 			status 						: qollstionnaire.status,
 			visibility 					: qollstionnaire.visibility,

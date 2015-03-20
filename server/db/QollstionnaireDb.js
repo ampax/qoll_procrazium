@@ -30,7 +30,7 @@ Meteor.methods({
 
 		var qolls_to_email = {};
 		emails.forEach(function(email){
-			email = email.replace(/\./g,"&#46;");
+			email = CoreUtils.encodeEmail(email); //email.replace(/\./g,"&#46;");
 			qlog.info('Printing email =======> ' + email, filename);
 			qolls_to_email[email] = {};
 			qbankids.forEach(function(qid){
@@ -42,6 +42,13 @@ Meteor.methods({
 
 		// add uuid to the questionnaire
 		qollstionnaire.quuid = CoreUtils.generateUUID();
+
+		// add uuid for each user to cross check when the hit the link from the email
+		qollstionnaire.submittedToUUID = {};
+		qollstionnaire.submittedTo.forEach(function(el){
+			el = CoreUtils.encodeEmail(el); // el.replace(/\./g,"&#46;");
+			qollstionnaire.submittedToUUID[el] = CoreUtils.generateUUID();
+		});
 
 		qlog.info('Printing qollstionnaire - ' + JSON.stringify(qollstionnaire), filename);
 
