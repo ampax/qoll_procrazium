@@ -28,14 +28,14 @@
 						<div class="col-md-5 col-xs-12">
 							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
 						</div>
-						<div class='col-md-3 col-xs-12'>&nbsp;</div>
+						<div class='col-md-2 col-xs-12'>&nbsp;</div>
 						<div class="col-md-1 col-xs-12">
 							Size
 						</div>
 						<div class="col-md-1 col-xs-12">
 							Rate
 						</div>
-						<div class="col-md-1 col-xs-12">
+						<div class="col-md-2 col-xs-12">
 							&nbsp;
 						</div>
 					</div><!-- list-group-item list-group-item-heading -->
@@ -47,7 +47,7 @@
 					<div class="col-md-1 col-xs-12">
 						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 					</div>
-					<div class="col-md-8 col-xs-12 make-clickable">
+					<div class="col-md-7 col-xs-12 make-clickable">
 						<a href="{{ pathFor 'sentView'}}" class='black-link'>
 							{{{title}}}
 						</a>
@@ -58,12 +58,14 @@
 					<div class="col-md-1 col-xs-12">
 						{{respo_length}} / {{recips_count}}
 					</div>
-					<div class="col-md-1 col-xs-12">
-						<span class="pull-left archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>&nbsp;
-						<span class="fa-stack fa-md sendemail btn-primary glossy">
+					<div class="col-md-2 col-xs-12">
+						<span class="fa-stack fa-md sendemail btn-primary glossy" title="Resend the questionnaire">
 							<i class="fa fa-square-o fa-stack-2x"></i>
 							<i class="fa fa-envelope-o fa-stack-1x"></i>
-						</span>
+						</span>&nbsp;&nbsp;&nbsp;
+						<span class="copy-link glossy" title="Copy the embeddable link" data-toggle="popover" data-placement="left" data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus."><i class="glyphicon glyphicon-link blue ios-enabled"></i></span>&nbsp;&nbsp;&nbsp;
+						<span class="archive-qoll-btn glossy" title="Archive the questionnaire"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+						
 						<!-- span class="pull-left lock-qoll-btn glossy"><i class="glyphicon glyphicon-off orange lock-btn ios-enabled"></i></span -->
 					</div>
 				</div><!-- list-group-item list-group-item-success -->

@@ -1,4 +1,5 @@
 // debug in chrome by typing in the browser - about:inspect
+// https://github.com/Slava/meteor-mobile-icons-example
 
 Template.signin_qoll_cordova.events({
 

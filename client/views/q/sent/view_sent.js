@@ -27,6 +27,19 @@ Template.view_sent.events({
           }
         });
 	},
+	// URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email
+	// http://localhost:5000/ext_email_board/5e0714a7-1d59-480f-9c77-372fc68ea4f8/F2pPoF6rzdR3ZFZLY/kaushik.anoop@gmail.com/embed
+	// /ext_embed_board/:_id/:email_id/:qoll_portal
+	'click .copy-link' : function(event) {
+		//event.preventDefault();
+		var questid = this._id;
+		var embeddable_url = URLUtil.SITE_URL+'ext_embed_board/'+questid+'/user_emailid/embed';
+		qlog.info('Clicked to copy link for this questionnaire ' + questid, filename);
+		// alert(embeddable_url);
+		prompt("Copy and embed the link", embeddable_url);
+		//$(event.target).popover();
+		// return embeddable_url;
+	},
 });
 
 Template.view_sent.rendered = function(){
