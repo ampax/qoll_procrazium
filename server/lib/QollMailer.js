@@ -79,7 +79,7 @@ Meteor.methods({
         q.submittedTo.forEach(function(to, idx){
             qlog.info('Sending email to - ' + to + ', subject - ' + subject + ', post - ' + post, filename);
             to_tmp = CoreUtils.encodeEmail(to); //to.replace(/\./g,"&#46;");
-            responses.push(QollMailer.sendQollEmail(from_beau, to, subject, formatHtmlEmail(to, subject, post, qollstionnaire_id, q.submittedToUUID[to_tmp])));
+            responses.push(QollMailer.sendQollEmail(from_beau, to, subject, formatQollstionnaireHtmlEmail(to, subject, post, qollstionnaire_id, q.submittedToUUID[to_tmp])));
         });
 
         return responses;
@@ -108,11 +108,19 @@ Meteor.methods({
             }
         /** END ::::: Replace the fill in the blanks if it is of FIB type **/
 
-        return QollMailer.sendQollEmail(from, to, subject, formatHtmlEmail(from, subject, post));
+        return QollMailer.sendQollEmail(from, to, subject, formatQollstionnaireHtmlEmail(from, subject, post));
     },
+    sendSocialContactToJoinQollMail : function(friend_id) {
+        var from = Meteor.user().profile.email;
+        var name = Meteor.user().profile.name;
+
+        var friend = SocialDb.SocialConnect.get(friend_id);
+
+        return QollMailer.sendQollEmail(from, friend.email, "Join Qoll Today", formatInvitationHtmlEmail(from, name, friend.email, friend.name));
+    }
 });
 
-var formatHtmlEmail = function(email, title, message, id, user_q_uuid) {
+var formatQollstionnaireHtmlEmail = function(email, title, message, id, user_q_uuid) {
     // Converts a String to word array
     //var enc_email = CryptoJS.enc.Utf16.parse('kaushik.anoop@gmail.com'); 
     // 00480065006c006c006f002c00200057006f0072006c00640021
@@ -138,3 +146,31 @@ var formatHtmlEmail = function(email, title, message, id, user_q_uuid) {
     return fmt_msg;
 };
 
+
+var formatInvitationHtmlEmail = function(from, from_name, to, to_name) {
+    // Converts a String to word array
+    //var enc_email = CryptoJS.enc.Utf16.parse('kaushik.anoop@gmail.com'); 
+    // 00480065006c006c006f002c00200057006f0072006c00640021
+    // var email = 'kaushik.anoop@gmail.com';
+
+    var msg = to_name + ', '+ from_name + ' has invited you to join Qoll. Click on the link in the email to register with Qoll today.';
+    
+    var fmt_msg = 
+    '<table>'+
+        '<tr style="background-color: #FFF1FF; border: 1px solid #ddd; font-size 18px;">'+
+            '<td><a href="'+URLUtil.SITE_URL+'"><img src="http://qoll.io/img/QollBrand.png"/></a></td>'+
+            '<td><a href="'+URLUtil.SITE_URL+'"><h4 style="font-size: 18px;">Join Qoll today ...</h4></a></td>'+
+        '</tr>'+
+        '<tr>'+
+               '<td>&nbsp;</td><td><h5 style="font-size: 14px;">'+msg+'</h5></td>'+
+        '</tr>'+
+        '<tr>'+
+                '<td colspan="2"><a href="'+URLUtil.SITE_URL+'"><h4 style="font-size: 18px;">Join</a></td>'
+        '</tr>'+
+        '<tr>'+
+               '<td>&nbsp;</td><td>©2014 Millennials Venture Labs </td>'+
+        '</tr>'+
+    '</table>';
+
+    return fmt_msg;
+};

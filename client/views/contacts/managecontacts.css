@@ -273,3 +273,55 @@ li.group-strip-long {
 
 /**** END: Style sheets for groups ****/
 
+/**** START : list group strip ****/
+div.list-enclosure {
+	height: 3em;
+	background-color: #d9edf7;
+  	border-bottom-style: ridge;
+  	border-bottom-color: lemonchiffon;
+}
+
+li.list-group-strip {
+	margin-left: 0px;
+	margin-right: 20px;
+	margin-top: 0px;
+	margin-bottom: 20px;
+	padding-top: 0px;
+	position: relative;
+	width: 300px;
+	height: 20px;
+	float: left;
+	display: inline;
+	text-align: -webkit-match-parent;
+	line-height: 0.8em;
+}
+
+.profile-pic-long-list {
+	width: 25px;
+	height: 25px;
+	margin-top: 5px;
+	float: left;
+}
+
+.profile-content-1 {
+	margin-top: 9px;
+	margin-left: 36px;
+	width: 40%;
+}
+
+.profile-content-2 {
+	margin-top: 9px;
+	margin-left: 36px;
+	width: 40%;
+}
+
+.profile-content-3 {
+	margin-top: 9px;
+	margin-left: 36px;
+	width: 20%;
+}
+
+/**** END : list group strip ****/
+
+
+

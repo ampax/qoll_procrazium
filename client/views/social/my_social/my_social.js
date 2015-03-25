@@ -28,7 +28,7 @@ Template.my_social.events({
 
 		//QollConnectClient.connectWithQollUser(this.contact._id, this.contact.name);
 
-		QollConnectClient.inviteSocialContactToJoinQoll(this.contact._id, this.contact.name);
+		QollConnectClient.inviteSocialContactToJoinQoll(this.contact._id, this.contact.name, btn);
 		
 		
 	},
@@ -36,18 +36,28 @@ Template.my_social.events({
 
 var QollConnectClient = {
 	
-	inviteSocialContactToJoinQoll: function(connect_id, name) {
+	inviteSocialContactToJoinQoll: function(connect_id, name, btn) {
+
+		Meteor.call('sendSocialContactToJoinQollMail', connect_id, function(err, data) {
+          if (err) {
+            qlog.info('Failed sending the invitation - ' + connect_id + '/' + err, filename);
+          } else {
+            qlog.info('Sent the invitation email - ' + connect_id + ', message - ' + data, filename);
+            btn.parent().removeClass('add');
+			btn.removeClass('green');
+			btn.addClass('black');
+			btn.parent().addClass('green');
+			alert('Sent the invitation to ' + name);
+          }
+        });
 		
-		Meteor.call('inviteSocialContactToJoinQoll', connect_id, function(err, message) {
+		/** Meteor.call('inviteSocialContactToJoinQoll', connect_id, function(err, message) {
 			if(err) {
 				qlog.info('Error happened while inviting friend to join Qoll', filename);
 			} else {
 				qlog.info('Sent invitation to invite friend to Qoll ' + name, filename);
-				btn.parent().removeClass('add');
-				btn.removeClass('green');
-				btn.addClass('black');
 			}
-		});
+		}); **/
 
 	},
 };

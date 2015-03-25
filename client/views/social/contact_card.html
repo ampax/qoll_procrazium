@@ -1,3 +1,29 @@
+<template name="list_card_long">
+	{{#each contacts}}
+	<div class="row">
+		<div class='col-md-4 list-enclosure'>
+			<div class="entityblock profile profile-pic-long-list">
+				<img src="/img/ghost_avatar.png" alt="Ghost Avatar" class="avatar-image">
+			</div>
+			<div class="profile-content-1">
+				{{name}}
+			</div>
+		</div>
+		<div class='col-md-4 list-enclosure'>
+			<div class="profile-content-1">
+				{{email}}
+			</div>
+		</div>
+		<div class='col-md-3 list-enclosure'>
+			&nbsp;
+		</div>
+		<div class='col-md-1 list-enclosure' >
+			{{> sel_button contact=this}}
+		</div>
+	</div>
+	{{/each}}
+</template>
+
 <!-- Container to print all the contacts on the social circle page -->
 <template name="list_card">
 	<div class="group-contact-container">

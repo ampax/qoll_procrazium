@@ -40,3 +40,11 @@ SocialDb.insertSocialConnect=function(user_id, social_unique_id, social_connect)
 		SocialFriends.insert({social_connect_id : social_connect_id, user_id : user_id, friend_id : social_connect_id, social_unique_id : social_unique_id, active : 1});
 	}
 }
+
+SocialDb.SocialConnect = {
+	get : function(connect_id) {
+		return SocialConnect.findOne({_id : connect_id});
+	},
+};
+
+

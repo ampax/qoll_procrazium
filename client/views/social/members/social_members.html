@@ -20,37 +20,31 @@
 					
 					<!-- Nav tabs -->
 					<ul class="nav nav-tabs bs-tab-margin-top-0" role="tablist">
-					  <li class="active"><a href="#owner" role="tab" data-toggle="tab">Qoll Connects</a></li>
-					  <li><a href="#subscriber" role="tab" data-toggle="tab">Search and Add</a></li>
-					  <li><a href="#open_requests" role="tab" data-toggle="tab">Open Requests</a></li>
+						<li class="active"><a href="#subscriber" role="tab" data-toggle="tab">Search and Add</a></li>
+					 	<li><a href="#owner" role="tab" data-toggle="tab">Qoll Connects</a></li>
+					 	<li><a href="#open_requests" role="tab" data-toggle="tab">Open Requests</a></li>
 					</ul>
 
 					<!-- Tab panes -->
 					<div class="tab-content row">
-					  <div class="tab-pane active" id="owner">
-					  		Qoll Connects ...<p>&nbsp;</p>
-					  		<div class='col-md-12'>
-							{{> list_card contacts=qoll_connects btn_ctx='social_connects' }}
-							</div>
-					  </div>
-					  <div class="tab-pane" id="subscriber">
+					  <div class="tab-pane active" id="subscriber">
 					  		Search Qoll Connects ...<p>&nbsp;</p>
-							<div class='col-md-12'>
-								{{> list_card contacts=connects }}
-							</div>
+							<!-- div class='col-md-12' -->
+								{{> list_card_long contacts=connects }}
+							<!-- /div -->
 						</div>
+						<div class="tab-pane" id="owner">
+					  		Qoll Connects ...<p>&nbsp;</p>
+					  		{{> list_card_long contacts=qoll_connects btn_ctx='social_connects' }}
+					  </div>
 					  <div class="tab-pane" id="open_requests">
 					  		Received Requests ...<p>&nbsp;</p>
-							<div class='col-md-12'>
-								{{> list_card contacts=qoll_connects_open_rec_reqs btn_ctx='social_connects' }}
-							</div>
+							{{> list_card_long contacts=qoll_connects_open_rec_reqs btn_ctx='social_connects' }}
 						
 						<hr class='divider divider-bottom-0'>
 
 							Sent Requests ...<p>&nbsp;</p>
-							<div class='col-md-12'>
-								{{> list_card contacts=qoll_connects_open_reqs btn_ctx='social_connects' }}
-							</div>
+							{{> list_card_long contacts=qoll_connects_open_reqs btn_ctx='social_connects' }}
 						</div>
 					</div>
 
