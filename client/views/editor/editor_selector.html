@@ -4,6 +4,7 @@
   QollConstants.EDITOR_MODE.HTML - html
 -->
 <template name="editor_selector">
+	<div class="row">
 	<div class="col-md-12 col-xs-12 text-right">
 		<label class="control-label">&nbsp; Editor :&rarr;</label>
 		<!-- Basic does not work today properly from look and feel perspective :(-->
@@ -16,5 +17,9 @@
 		<label class="radio-inline">
 		  <input type="radio" name="editorPref" id="ckeditor" value="html" {{is_html}}> Html
 		</label>
+		<label class="radio-inline">
+		  <input type="radio" name="editorPref" id="template" value="template" {{is_template}}> Template
+		</label>
+	</div>
 	</div>
 </template>

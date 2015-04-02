@@ -764,4 +764,24 @@ input.add-group {
     border-color: #999999; /**darkred; **/
     outline:0; 
 }
+
+td.qoll-auto-complete {
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+    font-size: 1em;
+    color: #444;
+    background: #eee;
+    border: 1px solid #aaa;
+    border-right-color: #ddd;
+    border-bottom-color: #ddd;
+    padding: 4px;
+}
+
+td.qoll-auto-complete:hover {
+    background-color: #006BB2;
+    color: white;
+}
+
+div.xmultiple > span.label {
+    color: black;
+}
 /* End: Basic styling for html elements for Qoll */

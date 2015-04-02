@@ -1,0 +1,23 @@
+<template name="quick_qoll">
+  {{#autoForm schema=quickQollSchema id="quickQollForm" type="method" meteormethod="sendEmail"}}
+  <fieldset>
+    {{> afQuickField type="xautocomplete" xmultiple=true
+        formid="quickQollForm" name="name"
+        renderKey="name" fieldref="email" call="fetch_my_emails" 
+        renderfunction="renderQollToEmails"}}
+
+    {{> afQuickField name="title"}}
+    {{> afQuickField name="text"}}
+    {{> afArrayField name="options"}}
+    <div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+      <button type="reset" class="btn btn-default">Reset</button>
+    </div>
+  </fieldset>
+  {{/autoForm}}
+</template>
+
+
+<template name="quick_qoll_send_to">
+    <td class="qoll-auto-complete">{{this.name}} <b>{{this.email}}</b></td>
+</template>

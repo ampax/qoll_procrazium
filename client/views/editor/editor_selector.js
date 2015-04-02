@@ -10,6 +10,9 @@ Template.editor_selector.helpers({
 	},
 	is_html : function() {
 		return QollEditorUtil.checkEditorMode(QollConstants.EDITOR_MODE.HTML) ? 'checked' : '';
+	},
+	is_template : function() {
+		return QollEditorUtil.checkEditorMode(QollConstants.EDITOR_MODE.TEMPLATE) ? 'checked' : '';
 	}
 });
 

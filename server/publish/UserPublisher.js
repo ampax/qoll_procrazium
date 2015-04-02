@@ -575,5 +575,66 @@ var collectQollUserInfo = function(user) {
     sex           :   user.profile.sex,
     social_type   :   'qoll',
   };
-}
+};
+
+
+Meteor.methods({
+  fetch_my_emails: function(query){
+        qlog.info("Getting emails of all friends for: " + Meteor.userId() + ", Query: " + query, filename);
+        if(query.search(/,/) != -1) {
+          var query = split(query);
+          query = query[query.length-1];
+        }
+        qlog.info('Extracted query string from multiple is - ' + query, filename);
+
+        var results = new Array();
+        var user_id = Meteor.userId();
+
+        var friend_ids = new Array();
+
+        // Finding all the Qoll-Friends for this user
+        var qoll_friend = QollFriends.find({user_id : Meteor.userId(), status : QollConstants.STATUS.CONFIRMED}, {friend_id : 1}).fetch();
+        var qoll_friend_ids = new Array();
+        qoll_friend.forEach(function(qf){
+          qoll_friend_ids.push(qf.friend_id);
+        });
+        // qlog.info('Qoll friends ids: ' + qoll_friend_ids, filename);
+        if(query != '') {
+          var user_emails = Meteor.users.find({'profile.name': {$regex: '^.*'+query+'.*$'}, _id : {$in : qoll_friend_ids}}, 
+            {'profile.name' : 1, 'profile.email' : 1}).fetch();
+
+          user_emails.forEach(function(ue){
+            //qlog.info('Email for qoll connect is =======> ' + JSON.stringify(ue), filename);
+            results.push({'name' : ue.profile.name, 'email' : ue.profile.email});
+          });
+        }
+
+        // Fetching all the Social-Friends for this user ( if there are any pulled from soc-networking-portals)
+        var soc_friend = SocialFriends.find({user_id : Meteor.userId(), active : 1}, {friend_id : 1});
+        var soc_friend_ids = new Array();
+        soc_friend.forEach(function(qf){
+          soc_friend_ids.push(qf.friend_id);
+        });
+        //qlog.info('Social friends ids: ' + JSON.stringify(soc_friend_ids), filename);
+        if(query != '') {
+          var user_emails = SocialConnect.find({'name': {$regex: '^.*'+query+'.*$'}, _id : {$in : soc_friend_ids}}, 
+            {'name' : 1, 'email' : 1}).fetch();
+
+          //qlog.info('Social user data: ' + user_emails, filename);
+
+          user_emails.forEach(function(ue){
+            // qlog.info('Email for social connect is =======> ' + JSON.stringify(ue), filename);
+            results.push({'name' : ue.name, 'email' : ue.email});
+          });
+        }
+
+        // qlog.info('Result till this point - ' + JSON.stringify(results), filename);
+
+        return results;
+    },
+});
+
+var split = function(val){
+  return val.split( /,\s*/ );
+};
 

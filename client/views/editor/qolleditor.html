@@ -7,21 +7,26 @@
 	<!--div class='dummy_class'>Click me!</div-->
 	{{> editor_selector}}
 
-	{{> recipient}}
-
 	<!-- If the editor selection is markdown then this one will work -->
 	{{#if is_adv}}
+		{{> recipient}}
 		{{> qolleditor_adv}}
 	{{/if}}
 
 	<!-- If the editor selection is html then this one will work -->
 	{{#if is_html}}
+		{{> recipient}}
 		{{> html_editor}}
 	{{/if}}
 
 	<!-- If the editor selection is basic then this one will work -->
 	{{#if is_basic}}
+		{{> recipient}}
 		{{> newqoll}}
+	{{/if}}
+
+	{{#if is_template}}
+		{{> quick_qoll}}
 	{{/if}}
 
 	</div>

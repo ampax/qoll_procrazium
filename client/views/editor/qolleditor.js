@@ -17,6 +17,10 @@ Template.qolleditor.helpers({
 	is_html : function() {
 		console.log('Fetching the mode informaiton 3');
 		return QollEditorUtil.checkEditorMode(QollConstants.EDITOR_MODE.HTML);
+	},
+	is_template : function() {
+		console.log('Fetching the mode informaiton 4');
+		return QollEditorUtil.checkEditorMode(QollConstants.EDITOR_MODE.TEMPLATE);
 	}
 });
 
