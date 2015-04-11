@@ -144,6 +144,7 @@ Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
     if (ufound.length > 0) {
       var user = ufound[0];
       var groups = user.groups;
+      if(!groups) groups = [];
 
       var group_ids = [];
       groups.map(function(group){

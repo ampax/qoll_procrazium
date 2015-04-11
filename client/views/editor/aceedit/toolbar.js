@@ -143,7 +143,8 @@ Template.toolbar.events({
 });
 
 /** Manage various events for storing the qoll contents **/
-var storeEditorContents = function(editor, recips, tags, action) {
+// Global method ... wil be called from quick qoll page also to store qolls
+storeEditorContents = function(editor, recips, tags, action) {
 
 	qlog.info('Adding the qoll to the db with %' + recips + '%' + tags + '%', filename);
 	var qollIdToEdit = Session.get('QollIdToEdit');

@@ -43,6 +43,9 @@
 					</div>
 					<div class="col-md-8 col-xs-12 make-clickable">
 						<a href="{{ pathFor 'qollView' }}" class='black-link'>
+							{{#each imgs imageIds}}
+					          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 20%;" data-gallery id="{{this._id}}"/>
+					        {{/each}}
 							<span class='title-qoll'>{{{qollTitle}}}</span> - {{{qollText}}}
 						</a>
 					</div>

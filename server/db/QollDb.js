@@ -29,7 +29,7 @@ Meteor.methods({
 	*						types, typesX, visibility, complexity, isMultiple ) 
 	**/
 	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
-	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups) {
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds) {
 		var collection_forqoll = Qoll; 
 
 		var qoll_to_insert = {
@@ -59,7 +59,8 @@ Meteor.methods({
 			'qollMasterId' : qollMasterId,
 			'tags' : tags,
 			//'attributes' : attributes,
-			'qollFormat' : qollFormat
+			'qollFormat' : qollFormat,
+			'imageIds'	 : selImgIds
 		};
 
 		var qollId;
@@ -176,7 +177,7 @@ Meteor.methods({
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups) {
+	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
 		qlog.info('Inserting into qoll master', filename);
 
 		//Store the tags
@@ -185,13 +186,16 @@ Meteor.methods({
 
 		qlog.info('This is the editor content - ' + qollText, filename);
 
-		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT});
+		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
 
-		var qollids = QollParser.addQollsForMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups);
+		var qollids = QollParser.addQollsForMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 
+		// create a questionnaire if need be
+		// (1) no email and groups attached
+		// (2) what?
 		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
 
-		return 'Successfully created ' + qollids.length + ' qolls.' + questinfo;
+		return {msg : 'Successfully created ' + qollids.length + ' qolls.' + questinfo, qollids : qollids, questId : questinfo.questId};
 	},
 
 	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate, accessGroups){
@@ -215,7 +219,7 @@ Meteor.methods({
 
 		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
 		
-		return 'Successfully created ' + qollids.length + ' qolls.' + questinfo;
+		return 'Successfully created ' + qollids.length + ' qolls.' + questinfo.questinfo;
 	}
 });
 
@@ -251,7 +255,17 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 
 		qollstionnaire.qolls_to_email = QollParser.mapQollsToEmail(eandg.submittedTo, qollids);
 
-		qollstionnaire.title = 'Questionnaire for ' + tags.join(', ') + '.';
+		// add uuid to the questionnaire
+		qollstionnaire.quuid = CoreUtils.generateUUID();
+
+		// add uuid for each user to cross check when the hit the link from the email
+		qollstionnaire.submittedToUUID = {};
+		qollstionnaire.submittedTo.forEach(function(el){
+			el = CoreUtils.encodeEmail(el); // el.replace(/\./g,"&#46;");
+			qollstionnaire.submittedToUUID[el] = CoreUtils.generateUUID();
+		});
+
+		qollstionnaire.title = 'New Qoll Questionnaire for you ...' //'Questionnaire for ' + tags.join(', ') + '.';
 
 
 		if(action === QollConstants.QOLL_ACTION_STORE) {
@@ -263,5 +277,5 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 		questId = Qolls.QollstionnaireDb.insert(qollstionnaire);
 		questinfo = ' Questionnaire with id - ' + questId;
 	}
-	return questinfo;
+	return {questinfo: questinfo, questId: questId};
 };

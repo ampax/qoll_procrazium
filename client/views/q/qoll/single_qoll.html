@@ -15,6 +15,10 @@
             {{/each}}
           </div>
         {{/if}}
+
+        {{#each imgs q.imageIds}}
+          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" data-gallery id="{{this._id}}"/>
+        {{/each}}
         <!--{{{get_hint_html q.hint q.context}}}-->
         {{#if q.hint}}
           <button type="button" class="btn btn-warning pull-right" data-toggle="tooltip"

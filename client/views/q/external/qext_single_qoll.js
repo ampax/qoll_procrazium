@@ -126,7 +126,17 @@ Template.qext_single_qoll.helpers({
 			return 'white_bg_5';
 		} else return 'green_bg_1';
 	},
+    imgs: function(img_ids) {
+    	console.log(img_ids);
+    	if(!img_ids) return [];
+	    var imgs1 = QollImages.find({'_id': {$in: img_ids}});
+	    return imgs1;
+  	},
 });
+
+Template.qext_single_qoll.onCreated(function(){
+    this.subscribe('images');
+}); 
 
 //<input class="textbox"type="text">      http://html-generator.weebly.com/css-textbox-style.html
 

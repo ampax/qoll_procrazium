@@ -9,6 +9,19 @@ Template.all_qolls.rendered = function() {
 
 };
 
+Template.all_qolls.onCreated(function(){
+    this.subscribe('images');
+}); 
+
+
+Template.all_qolls.helpers({
+  imgs: function(image_ids) {
+    if(!image_ids) return [];
+    var imgs1 = QollImages.find({'_id': {$in: image_ids}});
+    return imgs1;
+  },
+});
+
 $.fn.toggleCheckbox = function() {
 	this.attr('checked', !this.attr('checked'));
 };

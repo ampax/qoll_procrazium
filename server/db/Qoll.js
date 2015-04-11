@@ -45,7 +45,8 @@ Qolls.QollMasterDb = {
 			'submittedBy' : Meteor.userId(),
 			'submittedByEmail' : getCurrentEmail,
 			'visibility' : qoll.visibility,
-			'qollFormat' : qoll.qollFormat
+			'qollFormat' : qoll.qollFormat,
+			'imageIds'	 : qoll.imageIds
 		});
 
 		return qollMasterId;
@@ -69,7 +70,8 @@ Qolls.QollRawDb = {
 			'submittedBy' : Meteor.userId(),
 			'submittedByEmail' : getCurrentEmail,
 			'visibility' : qoll.visibility,
-			'qollFormat' : qoll.qollFormat
+			'qollFormat' : qoll.qollFormat,
+			'imageIds'	 : qoll.imageIds
 		});
 
 		return id;

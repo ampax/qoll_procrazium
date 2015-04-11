@@ -5,11 +5,12 @@ Template.registerHelper("Schemas", Schemas);
 
 /******* Single quick qoll collectoin less schema *******/
 Schemas.quick_qoll = new SimpleSchema({
-  name: {
+  send_to: {
     type: [String],
     label: "Send To",
-    regEx: SimpleSchema.RegEx.Email,
-    max: 500
+    // regEx: SimpleSchema.RegEx.Email,
+    max: 500,
+    // optional: true
   },
   title: {
     type: String,
@@ -19,8 +20,15 @@ Schemas.quick_qoll = new SimpleSchema({
   text: {
     type: String,
     label: "Qoll",
-    min: 60,
+    min: 10,
     max: 200
+  },
+  image: {
+    type: String,
+    label: "Image",
+    min: 60,
+    max: 400,
+    optional: true
   },
   options: {
     type: Array,

@@ -30,3 +30,9 @@ twbs:bootstrap
 aldeed:autoform
 aldeed:collection2
 miguelalarcos:afwrap-xautocomplete
+semantic:ui-icon
+cfs:standard-packages
+cfs:filesystem
+cfs:gridfs
+cfs:graphicsmagick
+andruschka:bootstrap-image-gallery

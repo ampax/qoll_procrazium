@@ -50,6 +50,7 @@ Router.map(function(){
 		path: '/qolleditor_adv',
 		waitOn: function(){
 			Meteor.subscribe('Settings');
+			Meteor.subscribe('QOLL_IMAGES');
 		},
 		/**onBeforeAction: [function(){
 			qlog.info('Before for qoll-editor ...', filename);
@@ -89,6 +90,7 @@ Router.map(function(){
 		waitOn: function(){
 			qlog.info('In the controller code for xxx template', filename);
 			Meteor.subscribe('Settings');
+			Meteor.subscribe('QOLL_IMAGES');
 		},
 		/**onBeforeAction: [function(){
 			qlog.info('Before for qoll-editor ...', filename);
@@ -98,6 +100,9 @@ Router.map(function(){
 		}],**/
 		onAfterAction: function(){
 			//TODO
+		},
+		data: function() {
+			return {'all_images' : QollImagesPub.find()};
 		}
 	});
 });

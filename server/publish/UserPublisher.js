@@ -600,7 +600,7 @@ Meteor.methods({
         });
         // qlog.info('Qoll friends ids: ' + qoll_friend_ids, filename);
         if(query != '') {
-          var user_emails = Meteor.users.find({'profile.name': {$regex: '^.*'+query+'.*$'}, _id : {$in : qoll_friend_ids}}, 
+          var user_emails = Meteor.users.find({'profile.name': {$regex: '^.*'+query+'.*$', $options: 'i'}, _id : {$in : qoll_friend_ids}}, 
             {'profile.name' : 1, 'profile.email' : 1}).fetch();
 
           user_emails.forEach(function(ue){
@@ -617,7 +617,7 @@ Meteor.methods({
         });
         //qlog.info('Social friends ids: ' + JSON.stringify(soc_friend_ids), filename);
         if(query != '') {
-          var user_emails = SocialConnect.find({'name': {$regex: '^.*'+query+'.*$'}, _id : {$in : soc_friend_ids}}, 
+          var user_emails = SocialConnect.find({'name': {$regex: '^.*'+query+'.*$', $options: 'i'}, _id : {$in : soc_friend_ids}}, 
             {'name' : 1, 'email' : 1}).fetch();
 
           //qlog.info('Social user data: ' + user_emails, filename);

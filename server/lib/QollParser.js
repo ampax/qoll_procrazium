@@ -54,14 +54,14 @@ QollParser = {
 	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
-	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups) {
+	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds) {
         var qollId = new Array();
         var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
         qolls = qolls.slice(1);
 
         qolls.map(function(q){
         	//qoll: {qollText: qollText, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat}
-            var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat});
+            var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds});
             q = ToMarkdown.convert(q);
 
             qlog.info('Markdown converted qoll is - ' + q, filename);
@@ -281,7 +281,7 @@ QollParser = {
 			**/
 			//function(action, qollData qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate)
 			var qid = Meteor.call('addQoll', action, qoll_data, qollRawId, qollMasterId, emailsandgroups,
-										undefined, undefined,  tags, qollFormat, qollIdtoUpdate, accessGroups);
+										undefined, undefined,  tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds);
 			/**	qoll, 
 				types, 
 				typesX, 

@@ -313,6 +313,7 @@ var extractQollDetails = function(q) {
 		stats 			: q.stats,
 		//viewContext 	: "createUsr",
 		isMultiple		: q.isMultiple,
+		imageIds		: q.imageIds,
 		_id 			: q._id,
 		qollRawId 		: q.qollRawId
 	};

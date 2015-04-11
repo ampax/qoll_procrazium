@@ -115,9 +115,9 @@ Template.recipient.events({
 			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg.msg);
 				} else {
-					QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+					QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg.msg);
 					edtr.setValue('', 1);
 				}
 			});
@@ -195,9 +195,9 @@ Template.recipient.events({
 			Meteor.call("addQollMaster", content, emailsandgroups, tagArr, QollConstants.QOLL_ACTION_SEND, access, qollIdToEdit, accessGroups, function(error, msg) {
 				if (error) {
 					qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
-		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg);
+		          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg.msg);
 				} else {
-					QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg);
+					QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg.msg);
 					edtr.setValue('', 1);
 				}
 			});

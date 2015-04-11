@@ -784,4 +784,27 @@ td.qoll-auto-complete:hover {
 div.xmultiple > span.label {
     color: black;
 }
+
+img.qoll-thumbs {
+    /**display: block;*/
+    padding: 4px;
+    margin-bottom: 20px;
+    line-height: 1.42857143;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-transition: border .2s ease-in-out;
+    -o-transition: border .2s ease-in-out;
+    transition: border .2s ease-in-out;
+}
+
+.qoll-thumbs-toggle {
+    border-color: #003D7A !important;
+}
+
+div.img-container {
+    padding: 5px;
+    height: 25pc !important;
+    overflow-y: scroll;
+}
 /* End: Basic styling for html elements for Qoll */

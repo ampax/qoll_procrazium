@@ -119,6 +119,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						viewContext 	: "createUsr",
 						context 		: findoptions.context,
 						isMultiple		: item.isMultiple,
+						imageIds		: item.imageIds,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -168,6 +169,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						viewContext 		: "createUsr",
 						context 			: findoptions.context,
 						isMultiple			: item.isMultiple,
+						imageIds			: item.imageIds,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -231,6 +233,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						viewContext 		: "recieveUsr",
 						context 			: findoptions.context,
 						isMultiple			: item.isMultiple,
+						imageIds			: item.imageIds,
 
 						_id : item._id
 					};
@@ -322,6 +325,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 							viewContext 	: "recieveUsr",
 							context 		: findoptions.context,
 							isMultiple		: item.isMultiple,
+							imageIds		: item.imageIds,
 
 							_id 			: item._id
 						};
@@ -391,6 +395,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				viewContext 	: "publicQolls",
 				context 		: findoptions.context,
 				isMultiple		: item.isMultiple,
+				imageIds		: item.imageIds,
 				_id 			: item._id
 			};
 			if (item.is_parent)
@@ -477,6 +482,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					totals 			: sumstats(item.stats),
 					viewContext 	: "createUsr",
 					isMultiple		: item.isMultiple,
+					imageIds		: item.imageIds,
 
 					_id 			: item._id
 				};
@@ -519,6 +525,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					totals 			: sumstats(item.stats),
 					viewContext 	: "createUsr",
 					isMultiple		: item.isMultiple,
+					imageIds		: item.imageIds,
 
 					_id 			: item._id
 				};
@@ -765,6 +772,7 @@ var fetchConciseQollInfo = function(item) {
 				submittedTo : item.submittedTo,
 				action : item.action,
 				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
+				imageIds		: item.imageIds,
 				_id : item._id
 			};
 
@@ -786,6 +794,7 @@ var fetchMyConciseQollInfo = function(item) {
 				stats : item.stats,
 				totals : sumstats(item.stats),
 				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
+				imageIds		: item.imageIds,
 				_id : item._id
 			};
 			
@@ -806,6 +815,7 @@ var fetchMyRecConciseQollInfo = function(item) {
 				stats : item.stats,
 				totals : sumstats(item.stats),
 				viewContext : QollConstants.QOLL.USER_CTX.CREATE,
+				imageIds		: item.imageIds,
 				_id : item._id
 			};
 

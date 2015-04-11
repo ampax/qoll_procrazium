@@ -1,23 +1,119 @@
 <template name="quick_qoll">
-  {{#autoForm schema=quickQollSchema id="quickQollForm" type="method" meteormethod="sendEmail"}}
+  {{#autoForm schema=quickQollSchema id="quickQollForm" type="normal"}}
   <fieldset>
-    {{> afQuickField type="xautocomplete" xmultiple=true
-        formid="quickQollForm" name="name"
-        renderKey="name" fieldref="email" call="fetch_my_emails" 
-        renderfunction="renderQollToEmails"}}
+    
+    <div class="row">
+      <div class="col-md-6 col-xs-12"> <!--  well well-sm -->
+      {{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+          formid="quickQollForm" name="send_to"
+          renderKey="name" fieldref="email" call="fetch_my_emails" 
+          renderfunction="renderQollToEmails"}}
+      </div>
 
-    {{> afQuickField name="title"}}
-    {{> afQuickField name="text"}}
+      <div class="col-md-6 col-xs-12">
+        {{> afQuickField name="title"}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        {{> afQuickField name="text"}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
+        <!-- Large modal -->
+        {{#each sel_imgs}}
+          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 50%;" data-gallery id="sel{{this._id}}"/>
+        {{/each}}
+        <!--button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Img to Qoll</button-->
+        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">
+          <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Attach
+        </button>
+
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content qoll-img-modal">
+              <div class="modal-header">
+                <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button-->
+                <h4 class="modal-title" id="gridSystemModalLabel">Select upto five images</h4>
+                <input type="file" name="img-upload" label="Attach images"  multiple="multiple" 
+                  accept="image/jpg, image/jpeg, image/gif, image/bmp, image/png" class="myFileInput">
+              </div>
+              <div class='img-container'>
+                {{#each imgs}}
+                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" data-gallery id="{{this._id}}"/>
+                {{/each}}
+              </div>
+              <div class="modal-footer">
+                <div class='row'>
+                  <div class="col-md-8 col-xs-8">
+                    
+                    {{#each sel_imgs}}
+                      <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 25%;" data-gallery id="sel{{this._id}}"/>
+                    {{/each}}
+                    
+                  </div>
+                  <div class="col-md-4 col-xs-4">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12 col-xs-12">
     {{> afArrayField name="options"}}
+      </div>
+    </div>
+
     <div>
       <button type="submit" class="btn btn-primary">Submit</button>
       <button type="reset" class="btn btn-default">Reset</button>
     </div>
   </fieldset>
   {{/autoForm}}
+
+  <!-- {{> uploadForm}}
+  {{> images}} -->
 </template>
 
 
 <template name="quick_qoll_send_to">
     <td class="qoll-auto-complete">{{this.name}} <b>{{this.email}}</b></td>
+</template>
+
+<template name="imageView">
+    <div class="imageView">
+        {{#each images}}
+        <div>
+            <a href="{{this.url}}" target="_blank"><img src="{{this.url}}" alt="" class="thumbnail" />{{this.url}}</a><br/>
+            <strong>{{this.name}}</strong> <a href="{{this.url download=true}}" class="btn btn-primary">Download</a>
+        </div>
+        {{/each}}
+    </div>
+</template>
+
+
+
+
+
+
+
+
+<template name="images">
+  <ul>
+  {{#each all_images}}
+    <li><img src="{{this.url store='thumbs_1'}}"/><img src="{{url thumbs}}"/></li>
+  {{/each}}
+  </ul>
+</template>
+ 
+<template name="uploadForm">
+  <input type="file" class="myFileInput" />
 </template>

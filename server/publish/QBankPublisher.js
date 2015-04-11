@@ -31,6 +31,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						unit 			: item.unit,
 						visibility 		: item.visibility,
 						complexity 		: item.complexity,
+						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
 					};
 
@@ -54,6 +55,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						unit 			: item.unit,
 						visibility 		: item.visibility,
 						complexity 		: item.complexity,
+						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
 					};
 
@@ -824,6 +826,7 @@ var extractQollDetails = function(q) {
 		stats 			: q.stats,
 		viewContext 	: "createUsr",
 		isMultiple		: q.isMultiple,
+		imageIds		: q.imageIds,
 		_id 			: q._id,
 		qollRawId 		: q.qollRawId
 	};
