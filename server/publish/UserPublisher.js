@@ -630,6 +630,10 @@ Meteor.methods({
 
         // qlog.info('Result till this point - ' + JSON.stringify(results), filename);
 
+        results.push({'name' : 'dummy1', 'email' : 'dummy1@gmail.com'});
+        results.push({'name' : 'dummy2', 'email' : 'dummy2@gmail.com'});
+        results.push({'name' : 'dummy3', 'email' : 'dummy3@gmail.com'});
+
         return results;
     },
 });

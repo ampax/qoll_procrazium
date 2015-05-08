@@ -18,4 +18,8 @@
                                                                                          // 108
   Package.onUse(function(api) {                                                          // 109
     api.add_files(['index.js', '../../packages.json'], 'server');                        // 110
-  });                                                                                    // 111
+  });   
+
+  Cordova.depends({
+  'org.apache.cordova.statusbar': '0.1.10'
+});                                                                                 // 111

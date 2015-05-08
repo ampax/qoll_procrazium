@@ -1,0 +1,93 @@
+<template name="addQoll_cordova">
+	<div class="content">
+		<div class="qoll-toolbar">
+			<div class="title"><h4>Add a Qoll</h4></div>
+			<div class="editor-link"><a href="#" id="advanced">Advanced Editor>>&nbsp;&nbsp;&nbsp;</a></div>
+		</div><p></p>
+		<!--input type="text" class="qoll-title qoll-type-option" id="qolltitle" placeholder="Qoll Title Here ..."><p-->
+		<div class="editor-writer">
+			<textarea class="editor-upen editor-writer" name="qollText" id="qollText" placeholder="Qoll Content Here ..."></textarea>
+		</div><p></p>
+
+
+		<div class="options-and-users">
+
+			<div class="input-group div-qoll-types pull-left">
+		  		<input type="text" class="qoll-type-option" id="qolltypeoption" placeholder="Qoll Choice ..."/>
+		  		<span class="input-group-addon input-group-addon-klik add-option ios-enabled">+Choice</span>
+			</div>
+
+			<div class="input-group div-qoll-types pull-right">
+		  		<input type="text" class="qoll-type-option" id="qollsendto" placeholder="Enter Email(s) user12345@qoll.io;user54321@qoll.io,user4567@qoll.io"/>
+		  		<span class="input-group-addon input-group-addon-klik send-to ios-enabled">+Email</span>
+		  		<div class ="btn-group">
+		  		 <button type="button" class="btn btn-default dropdown-toggle ios-enabled" data-toggle="dropdown">+Select Groups<span class="caret"></span>
+  				</button> 
+  
+				  <ul class="dropdown-menu qoll-group-list" role="menu">
+				  	 {{#each qollGroups}}
+				  	<li class= "qoll-grp-select"><a href="#">{{this.name}}</a></li>
+				  	{{/each}}
+				  </ul>
+		  				
+				</div>
+			</div>
+	
+			
+			</div>
+		<p></p><p>&nbsp;</p>
+		<div class="options-and-users">
+
+			<div class="panel panel-default panel-qoll-type-list pull-left" id="options">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Added Choices</h3>
+			  </div>
+			  <div class="panel-body" id="qolloptions">
+			  	<!--div class="qoll-type-panel">Panel content 1</div-->
+			  	<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
+			  </div>
+			</div>
+
+			<div class="panel panel-default panel-qoll-type-list pull-right" id="groups">
+			  <div class="panel-heading">
+			    <h3 class="panel-title">Send List</h3>
+			  </div>
+			  <div class="panel-body" id="sendtoemails">
+			  	<!--div class="qoll-type-panel">Panel content 1</div-->
+			  	<!--a class="btn btn-danger btn-sm" href="#"><i class="fa fa-trash-o fa-sm"></i></a-->
+			  </div>
+			</div>
+		</div>
+
+		<div class="is-invisible" id="update_qoll_id"></div>
+
+	</div>
+
+
+	<!--div class="row">
+		<div class="col-12 col-xs-12 border-box">
+			<textarea rows="3" class="input-xxlarge editor-writer" name="qollText" id="qollText" placeholder="Post a qoll..."></textarea>
+		</di
+	</div-->
+
+	<!--div class="col-1 col-xs-2">
+			
+	</div>
+	<div class="col-2 col-xs-4"-->
+	<span >
+		<!--input type="button" class="btn-info add-qoll {{#unless currentUser}}disabled{{/unless}}" value="Qoll"/-->
+		<div class="" id="insert-section">
+			<a href="#" class="btn btn-primary store-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-save"></i>Store</a>
+			<a href="#" class="btn btn-primary send-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-send"></i>Send</a>
+		</div>
+
+		<div class="is-invisible" id="update-section">
+			<a href="#" class="btn btn-primary store-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-open"></i>Update</a>
+			<a href="#" class="btn btn-danger discard-qoll {{#unless currentUser}}disabled{{/unless}}" role="button">
+				<i class="glyphicon glyphicon-remove"></i>Cancel</a>
+		</div>
+	</span>
+</template>

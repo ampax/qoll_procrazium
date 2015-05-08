@@ -1,6 +1,5 @@
 var filename = 'server/db/QollDb.js';
 
-QollTimerAction = new Meteor.Collection("QOLL_TIMER_ACTION");
 /** Database insert method for qolls  **/
 Meteor.methods({
 	getRawQoll: function(qollrawid){

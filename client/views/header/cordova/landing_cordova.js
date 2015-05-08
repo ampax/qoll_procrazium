@@ -18,12 +18,18 @@ Template.signin_qoll_cordova.events({
       	verif_result = validateEmail(email_or_username);
       }
 
+      console.log('------------------ 1');
+
       if(!verif_result) return;
 
       verif_result = validatePassword(password);
+      console.log(verif_result);
+
+      console.log('------------------ 2');
       
       if(verif_result) {
-      	// Trim and validate your fields here.... 
+      	// Trim and validate your fields here....
+        console.log('------------------ 3'); 
 
         // If validation passes, supply the appropriate fields to the
         // Meteor.loginWithPassword() function.

@@ -296,7 +296,7 @@ Template.qolls_inner.events({
 		qlog.info('youclickedid: ' + qollId, filename);
 		qlog.info('the aindex =' + answerVal + '/' + answerIndex, filename);
 		if (qollstionnaireId) {
-			Meteor.call('AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, function(err, qollRegId) {
+			Meteor.call('AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, undefined, function(err, qollRegId) {
 				if (err) {
 					qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
 				} else {

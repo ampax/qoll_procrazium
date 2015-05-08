@@ -1,0 +1,68 @@
+<template name="all_qolls_cordova">
+	{{>nav_inbox_cordova}}
+	<div id="wrapper">
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<!--div class="content-header">
+	            <h1-->
+	            	<!-- Toggle on small screen -->
+	                <!--a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                Qolls
+	            </h1>
+	        </div-->
+			
+			<hr class='divider divider-bottom-0'/>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset inset-5">
+				<div class="row">
+	            	 <div class="col-md-12 col-xs-12">
+							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
+						</div>
+				</div>
+				<div class="row">
+					{{#each qolls}}
+				<!-- Start of Qoll Section -->
+
+				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success" id='qdiv_{{_id}}'>
+
+					
+					<div class="col-md-1 col-xs-12">
+						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
+					</div>
+					<div class="col-md-8 col-xs-12 make-clickable">
+						<a href="{{ pathFor 'qollView' }}" class='black-link'>
+							<span class='title-qoll'>{{{qollTitle}}}</span> - {{{qollText}}}
+						</a>
+					</div>
+					<div class="col-md-1 col-xs-12">
+						<!-- i class="fa fa-lg fa-facebook fa-border btn-primary"></i -->
+						<span class="fa-stack fa-lg facebook">
+						  <i class="fa fa-square-o fa-stack-2x"></i>
+						  <i class="fa fa-facebook fa-stack-1x"></i>
+						</span>
+
+						<span class="fa-stack fa-lg sendemail">
+							<i class="fa fa-square-o fa-stack-2x"></i>
+							<i class="fa fa-envelope-o fa-stack-1x"></i>
+						</span>
+
+					</div>
+					<div class="col-md-1 col-xs-12">
+						{{cat}}
+					</div>
+					<div class="col-md-1 col-xs-12">
+						{{#if isOwner}}
+						<span class="pull-left archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+						<span class="pull-right edit-qoll-btn glossy"><i class="glyphicon glyphicon-edit ios-enabled"></i></span>
+						{{/if}}
+					</div>
+					{{> qollModalEditor}}
+				</div><!-- list-group-item list-group-item-success -->
+				<!-- End of Qoll Section here -->
+				{{/each}}
+				</div><!-- /row-->
+				<!--{{> slide_up_bank}}-->
+			</div>
+		</div>
+	</div>
+</template>

@@ -1,6 +1,55 @@
 var filename = 'server/publisher/QollPublisher.js';
 
 
+Meteor.publish('RAW_QOLL_FOR_ID_PUBLISHER', function(findoptions) {
+	var self = this;
+	var uuid = Meteor.uuid();
+	var lim = findoptions.limit || 10000;
+	var handle_raw_qoll = undefined;
+	var initializing = true;
+	qlog.info('Publisher options' + JSON.stringify(findoptions));
+
+	if (this.userId || findoptions.userId /* userId coming from ionic app */) {
+		//first publish specialized qolls to this user
+		var tuid = this.userId ? this.userId : findoptions.userId;
+		var ufound = Meteor.users.find({
+			"_id" : tuid
+		}).fetch();
+	}
+
+	/** if (ufound.length > 0) {
+			var user = ufound[0];
+	} **/
+
+	handle_raw_qoll = Qoll.find({'_id' : findoptions._id}).observe({
+		added : function(item, idx){
+			qlog.info('Added - ' + JSON.stringify(item), filename);
+			item.context = QollConstants.CONTEXT.READ;
+			self.added('raw-qoll-for-id', item._id, item);
+		},
+		changed : function(item, idx) {
+			item.context = QollConstants.CONTEXT.READ;
+			self.changed('raw-qoll-for-id', item._id, item);
+
+		},
+		removed : function(item){
+			self.removed('raw-qoll-for-id', item._id);
+		}
+	});
+
+	qlog.info('Done initializing the raw-qoll-for-id publisher: RAW_QOLL_FOR_ID_PUBLISHER, uuid: ' + uuid, filename);
+
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle_raw_qoll) handle_raw_qoll.stop();
+	});
+
+});
+
+
 /** Publishing to the subscribers method for qolls  **/
 Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 	var self = this;

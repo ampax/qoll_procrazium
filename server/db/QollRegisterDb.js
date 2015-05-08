@@ -156,11 +156,18 @@ Meteor.methods({
 		qlog.info('OUTOF register custom qoll: ' + qollRegId + ' canans: ' + canans, filename);
 		return qollRegId;
 	},
-	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal) {
+	AddQollstionnaireResponseRemote : function(response) {
+		var userId = response.userId ? response.userId : Meteor.userId();
+		if(!userId) return; // register nothing for non existent user
+		Meteor.call('AddQollstionnaireResponse', response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, undefined, userId);
+		// AddQollstionnaireResponse(response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, userId);
+	},
+	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal, userId) {
 		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
+		if(!userId) userId = Meteor.userId();
 
 		var thisemail = UserUtil.getCurrentUserEmail();
-		var usrid = this.userId;
+		var usrid = userId;
 		// find questionnaire
 		var qsnr = Qollstionnaire.findOne({
 			_id : qsnrid
@@ -171,7 +178,7 @@ Meteor.methods({
 
 		var resp = QollstionnaireResponses.findOne({
 			qollstionnaireid : qsnrid,
-			usrid : this.userId
+			usrid : userId
 		});
 		var qoll = Qoll.findOne({
 			_id : qollId

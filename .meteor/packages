@@ -36,3 +36,4 @@ cfs:filesystem
 cfs:gridfs
 cfs:graphicsmagick
 andruschka:bootstrap-image-gallery
+meteorhacks:cluster
