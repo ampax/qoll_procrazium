@@ -1,4 +1,4 @@
-<template name="user_profile">
+<template name="userProfile">
 	{{> header_awesome}}
 	<p class="lead"></p>
 	<div class="container">
@@ -60,7 +60,7 @@
 			</table>
 			<p class="lead"></p>
 			{{#if canEditProfile}}
-				<a class="btn btn-primary btn-qoll" href="/users/{{slug}}/edit">{{i18n "Edit Profile"}}</a>
+				<a class="btn btn-primary btn-qoll" href="{{editMyProfile}}">{{i18n "Edit Profile"}}</a>
 			{{/if}}
 			{{#if canInvite}}
 				{{#if inviteCount}}

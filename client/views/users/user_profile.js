@@ -1,4 +1,4 @@
-Template.user_profile.helpers({
+Template.userProfile.helpers({
   avatarUrl: function() {
     return UserUtil.getAvatarUrl(this);
   },
@@ -27,10 +27,15 @@ Template.user_profile.helpers({
   },
   getGitHubName: function () {
     return UserUtil.getGitHubName(this);
-  }
+  },
+  editMyProfile : function() {
+    qlog.info('========================================');
+      return '/users/'+Meteor.user().profile.slug+'/edit';
+      //return '/users/'+Meteor.user().slug;
+  },
 });
 
-Template.user_profile.events({
+Template.userProfile.events({
   'click .invite-link': function(e, instance){
     Meteor.call('inviteUser', instance.data.user._id);
     throwError('Thanks, user has been invited.');

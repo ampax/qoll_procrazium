@@ -414,7 +414,13 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 					qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
 
-					self.added('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
+					var pub = {qolls : qolls, questionaire : quest};
+
+					if(quest.questResponse) {
+						pub.stats = quest.questResponse.stats;
+					}
+
+					self.added('qoll-for-questionaire-id', item._id, pub);
 				},
 				changed : function(item, idx) {
 					var qolls = [];
@@ -457,9 +463,15 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						quest.questResponse = getQuestionnaireResponses(item);
 					}
 
+					var pub = {qolls : qolls, questionaire : quest};
+
+					if(quest.questResponse) {
+						pub.stats = quest.questResponse.stats;
+					}
+
 					//qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
 
-					self.changed('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
+					self.changed('qoll-for-questionaire-id', item._id, pub);
 				},
 				removed : function(item){
 					self.removed('qoll-for-questionaire-id', item._id);
@@ -490,146 +502,6 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 		(2) qoll_id
 		(3) responder-id
 **/
-Meteor.publish('QOLL_FOR_ID_WITH_RESPONSE_PUBLISHER', function(findoptions) {
-	var user_id = this.userId;
-	var self = this;
-	var uuid = Meteor.uuid();
-	var initializing = true;
-	var handle_questionaires;
-
-	var questionaire_id = findoptions.questionaire_id;
-	var qoll_id = findoptions.qoll_id;
-	var responder_id = findoptions.responder_id;
-
-	qlog.info('====================> ' + findoptions, filename);
-
-	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
-		var tuid = this.userId ? this.userId : findoptions.userId;
-		var ufound = Meteor.users.find({
-			"_id" : tuid
-		}).fetch();
-
-		if (ufound.length > 0) { // proceed only if the request comes for a logged in user
-			var user = ufound[0];
-
-			qlog.info('Found user-id - ' + JSON.stringify(user), filename);
-
-			var resp = QollstionnaireResponses.findOne({
-				qollstionnaireid : findoptions._id,
-				usrid : user._id
-			});
-			qlog.info('=== === === ===> {'+findoptions._id+'}' + JSON.stringify(resp), filename);
-			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
-				added : function(item, idx){
-					var qolls = [];
-					var counter = 1;
-					item.qollids.map(function(qid){
-						
-						var q = Qoll.find({_id : qid}).map(function(t){
-							var thisresponse; 
-							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
-							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
-							var used_hint = resp && resp.responses[qid] ? resp.responses[qid].usedHint : undefined;
-							
-							var q2 = extractQollDetails(t);
-							q2.myresponses = thisresponse;
-							q2._qollstionnaireid = findoptions._id;
-							q2.qoll_idx_title = '(Q'+counter+++')';
-							q2.context = findoptions.context;
-							q2.qoll_response = response;
-
-							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
-								if(response != undefined)
-									q2.fib = response.response;
-								else q2.fib = [];
-							}
-
-							q2 = QollRandomizer.randomize(q2);
-
-							q2 = QollKatexUtil.populateIfTex(q2, t);
-
-							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
-
-							qolls.push(q2);
-						});
-					});
-
-					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id};
-
-					if(user._id === item.submittedBy) {
-						// send more information at the questionnaire level so that owner gets to see how people have responded
-						quest.questSubmittedTo  = item.submittedTo;
-						quest.questResponse = getQuestionnaireResponses(item);
-					}
-
-					qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
-
-					self.added('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
-				},
-				changed : function(item, idx) {
-					var qolls = [];
-					var counter = 1;
-					item.qollids.map(function(qid){
-						
-						var q = Qoll.find({_id : qid}).map(function(t){
-							var thisresponse; 
-							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
-							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
-							
-							var q2 = extractQollDetails(t);
-							q2.myresponses = thisresponse;
-							q2._qollstionnaireid = findoptions._id;
-							q2.qoll_idx_title = '(Q'+counter+++')';
-							q2.context = findoptions.context;
-							q2.qoll_response = response;
-
-							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
-								if(response != undefined)
-									q2.fib = response.response;
-								else q2.fib = [];
-							}
-
-							q2 = QollRandomizer.randomize(q2);
-
-							q2 = QollKatexUtil.populateIfTex(q2, t);
-
-							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
-
-							qolls.push(q2);
-						});
-					});
-
-					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id};
-
-					if(user._id === item.submittedBy) {
-						// send more information at the questionnaire level so that owner gets to see how people have responded
-						quest.questSubmittedTo  = item.submittedTo;
-						quest.questResponse = getQuestionnaireResponses(item);
-					}
-
-					//qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
-
-					self.changed('qoll-for-questionaire-id', item._id, {qolls : qolls, questionaire : quest});
-				},
-				removed : function(item){
-					self.removed('qoll-for-questionaire-id', item._id);
-				}
-			});
-		}
-	}
-
-	qlog.info('Done initializing the qoll-for-questionaire-id: QOLL_FOR_ID_WITH_RESPONSE_PUBLISHER, uuid: ' + uuid, filename);
-	initializing = false;
-	self.ready();
-	//self.flush();
-
-	self.onStop(function() {
-		if(handle_questionaires != undefined) {
-			handle_questionaires.stop();
-		}
-	});
-});
-
 
 Meteor.publish('BATTLEG_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 	var self = this;
@@ -1098,7 +970,7 @@ var getQuestionnaireResponses = function(item) {
 								'unit_selected' : rtmp.unit, label : 'Q' + counter_x++,
 								responses : attach_resp, iscorrect : rtmp.iscorrect,
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
-								title : qoll_text_hash[qid].title
+								title : qoll_text_hash[qid].title, qoll_id : qid
 							});
 				if(!resp_flag) {
 					respo_length++;
@@ -1109,7 +981,7 @@ var getQuestionnaireResponses = function(item) {
 				responses.push({
 								'response' : 'NA', 'unit_selected' : undefined, label : 'Q' + counter_x++, responses : [],
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
-								title : qoll_text_hash[qid].title
+								title : qoll_text_hash[qid].title, qoll_id : qid
 								});
 			}
 		});

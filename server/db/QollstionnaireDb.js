@@ -2,9 +2,18 @@ var filename='server/db/Qollstionnaire.js';
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids) {
+	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids, user_id) {
 		qlog.info('Storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
 		var qollstionnaire = {};
+
+
+		qlog.info('============================> printing user-id from mobile app ' + user_id, filename);
+
+
+		if(user_id) {
+			// request coming from the mobile app, set this user-id
+			qollstionnaire.submittedBy = user_id;
+		}
 
 		var eandg = QollParser.parseEmailAndGroups(emailsandgroups);
 		qollstionnaire.submittedTo = eandg.submittedTo;

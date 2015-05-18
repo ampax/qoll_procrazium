@@ -424,6 +424,57 @@ Meteor.methods({
 		}
 
 	},
+
+	findQollForRespondend : function(quest_owner_id, questionaire_id, qid, responder_id, context) {
+		var user_id = this.userId;
+		var self = this;
+		var uuid = Meteor.uuid();
+		var initializing = true;
+
+		if (this.userId || quest_owner_id /* userId coming from ionic app */) {//first publish specialized qolls to this user
+			var tuid = this.userId ? this.userId : quest_owner_id;
+			var ufound = Meteor.users.find({
+				"_id" : tuid
+			}).fetch();
+
+			if (ufound.length > 0) { // proceed only if the request comes for a logged in user
+				var user = ufound[0];
+
+				qlog.info('Found user-id - ' + JSON.stringify(user), filename);
+
+				var u1 = Meteor.users.find({'emails.address' : responder_id}).fetch();
+
+				if(u1.length > 0) { 
+					resp = QollstionnaireResponses.findOne({ qollstionnaireid : questionaire_id, usrid : u1[0]._id });
+				} else {
+					resp = QollstionnaireResponses.findOne({ qollstionnaireid : questionaire_id, email : responder_id });
+				}
+
+				var t = Qolls.QollDb.get({_id : qid});
+				var thisresponse; 
+				thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+				var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
+				var used_hint = resp && resp.responses[qid] ? resp.responses[qid].usedHint : undefined;
+				
+				var q2 = extractQollDetails(t);
+				q2.myresponses = thisresponse;
+				q2._qollstionnaireid = questionaire_id;
+				q2.context = context;
+				q2.qoll_response = response;
+
+				if(context === QollConstants.CONTEXT.WRITE) {
+					if(response != undefined)
+						q2.fib = response.response;
+					else q2.fib = [];
+				}
+
+
+				qlog.info('=== === === ===> {'+questionaire_id+'/'+qid+'}' + JSON.stringify(q2), filename);
+			}
+
+			return q2;
+		}
+	},
 });
 
 findQollRegisters = function(submittedBy, qollId) {
@@ -474,4 +525,41 @@ var createRespObject = function(qsnrid, usrid, type, qoll, qollTypeIx, usedHint)
 		usedHint : usedHint
 	};
 	return QollstionnaireResponses.insert(newentry);
+};
+
+var extractQollDetails = function(q) {
+	return {
+		qollTitle 		: q.title,
+		title 			: q.title,
+		qollText 		: q.qollText,
+		qollTypes 		: translateToIndexedArray(q.qollTypes),
+		qollTypesX 		: q.qollTypesX,
+
+		cat 			: q.cat,
+		answer 			: q.answer,
+		fib 			: q.fib,
+		hint 			: q.hint,
+		unit_name 		: q.unit_name,
+		unit 			: q.unit,
+		visibility 		: q.visibility,
+		complexity 		: q.complexity,
+		//qollStarAttributes : q.qollStarAttributes ? q.qollStarAttributes : {},
+		//qollAttributes 	: q.qollAttributes,
+		submittedOn 	: q.submittedOn,
+		submittedBy 	: q.submittedBy,
+		submittedTo 	: q.submittedTo,
+		action 			: q.action,
+		enableEdit 		: q.action === 'store',
+		stats 			: q.stats,
+		viewContext 	: "createUsr",
+		isMultiple		: q.isMultiple,
+		imageIds		: q.imageIds,
+		_id 			: q._id,
+		qollRawId 		: q.qollRawId
+	};
+};
+
+var translateToIndexedArray = function ( ar){
+		if(!ar) return [];
+		return ar.map(function (item,ix){ return {index : ix, value : item};});
 };

@@ -21,10 +21,15 @@ Qolls = {};
 
 Qolls.QollDb = {
 	insert : function(){},
-	update : function(){},
+	update : function(query, upd){
+		Qoll.update(query, {$set : upd});
+	},
 	remove : function(){},
 	get		 : function (params){
 		return Qoll.findOne(params);
+	},
+	getAll 	: function(query) {
+		return Qoll.find(query);
 	}
 };
 
@@ -96,7 +101,7 @@ Qolls.QollstionnaireDb = {
 	insert : function(qollstionnaire){
 		var questId = Qollstionnaire.insert({
 			title						: qollstionnaire.title,
-			submittedBy 				: Meteor.userId(),
+			submittedBy 				: qollstionnaire.submittedBy? qollstionnaire.submittedBy : Meteor.userId(),
 			submittedOn 				: new Date(),
 			qollids 					: qollstionnaire.qollids,
 			qolls_to_email 				: qollstionnaire.qolls_to_email,
@@ -124,6 +129,7 @@ Qolls.QollstionnaireDb = {
 
 // Exposing DB methods to client.
 Meteor.methods({
+	getAllQollsByIds : function (qollids) { return Qolls.QollDb.getAll( { _id : { $in : qollids }} ); },
 	getQollById: function (qollid) { return Qolls.QollDb.get({_id:qollid});},
 	removeQuestionnaire : function(questid) { Qolls.QollstionnaireDb.update({_id : questid}, {status : QollConstants.STATUS.ARCHIVE});},
 	sendQuestionnaire : function(questid) { Qolls.QollstionnaireDb.update({_id : questid}, {status : QollConstants.STATUS.SENT});}

@@ -37,6 +37,7 @@ cfs:upload-http@0.0.20
 cfs:worker@0.1.4
 check@1.0.5
 chuangbo:cookie@1.1.0
+cmather:handlebars-server@2.0.0
 coffeescript@1.0.6
 ddp@1.1.0
 deps@1.0.7
@@ -46,6 +47,7 @@ facebook@1.2.0
 fastclick@1.0.3
 geojson-utils@1.0.3
 google@1.1.5
+handlebars@1.0.3
 html-tools@1.0.4
 htmljs@1.0.4
 http@1.1.0
@@ -120,3 +122,4 @@ url@1.0.4
 webapp@1.2.0
 webapp-hashing@1.0.3
 wylio:mandrill@0.2.1
+yogiben:pretty-email@0.0.5

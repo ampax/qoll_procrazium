@@ -176,6 +176,23 @@ Meteor.methods({
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
+	shareQolls : function(qollids, emailsandgroups) {
+		var qolls = Qolls.QollDb.getAll( { _id : { $in : qollids }} );
+		qolls.forEach(function(qoll){
+			// updating the qoll for shared-with
+			var sharedWith = qoll.sharedWith;
+			if(!sharedWith) sharedWith = emailsandgroups;
+			else {
+				emailsandgroups.map(function(emailandgroup){
+					if(_.indexOf(sharedWith, emailandgroup)  === -1)
+						sharedWith.push(emailandgroup);
+				});
+			}
+
+			Qolls.QollDb.update({_id : qoll._id}, {sharedWith : sharedWith});
+		});
+	},
+
 	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
 		qlog.info('Inserting into qoll master', filename);
 
@@ -243,6 +260,9 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 	if(emailsandgroups && emailsandgroups.length > 0) {
 
 		var qollstionnaire = {};
+		qollstionnaire.submittedBy = Meteor.userId();
+
+		
 		qollstionnaire.qollids = qollids;
 		qollstionnaire.visibility = visibility;
 

@@ -811,6 +811,55 @@ Meteor.publish('QOLL_PUBLISHER', function(findoptions) {
 	});
 });
 
+Meteor.publish('All_MY_ACTIVE_QOLLS', function(findoptions) {
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var handle_my_active_qolls = undefined;
+
+	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
+		var tuid = this.userId ? this.userId : findoptions.userId;
+		var ufound = Meteor.users.find({
+			"_id" : tuid
+		}).fetch();
+
+		qlog.info('Printing the user for this request ===========> ' + JSON.stringify(ufound), filename);
+
+		if (ufound.length > 0) {
+			var user = ufound[0];
+			handle_my_active_qolls = Qoll.find(
+				{'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, reactive : true}
+			).observe({
+				added : function(item, idx){
+					self.added('all_my_active_qolls', item._id, extractQollDetails(item));
+				},
+				changed : function(item, idx){
+					self.added('all_my_active_qolls', item._id, extractQollDetails(item));
+				},
+				removed : function(item){
+					self.removed('all_my_active_qolls', item._id);
+				}
+			});
+		}
+	}
+	qlog.info('Done initializing the publisher: QBANK_SUMMARY_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle_my_active_qolls != undefined) handle_my_active_qolls.stop();
+	});
+
+});
+
+Meteor.publish('qolls_for_ids', function(findoptions) {
+  qlog.info('Publishing qolls for ids - ' + findoptions.qollids, filename);
+  return Qolls.QollDb.getAll( { _id : { $in : qollids }} );
+});
+
 var fetchConciseQollInfo = function(item) {
 	var q = {
 				qollTitle : item.title,
@@ -891,4 +940,36 @@ var sumstats = function(statsobj) {
 var translateToIndexedArray = function ( ar){
 		if(!ar) return [];
 		return ar.map(function (item,ix){ return {index : ix, value : item};});
+};
+
+var extractQollDetails = function(q) {
+	return {
+		qollTitle 		: q.title,
+		title 			: q.title,
+		qollText 		: q.qollText,
+		qollTypes 		: translateToIndexedArray(q.qollTypes),
+		qollTypesX 		: q.qollTypesX,
+
+		cat 			: q.cat,
+		answer 			: q.answer,
+		fib 			: q.fib,
+		hint 			: q.hint,
+		unit_name 		: q.unit_name,
+		unit 			: q.unit,
+		visibility 		: q.visibility,
+		complexity 		: q.complexity,
+		//qollStarAttributes : q.qollStarAttributes ? q.qollStarAttributes : {},
+		//qollAttributes 	: q.qollAttributes,
+		submittedOn 	: q.submittedOn,
+		submittedBy 	: q.submittedBy,
+		submittedTo 	: q.submittedTo,
+		action 			: q.action,
+		enableEdit 		: q.action === 'store',
+		stats 			: q.stats,
+		viewContext 	: "createUsr",
+		isMultiple		: q.isMultiple,
+		imageIds		: q.imageIds,
+		_id 			: q._id,
+		qollRawId 		: q.qollRawId
+	};
 };

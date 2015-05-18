@@ -16,3 +16,4 @@ var connectOptions = {
 
 Cluster.connect("mongodb://localhost:3001/meteor");
 Cluster.register("qollserver");
+Cluster.allowPublicAccess("qollserver");

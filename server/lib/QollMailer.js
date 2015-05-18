@@ -62,10 +62,17 @@ Meteor.methods({
     sendContactUsEmail : function(from, to, subject, msg) {
         return QollMailer.sendContactUsEmail(from, to, subject, msg);
     },
-    sendQollstionnaireMail : function(qollstionnaire_id) {
+    sendQollstionnaireMail : function(qollstionnaire_id, userId) {
         qlog.info('------------------- Called sending the questionnaire method -------------------');
-        var from = Meteor.user().profile.email;
-        var name = Meteor.user().profile.name;
+        var user = userId? Meteor.users.find({
+            "_id" : userId
+        }).fetch()[0] : Meteor.user();
+
+        qlog.info('=====> Found user ' + JSON.stringify(user), filename);
+
+
+        var from = user.profile.email;
+        var name = user.profile.name;
         var from_beau = name + '<' + from  + '>';
 
         var q = Qolls.QollstionnaireDb.get({_id : qollstionnaire_id});

@@ -2,7 +2,7 @@ var filename = "client/views/users/user_edit.js";
 
 currentUserData = new Meteor.Collection("currentUserData");
 
-Template.user_edit.helpers({
+Template.userEdit.helpers({
 	profileIncomplete : function() {
 		return this && !this.loading && !UserUtil.userProfileComplete(this);
 	},
@@ -75,7 +75,7 @@ Template.user_edit.helpers({
 
 
 
-Template.user_edit.events({
+Template.userEdit.events({
 	'keyup input#group_search': function (e) {
 		e.preventDefault();
 		var group_search_val = $('#group_search').val();
@@ -226,7 +226,7 @@ Template.user_edit.events({
 	}
 }); 
 
-Template.user_edit.rendered = function() {
+Template.userEdit.rendered = function() {
 	qlog.info("Initializing autocomplete ... ", filename);
 	Meteor.subscribe('PUBLISH_GROUPS_OF_USER_1');
 	QollAutoComplete.init("input#group_search");
@@ -241,7 +241,7 @@ Template.user_subscribed_groups.helpers({
 });
 
 
-Template.user_edit.rendered = function(){
+Template.userEdit.rendered = function(){
     $( "#dob" ).datepicker();
 };
 
