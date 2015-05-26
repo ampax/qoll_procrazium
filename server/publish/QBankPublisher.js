@@ -14,14 +14,17 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			"_id" : tuid
 		}).fetch();
 
-		qlog.info('Printing the user for this request ===========> ' + JSON.stringify(ufound), filename);
-
 		if (ufound.length > 0) {
 			var user = ufound[0];
 
+			findoptions.userId = user._id;
+
+			qlog.info('Printing the user for this request ===========> ' + JSON.stringify(findoptions), filename);
+
 			//submitted by this user
-			qlog.info('Query ===================> '+ JSON.stringify(getQuery.call(findoptions)));
-			var handle = Qoll.find( getQuery.call(findoptions), {sort : {'submittedOn' : -1}, reactive : true} ).observe({
+			var qry = getQuery(findoptions);
+			qlog.info('Query ===================> '+ JSON.stringify(qry));
+			var handle = Qoll.find( qry, {sort : {'submittedOn' : -1}, reactive : true} ).observe({
 				added : function(item, idx) {
 					qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
 					var q = {
@@ -823,7 +826,8 @@ var getUnitSelected = function(ansHash) {
 
 var getQuery = function(findoptions) {
 	//Return default query if nothing specified for the type in the paramenters. Else return appropriate query parameter.
-	var tuid = Meteor.userId ? Meteor.userId : findoptions.userId;
+	qlog.info("===========> " + findoptions, filename);
+	var tuid = findoptions.userId; // this.userId ? this.userId : findoptions.userId;
 	var ufound = Meteor.users.find({ "_id" : tuid }).fetch();
 
 	// var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
@@ -834,9 +838,9 @@ var getQuery = function(findoptions) {
 		grps.push(gr.groupName);
 	});
 
-	qlog.info('Pushed groups before making the query =============>>>> ' + grps, filename);
+	qlog.info('Pushed groups before making the query =============>>>> ' + grps + '/' + tuid, filename);
 	
-	var query = {$or: [ {'submittedBy' : this.userId,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+	var query = {$or: [ {'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
 						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}},
 						{'visibility': QollConstants.QOLL.VISIBILITY.PVT,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
 							accessToGroups : {$in : grps}}

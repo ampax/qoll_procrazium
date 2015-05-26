@@ -214,6 +214,41 @@ Meteor.methods({
 		return {msg : 'Successfully created ' + qollids.length + ' qolls.' + questinfo, qollids : qollids, questId : questinfo.questId};
 	},
 
+	updateQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
+		qlog.info('Inserting into qoll master for qollid - ' + qollIdtoUpdate, filename);
+
+		//Store the tags
+		if(tags != undefined)
+			var err_msg = QollTagsDb.storeTags(tags);
+
+		qlog.info('This is the editor content - ' + qollText, filename);
+
+		var existing_qoll = Qolls.QollDb.get({_id:qollIdtoUpdate});
+
+		qlog.info('Found qoll for qollIdToUpdate ' + JSON.stringify(existing_qoll), filename);
+
+		Qolls.QollMasterDb.update(
+			{_id : existing_qoll.qollMasterId}, 
+			{'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 
+			'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
+
+		// Qolls.QollMasterDb();
+
+		// var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
+
+		var qollids = QollParser.addQollsForMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
+
+
+		qlog.info('=================> ' + qollids[0], filename);
+
+		// create a questionnaire if need be
+		// (1) no email and groups attached
+		// (2) what?
+		// var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
+
+		return {msg : 'Successfully updated ' + qollIdtoUpdate };
+	},
+
 	processStoreHtmlQoll : function(html, emailsandgroups, tags, action, visibility, qollIdToUpdate, accessGroups){
 		//md = md.replace(/(\d+)\.\s+/g, '- ');//needs to be removed
 

@@ -56,7 +56,9 @@ Qolls.QollMasterDb = {
 
 		return qollMasterId;
 	},
-	update : function(){},
+	update : function(query, upd){
+		QollMaster.update(query, {$set : upd});
+	},
 	remove : function(){},
 };
 

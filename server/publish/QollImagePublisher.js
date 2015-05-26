@@ -53,7 +53,7 @@ Meteor.methods({
   images_for_ids : function(img_ids) {
     qlog.info('Received request for images for ids - ' + img_ids, filename);
     var imgs_found = QollImages.find({'_id': {$in: img_ids}}).fetch();
-    qlog.info('=====================> ' + imgs_found);
+    // qlog.info('=====================> ' + imgs_found);
     return imgs_found;
   },
 });

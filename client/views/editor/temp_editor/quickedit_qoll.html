@@ -1,0 +1,277 @@
+<template name="quickedit_qoll">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> qoll_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+
+			<div class="content-header">
+	            <h1>
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                Edit Qoll
+	            </h1>
+	        </div>
+
+	        <hr class='divider divider-bottom-0'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset inset-5">
+				<div class="row">
+					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+
+						
+						<div class="col-md-1 col-xs-12">
+							<a href="{{ pathFor 'all_qolls' }}" class='white-link make-clickable'>&larr; back</a>
+						</div>
+						<div class="col-md-5 col-xs-12">
+							&nbsp;
+						</div>
+						<div class='col-md-3 col-xs-0'>&nbsp;</div>
+						<div class="col-md-1 col-xs-12">&nbsp;</div>
+						<div class="col-md-1 col-xs-12">
+							<a href="{{ pathFor 'all_qolls' }}" class='white-link make-clickable'>
+								<i class="fa fa-close fa-3x red_bg_1 button"></i>
+							</a>
+						</div>
+						<div class="col-md-1 col-xs-12">&nbsp;</div>
+					</div><!-- list-group-item list-group-item-heading -->
+				</div>
+
+			  {{#autoForm schema=quickQollSchema id="quickQollEditForm" type="normal"  doc=qollDoc}}
+			  <fieldset>
+			    
+			    <div class="row">
+			      <div class="col-md-12 col-xs-12">
+			        {{> afQuickField name="title"}}
+			      </div>
+			    </div>
+
+			    <div class="row">
+			      <div class="col-md-12 col-xs-12">
+			        {{> afQuickField name="qollText"}}
+			      </div>
+			    </div>
+
+			    <div class="row">
+			      <div class="col-md-12 col-xs-12">
+			        <!-- Large modal -->
+			        {{#each sel_imgs}}
+			          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 50%;" data-gallery id="sel{{this._id}}"/>
+			        {{/each}}
+			        <!--button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Img to Qoll</button-->
+			        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">
+			          <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Attach
+			        </button>
+
+			        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+			          <div class="modal-dialog modal-lg">
+			            <div class="modal-content qoll-img-modal">
+			              <div class="modal-header">
+			                <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button-->
+			                <h4 class="modal-title" id="gridSystemModalLabel">Select upto five images</h4>
+			                <input type="file" name="img-upload" label="Attach images"  multiple="multiple" 
+			                  accept="image/jpg, image/jpeg, image/gif, image/bmp, image/png" class="myFileInput">
+			              </div>
+			              <div class='img-container'>
+			                {{#each imgs}}
+			                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" data-gallery id="{{this._id}}"/>
+			                {{/each}}
+			              </div>
+			              <div class="modal-footer">
+			                <div class='row'>
+			                  <div class="col-md-8 col-xs-8">
+			                    
+			                    {{#each sel_imgs}}
+			                      <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 25%;" data-gallery id="sel{{this._id}}"/>
+			                    {{/each}}
+			                    
+			                  </div>
+			                  <div class="col-md-4 col-xs-4">
+			                    <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+			                  </div>
+			                </div>
+			              </div>
+			            </div>
+			          </div>
+			        </div>
+			      </div>
+			    </div>
+
+			    <div class="row">
+			      <div class="col-md-12 col-xs-12">
+			    {{> afArrayField name="qollTypes"}}
+			      </div>
+			    </div>
+
+			    <div>
+			      <button type="submit" class="btn btn-primary">Submit</button>
+			      <button type="reset" class="btn btn-default">Reset</button>
+			    </div>
+			  </fieldset>
+			  {{/autoForm}}
+
+			</div>
+
+		</div>
+	</div>
+
+  <!-- {{> uploadForm}}
+  {{> images}} -->
+</template>
+
+
+
+<template name="quickedit_qoll2">
+	{{> header_awesome}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		{{> qoll_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="content-header">
+	            <h1>
+	            	<!-- Toggle on small screen -->
+	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
+	                Edit Qoll
+	            </h1>
+	        </div>
+			
+			<hr class='divider divider-bottom-0'>
+			<!-- Keep all page content within the page-content inset div! -->
+			<div class="page-content inset inset-5">
+				<div class="row">
+					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+
+						
+						<div class="col-md-1 col-xs-12">
+							<a href="{{ pathFor 'all_qolls' }}" class='white-link make-clickable'>&larr; back</a>
+						</div>
+						<div class="col-md-5 col-xs-12">
+							&nbsp;
+						</div>
+						<div class='col-md-3 col-xs-0'>&nbsp;</div>
+						<div class="col-md-1 col-xs-12">&nbsp;</div>
+						<div class="col-md-1 col-xs-12">
+							<a href="{{ pathFor 'all_qolls' }}" class='white-link make-clickable'>
+								<i class="fa fa-close fa-3x red_bg_1 button"></i>
+							</a>
+						</div>
+						<div class="col-md-1 col-xs-12">&nbsp;</div>
+					</div><!-- list-group-item list-group-item-heading -->
+				</div>
+				{{#autoForm schema=quickQollSchema id="quickQollEditForm" type="normal" doc=qollDoc}}
+				  <fieldset>
+				    <div class="row">
+				      <div class="col-md-12 col-xs-12">
+				        {{> afQuickField name="title"}}
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="col-md-12 col-xs-12">
+				        {{> afQuickField name="qollText"}}
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="col-md-12 col-xs-12">
+				        <!-- Large modal -->
+				        {{#each sel_imgs}}
+				          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 50%;" data-gallery id="sel{{this._id}}"/>
+				        {{/each}}
+				        <!--button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Img to Qoll</button-->
+				        <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target=".bs-example-modal-lg">
+				          <span class="glyphicon glyphicon-star" aria-hidden="true"></span> Attach
+				        </button>
+
+				        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+				          <div class="modal-dialog modal-lg">
+				            <div class="modal-content qoll-img-modal">
+				              <div class="modal-header">
+				                <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button-->
+				                <h4 class="modal-title" id="gridSystemModalLabel">Select upto five images</h4>
+				                <input type="file" name="img-upload" label="Attach images"  multiple="multiple" 
+				                  accept="image/jpg, image/jpeg, image/gif, image/bmp, image/png" class="myFileInput">
+				              </div>
+				              <div class='img-container'>
+				                {{#each imgs}}
+				                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" data-gallery id="{{this._id}}"/>
+				                {{/each}}
+				              </div>
+				              <div class="modal-footer">
+				                <div class='row'>
+				                  <div class="col-md-8 col-xs-8">
+				                    
+				                    {{#each sel_imgs}}
+				                      <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 25%;" data-gallery id="sel{{this._id}}"/>
+				                    {{/each}}
+				                    
+				                  </div>
+				                  <div class="col-md-4 col-xs-4">
+				                    <button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+				                  </div>
+				                </div>
+				              </div>
+				            </div>
+				          </div>
+				        </div>
+				      </div>
+				    </div>
+
+				    <div class="row">
+				      <div class="col-md-12 col-xs-12">
+				    {{> afArrayField name="qollTypes"}}
+				      </div>
+				    </div>
+
+				    <div>
+				      <button type="submit" class="btn btn-primary">Submit</button>
+				      <button type="reset" class="btn btn-default">Reset</button>
+				    </div>
+				  </fieldset>
+				{{/autoForm}}
+			</div>
+		</div>
+	</div>
+</template>
+
+
+
+<template name="quickedit_qoll1">
+	{{> header_awesome}}
+	<!-- div id="wrapper" -->
+	<div id="aceEditorContainer">
+		  {{#autoForm schema=quickQollSchema id="quickQollForm" type="normal" doc=qollDoc}}
+			  <!--fieldset-->
+			    
+			    <div class="row">
+			      <div class="col-md-12 col-xs-12">
+			        {{> afQuickField name="title"}}
+			      </div>
+			    </div>
+
+			    <div class="row">
+			      <div class="col-md-12 col-xs-12">
+			        {{> afQuickField name="qollText"}}
+			      </div>
+			    </div>
+
+			    <div class="row">
+			      <div class="col-md-12 col-xs-12">
+			    {{> afArrayField name="qollTypes"}}
+			      </div>
+			    </div>
+
+			    <div>
+			      <button type="submit" class="btn btn-primary">Submit</button>
+			      <button type="reset" class="btn btn-default">Reset</button>
+			    </div>
+			  <!--/fieldset-->
+			{{/autoForm}}
+	</div>
+	<!-- /div -->
+</template>
+

@@ -41,6 +41,12 @@ Template.recipient.events({
 		var tags = jQuery("input.tags").val();
 		var editor_choice = $('input[name=editorPref]:checked').val();
 		var qollIdToEdit = Session.get('QollIdToEdit');
+
+		if(!recips)
+			recips = '';
+
+		// always create private qolls ... there is no qoll for public sharing as of this now
+		var access = 'private';
 		
 		
 		if (tags == undefined || tags === '') {

@@ -10,14 +10,14 @@ Schemas.quick_qoll = new SimpleSchema({
     label: "Send To",
     // regEx: SimpleSchema.RegEx.Email,
     max: 500,
-    // optional: true
+    optional: true
   },
   title: {
     type: String,
     label: "Title",
     max: 50
   },
-  text: {
+  qollText: {
     type: String,
     label: "Qoll",
     min: 10,
@@ -30,12 +30,12 @@ Schemas.quick_qoll = new SimpleSchema({
     max: 400,
     optional: true
   },
-  options: {
+  qollTypes: {
     type: Array,
     label: "Qoll Options",
     optional: false
   },
-  'options.$': {
+  'qollTypes.$': {
     type: String
   }
 });

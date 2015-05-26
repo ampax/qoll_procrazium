@@ -24,8 +24,8 @@ var QuickQollHooks = {
         console.log(insertDoc);
         var send_to = insertDoc.send_to;
         var title = insertDoc.title;
-        var text = insertDoc.text;
-        var options = insertDoc.options;
+        var text = insertDoc.qollText;
+        var options = insertDoc.qollTypes;
         var sel_img_ids = Session.get("selected_image_ids");
         var type = QollConstants.EDITOR_MODE.QUICK;
 
