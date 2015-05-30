@@ -1,88 +1,4 @@
-function builtPie() {
-    
-    // 'external' data
-    var data = new Array();
-
-    data.push({
-        name: 'Level 0',
-        y: 10,
-        color: '#7cb5ec'//#55BF3B'
-    });
-
-    data.push({
-        name: 'Level 1',
-        y: 12,
-        color: '#434348'
-    });
-
-    data.push({
-        name: 'Level 2',
-        y: 30,
-        color: '#90ed7d' //'#DF5353'
-    });
-
-    data.push({
-        name: 'Level 3',
-        y: 20,
-        color: '#f7a35c' //'#DF5353'
-    });
-
-    $('#container-pie').highcharts({
-        
-        chart: {
-            plotBackgroundColor: null,
-            plotBorderWidth: null,
-            plotShadow: false
-        },
-        
-        title: {
-            text: ''
-        },
-        
-        credits: {
-            enabled: false
-        },
-        
-        tooltip: {
-            pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-        },
-        
-        plotOptions: {
-            pie: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: false
-                },
-                showInLegend: true
-            }
-        },
-        
-        series: [{
-            type: 'pie',
-            name: 'Anteil',
-            data: data
-        }]
-    });
-}
-
-/*
- * Call the function to built the chart when the template is rendered
- */
-Template.pieDemo.rendered = function() {
-    builtPie();
-}
-
-
-
-
-
-/******************************************************************************************************/
-
-/*
- * Function to draw the column chart
- */
-function builtColumn() {
+function builtColumnDistribution(data) {
 
     $('#container-column').highcharts({
         
@@ -160,11 +76,13 @@ function builtColumn() {
 
         }]
     });
-}
+};
+
 
 /*
  * Call the function to built the chart when the template is rendered
  */
-Template.columnDemo.rendered = function() {    
-    builtColumn();
-}
+Template.columnDistribution.rendered = function() {
+    var data = new Array(); 
+    builtColumnDistribution(data);
+};

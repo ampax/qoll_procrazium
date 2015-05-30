@@ -5,6 +5,12 @@ Template.view_sent_board.helpers({
 	questionaire : function() {
 		return QuestionaireForId.findOne();
 	},
+	is_quicker : function(category) {
+		return category === 'quicker';
+	},
+	is_not_quicker : function(category) {
+		return !(category === 'quicker');
+	},
 });
 
 Template.stats_table.helpers({

@@ -301,9 +301,30 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 		qollstionnaire.qollids = qollids;
 		qollstionnaire.visibility = visibility;
 
+		if(qollstionnaire.qollids.length === 1) {
+			qollstionnaire.category = 'quicker';
+			var q = Qolls.QollDb.get({_id: qollstionnaire.qollids[0]});
+			qollstionnaire.title = q.title;
+		} else {
+			qollstionnaire.category = 'questionnaire';
+			qollstionnaire.title = 'New Qoll Questionnaire for you ...' //'Questionnaire for ' + tags.join(', ') + '.';
+		}
+
 		var eandg = QollParser.parseEmailAndGroups(emailsandgroups);
 		qollstionnaire.submittedTo = eandg.submittedTo;
 		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
+
+		eandg.submittedToGroup.forEach(function(grp){
+			// Find all emailids in this group and push it in the submitted to
+			var grpemails = QollGroups.find({'submittedBy': Meteor.userId(), 'groupName' : grp},
+											{"_id": 1,'groupName':1, 'userEmails':1, 'submittedBy':2}).fetch();
+
+			console.log(Meteor.userId() + ':::::::::' + grp + ':::::::' + JSON.stringify(grpemails));
+			if(grpemails && grpemails.length > 0 && grpemails[0].userEmails)
+				grpemails[0].userEmails.forEach(function(emls){
+					qollstionnaire.submittedTo.push(emls);
+				});
+		});
 
 		qollstionnaire.tags = tags;
 
@@ -318,9 +339,6 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 			el = CoreUtils.encodeEmail(el); // el.replace(/\./g,"&#46;");
 			qollstionnaire.submittedToUUID[el] = CoreUtils.generateUUID();
 		});
-
-		qollstionnaire.title = 'New Qoll Questionnaire for you ...' //'Questionnaire for ' + tags.join(', ') + '.';
-
 
 		if(action === QollConstants.QOLL_ACTION_STORE) {
 			qollstionnaire.status = QollConstants.STATUS.DRAFT;

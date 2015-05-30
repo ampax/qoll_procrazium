@@ -18,6 +18,20 @@ Meteor.methods({
 		var eandg = QollParser.parseEmailAndGroups(emailsandgroups);
 		qollstionnaire.submittedTo = eandg.submittedTo;
 		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
+
+		eandg.submittedToGroup.forEach(function(grp){
+			// Find all emailids in this group and push it in the submitted to
+			var grpemails = QollGroups.find({'submittedBy': Meteor.userId(), 'groupName' : grp},
+											{"_id": 1,'groupName':1, 'userEmails':1, 'submittedBy':2}).fetch();
+
+
+			if(grpemails && grpemails.length > 0 && grpemails[0].userEmails)
+				grpemails[0].userEmails.forEach(function(emls){
+					qollstionnaire.submittedTo.push(emls);
+				});
+		});
+
+
 		qollstionnaire.submittedToGroup.map(function(grp){
 			var qg = QollGroups.findOne({'groupName' : grp, 'createdBy' : Meteor.userId()});
 			if(qg && qg.userEmails && qg.userEmails.length > 0) {
@@ -32,6 +46,11 @@ Meteor.methods({
 		qollstionnaire.tags = tags;
 		qollstionnaire.status = status;
 		qollstionnaire.qollids = qollids;
+
+		if(qollstionnaire.qollids.length === 1)
+			qollstionnaire.category = 'quicker';
+		else
+			qollstionnaire.category = 'questionnaire';
 
 
 		var qbankids = qollstionnaire.qollids;

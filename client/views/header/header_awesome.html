@@ -17,6 +17,7 @@
             <li><a href="/"><span class="glyphicon glyphicon-home"> {{i18n "Home"}}</span></a></li>
             <li id="mob-only" class="qoll-login auth-buttons">{{> loginButtons align="right"}}</li>
             {{#if currentUser}}
+            <li class="quicker-menu-bg"><a href="/quicker"><span class="fa fa-cloud"> {{i18n "Quicker"}} </span></a></li>
             <li><a href="/inbox"><span class="fa fa-cloud"> {{i18n "QBank"}} </span></a></li>
             <!-- li><a href="/dashboard"><span class="glyphicon glyphicon-list"> {{i18n "QBox"}}</span></a></li -->
             <li><a href="/qolleditor"><span class="glyphicon glyphicon-send"> {{i18n "Create Qoll"}}</span></a></li>

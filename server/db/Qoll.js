@@ -113,6 +113,7 @@ Qolls.QollstionnaireDb = {
 			submittedToGroup 			: qollstionnaire.submittedToGroup,
 			status 						: qollstionnaire.status,
 			visibility 					: qollstionnaire.visibility,
+			category 					: qollstionnaire.category,
 			quuid						: qollstionnaire.quuid,
 		});
 

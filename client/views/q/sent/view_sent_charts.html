@@ -1,19 +1,10 @@
-<template name="bar_charts">
-	<div>
-		<svg id="bar_charts" width="1200px" height="500px">
-			{{#each bars}}
-				{{> bar_chart}}
-			{{/each}}
-		</svg>
-	</div>
-
-	<div>
-		<svg id="treemap" width="1200px" height="620px">
-
-		</svg>
-	</div>
+<template name="pieDemo">
+    <h2>Pie Demo</h2>
+    <div id="container-pie" style="width: 300px; height: 200px;"></div>
 </template>
 
-<template name="bar_chart">
-	{{bar}}
+
+<template name="columnDemo">
+    <h2>Columner Demo</h2>
+    <div id="container-column" style="min-width: 310px; height: 400px;"></div>
 </template>

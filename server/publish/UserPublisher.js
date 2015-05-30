@@ -628,6 +628,20 @@ Meteor.methods({
           });
         }
 
+        // push user groups here
+        // QollGroups.find({'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}});
+        if(query != '') {
+          var user_groups = QollGroups.find({'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}, 'submittedBy':this.userId}, 
+            {"_id": 1,'groupName':1,'submittedBy':2}).fetch();
+
+          //qlog.info('Social user data: ' + user_emails, filename);
+
+          user_groups.forEach(function(gp){
+            // qlog.info('Email for social connect is =======> ' + JSON.stringify(ue), filename);
+            results.push({'name' : gp.groupName, 'email' : gp.groupName});
+          });
+        }
+
         // qlog.info('Result till this point - ' + JSON.stringify(results), filename);
 
         results.push({'name' : 'dummy1', 'email' : 'dummy1@gmail.com'});

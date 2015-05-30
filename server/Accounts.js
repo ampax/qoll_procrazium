@@ -101,11 +101,11 @@ Accounts.onCreateUser(function(options, user){
 Accounts.validateLoginAttempt(function(attempt){
   qlog.info('Validating login attempt - ' + JSON.stringify(attempt), filename);
 
-  if (attempt.user && attempt.user.emails && !attempt.user.emails[0].verified ) {
+  /** if (attempt.user && attempt.user.emails && !attempt.user.emails[0].verified ) {
     console.log('email not verified');
     throw new Meteor.Error(100002, reason, 'Please check your email and verify user account [' + reason +']');
     return false; // the login is aborted
-  }
+  } **/
 
   if (attempt.error){
       var reason = attempt.error.reason;

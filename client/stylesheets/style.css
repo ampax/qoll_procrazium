@@ -807,4 +807,10 @@ div.img-container {
     height: 25pc !important;
     overflow-y: scroll;
 }
+
+.quicker-menu-bg {
+    background-color: #1F5223 !important;
+    color: white !important;
+}
 /* End: Basic styling for html elements for Qoll */
+
