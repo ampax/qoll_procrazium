@@ -159,10 +159,10 @@ Meteor.methods({
 	AddQollstionnaireResponseRemote : function(response) {
 		var userId = response.userId ? response.userId : Meteor.userId();
 		if(!userId) return; // register nothing for non existent user
-		Meteor.call('AddQollstionnaireResponse', response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, undefined, userId);
+		Meteor.call('AddQollstionnaireResponse', response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, undefined, userId, answered_or_unanswered);
 		// AddQollstionnaireResponse(response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, userId);
 	},
-	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal, userId) {
+	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal, userId, answered_or_unanswered) {
 		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
 		if(!userId) userId = Meteor.userId();
 
@@ -174,7 +174,7 @@ Meteor.methods({
 		});
 		if (!qsnr)
 			return;
-		qlog.info(" Adding qollstionnaire response for  " + qsnrid);
+		qlog.info(" Adding qollstionnaire response for xxx " + qsnrid);
 
 		var resp = QollstionnaireResponses.findOne({
 			qollstionnaireid : qsnrid,
@@ -186,19 +186,41 @@ Meteor.methods({
 		var type;type = qoll.cat;
 		//?"Multiple":"Single"; //TODO: add fill in blanks
 
+		//collect all the indexes of the correct answers
+		var correct_answers = new Array();
+		if(type === QollConstants.QOLL.TYPE.MULTIPLE) {
+			qoll.qollTypesX.map(function(val, index){
+				qlog.info(index +" $$$ "+ JSON.stringify(val) + " $$$ " + qollTypeVal + " $$$ " + qollTypeIx + " $$$ " + answered_or_unanswered, filename);
+				if(val.isCorrect)
+					correct_answers.push(index);
+			});
+		} 
+
+		qlog.info('############# ' + correct_answers + ' #############');
+
 		var iscorrect = false;
 		iscorrect = false;
 		if (!resp) {
+			qlog.info('1111111111111');
 			var resp_array;
 			resp_array = new Array(qoll.qollTypes.length);
 			resp_array[qollTypeIx] = true;
-			if (type == QollConstants.QOLL.TYPE.SINGLE) {
+			/** if (type == QollConstants.QOLL.TYPE.SINGLE) {
 				iscorrect = qoll.qollTypesX.reduce(function(previousValue, currentValue, index, array) {
+					qlog.info(previousValue +" ######### "+ currentValue +" ######### "
+										+ index +" ######### "+ array + " ######## " + qollTypeVal + " ######## " + qollTypeIx);
 					if (currentValue.index == qollTypeIx && currentValue.isCorrect)
 						return true;
 					return previousValue;
 				}, false);
-			}
+			} **/
+
+			var usr_answers = new Array();
+			usr_answers.push(qollTypeIx);
+			qlog.info(new_responses, filename);
+			qlog.info('############# ' + correct_answers + ' ############# ' + usr_answers + ' ############', filename);
+
+			iscorrect = _.isEqual(correct_answers, usr_answers);
 			//create a new response
 			var newentry;
 			newentry = {
@@ -215,6 +237,7 @@ Meteor.methods({
 			};
 			return QollstionnaireResponses.insert(newentry);
 		} else {
+			qlog.info('2222222222222');
 			var value_to_set;
 			if (resp.responses['' + qollId]) {//this qoll id exists
 				var new_responses;
@@ -231,11 +254,24 @@ Meteor.methods({
 					}
 				}
 
-				iscorrect = qoll.qollTypesX.reduce(function(previousValue, currentValue, index, array) {
-					if ((currentValue.isCorrect && new_responses[currentValue.index]) || (!currentValue.isCorrect && !new_responses[currentValue.index]))
+				var usr_answers = new Array();
+				qlog.info(new_responses, filename);
+				new_responses.map(function(resp, idx){
+					if(resp) usr_answers.push(idx);
+					qlog.info('=============> ' + resp + '/' + idx, filename);
+				});
+
+				iscorrect = _.isEqual(correct_answers, usr_answers);
+				qlog.info('############# ' + correct_answers + ' ############ ' + usr_answers + ' ############# ' + iscorrect, filename);
+
+				/** iscorrect = qoll.qollTypesX.reduce(function(previousValue, currentValue, index, array) {
+					qlog.info(previousValue +" ######### "+ JSON.stringify(currentValue) +" ######### "+ index 
+						+" ######### "+ JSON.stringify(array) + " ######## " + qollTypeVal + " ######## " + qollTypeIx);
+					if ((currentValue.isCorrect && new_responses[currentValue.index]) 
+						|| (!currentValue.isCorrect && !new_responses[currentValue.index]))
 						return previousValue;
 					return false;
-				}, true);
+				}, true); **/
 				var updatepaths;
 				updatepaths = {};
 				updatepaths['responses.' + qollId + '.response'] = new_responses;
@@ -248,12 +284,13 @@ Meteor.methods({
 				});
 
 			} else {//this qollid doesnt exist
-
+				qlog.info('333333333333');
 				var resp_array;
 				resp_array = new Array(qoll.qollTypes.length);
 				resp_array[qollTypeIx] = true;
 
 				if (type == QollConstants.QOLL.TYPE.SINGLE) {
+					qlog.info('4444444444444444');
 					iscorrect = qoll.qollTypesX.reduce(function(previousValue, currentValue, index, array) {
 						if (currentValue.index == qollTypeIx && currentValue.isCorrect)
 							return true;
@@ -369,8 +406,11 @@ Meteor.methods({
 
 		var iscorrect = [];
 		var cnt = 0;
-		qoll.fib.map(function(f){
-			if(f === fib[cnt]) iscorrect.push(true);
+		qlog.info('========> ' + fib);
+		qlog.info('========> ' + qoll.fib);
+		qoll.fib.map(function(f, idx){
+			qlog.info('$$$ ' + f + ' $$$ ' + fib[idx]);
+			if(f === fib[idx]) iscorrect.push(true);
 			else iscorrect.push(false);
 		});
 

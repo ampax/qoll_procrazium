@@ -71,7 +71,7 @@ IdLookUpInboxController = RouteController.extend({
 					context : QollConstants.CONTEXT.WRITE  };
 	},
 	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
-								Meteor.subscribe('QUESTIONAIRE_PROGRESS_PUBLISHER', this.findOptions()), 
+								// Meteor.subscribe('QUESTIONAIRE_PROGRESS_PUBLISHER', this.findOptions()), 
 								Meteor.subscribe('RECIPIENTS_PUBLISHER'),
 								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
 	},
@@ -87,7 +87,7 @@ IdLookUpDraftController = RouteController.extend({
 					context : QollConstants.CONTEXT.READ  };
 	},
 	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
-								Meteor.subscribe('QUESTIONAIRE_PROGRESS_PUBLISHER', this.findOptions()), 
+								// Meteor.subscribe('QUESTIONAIRE_PROGRESS_PUBLISHER', this.findOptions()), 
 								Meteor.subscribe('RECIPIENTS_PUBLISHER'),
 								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
 	},

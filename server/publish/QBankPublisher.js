@@ -1065,7 +1065,7 @@ var getQuestionnaireResponses = function(item) {
 	item.qollids.map(function(qid){
 		labels.push({label : 'Q' + counter++});
 		var t = Qolls.QollDb.get({_id : qid});
-		qoll_text_hash[qid] = {qollText : t.qollText, title : t.title};
+		qoll_text_hash[qid] = {qollText : t.qollText, title : t.title, qollCat : t.cat};
 	});
 
 	item.submittedTo.map(function(subTo){
@@ -1110,7 +1110,7 @@ var getQuestionnaireResponses = function(item) {
 								'unit_selected' : rtmp.unit, label : 'Q' + counter_x++,
 								responses : attach_resp, iscorrect : rtmp.iscorrect,
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
-								title : qoll_text_hash[qid].title, qoll_id : qid
+								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat
 							});
 				if(!resp_flag) {
 					respo_length++;
@@ -1121,7 +1121,7 @@ var getQuestionnaireResponses = function(item) {
 				responses.push({
 								'response' : 'NA', 'unit_selected' : undefined, label : 'Q' + counter_x++, responses : [],
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
-								title : qoll_text_hash[qid].title, qoll_id : qid
+								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat
 								});
 			}
 		});

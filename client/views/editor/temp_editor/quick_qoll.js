@@ -30,6 +30,7 @@ var QuickQollHooks = {
         var type = QollConstants.EDITOR_MODE.QUICK;
 
         var qoll_txt = '\n# ' + title + '\n*text ' + text;
+        if(options && options.length > 0)
         options.forEach(function(opt){
             qoll_txt = qoll_txt + '\n- ' + opt;
         });

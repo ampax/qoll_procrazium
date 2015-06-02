@@ -1,4 +1,4 @@
-function builtColumnDistribution(data) {
+function builtColumnDistribution(title, data_xAxis, data_series) {
 
     $('#container-column').highcharts({
         
@@ -7,11 +7,11 @@ function builtColumnDistribution(data) {
         },
         
         title: {
-            text: 'Monthly Average Rainfall'
+            text: title
         },
         
         subtitle: {
-            text: 'Source: WorldClimate.com'
+            text: 'Columner Distribution of Responses'
         },
         
         credits: {
@@ -19,33 +19,20 @@ function builtColumnDistribution(data) {
         },
         
         xAxis: {
-            categories: [
-                'Jan',
-                'Feb',
-                'Mar',
-                'Apr',
-                'May',
-                'Jun',
-                'Jul',
-                'Aug',
-                'Sep',
-                'Oct',
-                'Nov',
-                'Dec'
-            ]
+            categories: data_xAxis
         },
         
         yAxis: {
             min: 0,
             title: {
-                text: 'Rainfall (mm)'
+                text: 'Answered By (n)'
             }
         },
         
         tooltip: {
             headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
             pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                '<td style="padding:0"><b>{point.y:f}</b></td></tr>',
             footerFormat: '</table>',
             shared: true,
             useHTML: true
@@ -58,23 +45,7 @@ function builtColumnDistribution(data) {
             }
         },
         
-        series: [{
-            name: 'Tokyo',
-            data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
-
-        }, {
-            name: 'New York',
-            data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
-
-        }, {
-            name: 'London',
-            data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
-
-        }, {
-            name: 'Berlin',
-            data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
-
-        }]
+        series: data_series
     });
 };
 
@@ -83,6 +54,77 @@ function builtColumnDistribution(data) {
  * Call the function to built the chart when the template is rendered
  */
 Template.columnDistribution.rendered = function() {
+    var q = QuestionaireForId.findOne();
+    var stats = q.stats;
+
+    var data_recipients = [];
+    var data_arr_hash = {};
+
+    // initialize the data array
+    var data_series = [ {name: 'NA', data: []},
+                        {name: 'Correct', data: []}, 
+                        {name: 'InCorrect', data: []}];
+
+    var data_xAxis = [];
+    var counter=1;
+    while(counter <= q.qoll_count) {
+        data_xAxis.push('Q'+counter);
+        counter++;
+        data_series[0].data.push(0);
+        data_series[1].data.push(0);
+        data_series[2].data.push(0);
+    }
+
+    stats.forEach(function(s){
+        data_recipients.push(s.name);
+
+        counter = 0;
+        s.responses.forEach(function(res){
+            console.log(res);
+            var idx = undefined;
+            if('NA' === res.response) {
+                // console.log('Not Answered');
+                idx = 0;
+            } else if(res.iscorrect) { //iscorrect is defined
+                qlog.info('===============> 1 ' + res.iscorrect + '/' + res.cat, filename);
+                var iscorct = true;
+                if(res.cat === QollConstants.QOLL_TYPE.BLANK) { //this is a fill in the blanks
+                    res.iscorrect.forEach(function(isc){
+                        iscorct = iscorct && isc; // all fill in the blank answers are correct
+                        qlog.info('===============> 1.1 ' + iscorct + '/' + isc, filename);
+                    });
+
+                    if(iscorct) idx = 1; // if correct
+                    else idx = 2; // else not correct
+                } else { // this is a multiple choice question
+                    qlog.info('===============> 2 ' + res.iscorrect, filename);
+                    if(res.iscorrect) idx = 1; // is correct
+                    else idx = 2; // is not correct
+                }
+            } else {
+                qlog.info('===============> 3 ' + res.iscorrect, filename);
+                // console.log('InCorrect');
+                idx = 2; // it is incorrect
+            }
+
+            data_series[idx].data[counter] += 1;
+            counter++;
+        });
+        /** var resp = s.responses[0];
+        
+        console.log(resp.response);
+
+        if(data_hash[resp.response]  == undefined) {
+            data_hash[resp.response] = 1;
+        } else {
+            data_hash[resp.response] += 1;
+        } **/
+    });
+
+    //console.log(data_xAxis);
+    //console.log(data_series);
+
+
     var data = new Array(); 
-    builtColumnDistribution(data);
+    builtColumnDistribution(q.title, data_xAxis, data_series); // data
 };

@@ -314,6 +314,8 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 		qollstionnaire.submittedTo = eandg.submittedTo;
 		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
 
+		qlog.info('==================+++++> ' + qollstionnaire.submittedTo, filename);
+
 		eandg.submittedToGroup.forEach(function(grp){
 			// Find all emailids in this group and push it in the submitted to
 			var grpemails = QollGroups.find({'submittedBy': Meteor.userId(), 'groupName' : grp},
@@ -325,6 +327,8 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 					qollstionnaire.submittedTo.push(emls);
 				});
 		});
+
+		qlog.info('==================+++++> ' + qollstionnaire.submittedTo, filename);
 
 		qollstionnaire.tags = tags;
 

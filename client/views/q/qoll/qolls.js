@@ -271,6 +271,7 @@ Template.qolls_inner.events({
 		event.preventDefault();
 		var chk = $(event.target);
 		var qoll =this.parent.q;
+		var answered_or_unanswered;
 		//If not a multiple choice question, remove the border-selected
 		qlog.info('Printing ooooif this is multiple - ' + qoll + '/' + qoll.isMultiple);
 		//return;
@@ -281,8 +282,10 @@ Template.qolls_inner.events({
 		} else {
 			if (chk.hasClass('border-selected')) {
 				chk.removeClass('border-selected');
+				answered_or_unanswered = 'unanswered';
 			} else {
 				chk.addClass('border-selected');
+				answered_or_unanswered = 'answered';
 			}
 		}
 
@@ -291,16 +294,14 @@ Template.qolls_inner.events({
 		var answerIndex = this.item.index;
 		var answerVal = this.item.value;
 
-		qlog.info('youclicked: ' + qollstionnaireId, filename);
-		qlog.info('youclickedon: ' + event, filename);
-		qlog.info('youclickedid: ' + qollId, filename);
-		qlog.info('the aindex =' + answerVal + '/' + answerIndex, filename);
+		qlog.info(qollstionnaireId + ' ### ' + qollId + ' ### ' + answerVal + ' ### ' + answerIndex + ' ### ' + answered_or_unanswered, filename);
+		
 		if (qollstionnaireId) {
-			Meteor.call('AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, undefined, function(err, qollRegId) {
+												//	qsnrid, 		qollId, qollTypeVal, qollTypeIx, qollPortal, 					userId, 	answered_or_unanswered
+			Meteor.call('AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, QollConstants.QOLL_PORTAL.QOLL, undefined, answered_or_unanswered, function(err, qollRegId) {
 				if (err) {
 					qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
 				} else {
-					qlog.info('Registered qoll with id: ' + qollRegId + answerVal, filename);
 					var saved_target = $('#' + qollId).find('span.saved-msg');
 					saved_target.html('Response saved ...');
 					saved_target.fadeOut(6400, 'swing', function() {

@@ -19,6 +19,8 @@ Meteor.methods({
 		qollstionnaire.submittedTo = eandg.submittedTo;
 		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
 
+		qlog.info('==================+++++> ' + qollstionnaire.submittedTo, filename);
+
 		eandg.submittedToGroup.forEach(function(grp){
 			// Find all emailids in this group and push it in the submitted to
 			var grpemails = QollGroups.find({'submittedBy': Meteor.userId(), 'groupName' : grp},
@@ -31,8 +33,10 @@ Meteor.methods({
 				});
 		});
 
+		qlog.info('==================+++++> ' + qollstionnaire.submittedTo, filename);
 
-		qollstionnaire.submittedToGroup.map(function(grp){
+
+		/** qollstionnaire.submittedToGroup.map(function(grp){
 			var qg = QollGroups.findOne({'groupName' : grp, 'createdBy' : Meteor.userId()});
 			if(qg && qg.userEmails && qg.userEmails.length > 0) {
 				qg.userEmails.map(function(eml){
@@ -40,7 +44,7 @@ Meteor.methods({
 						qollstionnaire.submittedTo.push(eml);
 				});
 			}
-		});
+		}); **/
 
 		qollstionnaire.title = title;
 		qollstionnaire.tags = tags;

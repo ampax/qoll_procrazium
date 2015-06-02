@@ -33,7 +33,7 @@ Schemas.quick_qoll = new SimpleSchema({
   qollTypes: {
     type: Array,
     label: "Qoll Options",
-    optional: false
+    optional: true
   },
   'qollTypes.$': {
     type: String
