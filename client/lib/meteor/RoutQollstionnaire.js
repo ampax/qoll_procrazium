@@ -102,11 +102,14 @@ IdLookUpSentController = RouteController.extend({
 		return { sort : { submittedOn : -1 }, _id : this.params._id, stats : "yes",
 					context : QollConstants.CONTEXT.READ };
 	},
-	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
-								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
+	waitOn : function() {
+		Session.set('questionnaire_id', this.params._id);
+
+		return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
+				Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
 	},
 	data : function() {
-		return { qollList : QollForQuestionaireId};
+		return { qollList : QollForQuestionaireId, qollResultList : QollForQuestionaireId.find().fetch()};
 	}
 });
 

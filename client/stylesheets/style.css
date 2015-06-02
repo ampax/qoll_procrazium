@@ -814,3 +814,18 @@ div.img-container {
 }
 /* End: Basic styling for html elements for Qoll */
 
+
+.respondent-bg {
+    background-color: #246BB2;
+    /* margin: 5px; */
+    font-size: 1.2em;
+    padding: 5px;
+    color: whitesmoke;
+    border-radius: 3px;
+}
+
+.respondent-row-style {
+    border-color: rgb(218, 215, 215);
+    border-top-style: solid;
+    border-width: thin;
+}

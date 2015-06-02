@@ -11,12 +11,18 @@ Template.view_sent_board.helpers({
 	is_not_quicker : function(category) {
 		return !(category === 'quicker');
 	},
+	qoll_list : function() {
+		return QollForQuestionaireId.find({_id : Session.get('questionnaire_id')}).fetch()[0];
+	}
 });
 
 Template.stats_table.helpers({
 	questionaire : function() {
 		return QuestionaireForId.findOne();
 	},
+	qoll_list : function() {
+		return QollForQuestionaireId.find({_id : Session.get('questionnaire_id')}).fetch()[0];
+	}
 });
 
 Template.stats_table.rendered = function() {

@@ -55,10 +55,39 @@
 			</div>
 
 				{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
+
+				{{> view_sent_board_results stats = qoll_list.stats }}
 			</div>
 		</div>
 	</div>
 </template>
+
+<template name="view_sent_board_results">
+	{{#each stats}}
+		<h2 class="respondent-bg">{{this.name}}</h2>
+
+		{{#each this.responses}}
+			<div class="row respondent-row-style">
+    			<div class="col-md-1 col-xs-12">
+    				<button class="button button-small respondent-bg" 
+    				data-title="{{this.title}}" 
+    				data-questionaire_id="{{questId}}"
+    				data-qid="{{this.qoll_id}}"
+    				data-responder_id="{{this.email}}"
+    				data-data1="{{this}}">
+    					{{this.label}}
+    				</button>
+    			</div>
+    			<div class="col-md-8 col-xs-12"><p>{{this.title}}</p></div>
+    			<div class="col-md-2 col-xs-12">
+        			<h2>{{this.response}}</h2>
+				</div>
+				<div class="col-md-1 col-xs-12">{{{this.iscorrect}}}</div>
+			</div>
+		{{/each}}
+	{{/each}}
+</template>
+
 
 <template name="stats_table">
 	<table id="example" class="table" cellspacing="0" width="100%">
