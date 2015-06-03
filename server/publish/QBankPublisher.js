@@ -295,10 +295,15 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 	var initializing = true;
 	var handle_questionaires;
 
-	if (user_id) {
+	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
 		//Check for existing user record
-		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+		var tuid = this.userId ? this.userId : findoptions.userId;
+		var ufound = Meteor.users.find({
+			"_id" : tuid
+		}).fetch();
+
 		if (ufound.length > 0) {
+			var user = ufound[0];
 			
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
@@ -312,6 +317,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						questionaire.respo_length = r.respo_length;
 						questionaire.recip_length = r.recip_length;
 					}
+
+					qlog.info('+++++++++++++++++> ' + JSON.stringify(questionaire), filename);
 
 					self.added('questionaire-for-id', item._id, questionaire);
 				},
