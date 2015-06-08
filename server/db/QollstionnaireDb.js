@@ -92,5 +92,38 @@ Meteor.methods({
 		}
 
 		return qollstionnaire_id;
+	},
+
+	submit_questionnaire : function(questionnaire_id, user_id) {
+		var resp_msg = {};
+
+		var resp = QollstionnaireResponses.findOne({
+			qollstionnaireid : questionnaire_id,
+			usrid : user_id
+		});
+
+		if(resp) {
+			QollstionnaireResponses.update({qollstionnaireid : questionnaire_id, usrid : user_id}, 
+				{$set : {qollstionnaireSubmitted : true, qollstionnaireSubmittedOn : new Date()}});
+
+			resp_msg.msg = 'Submitted the questionnaire.';
+		} else {
+			resp_msg.msg = 'Register responses before submitting please.';
+		}
+
+		return resp_msg;
+	},
+	resend_submitted_questionnaire : function(questionnaire_id, email_id) {
+		// set submitted to false and submitted-on to undefined
+		var u1 = Meteor.users.find({'emails.address' : email_id}).fetch();
+
+
+		if(u1.length > 0) { 
+			QollstionnaireResponses.update({qollstionnaireid : questionnaire_id, usrid : u1[0]._id}, 
+				{$set : {qollstionnaireSubmitted : false, qollstionnaireSubmittedOn : undefined}});
+		} else {
+			QollstionnaireResponses.update({qollstionnaireid : questionnaire_id, email : email_id}, 
+				{$set : {qollstionnaireSubmitted : false, qollstionnaireSubmittedOn : undefined}});
+		}
 	}
 });

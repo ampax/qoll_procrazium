@@ -257,19 +257,41 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			//handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT})
-			
+
 			handle_questionaires = Qollstionnaire.find({ 'submittedTo' : UserUtil.getEmail(user), 'status' : QollConstants.STATUS.SENT }, 
 				{ sort : { 'submittedOn' : -1}, reactive : true }
 			).observe({
 				added : function(item, idx){
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
-					self.added('recvd-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class});
+					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class};
+					
+					var resp = QollstionnaireResponses.findOne({
+						qollstionnaireid : item._id,
+						usrid : user._id
+					});
+
+					if(resp) {
+						pub.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						pub.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
+
+					self.added('recvd-questionaire', item._id, pub);
 				},
 				changed : function(item, idx) {
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
-					self.changed('recvd-questionaire', item._id, 
-						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class});
+					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class};
+					
+					var resp = QollstionnaireResponses.findOne({
+						qollstionnaireid : item._id,
+						usrid : user._id
+					});
+					
+					if(resp) {
+						pub.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						pub.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
+
+					self.changed('recvd-questionaire', item._id, pub);
 				},
 				removed : function(item){
 					self.removed('recvd-questionaire', item._id);
@@ -304,6 +326,11 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 
 		if (ufound.length > 0) {
 			var user = ufound[0];
+
+			var resp = QollstionnaireResponses.findOne({
+				qollstionnaireid : findoptions._id,
+				usrid : user._id
+			});
 			
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
@@ -316,6 +343,11 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						questionaire.stats_labels = r.labels;
 						questionaire.respo_length = r.respo_length;
 						questionaire.recip_length = r.recip_length;
+					}
+
+					if(resp) {
+						questionaire.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						questionaire.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
 					}
 
 					qlog.info('+++++++++++++++++> ' + JSON.stringify(questionaire), filename);
@@ -332,6 +364,11 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						questionaire.stats_labels = r.labels;
 						questionaire.respo_length = r.respo_length;
 						questionaire.recip_length = r.recip_length;
+					}
+
+					if(resp) {
+						questionaire.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						questionaire.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
 					}
 
 					self.changed('questionaire-for-id', item._id, questionaire);
@@ -408,6 +445,11 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 							q2 = QollKatexUtil.populateIfTex(q2, t);
 
+							//if submitted, do not let register any more answers
+							if(resp && resp.qollstionnaireSubmitted == true) {
+								q2.context = QollConstants.CONTEXT.READ;
+							}
+
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
 							qolls.push(q2);
@@ -416,13 +458,18 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id};
 
+					if(resp && resp.qollstionnaireSubmitted == true) {
+						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						quest.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
+
 					if(user._id === item.submittedBy) {
 						// send more information at the questionnaire level so that owner gets to see how people have responded
 						quest.questSubmittedTo  = item.submittedTo;
 						quest.questResponse = getQuestionnaireResponses(item);
 					}
 
-					qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
+					qlog.info('Pushing qolls to client ++++++++++++++++++> ' + JSON.stringify(quest), filename);
 
 					var pub = {qolls : qolls, questionaire : quest};
 
@@ -459,6 +506,11 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 							q2 = QollKatexUtil.populateIfTex(q2, t);
 
+							//if submitted, do not let register any more answers
+							if(resp && resp.qollstionnaireSubmitted == true) {
+								q2.context = QollConstants.CONTEXT.READ;
+							}
+
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
 							qolls.push(q2);
@@ -466,6 +518,11 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 					});
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id};
+
+					if(resp && resp.qollstionnaireSubmitted == true) {
+						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						quest.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
 
 					if(user._id === item.submittedBy) {
 						// send more information at the questionnaire level so that owner gets to see how people have responded
@@ -1119,6 +1176,7 @@ var getQuestionnaireResponses = function(item) {
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
 								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat
 							});
+
 				if(!resp_flag) {
 					respo_length++;
 					resp_flag = true;
@@ -1149,7 +1207,14 @@ var getQuestionnaireResponses = function(item) {
 		}**/
 
 		stat.name = name;
+		stat.email = subTo;
+		stat.questionaire_id = item._id;
 		stat.responses = responses;
+
+		if(resp && resp.qollstionnaireSubmitted === true) {
+			stat.qollstionnaireSubmitted = resp.qollstionnaireSubmitted;
+			stat.qollstionnaireSubmittedOn = resp.qollstionnaireSubmittedOn;
+		}
 
 		stats.push(stat);
 

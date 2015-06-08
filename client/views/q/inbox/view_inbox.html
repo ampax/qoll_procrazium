@@ -28,15 +28,15 @@
 						<div class="col-md-5 col-xs-12">
 							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
 						</div>
-						<div class='col-md-3 col-xs-12'>&nbsp;</div>
+						<div class='col-md-2 col-xs-12'>&nbsp;</div>
 						<div class="col-md-1 col-xs-12">
 							Size
 						</div>
 						<div class="col-md-1 col-xs-12">
 							Recips
 						</div>
-						<div class="col-md-1 col-xs-12">
-							&nbsp;
+						<div class="col-md-2 col-xs-12">
+							Submitted On
 						</div>
 					</div><!-- list-group-item list-group-item-heading -->
 					{{#each qolls}}
@@ -47,7 +47,7 @@
 					<div class="col-md-1 col-xs-12">
 						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 					</div>
-					<div class="col-md-8 col-xs-12 make-clickable">
+					<div class="col-md-7 col-xs-12 make-clickable">
 						<a href="{{ pathFor 'inboxView' }}" class='black-link'>
 							{{{title}}}
 						</a>
@@ -58,9 +58,12 @@
 					<div class="col-md-1 col-xs-12">
 						{{recips_count}}
 					</div>
-					<div class="col-md-1 col-xs-12">
-						&nbsp;
+					<div class="col-md-2 col-xs-12">
+						{{submitted_on qollstionnaireSubmittedOn}}
 					</div>
+					<!-- div class="col-md-1 col-xs-12">
+						&nbsp;
+					</div -->
 				</div><!-- list-group-item list-group-item-success -->
 				<!-- End of Qoll Section here -->
 				{{/each}}
