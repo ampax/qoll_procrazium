@@ -14,6 +14,47 @@ Template.view_sent_board.helpers({
 	qoll_list : function() {
 		return QollForQuestionaireId.find({_id : Session.get('questionnaire_id')}).fetch()[0];
 	},
+	can_close : function(questionnaire) {
+		console.log('================================' + (questionnaire && questionnaire.qollstionnaire_closed === 'closed'));
+		console.log(questionnaire);
+		console.log('================================' + (questionnaire && questionnaire.qollstionnaire_closed != 'closed'));
+		if(questionnaire && questionnaire.qollstionnaire_closed === 'closed') {
+			return 'is-invisible';
+		}
+	},
+	is_closed : function(questionnaire) {
+		if(questionnaire && questionnaire.qollstionnaire_closed != 'closed') {
+			return 'is-invisible';
+		}
+	},
+	closed_on : function(questionnaire) {
+		if(questionnaire && questionnaire.qollstionnaire_closed === 'closed') {
+			// return qollstionnaireSubmittedOn;
+			return "(Closed On: "+moment(questionnaire.qollstionnaire_closed_on).format('MMM Do YYYY, h:mm a')+")";
+		}
+	},
+});
+
+Template.view_sent_board.events({
+	'click button#close_questionnaire' : function(e, l) {
+		e.preventDefault();
+
+		var btn = $(e.target);
+
+		var quest_id = btn.data('questionaire_id');
+		var user_id = Meteor.userId();
+
+		qlog.info('------------------------ closing ------- ' + quest_id+ '/' + user_id, filename);
+
+		Meteor.call('close_questionnaire', quest_id, user_id, function(err, res){
+			if(err) {
+				qlog.error('Error happened while submitting the questionnaire ... ' + quest_id, filename);
+				qlog.error(err, filename);
+			} else {
+				alert(res.msg);
+			}
+		});
+	},
 });
 
 Template.view_sent_board_results.helpers({
@@ -52,10 +93,10 @@ Template.view_sent_board_results.events({
 			} else {
 				alert('Resend complete ...');
 				lnk.html('');
-				//$('h5#submitted'+email_id).html('');
+				//$('h5#submitted'+email_id).html('');lnk.
 			}
 		});
-	}
+	},
 });
 
 Template.stats_table.helpers({

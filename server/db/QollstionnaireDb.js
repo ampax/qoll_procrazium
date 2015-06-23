@@ -113,6 +113,15 @@ Meteor.methods({
 
 		return resp_msg;
 	},
+
+	close_questionnaire : function(questionnaire_id, user_id) {
+		var resp_msg = {};
+
+		Qolls.QollstionnaireDb.update({_id : questionnaire_id, submittedBy : user_id}, {qollstionnaireClosed : 'closed', qollstionnaireClosedOn : new Date()});
+
+		return {'msg' : 'Questionnaire Closed ...'};
+	},
+
 	resend_submitted_questionnaire : function(questionnaire_id, email_id) {
 		// set submitted to false and submitted-on to undefined
 		var u1 = Meteor.users.find({'emails.address' : email_id}).fetch();

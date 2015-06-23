@@ -175,14 +175,16 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 					var r = getQuestCompletionRate(item);
 					self.added('sent-by-me-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
-							submitted_on : item.submittedOn, length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
+							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
+							length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				changed : function(item, idx) {
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					var r = getQuestCompletionRate(item);
 					self.changed('sent-by-me-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
-							submitted_on : item.submittedOn, length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
+							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
+							length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				removed : function(item){
 					self.removed('sent-by-me-questionaire', item._id);
@@ -249,12 +251,17 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 	var uuid = Meteor.uuid();
 	var initializing = true;
 	var handle_questionaires;
+
+	qlog.info('Printing findoptions ---------------> ' + JSON.stringify(findoptions), filename);
+
 	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
 		var tuid = this.userId ? this.userId : findoptions.userId;
 		//Check for existing user record
 		var ufound = Meteor.users.find({"_id" : tuid}).fetch();
 		if (ufound.length > 0) {
 			var user = ufound[0];
+
+			qlog.info('Found user - ' + JSON.stringify(user), filename);
 
 			//handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT})
 
@@ -263,7 +270,9 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 			).observe({
 				added : function(item, idx){
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
-					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class};
+					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
+						recips_count : item.submittedTo.length, submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
+						length_class : length_class};
 					
 					var resp = QollstionnaireResponses.findOne({
 						qollstionnaireid : item._id,
@@ -279,7 +288,9 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 				},
 				changed : function(item, idx) {
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
-					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, submitted_on : item.submittedOn, length_class : length_class};
+					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
+						recips_count : item.submittedTo.length, submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
+						length_class : length_class};
 					
 					var resp = QollstionnaireResponses.findOne({
 						qollstionnaireid : item._id,
@@ -335,7 +346,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
 					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.submittedTo.length, submitted_on : item.submittedOn, category : item.category};
+							recips_count : item.submittedTo.length, submitted_on : item.submittedOn, category : item.category,
+							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
 
 					if(findoptions.stats){
 						var r = getQuestionnaireResponses(item);
@@ -356,7 +368,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 				},
 				changed : function(item, idx) {
 					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.submittedTo.length, submitted_on : item.submittedOn, category : item.category};
+							recips_count : item.submittedTo.length, submitted_on : item.submittedOn, category : item.category,
+							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
 
 					if(findoptions.stats){
 						var r = getQuestionnaireResponses(item);
@@ -446,7 +459,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							//if submitted, do not let register any more answers
-							if(resp && resp.qollstionnaireSubmitted == true) {
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
 								q2.context = QollConstants.CONTEXT.READ;
 							}
 
@@ -456,7 +469,9 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						});
 					});
 
-					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id};
+					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id,
+								 status : item.status, qollstionnaireClosed : item.qollstionnaireClosed, 
+								 qollstionnaireClosedOn : item.qollstionnaireClosedOn};
 
 					if(resp && resp.qollstionnaireSubmitted == true) {
 						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
@@ -507,7 +522,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							//if submitted, do not let register any more answers
-							if(resp && resp.qollstionnaireSubmitted == true) {
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
 								q2.context = QollConstants.CONTEXT.READ;
 							}
 
@@ -517,7 +532,9 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						});
 					});
 
-					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id};
+					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id,
+								 status : item.status, qollstionnaireClosed : item.qollstionnaireClosed, 
+								 qollstionnaireClosedOn : item.qollstionnaireClosedOn};
 
 					if(resp && resp.qollstionnaireSubmitted == true) {
 						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
@@ -577,9 +594,12 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 	}
 
 	qlog.info('Fetching all the qolls battle-ground: ' + uuid, filename);
-	if (this.userId) {
-		//Check for existing user record
-		var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
+		var tuid = this.userId ? this.userId : findoptions.userId;
+		var ufound = Meteor.users.find({
+			"_id" : tuid
+		}).fetch();
+		
 		if (ufound.length > 0) {
 			//User found, will publish different qolls to user now
 			var user = ufound[0];

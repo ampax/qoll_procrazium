@@ -39,7 +39,7 @@ Meteor.publish("QOLL_IMAGES", function(){
 Meteor.publish('images', function() {
   qlog.info('Received publish image from ionic (probably)', filename);
 
-  console.log(QollImages.find().fetch());
+  //console.log(QollImages.find().fetch());
 
   return QollImages.find();
 });
@@ -51,7 +51,7 @@ Meteor.publish('images_cluster', function() {
 
 Meteor.methods({
   images_for_ids : function(img_ids) {
-    qlog.info('Received request for images for ids - ' + img_ids, filename);
+    //qlog.info('Received request for images for ids - ' + img_ids, filename);
     var imgs_found = QollImages.find({'_id': {$in: img_ids}}).fetch();
     // qlog.info('=====================> ' + imgs_found);
     return imgs_found;

@@ -55,6 +55,22 @@
 			</div>
 
 				{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
+				
+				<br>
+				<!--{{#if can_close questionaire}} -->
+			    <button class="btn btn-danger btn-lg btn-block {{can_close questionaire}}" 
+			    	id="close_questionnaire"
+			    	data-questionaire_id="{{questionaire._id}}">
+				  Close Questionnaire
+				</button>
+				<!--{{/if}}-->
+
+				<!--{{#if is_closed questionaire}}-->
+				<button class="btn btn-default btn-lg btn-block {{is_closed questionaire}}">
+				  Closed Questionnaire <span class='red_1'>{{closed_on questionaire}}</span>
+				</button>
+				<!--{{/if}}-->
+				<br><br>
 
 				{{> view_sent_board_results stats = qoll_list.stats questionaire=qoll_list.questionaire }}
 			</div>

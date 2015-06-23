@@ -1,5 +1,14 @@
 var filename='client/views/q/sent/view_sent.js';
 
+Template.view_sent.helpers({
+  closed_on : function(closed_on) {
+  		if(closed_on && closed_on.closed_on) {
+			// return qollstionnaireSubmittedOn;
+			return "<span class='red_1'>"+moment(closed_on.closed_on).format('MMM Do YYYY, h:mm a')+"</span>";
+		}
+	},
+});
+
 Template.view_sent.events({
 	'click .archive-qoll-btn' : function(event) {
 		event.preventDefault();
