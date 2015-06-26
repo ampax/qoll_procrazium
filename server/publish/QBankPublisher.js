@@ -161,6 +161,7 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 	var uuid = Meteor.uuid();
 	var initializing = true;
 	var handle_questionaires;
+	qlog.info('Printing findoptions from SENT_QUESTIONAIRE_PUBLISHER =====>' + JSON.stringify(findoptions), filename);
 	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
 		var tuid = this.userId ? this.userId : findoptions.userId;
 		//Check for existing user record
@@ -173,6 +174,7 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 				added : function(item, idx){
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					var r = getQuestCompletionRate(item);
+					qlog.info("Adding item to SENT_QUESTIONAIRE_PUBLISHER =======>" + JSON.stringify(item), filename);
 					self.added('sent-by-me-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
 							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,

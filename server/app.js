@@ -10,10 +10,7 @@ var connectOptions = {
 };
 
 
-//Cluster.connect('mongodb://localhost:5002/meteor', connectOptions);
-//Cluster.register('qollserver');
-
 
 Cluster.connect("mongodb://localhost:3001/meteor");
 Cluster.register("qollserver");
-Cluster.allowPublicAccess("qollserver");
+Cluster.allowPublicAccess("qollserver"); 
