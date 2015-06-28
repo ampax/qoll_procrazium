@@ -10,7 +10,15 @@ var connectOptions = {
 };
 
 
+//Cluster.connect('mongodb://localhost:5002/meteor', connectOptions);
+//Cluster.register('qollserver');
 
-Cluster.connect("mongodb://localhost:3001/meteor");
+var mongo_url = SITE_URL.replace(/http/, 'mongodb') + '/meteor';
+
+qlog.info('Starting cluster connection and connecting to mongodb - ' + mongo_url, filename);
+
+// Cluster.connect("mongodb://localhost:3001/meteor");
+
+Cluster.connect(mongo_url);
 Cluster.register("qollserver");
-Cluster.allowPublicAccess("qollserver"); 
+Cluster.allowPublicAccess("qollserver");
