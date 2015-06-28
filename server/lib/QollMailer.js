@@ -136,7 +136,7 @@ var formatQollstionnaireHtmlEmail = function(email, title, message, id, user_q_u
     var fmt_msg = 
     '<table>'+
         '<tr style="background-color: #FFF1FF; border: 1px solid #ddd; font-size 18px;">'+
-            '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><img src="http://qoll.io/img/QollBrand.png"/></a></td>'+
+            '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><img src="'+URLUtil.SITE_URL+'/logos/2/2 50 px.png"/></a></td>'+
             '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><h4 style="font-size: 18px;">'+title+'</h4></a></td>'+
         '</tr>'+
         '<tr>'+
@@ -165,7 +165,7 @@ var formatInvitationHtmlEmail = function(from, from_name, to, to_name) {
     var fmt_msg = 
     '<table>'+
         '<tr style="background-color: #FFF1FF; border: 1px solid #ddd; font-size 18px;">'+
-            '<td><a href="'+URLUtil.SITE_URL+'"><img src="http://qoll.io/img/QollBrand.png"/></a></td>'+
+            '<td><a href="'+URLUtil.SITE_URL+'"><img src="'+URLUtil.SITE_URL+'/logos/2/2 50 px.png"/></a></td>'+
             '<td><a href="'+URLUtil.SITE_URL+'"><h4 style="font-size: 18px;">Join Qoll today ...</h4></a></td>'+
         '</tr>'+
         '<tr>'+
