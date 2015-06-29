@@ -471,7 +471,7 @@ Meteor.publish('MEMBERS_FOR_GROUP_ID', function(options) {
                 user=Meteor.users.findOne({ "emails.address" : email });
             }
 
-            userIds.push(user._id);
+            if(user) userIds.push(user._id);
           })
 
           var usrs = Meteor.users.find({_id : {$in : userIds}});
@@ -497,7 +497,7 @@ Meteor.publish('MEMBERS_FOR_GROUP_ID', function(options) {
                 user=Meteor.users.findOne({ "emails.address" : email });
             }
 
-            userIds.push(user._id);
+            if(user) userIds.push(user._id);
           })
 
           var usrs = Meteor.users.find({_id : {$in : userIds}});
@@ -523,7 +523,7 @@ Meteor.publish('MEMBERS_FOR_GROUP_ID', function(options) {
                 user=Meteor.users.findOne({ "emails.address" : email });
             }
 
-            userIds.push(user._id);
+            if(user) userIds.push(user._id);
           })
 
           var usrs = Meteor.users.find({_id : {$in : userIds}});

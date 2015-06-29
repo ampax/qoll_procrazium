@@ -244,28 +244,30 @@ updateUserGroupWithEmail = function(groupId, groupName, userEmail){
         user=Meteor.users.findOne({ "emails.address" : userEmail });
     }
 
-    if(user) qlog.info('Fetched user with email - ' + userEmail, filename);
+    if(user) {
+        qlog.info('Fetched user with email - ' + userEmail, filename);
 
-    if(!user.groups) {
-        user.groups = {};
-    }
-    qlog.info('Found user: ' + JSON.stringify(user) + ', crt: ' + user.createdAt, filename);
+        if(!user.groups) {
+            user.groups = {};
+        }
+        qlog.info('Found user: ' + JSON.stringify(user) + ', crt: ' + user.createdAt, filename);
 
-    var groupInfo = {};
-    groupInfo['groupOwner'] = Meteor.userId();
-    groupInfo['groupId'] = groupId;
-    groupInfo['groupName'] = groupName;
+        var groupInfo = {};
+        groupInfo['groupOwner'] = Meteor.userId();
+        groupInfo['groupId'] = groupId;
+        groupInfo['groupName'] = groupName;
 
-    if(user._id) {
-        Meteor.users.update({ "emails.address" : userEmail }, {$push: {groups : groupInfo}}, function(error){
-            if(error){
-                qlog.error('Error happened while pushing groups for user: ' + user._id + ', group: ' + groupName + ', ERROR: ' + error, filename);
-            } else {
-                qlog.info('Done pushing group: ' + groupName + ' for email: ' + userEmail, filename);
-            }
-        });
-    } else {
-        qlog.error('No user exists for email-id: ' + userEmail, filename);
+        if(user._id) {
+            Meteor.users.update({ "emails.address" : userEmail }, {$push: {groups : groupInfo}}, function(error){
+                if(error){
+                    qlog.error('Error happened while pushing groups for user: ' + user._id + ', group: ' + groupName + ', ERROR: ' + error, filename);
+                } else {
+                    qlog.info('Done pushing group: ' + groupName + ' for email: ' + userEmail, filename);
+                }
+            });
+        } else {
+            qlog.error('No user exists for email-id: ' + userEmail, filename);
+        }
     }
 }
 
