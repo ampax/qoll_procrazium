@@ -18,13 +18,16 @@
 
 
 <template name="qext_qolls_inner">
-	  <!--div class="row" -->
+    {{> header_ext}}
     Email - {{user_email_id}} / {{qoll_portal}}
+<p class="lead">
+	  <!--div class="row" -->
     {{#each allQolls}}
     <!-- Start of Qoll Section -->
      		{{> qext_single_qoll q= this user_email_id= ../user_email_id qoll_portal= ../qoll_portal btns= ../btns}}
     {{/each}}
   <!--/div-->
+</p>
 </template>
 
 
