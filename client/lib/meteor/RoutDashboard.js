@@ -94,6 +94,11 @@ Router.map(function() {
 		controller : QuickerQollsController,
 	});
 
+	this.route('howto', {
+		template : 'howto',
+		path : '/howto'
+	});
+
 });
 
 
