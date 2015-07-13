@@ -72,6 +72,10 @@ Meteor.methods({
 
 		qollstionnaire.qolls_to_email = qolls_to_email;
 
+		// comments will be kept in the form {email-ids : comment, submitted-on : new Date(), some more : attributes}
+		// pushed in an array in the order of creation
+		qollstionnaire.qolls_to_comments = [];
+
 		// add uuid to the questionnaire
 		qollstionnaire.quuid = CoreUtils.generateUUID();
 
@@ -133,6 +137,39 @@ Meteor.methods({
 		} else {
 			QollstionnaireResponses.update({qollstionnaireid : questionnaire_id, email : email_id}, 
 				{$set : {qollstionnaireSubmitted : false, qollstionnaireSubmittedOn : undefined}});
+		}
+	},
+
+	update_questionnaire_comment : function(questionnaire_id, qoll_id, email_id, comment) {
+		var ufound = Meteor.users.find({ "_id" : this.userId }).fetch();
+		if (ufound.length > 0) {
+			// update comment for the user-id (finding-email-id using user-id)
+			var user = ufound[0];
+			var email_id = user.profile.email;
+
+			// {email-ids : comment, submitted-on : new Date(), some more : attributes}
+
+			var quest = Qollstionnaire.findOne({'_id' : questionnaire_id});
+			var qolls_to_comments = quest.qolls_to_comments;
+			// Qollstionnaire.find({'_id' : findoptions._id})
+			qlog.info('qolls to comments =====> '+JSON.stringify(quest) + '/' + questionnaire_id, filename);
+			qlog.info(qolls_to_comments, filename);
+
+			
+			if(qolls_to_comments == undefined) qolls_to_comments = {};
+
+			var comments = qolls_to_comments[qoll_id] ? qolls_to_comments[qoll_id] : new Array();
+			var comment_id = comments.length+1;
+
+			var comment_obj = {comment_id : comment_id, email_id : email_id, user_id : user._id, comment : comment, commentedOn : new Date()};
+
+			comments.push(comment_obj);
+
+			qolls_to_comments[qoll_id] = comments;
+
+			Qolls.QollstionnaireDb.update({_id : questionnaire_id}, {qolls_to_comments : qolls_to_comments});
+		} else if(email_id) {
+			// ensure that the email-id is of the right person and then update the comment for email-id
 		}
 	}
 });

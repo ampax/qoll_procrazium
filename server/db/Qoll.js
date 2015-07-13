@@ -107,6 +107,7 @@ Qolls.QollstionnaireDb = {
 			submittedOn 				: new Date(),
 			qollids 					: qollstionnaire.qollids,
 			qolls_to_email 				: qollstionnaire.qolls_to_email,
+			qolls_to_comments			: qollstionnaire.qolls_to_comments,
 			tags 						: qollstionnaire.tags,
 			submittedTo 				: qollstionnaire.submittedTo,
 			submittedToUUID				: qollstionnaire.submittedToUUID,

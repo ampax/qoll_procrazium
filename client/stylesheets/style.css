@@ -881,3 +881,25 @@ div.img-container {
     background-color: green;
     bottom: 5px;
 }
+
+.qoll_comments {
+    padding-top: 6px !important; 
+    padding-bottom: 6px !important; 
+}
+
+.qoll-comment-display-1 {
+    font-size: xx-small;
+    color: rgb(139, 135, 135);
+}
+
+.qoll-comment-display-2 {
+    font-size: xx-small;
+    font-style: oblique; 
+    color: rgb(169, 113, 113);
+}
+
+.qoll-comment-display-3 {
+    font-size: xx-small;
+    font-style: oblique; 
+    color: rgb(84, 85, 197);
+}

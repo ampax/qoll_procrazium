@@ -637,6 +637,9 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
+							// move this to read only context later
+							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+
 							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
 								if(response != undefined)
 									q2.fib = response.response;
@@ -679,6 +682,9 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.qoll_idx_title = '(Q).';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
+
+							// move this to read only context later
+							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
 
 							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
 								if(response != undefined)
