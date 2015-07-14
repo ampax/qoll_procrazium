@@ -74,7 +74,7 @@ Meteor.methods({
 
 		// comments will be kept in the form {email-ids : comment, submitted-on : new Date(), some more : attributes}
 		// pushed in an array in the order of creation
-		qollstionnaire.qolls_to_comments = [];
+		qollstionnaire.qolls_to_comments = {};
 
 		// add uuid to the questionnaire
 		qollstionnaire.quuid = CoreUtils.generateUUID();
@@ -151,8 +151,10 @@ Meteor.methods({
 
 			var quest = Qollstionnaire.findOne({'_id' : questionnaire_id});
 			var qolls_to_comments = quest.qolls_to_comments;
+
+			var owner_comment = quest.submittedBy === user._id;
 			// Qollstionnaire.find({'_id' : findoptions._id})
-			qlog.info('qolls to comments =====> '+JSON.stringify(quest) + '/' + questionnaire_id, filename);
+			qlog.info('qolls to comments =====> '+JSON.stringify(quest) + '/' + questionnaire_id + '/' + qoll_id, filename);
 			qlog.info(qolls_to_comments, filename);
 
 			
@@ -161,13 +163,18 @@ Meteor.methods({
 			var comments = qolls_to_comments[qoll_id] ? qolls_to_comments[qoll_id] : new Array();
 			var comment_id = comments.length+1;
 
-			var comment_obj = {comment_id : comment_id, email_id : email_id, user_id : user._id, comment : comment, commentedOn : new Date()};
+			var comment_obj = {comment_id : comment_id, email_id : email_id, user_id : user._id, comment : comment, 
+								commentedOn : new Date(), owner_comment : owner_comment};
 
 			comments.push(comment_obj);
 
 			qolls_to_comments[qoll_id] = comments;
 
-			Qolls.QollstionnaireDb.update({_id : questionnaire_id}, {qolls_to_comments : qolls_to_comments});
+			qlog.info('---------------------->'+JSON.stringify(qolls_to_comments), filename);
+			qlog.info('---------------------->'+JSON.stringify(comment_obj), filename);
+			qlog.info('---------------------->'+JSON.stringify(comments), filename);
+
+			Qolls.QollstionnaireDb.update({'_id' : questionnaire_id}, {'qolls_to_comments' : qolls_to_comments});
 		} else if(email_id) {
 			// ensure that the email-id is of the right person and then update the comment for email-id
 		}

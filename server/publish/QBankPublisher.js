@@ -465,6 +465,13 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 								q2.context = QollConstants.CONTEXT.READ;
 							}
 
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed' || findoptions.context === QollConstants.CONTEXT.READ) {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+							} else {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email);
+							}
+
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
 							qolls.push(q2);
@@ -526,6 +533,13 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							//if submitted, do not let register any more answers
 							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
 								q2.context = QollConstants.CONTEXT.READ;
+							}
+
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed' || findoptions.context === QollConstants.CONTEXT.READ) {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+							} else {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email);
 							}
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
@@ -637,7 +651,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
-							// move this to read only context later
+							// For quicker, show all the comments all the time
 							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
 
 							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
@@ -683,7 +697,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
-							// move this to read only context later
+							// For quicker, show all the comments all the time
 							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
 
 							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
@@ -1296,5 +1310,20 @@ var questResponsesForOwner = function(item) {
 			}
 		});
 	});
+};
+
+var filterCommentForWriteCtx= function(comments, this_email_id) {
+	var filtered_comments = new Array();
+
+	if(comments != undefined)
+	comments.map(function(comment){
+		if(comment.owner_comment === true) {
+			filtered_comments.push(comment);
+		} else if(comment.email_id === this_email_id) {
+			filtered_comments.push(comment);
+		}
+	});
+
+	return filtered_comments;
 };
 

@@ -1,7 +1,7 @@
 <template name="qoll_comments">
 	<table class="table table-hover">
 	  {{#each this.comments}}
-	  	<tr><td>
+	  	<tr class='{{owner_comment_class owner_comment}}'><td>
 	  		<span class="qoll-comment-display-1">{{ comment }}</span>
 	  		<span class="qoll-comment-display-2">{{ email_id }}</span>
 	  		<!-- span class="qoll-comment-display-2">{{ commented_on commentedOn }}</span -->

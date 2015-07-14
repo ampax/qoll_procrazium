@@ -903,3 +903,8 @@ div.img-container {
     font-style: oblique; 
     color: rgb(84, 85, 197);
 }
+
+.qoll-comment-display-4 {
+    background-color: rgba(210, 229, 244, 0.84);
+    font-weight: 900;
+}

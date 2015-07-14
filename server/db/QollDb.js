@@ -336,7 +336,7 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 
 		// comments will be kept in the form {email-ids : comment, submitted-on : new Date(), some more : attributes}
 		// pushed in an array in the order of creation
-		qollstionnaire.qolls_to_comments = [];
+		qollstionnaire.qolls_to_comments = {};
 
 		// add uuid to the questionnaire
 		qollstionnaire.quuid = CoreUtils.generateUUID();

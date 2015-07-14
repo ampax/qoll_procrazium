@@ -8,6 +8,10 @@ Template.qoll_comments.helpers({
 			return "(On: "+moment(commentedOn).format('MMM Do YYYY, h:mm a')+")";
 		}
 	},
+	owner_comment_class : function(owner_comment) {
+		if(owner_comment === true) return 'qoll-comment-display-4';
+		return 'xxx';
+	},
 });
 
 Template.qoll_comments.events({
@@ -24,7 +28,7 @@ Template.qoll_comments.events({
 	'keyup .qoll_comments' : function(e, t) {
 		//qlog.info('Adding the comment now - ', filename);
 
-		if(event.which === 13 && !event.shiftKey){
+		if(e.which === 13 && !e.shiftKey){
 	      // submit your comment via AJAX or anything you like
 	      var qoll_comments_text = $('#qoll_comments'+this._id).val();
 	      qlog.info('Submitting the comment now ... ' + qoll_comments_text, filename);
