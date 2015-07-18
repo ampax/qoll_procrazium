@@ -31,12 +31,18 @@ Template.qoll_comments.events({
 		if(e.which === 13 && !e.shiftKey){
 	      // submit your comment via AJAX or anything you like
 	      var qoll_comments_text = $('#qoll_comments'+this._id).val();
-	      qlog.info('Submitting the comment now ... ' + qoll_comments_text, filename);
-
 	      var _qollstionnaireid = this._qollstionnaireid;
+
+	      if(! _qollstionnaireid ) {
+	      	alert('Comments for qolls not enabled yet.');
+	      	return false;
+	      }
 
 	      $('#qoll_comments'+this._id).val('');
 	      $('#textarea_feedback'+this._id).html('160 characters remaining');
+
+	      qlog.info('Submitting the comment now ... comment: ' + qoll_comments_text + ', qid: ' + this._id + 
+	      	', questionnaire-id: ' + _qollstionnaireid, filename);
 	      
 	      Meteor.call('update_questionnaire_comment', _qollstionnaireid, this._id, undefined, qoll_comments_text, function(err, res){
 				if(err) {

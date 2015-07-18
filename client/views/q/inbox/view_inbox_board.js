@@ -27,6 +27,15 @@ Template.view_inbox_board.helpers({
 
 		return true;
 	},
+	created_on : function(qollstionnaireCreatedOn) {
+		// console.log(qollstionnaireCreatedOn);
+
+		if(!qollstionnaireCreatedOn) return '';
+		else {
+			// return qollstionnaireSubmittedOn;
+			return moment(qollstionnaireCreatedOn).format('MMM Do YYYY, h:mm a');
+		}
+	},
 });
 
 Template.view_inbox_board.events({

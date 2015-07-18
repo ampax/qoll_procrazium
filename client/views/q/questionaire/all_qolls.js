@@ -20,6 +20,15 @@ Template.all_qolls.helpers({
     var imgs1 = QollImages.find({'_id': {$in: image_ids}});
     return imgs1;
   },
+  submitted_on : function(qollSubmittedOn) {
+		// console.log(qollstionnaireSubmittedOn);
+
+		if(!qollSubmittedOn) return '';
+		else {
+			// return qollstionnaireSubmittedOn;
+			return moment(qollSubmittedOn).format('MMM Do YYYY, h:mm a');
+		}
+	},
 });
 
 $.fn.toggleCheckbox = function() {

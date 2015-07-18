@@ -286,6 +286,15 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 						pub.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
 					}
 
+					var editorarr = Meteor.users.find({"_id" : item.submittedBy}).fetch();
+					if (editorarr.length > 0) {
+						var editor = editorarr[0];
+						pub.createdBy = editor._id;
+						pub.createdByEmail = editor.profile.email;
+						pub.createdByName = editor.profile.name;
+						pub.createdOn = item.submittedOn;
+					}
+
 					self.added('recvd-questionaire', item._id, pub);
 				},
 				changed : function(item, idx) {
@@ -302,6 +311,15 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 					if(resp) {
 						pub.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
 						pub.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
+
+					var editorarr = Meteor.users.find({"_id" : item.submittedBy}).fetch();
+					if (editorarr.length > 0) {
+						var editor = editorarr[0];
+						pub.createdBy = editor._id;
+						pub.createdByEmail = editor.profile.email;
+						pub.createdByName = editor.profile.name;
+						pub.createdOn = item.submittedOn;
 					}
 
 					self.changed('recvd-questionaire', item._id, pub);
@@ -364,6 +382,15 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						questionaire.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
 					}
 
+					var editorarr = Meteor.users.find({"_id" : item.submittedBy}).fetch();
+					if (editorarr.length > 0) {
+						var editor = editorarr[0];
+						questionaire.createdBy = editor._id;
+						questionaire.createdByEmail = editor.profile.email;
+						questionaire.createdByName = editor.profile.name;
+						questionaire.createdOn = item.submittedOn;
+					}
+
 					qlog.info('+++++++++++++++++> ' + JSON.stringify(questionaire), filename);
 
 					self.added('questionaire-for-id', item._id, questionaire);
@@ -384,6 +411,15 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 					if(resp) {
 						questionaire.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
 						questionaire.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
+
+					var editorarr = Meteor.users.find({"_id" : item.submittedBy}).fetch();
+					if (editorarr.length > 0) {
+						var editor = editorarr[0];
+						questionaire.createdBy = editor._id;
+						questionaire.createdByEmail = editor.profile.email;
+						questionaire.createdByName = editor.profile.name;
+						questionaire.createdOn = item.submittedOn;
 					}
 
 					self.changed('questionaire-for-id', item._id, questionaire);
