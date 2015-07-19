@@ -74,19 +74,23 @@ Template.toolbar.events({
 			} else {
 				parsed_qoll = val;
 				previewQoll(preparePreviewHtml(parsed_qoll));
+				$("div#aceEditor").height($("div#aceEditor_Preview").parent().height()+'px');
+				var editor = ace.edit("aceEditor");
+				editor.resize(true);
+				editor.setHighlightActiveLine(true);
 			}
 		});
 
 		if (jQuery("#aceEditor").hasClass("is-invisible")) {
 			qlog.info("Showing ace editor ...", filename);
-			jQuery("#aceEditor").removeClass("is-invisible");
-			jQuery("#aceEditor_Preview").addClass("is-invisible");
+			/**jQuery("#aceEditor").removeClass("is-invisible");
+			jQuery("#aceEditor_Preview").addClass("is-invisible");**/
 			jQuery('a.previewqoll > i').addClass("glyphicon-eye-open");
 			jQuery('a.previewqoll > i').removeClass("glyphicon-eye-close");
 		} else {
 			qlog.info("Hiding ace editor ...", filename);
-			jQuery("#aceEditor").addClass("is-invisible");
-			jQuery("#aceEditor_Preview").removeClass("is-invisible")
+			/**jQuery("#aceEditor").addClass("is-invisible");
+			jQuery("#aceEditor_Preview").removeClass("is-invisible")**/
 			jQuery('a.previewqoll > i').removeClass("glyphicon-eye-open");
 			jQuery('a.previewqoll > i').addClass("glyphicon-eye-close");
 

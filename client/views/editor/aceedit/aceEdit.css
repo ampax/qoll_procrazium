@@ -9,7 +9,6 @@
 	padding-bottom: 0.75em;
 	padding-left: 2.0em;
 	padding-right: 2.0em;
-	width: 50%;
 }
 
 
@@ -77,7 +76,7 @@ div.editor-toolbar > .toolbar-buttons-right {
 /* CSS Declaration for tag input text area */
 textarea.editor {
 	display: inherit;
-	height: 30px;
+	/** height: 30px; **/
 	position: relative;
 	overflow: hidden;
 	width: 100%;
@@ -97,4 +96,10 @@ textarea.editor {
 	border-right: none;
 	border-top: none;
 	vertical-align: middle;**/
+}
+
+div.row_ace {
+	/** height: 800px; **/
+	overflow-y: scroll;
+	position: relative;
 }

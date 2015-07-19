@@ -47,3 +47,15 @@ Template.aceEditor.rendered = function() {
 
   //initEditor(editor);
 };
+
+
+Template.aceEditor.events({
+  'keyup .aceEditor': function(e, t) {
+    qlog.info('Printing on keyup ......................', filename);
+    Meteor.setTimeout(function(){
+      qlog.info('Printing this after 5 seconds ... will I?', filename);
+    }, 5000);
+  }
+});
+
+
