@@ -103,7 +103,8 @@ Accounts.validateLoginAttempt(function(attempt){
 
   if (attempt.user && attempt.user.emails && !attempt.user.emails[0].verified ) {
     console.log('email not verified');
-    throw new Meteor.Error(100002, reason, 'Please check your email and verify user account [' + reason +']');
+    //throw new Meteor.Error(100002, reason, 'Please check your email and verify user account [' + reason +']');
+    throw new Meteor.Error(403, reason, 'Please check your email and verify user account [' + reason +']');
     return false; // the login is aborted
   }
 
@@ -137,6 +138,10 @@ Accounts.onLoginFailure(function(attempt){
     else if(attempt.user && attempt.error.reason) 
       throw new Meteor.Error(500, attempt.error.reason, "details", "more details");
 });
+
+Accounts.emailTemplates.verifyEmail.text = function(user, url) {
+  return 'click on the following link to verify your email address: ' + url;
+};
 
 
 //Accounts.emailTemplates.from = "MySiteName <username@yourDomain.com>";

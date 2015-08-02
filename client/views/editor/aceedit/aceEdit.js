@@ -36,6 +36,8 @@ Template.aceEditor.rendered = function() {
   editor.getSession().setMode("ace/mode/text");
   editor.getSession().setUseWrapMode(true);
 
+  editor.getSession().on('change', editorPreviewRefresh);
+
   editor.setOptions({
       enableBasicAutocompletion: true
   });
@@ -55,7 +57,64 @@ Template.aceEditor.events({
     Meteor.setTimeout(function(){
       qlog.info('Printing this after 5 seconds ... will I?', filename);
     }, 5000);
+  },
+  'keyup .ace_content': function(e, t) {
+    e.preventDefault();
+    qlog.info('Printing on keyup ......................', filename);
+    Meteor.setTimeout(function(){
+      qlog.info('Printing this after 5 seconds ... will I?', filename);
+    }, 5000);
   }
 });
+
+
+var editorPreviewRefresh = function() {
+    //var editor = ace.edit("aceEditor");
+    //var txt = editor.getValue();
+    //var pos = editor.getCursorPosition();
+    //var sel = editor.getSelection();
+
+    //var current_qoll = findCurrentQoll(txt, pos);
+
+    //console.log(pos);
+    //console.log(sel);
+    //qlog.info('Printing on keyup ......................', filename);
+    //qlog.info('................. ' + current_qoll + '.....' +  pos, filename);
+    //qlog.info(txt, filename);
+    Meteor.setTimeout(function(){
+      //qlog.info('Printing this after 5 seconds ... will I?', filename);
+
+      var editor = ace.edit("aceEditor");
+      var parsed_qoll;
+      Meteor.call('parse_downtown', editor.getValue(), DownTownOptions.downtown_default(), function(err, val) {
+        //qlog.info("Rec data from server: " + JSON.stringify(val), filename);
+        if (err) {
+          parsed_qoll = "Error occured while converting qoll-contents. Please try again: " + err;
+          previewQoll(parsed_qoll);
+        } else {
+          parsed_qoll = val;
+          previewQoll(preparePreviewHtml(parsed_qoll));
+          $("div#aceEditor").height($("div#aceEditor_Preview").parent().height()+'px');
+          var editor = ace.edit("aceEditor");
+          editor.resize(true);
+          editor.setHighlightActiveLine(true);
+        }
+      });
+      //previewQoll(preparePreviewHtml(parsed_qoll));
+    }, 5000);
+}
+
+var findCurrentQoll = function(str,pos){
+    var qolls = str.split(/\#\s/);
+    // var words=str.split(' ');
+    var offset=0;
+    var i;
+    for(i=0;i<qolls.length;i++){
+        offset+=qolls[i].length+1;
+        if (offset>pos) break;
+        
+    }
+    return qolls[i];
+}
 
 

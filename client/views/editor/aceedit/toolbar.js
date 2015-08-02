@@ -67,7 +67,7 @@ Template.toolbar.events({
 		var editor = ace.edit("aceEditor");
 		var parsed_qoll;
 		Meteor.call('parse_downtown', editor.getValue(), DownTownOptions.downtown_default(), function(err, val) {
-			qlog.info("Rec data from server: " + JSON.stringify(val), filename);
+			//qlog.info("Rec data from server: " + JSON.stringify(val), filename);
 			if (err) {
 				parsed_qoll = "Error occured while converting qoll-contents. Please try again: " + err;
 				previewQoll(parsed_qoll);
@@ -227,12 +227,12 @@ storeEditorContents = function(editor, recips, tags, action) {
 	});
 };
 
-var previewQoll = function(val) {
+previewQoll = function(val) {
 	$("div#aceEditor_Preview").html(val);
 };
 
-var preparePreviewHtml = function(qolls) {
-	qlog.info('Printing preview qoll ============>' + qolls, filename);
+preparePreviewHtml = function(qolls) {
+	// qlog.info('Printing preview qoll ============>' + qolls, filename);
 	var html = '';
 	qolls.map(function(qoll) {
 		html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>";
