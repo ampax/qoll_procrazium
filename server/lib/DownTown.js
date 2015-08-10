@@ -119,6 +119,9 @@ Meteor.methods({
                 } else if(part.match(QollRegEx.hint)) {
                     qlog.info('This is hint -> ' + part, filename);
                     qoll_star_attributes[QollConstants.EDU.HINT] = part.replace(QollRegEx.hint, '');
+                } else if(part.match(QollRegEx.imgs)) {
+                    qlog.info('This is images -> ' + part, filename);
+                    qoll_star_attributes[QollConstants.EDU.IMGS] = part.replace(QollRegEx.imgs, '').split(',');
                 } else if(part.match(QollRegEx.unit)) {
                     part = part.replace(QollRegEx.unit, '');
                     qlog.info('This is unit -> ' + part, filename);

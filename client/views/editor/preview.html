@@ -1,0 +1,55 @@
+<template name="preview">
+	<div class="col-md-6 col-xs-12">
+		<!-- {{#each preview_content}}
+			{{> single_qoll q= this  btns= ../btns}}
+		{{/each}} -->
+
+		{{#each preview_content}}
+		<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>
+			<h4>{{this.qoll_idx_title}} {{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib}}}</h4>
+			<h5>{{{transform_txt this.text this.cat QollConstants.CONTEXT.READ this.fib}}}</h5>
+
+			{{{get_units_html this.unit_name this.units}}}
+
+			{{#if this.unit}}
+	          <div class="input-group">{{#if this.unit_name}}{{this.unit_name}}: {{else}}Unit: {{/if}}
+	            {{#each this.unit}} 
+	                <input name="unit" value="{{this}}" type="radio"> &nbsp; {{this}} &nbsp;&nbsp;&nbsp;
+	            {{/each}}
+	          </div>
+	        {{/if}}
+
+	        {{#each imgs this.imgs}}
+	          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" data-gallery id="{{this._id}}"/>
+	        {{/each}}
+
+	        {{#if this.hint}}
+	          <button type="button" class="btn btn-warning pull-right" data-toggle="tooltip"
+	            data-placement="left" title="Partial credit will be deducted..." id="show_hint">Hint
+	          </button>
+	          <div class="red_1" id="hint">
+	            <h5>{{{this.hint}}}<u>(Already used hint)</u></h5>
+	          </div>
+	        {{/if}}
+
+	        {{#if is_blank_type this.cat}}
+	          <!--span id="{{q._id}}" class="badge pull-left register-blank glossy green_bg_1"-->
+	          <span id="{{this.qoll_idx_title}}" class="badge pull-left {{get_register_class QollConstants.CONTEXT.READ}} glossy {{get_register_bg_class QollConstants.CONTEXT.READ}}">
+	            Submit
+	          </span>
+	        {{/if}}
+
+			{{#each this.typesX}}
+				<div class='col-md-12 col-xs-12 list-group-item'>
+					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy'>{{qoll_type_abbr this.index}}</span>
+					{{this.type}}
+					{{#if is_correct_answer this this.index QollConstants.CONTEXT.READ}}
+		              <i class="glyphicon glyphicon-check green"></i>
+		            {{/if}}
+				</div>
+			{{/each}}
+		</div>
+		{{/each}}
+
+	</div>
+</template>

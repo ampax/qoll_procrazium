@@ -46,7 +46,8 @@ QollParser = {
 			}
 
 			tex_replace.map(function(fr, idx){
-				d.txt = d.txt.replace(/<span[^>]*>([^<]*)<\/span>/, '{TEX:'+cntr+'}');
+				// d.txt = d.txt.replace(/<span[^>]*>([^<]*)<\/span>/, '{TEX:'+cntr+'}');
+				d.txt = d.txt.replace(tex_replace[idx], '{TEX:'+cntr+'}');
 				cntr++;
 			});
         }
@@ -54,14 +55,18 @@ QollParser = {
 	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
-	addQollsForMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds) {
+	parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds) {
+        var parsedQoll = {};
+        parsedQoll.qollCombo = new Array();
+
         var qollId = new Array();
         var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
         qolls = qolls.slice(1);
 
         qolls.map(function(q){
-        	//qoll: {qollText: qollText, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat}
-            var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds});
+        	// ******************** no insertion at this point, storing in a hash to insert later
+        	var qoll_master = {qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds}
+        	// var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds});
             q = ToMarkdown.convert(q);
 
             qlog.info('Markdown converted qoll is - ' + q, filename);
@@ -148,10 +153,15 @@ QollParser = {
                     qoll_data[QollConstants.EDU.TEXT] = part;
                 } else if(part.match(QollRegEx.answer)) {
                     qlog.info('This is answer -> ' + part, filename);
+                    part = part.replace(/(\r\n|\n|\r)/gm,"");;
                     qoll_data[QollConstants.EDU.ANSWER] = part.replace(QollRegEx.answer, '');
+                    qlog.info('This is answer -> *' + qoll_data[QollConstants.EDU.ANSWER] +'*', filename);
                 } else if(part.match(QollRegEx.hint)) {
                     qlog.info('This is hint -> ' + part, filename);
                     qoll_data[QollConstants.EDU.HINT] = part.replace(QollRegEx.hint, '');
+                } else if(part.match(QollRegEx.imgs)) {
+                    qlog.info('This is images -> ' + part, filename);
+                    qoll_data[QollConstants.EDU.IMGS] = part.replace(QollRegEx.imgs, '').split(',');
                 } else if(part.match(QollRegEx.unit)) {
                     part = part.replace(QollRegEx.unit, '');
                     qlog.info('This is unit -> ' + part, filename);
@@ -216,11 +226,15 @@ QollParser = {
 				    if(qoll_data[QollConstants.EDU.ANSWER] && qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans)) {
 				        var index = -1;
 				        if(!qoll_data[QollConstants.EDU.ANSWER].match(/\d/)) {
-				            index = qoll_data[QollConstants.EDU.ANSWER].charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+				            index = qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+				            qlog.info('Printing from the correct loooooooooooop answer 1111 ....' + index + '/'+qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0), filename);
 				        } else {
 				            index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
+				            qlog.info('Printing from the correct loooooooooooop answer 2222 ....' + index, filename);
 				        }
 				        
+				        qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
+
 				        if(index === ix) {
 				            x.isCorrect = 1;
 				            qoll_data.answer_matched = 1;
@@ -270,198 +284,36 @@ QollParser = {
 
             qlog.info('##########=>'+JSON.stringify(qoll_data), filename);
 
-			//var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups 
-			//	,undefined, undefined,  tags, attributes, qollStarAttributes, qollAttributes, qollFormat,qollIdtoUpdate);
-
 			/**
 			* Qoll Data will have the following attributes in the end
 			* qoll_data = ( QollConstants.EDU.FIB, QollConstants.EDU.CAT, QollConstants.EDU.TITLE, QollConstants.EDU.TEXT,
 			*						QollConstants.EDU.ANSWER, QollConstants.EDU.HINT, QollConstants.EDU.UNIT_NAME, QollConstants.EDU.UNITS,
 			*						types, typesX, visibility, complexity, isMultiple ) 
 			**/
-			//function(action, qollData qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate)
-			var qid = Meteor.call('addQoll', action, qoll_data, qollRawId, qollMasterId, emailsandgroups,
-										undefined, undefined,  tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds);
-			/**	qoll, 
-				types, 
-				typesX, 
-				isMultiple, 
-				qollRawId, qollMasterId, emailsandgroups 
-				,undefined, undefined,  tags, 
-				attributes, 
-				qollStarAttributes, 
-				qollAttributes, 
-				qollFormat, qollIdtoUpdate, qoll_star_attributes);**/
+			//function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, 
+									// tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds)
+			// *********** move this call to the QollsDb, put this as part of the 
+			var qls = {action : action, qollData : qoll_data, 
+						qollRawId : undefined, qollMasterId : qollMasterId, 
+						emails : emailsandgroups, isparent : undefined, 
+						parentid : undefined, tags : tags, 
+						qollFormat : qollFormat, qollIdtoUpdate : qollIdtoUpdate, 
+						accessGroups : accessGroups, selImgIds : selImgIds};
 
-			qollId.push(qid);
+			parsedQoll.qollCombo.push({master : qoll_master, qoll : qls});
+
+			/** var qid = Meteor.call('addQoll', action, qoll_data, qollRawId, qollMasterId, emailsandgroups,
+			 							undefined, undefined,  tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds);
+			
+			qollId.push(qid); **/
 
 
 			//**** Above this is the new code
         });
 
       qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
-      return qollId;
-	},
-	addQollsForMaster_bkp : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate) {
-        var regExAnser = /^(a)\s+/;
-        var regExNoAnser = /^\s+/;
-        var qollId = new Array();
-        var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
-        qolls = qolls.slice(1);
-        qolls.map(function(q){
-        	//qoll: {qollText: qollText, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat}
-            var qollRawId = Qolls.QollRawDb.insert({qollText: q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat});
-            var qs = q.split(/\n-/);
-            var qoll = qs[0];
-			var qollType = QollConstants.QOLL_TYPE.MULTI; //multi is by default
-			var qollAttributes = {};
-		
-
-			//fetch the qoll level attributes here. split the qoll string on * and then apply
-	        //qlog.info('<==============Printing qoll===============>'+qoll, filename);
-	        var qoll_parts = qoll.split(/\n\*/);
-	        var qollStarAttributes = {};
-	        qoll = qoll_parts[0];
-	        
-	        //Start attributes are qoll level inputs like units, hints, and title. Fetch it here
-	        if(qoll_parts.length > 1) {
-	            qoll_parts.slice(1).map(function(qp){
-	            	if(qp) qp = qp.trim();
-	            	var star = qp.split(/\s+/)[0];
-	            	var star_val = qp.substr(qp.indexOf(' ') + 1);
-	            	//qlog.info('<======option name========>' +star, filename);
-	            	//qlog.info('<======option value========>' +star_val, filename);
-	            	if(_.contains(QollConstants.EDU.ALLOWED_STARS, star)) {
-	            		//handle the allowed options here
-	            		if(_.contains(['unit','units'], star)) {
-	            			qlog.info('This is unit' + star, filename);
-	            			if(star_val.indexOf(":") != -1) {
-	            				var tmp = star_val.split(":");
-	            				qollStarAttributes[QollConstants.EDU.UNIT_NAME] = tmp[0];
-	            				star_val = tmp[1];
-	            			}
-	            			qollStarAttributes[star] = new Array();
-	        				star_val.split(/(?:,| )+/).map(function(tmp1){
-	        					if(tmp1.length > 0) qollStarAttributes[star].push(tmp1);
-	        				});
-	            		} else if(star === QollConstants.EDU.ANSWER){
-	                        //Handle the answer here, first part will be number, second (if there) exponent, and third unit
-	                        /**
-	                        Examples - 
-	                        *answer 9.8*10^2 m/sec2
-	                        *answer 9.8 10 2 m/sec2
-	                        *answer 9.8 2 m/sec2
-	                        **/
-	                        qollStarAttributes[star] = {};
-	                        var tmp = [];
-	                        //star_val = star_val.replace("*", " ").replace("^" " ");
-	                        if(star_val) {
-		                        star_val = star_val.replace("*", " ");
-		                        star_val = star_val.replace("^", " ");
-		                        tmp = star_val.split(/\s+/);
-		                    }
-
-	                        if(tmp.length === 1) {
-	                        	qlog.info('Printing the array from case 1 ' + star_val + '/' + tmp[0], filename);
-	                            qollStarAttributes[star]['blankResponse'] = tmp[0];
-	                        } else if(tmp.length === 2){
-	                            //handle case 1
-	                            qollStarAttributes[star]['blankResponse'] = tmp[0];
-	                            qollStarAttributes[star]['power'] = tmp[1];
-	                        } else if(tmp.length === 3) {
-	                            //handle case 2
-	                            qollStarAttributes[star]['blankResponse'] = tmp[0];
-	                            qollStarAttributes[star]['power'] = tmp[1];
-	                            qollStarAttributes[star]['unitSelected'] = tmp[2];
-	                        } else if(tmp.length === 4) {
-	                            //handle case 3 (simplest, considering default log base-10)
-	                            qollStarAttributes[star]['blankResponse'] = tmp[0];
-	                            qollStarAttributes[star]['exponentBase'] = tmp[1];
-	                            qollStarAttributes[star]['power'] = tmp[2];
-	                            qollStarAttributes[star]['unitSelected'] = tmp[3];
-	                        }
-	                    } else
-	            			qollStarAttributes[star] = DownTown.downtown(star_val, DownTownOptions.downtown_default());
-	            	}
-	            });
-	        }
-	        
-	        qoll = DownTown.downtown(qoll, DownTownOptions.downtown_default());
-
-	        //Fetching and initializing all the qoll answers, with correct answers marked
-            var count =0; count=0;
-            var types = new Array();
-            var typesX = new Array();
-            var attributes = {};
-            attributes.visibility = visibility;
-            qollType = QollConstants.QOLL.TYPE.SINGLE;
-            attributes.complexity = QollConstants.QOLL.DIFFICULTY.EASY;
-            var isMultiple = false;
-            var ix =0; ix =0;
-            qs.slice(1).map(function(type){
-                var x = {index:ix};ix =ix+1;
-                type = type.trim();
-                if(type.indexOf('(a) ') == 0) {
-                    type = type.replace('(a) ', '');
-                    type = DownTown.downtown(type, DownTownOptions.downtown_default());
-                    x.type = type;
-                    x.isCorrect = 1;
-                    count=count+1;
-                } else {
-                    type = DownTown.downtown(type, DownTownOptions.downtown_default());
-                    x.type = type;
-                    x.isCorrect = 0;
-                }
-
-                types.push(type);
-                typesX.push(x);
-            });
-            qlog.info("counts for this qoll ---- "+ count);
-            if(count > 1) qollType = QollConstants.QOLL.TYPE.MULTIPLE; //isMultiple = true;
-            else qollType = QollConstants.QOLL.TYPE.SINGLE;
-		//If this is a single statement fill in the blanks
-        if(qoll.indexOf("?==") != -1){
-        	qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
-        } else if(qoll.indexOf("?=") != -1){
-        	qollType = QollConstants.QOLL_TYPE.BLANK;
-        }
-        //Check for type values, if there is one choice only and has ?= then mark it as BLANK. this can be extended to having
-		//more than one choices with blanks in 'em'
-		else if(typesX.length === 1) {
-			if(typesX[0].type === "?==") {
-				qollType = QollConstants.QOLL_TYPE.BLANK_DBL;
-			} else if(typesX[0].type === "?="){
-				qollType = QollConstants.QOLL_TYPE.BLANK;
-        	}
-		}
-        //Check the type values, if these are true/false then this will be a bool type
-		else if(typesX.length === 2) {
-			var foundTrue = false, foundFalse = false;
-			typesX.map(function(t){
-				if(_.contains(['1', 'true', 'True', 'TRUE'], t.type))
-					foundTrue = true;
-
-				if(_.contains(['0', 'false', 'False', 'FALSE'], t.type))
-					foundFalse = true;
-			});
-
-			if(foundTrue && foundFalse)
-				qollType = QollConstants.QOLL_TYPE.BOOL;
-		}
-
-		//If there are more than one correct answers, this is a multiple choice question
-        //qlog.info('qoll: ' + qoll + ", types: " + types, filename);
-		//Set qoll level attributes here - type, multiple or not, public or personal or org, and all
-		qollAttributes.type = qollType;
-		qollAttributes.isMultiple = isMultiple;
-		
-		var qid = Meteor.call('addQoll', action, qoll, types, typesX, isMultiple, qollRawId, qollMasterId, emailsandgroups 
-				,undefined, undefined,  tags, attributes, qollStarAttributes, qollAttributes, qollFormat,qollIdtoUpdate);
-		qollId.push(qid);
-        });
-
-      qlog.info('Inserted qolls with id: ' + qollId + ", for master-qoll-id: " + qollMasterId);
-      return qollId;
+      // return qollId;
+      return parsedQoll;
 	},
 	parseEmailAndGroups : function(emailsandgroups) {
 		var i = 0, actualmails = [], actualgroups = [];
@@ -494,4 +346,23 @@ QollParser = {
 		return qolls_to_email;
 	},
 };
+
+
+Meteor.methods({
+	// parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, 
+		// visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds)
+	parseQollPreview : function(qollMaster) {
+		var parsedQoll = QollParser.parseQollMaster(qollMaster, undefined, undefined, undefined, undefined, 
+										 undefined, undefined, undefined, undefined, undefined);
+
+		var qolls = new Array();
+
+		parsedQoll.qollCombo.forEach(function(combo, idx){
+			combo.qoll.qollData.qoll_idx_title = '(Q' + (idx+1) + ')';
+			qolls.push(combo.qoll.qollData);
+		});
+
+		return qolls;
+	}
+});
 

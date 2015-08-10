@@ -42,3 +42,5 @@ maazalik:highcharts
 momentjs:moment
 perak:markdown
 yong:meteor-videojs
+reactive-dict
+simple:reactive-method

@@ -1,5 +1,7 @@
 var filename = "client/views/editor/aceEdit.js";
- 
+
+preview_data = new ReactiveDict;
+
 var test_qolls = 
 "\# Who was Rani laxmibai\?\n"+
 "* text Identify the women from a small kingdom in northern part of U.P. to have fought with English rule in 1857, died in 1858\n"+
@@ -50,7 +52,6 @@ Template.aceEditor.rendered = function() {
   //initEditor(editor);
 };
 
-
 Template.aceEditor.events({
   'keyup .aceEditor': function(e, t) {
     qlog.info('Printing on keyup ......................', filename);
@@ -58,35 +59,20 @@ Template.aceEditor.events({
       qlog.info('Printing this after 5 seconds ... will I?', filename);
     }, 5000);
   },
-  'keyup .ace_content': function(e, t) {
-    e.preventDefault();
-    qlog.info('Printing on keyup ......................', filename);
-    Meteor.setTimeout(function(){
-      qlog.info('Printing this after 5 seconds ... will I?', filename);
-    }, 5000);
-  }
 });
 
 
 var editorPreviewRefresh = function() {
-    //var editor = ace.edit("aceEditor");
-    //var txt = editor.getValue();
-    //var pos = editor.getCursorPosition();
-    //var sel = editor.getSelection();
-
-    //var current_qoll = findCurrentQoll(txt, pos);
-
-    //console.log(pos);
-    //console.log(sel);
-    //qlog.info('Printing on keyup ......................', filename);
-    //qlog.info('................. ' + current_qoll + '.....' +  pos, filename);
-    //qlog.info(txt, filename);
     Meteor.setTimeout(function(){
-      //qlog.info('Printing this after 5 seconds ... will I?', filename);
+      qlog.info('Printing this after 5 seconds ... will I?', filename);
 
       var editor = ace.edit("aceEditor");
       var parsed_qoll;
-      Meteor.call('parse_downtown', editor.getValue(), DownTownOptions.downtown_default(), function(err, val) {
+
+      // set the data in the reactive variable
+      preview_data.set("preview_data", editor.getValue() );
+      /** Meteor.call('parse_downtown', editor.getValue(), DownTownOptions.downtown_default(), function(err, val) {
+        console.log(val);
         //qlog.info("Rec data from server: " + JSON.stringify(val), filename);
         if (err) {
           parsed_qoll = "Error occured while converting qoll-contents. Please try again: " + err;
@@ -99,8 +85,7 @@ var editorPreviewRefresh = function() {
           editor.resize(true);
           editor.setHighlightActiveLine(true);
         }
-      });
-      //previewQoll(preparePreviewHtml(parsed_qoll));
+      });**/
     }, 5000);
 }
 

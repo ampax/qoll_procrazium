@@ -144,7 +144,65 @@ Template.toolbar.events({
 			bindToolBarForImgEmbed(editor, img_url);
 		}
 	},
+
+	'click .insert-imgs' : function(e, t) {
+		e.preventDefault();
+		var sel_imgs = Session.get("selected_image_ids");
+		qlog.info('Inserting images into the editor - ' + sel_imgs, filename);
+		if (sel_imgs != null && sel_imgs && sel_imgs.length > 0) {
+			var editor = ace.edit("aceEditor");
+			bindToolBarForImgEmbed(editor, sel_imgs);
+		}
+	},
+	'click div.img-container > .qoll-thumbs': function(event, template) {
+        event.preventDefault();
+        //console.log(this);
+
+        //console.log(QollImages.findOne({_id : this._id}));
+
+        //console.log('Setting the default toggle class here');
+        //$(this).toggleClass( "qoll-thumbs-toggle" );
+
+        var sel_imgs = Session.get("selected_image_ids");
+        console.log(Session.get("selected_image_ids"));
+
+        var target = jQuery("img#"+this._id);
+        target.toggleClass('qoll-thumbs-toggle');
+
+        var sel_imgs_tmp = _.without(sel_imgs, this._id);
+
+        if(sel_imgs.length === sel_imgs_tmp.length) {
+            sel_imgs_tmp.push(this._id);
+        }
+
+        //Session.set("selected_images", sel_imgs);
+        Session.set("selected_image_ids", sel_imgs_tmp);
+
+        console.log(Session.get("selected_image_ids"));
+    },
 });
+
+
+Template.toolbar.helpers({
+    imgs: function () {
+	    qlog.info('Called the method to get all the images ... ', filename);
+	    return QollImages.find(); // Where Images is an FS.Collection instance
+	  },
+	sel_imgs: function() {
+	    var sel_imgs = Session.get("selected_image_ids");
+	    var imgs1 = QollImages.find({'_id': {$in: sel_imgs}});
+	    console.log(imgs1);
+	    return imgs1;
+	},
+  });
+
+Template.toolbar.onCreated(function(){
+    this.subscribe('images');
+
+    // set the session thumbnail variable for selected pictures
+    // this should be reset everytime the template is loaded so this is the best place to set this variable
+    Session.set("selected_image_ids", new Array());
+}); 
 
 /** Manage various events for storing the qoll contents **/
 // Global method ... wil be called from quick qoll page also to store qolls
@@ -238,7 +296,7 @@ preparePreviewHtml = function(qolls) {
 		html += "<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>";
 
 		if (qoll[QollConstants.EDU.TITLE]) {
-			html += '<h4>' + qoll[QollConstants.EDU.TITLE] + '</h4>';
+			html += '<h4>' + qoll[QollConstants.EDU.TITLE] + '</h4>';			
 		}
 
 		if(qoll[QollConstants.EDU.TITLE] != qoll[QollConstants.EDU.TEXT])
@@ -270,6 +328,12 @@ preparePreviewHtml = function(qolls) {
 
 		if (qoll[QollConstants.EDU.HINT]) {
 			html += getHintHtml(qoll[QollConstants.EDU.HINT]);
+		}
+
+		if (qoll[QollConstants.EDU.IMGS]) {
+			var img_url = getImgsHtml(qoll[QollConstants.EDU.IMGS]);
+			qlog.info(getImgsHtml(qoll[QollConstants.EDU.IMGS]), filename);
+			html += getImgsHtml(qoll[QollConstants.EDU.IMGS]);
 		}
 
 		html += "</div>";
@@ -356,4 +420,22 @@ var getHintHtml = function(hint) {
 	var hint_html = '<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip" data-placement="left" title="Partial credit will be deducted..." id="show_hint">' + 'Hint' + '</button><div class="is-invisible red_1" id="hint">' + hint + '</div>';
 
 	return hint_html;
+};
+
+var getImgsHtml = function(selected_image_ids) {
+	console.log(selected_image_ids);
+	var imgs_html ="";
+	// var imgs_html = "<img src='/cfs/files/images/ZJN6PvgsMn8R2ToFB/handi_decoration.jpg?token=eyJhdXRoVG9rZW4iOiJTZ2lXbjFVLW5GY2gzNkFkQ0loM1V5d1NKVnpFUkFaUHVHa3RiOHN3MWNzIn0%3D;store=thumbs_1' class='qoll-thumbs' style='zoom: 25%;' data-gallery id='ZJN6PvgsMn8R2ToFB/>"
+	// var imgs_html = "<img src='/cfs/files/images/6EkpFPFXsH9ATGron/How_To_UseQoll.png?token=eyJhdXRoVG9rZW4iOiJTZ2lXbjFVLW5GY2gzNkFkQ0loM1V5d1NKVnpFUkFaUHVHa3RiOHN3MWNzIn0%3D&amp;store=thumbs_1' class='qoll-thumbs' style='zoom: 25%;' data-gallery id='6EkpFPFXsH9ATGron'>";
+	// <img src='/cfs/files/images/6EkpFPFXsH9ATGron/How_To_UseQoll.png?token=eyJhdXRoVG9rZW4iOiJTZ2lXbjFVLW5GY2gzNkFkQ0loM1V5d1NKVnpFUkFaUHVHa3RiOHN3MWNzIn0%3D&amp;store=thumbs_1' class='qoll-thumbs' data-gallery='' id='6EkpFPFXsH9ATGron'>";
+	// <img src='/cfs/files/images/ZJN6PvgsMn8R2ToFB/handi_decoration.jpg?token=eyJhdXRoVG9rZW4iOiJTZ2lXbjFVLW5GY2gzNkFkQ0loM1V5d1NKVnpFUkFaUHVHa3RiOHN3MWNzIn0%3D;store=thumbs_1' class='qoll-thumbs' style='zoom: 25%;' data-gallery id='ZJN6PvgsMn8R2ToFB/>
+
+	var imgs1 = QollImages.find({'_id': {$in: selected_image_ids}}).fetch();
+	
+	imgs1.forEach(function(img){
+		imgs_html += "<img src='"+img.url()+";store=thumbs_1' class='qoll-thumbs' style='zoom: 25%;' data-gallery id='"+img._id+"/>";
+	});
+	// return imgs1;
+
+	return imgs_html;
 };

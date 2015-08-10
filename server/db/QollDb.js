@@ -194,24 +194,47 @@ Meteor.methods({
 	},
 
 	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
-		qlog.info('Inserting into qoll master', filename);
-
+		qlog.info('----------------- Inserting into qoll master -----------------', filename);
 		//Store the tags
 		if(tags != undefined)
+			var err_msg = QollTagsDb.storeTags(tags);
+
+		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
+
+		var qollIds = new Array();
+		var parsedQoll = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
+		
+		parsedQoll.qollCombo.forEach(function(combo){
+			var qollRawId = Qolls.QollRawDb.insert(combo.master);
+			combo.qoll.qollRawId = qollRawId;
+			
+			var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
+			combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.selImgIds)
+			qollIds.push(qid);
+		});
+
+		// create a questionnaire if need be
+		// (1) no email and groups attached
+		// (2) what?
+		var questinfo = addQuestionaire(emailsandgroups, qollIds, visibility, tags, action);
+			
+		
+		qlog.info(JSON.stringify(parsedQoll), filename);
+		return {msg : 'Successfully created ' + qollids.length + ' qolls.' + questinfo, qollids : qollids, questId : questinfo.questId};
+
+		//Store the tags
+		/** if(tags != undefined)
 			var err_msg = QollTagsDb.storeTags(tags);
 
 		qlog.info('This is the editor content - ' + qollText, filename);
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
 
-		var qollids = QollParser.addQollsForMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
+		var qollids = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 
-		// create a questionnaire if need be
-		// (1) no email and groups attached
-		// (2) what?
 		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
 
-		return {msg : 'Successfully created ' + qollids.length + ' qolls.' + questinfo, qollids : qollids, questId : questinfo.questId};
+		return {msg : 'Successfully created ' + qollids.length + ' qolls.' + questinfo, qollids : qollids, questId : questinfo.questId}; **/
 	},
 
 	updateQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
@@ -236,7 +259,7 @@ Meteor.methods({
 
 		// var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
 
-		var qollids = QollParser.addQollsForMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
+		var qollids = QollParser.parseQollMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 
 
 		qlog.info('=================> ' + qollids[0], filename);
@@ -266,7 +289,7 @@ Meteor.methods({
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : md, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.HTML});
 		
-		var qollids = QollParser.addQollsForMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML, qollIdToUpdate, accessGroups);
+		var qollids = QollParser.parseQollMaster(md, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.HTML, qollIdToUpdate, accessGroups);
 
 		var questinfo = addQuestionaire(emailsandgroups, qollids, visibility, tags, action);
 		
