@@ -687,6 +687,8 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
+							q2 = QollKatexUtil.populateIfTex(q2, t);
+
 							// For quicker, show all the comments all the time
 							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
 
@@ -732,6 +734,8 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.qoll_idx_title = '(Q).';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
+
+							q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							// For quicker, show all the comments all the time
 							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
@@ -1159,6 +1163,7 @@ var extractQollDetails = function(q) {
 		cat 			: q.cat,
 		answer 			: q.answer,
 		fib 			: q.fib,
+		tex 			: q.tex,
 		hint 			: q.hint,
 		unit_name 		: q.unit_name,
 		unit 			: q.unit,
@@ -1207,7 +1212,7 @@ var getQuestionnaireResponses = function(item) {
 	item.qollids.map(function(qid){
 		labels.push({label : 'Q' + counter++});
 		var t = Qolls.QollDb.get({_id : qid});
-		qoll_text_hash[qid] = {qollText : t.qollText, title : t.title, qollCat : t.cat};
+		qoll_text_hash[qid] = {qollText : t.qollText, title : t.title, qollCat : t.cat, fib: t.fib, tex: t.tex};
 	});
 
 	item.submittedTo.map(function(subTo){
@@ -1252,7 +1257,8 @@ var getQuestionnaireResponses = function(item) {
 								'unit_selected' : rtmp.unit, label : 'Q' + counter_x++,
 								responses : attach_resp, iscorrect : rtmp.iscorrect,
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
-								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat
+								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat,
+								fib : qoll_text_hash[qid].fib, tex : qoll_text_hash[qid].tex
 							});
 
 				if(!resp_flag) {
@@ -1264,7 +1270,8 @@ var getQuestionnaireResponses = function(item) {
 				responses.push({
 								'response' : 'NA', 'unit_selected' : undefined, label : 'Q' + counter_x++, responses : [],
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
-								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat
+								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat,
+								fib : qoll_text_hash[qid].fib, tex : qoll_text_hash[qid].tex
 								});
 			}
 		});

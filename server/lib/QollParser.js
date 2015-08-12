@@ -33,15 +33,17 @@ QollParser = {
 
 	},
 	parseTex : function(d) {
-		if(d.txt.match(QollRegEx.tex)) {
+		//regex-         /\\begin*\\end/g,
+		if(d.txt.match(QollRegEx.tex_1)) {
 			var cntr = d.tex_arr.length;
             //var matches;
             //qoll_data[QollConstants.EDU.CAT] = QollConstants.QOLL_TYPE.BLANK;
             var tex_replace = [];
-            d.txt = d.txt.replace(/\\/, "");
+            // d.txt = d.txt.replace(/\\/, "");
 
-            while ((matches = QollRegEx.tex.exec(d.txt)) != null) {
-				d.tex_arr.push(matches[1].substring(0, matches[1].length-1));
+            while ((matches = QollRegEx.tex_1.exec(d.txt)) != null) {
+            	qlog.info('TEEEEEEX ======> ' + matches[1].substring(0, matches[1].length), filename);
+				d.tex_arr.push(matches[1].substring(0, matches[1].length));
 				tex_replace.push(matches[0]);
 			}
 
@@ -51,6 +53,8 @@ QollParser = {
 				cntr++;
 			});
         }
+        if(d.tex_arr && d.tex_arr.length > 0)
+        	qlog.info('Printing TEX ------> ' + JSON.stringify({'txt' : d.txt, 'tex_arr' : d.tex_arr}), filename);
         return {'txt' : d.txt, 'tex_arr' : d.tex_arr};
 	},
 	//Parse the data from markdown editor
@@ -359,6 +363,9 @@ Meteor.methods({
 
 		parsedQoll.qollCombo.forEach(function(combo, idx){
 			combo.qoll.qollData.qoll_idx_title = '(Q' + (idx+1) + ')';
+
+			// convert all text expressions and put the katex display content here
+			
 			qolls.push(combo.qoll.qollData);
 		});
 

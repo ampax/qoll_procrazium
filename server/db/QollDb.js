@@ -204,6 +204,8 @@ Meteor.methods({
 		var qollIds = new Array();
 		var parsedQoll = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 		
+		qlog.info('Parsed the qoll =====>\n' + parsedQoll, filename);
+
 		parsedQoll.qollCombo.forEach(function(combo){
 			var qollRawId = Qolls.QollRawDb.insert(combo.master);
 			combo.qoll.qollRawId = qollRawId;
@@ -219,8 +221,8 @@ Meteor.methods({
 		var questinfo = addQuestionaire(emailsandgroups, qollIds, visibility, tags, action);
 			
 		
-		qlog.info(JSON.stringify(parsedQoll), filename);
-		return {msg : 'Successfully created ' + qollids.length + ' qolls.' + questinfo, qollids : qollids, questId : questinfo.questId};
+		qlog.info('=======================>\n'+JSON.stringify(parsedQoll), filename);
+		return {msg : 'Successfully created ' + qollIds.length + ' qolls.' + questinfo, qollids : qollIds, questId : questinfo.questId};
 
 		//Store the tags
 		/** if(tags != undefined)

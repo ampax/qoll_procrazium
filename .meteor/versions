@@ -106,12 +106,11 @@ reactive-var@1.0.5
 reload@1.1.3
 retry@1.0.3
 routepolicy@1.0.5
-sashko:katex@1.0.3
 semantic:ui-icon@1.11.6
 service-configuration@1.0.4
 session@1.1.0
 sha@1.0.3
-simple:katex@1.0.5
+simple:katex@1.1.0
 simple:reactive-method@1.0.2
 spacebars@1.0.6
 spacebars-compiler@1.0.6

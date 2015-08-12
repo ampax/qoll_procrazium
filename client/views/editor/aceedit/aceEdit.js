@@ -3,6 +3,17 @@ var filename = "client/views/editor/aceEdit.js";
 preview_data = new ReactiveDict;
 
 var test_qolls = 
+"\# Quadratic Equations; form begin => f(\\sigma x^n)=0end\?\n"+
+"* txt Which of the following is a quadratic equation of the form beginax^2+bx+cend\n"+
+"*hint It is highest degree of two of the variable\n"+
+"* answer A\n"+
+"- beginax^2+bx+cend\n"+
+"- beginax^3+bx^2+cx+dend\n"+
+"- beginax^4+bx^3+cx^2+dx+eend\n"+
+"- beginx = {-b pm \\sqrt ((b^2-4ac) * 2a})end\n"+
+"- beginx = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}end\n"+
+"- beginf(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi)\\,e^{2 \\pi i \\xi x} \\,d\\xiend\n\n"+
+
 "\# Who was Rani laxmibai\?\n"+
 "* text Identify the women from a small kingdom in northern part of U.P. to have fought with English rule in 1857, died in 1858\n"+
 "*hint She was a warrior, a princess, and a queen of the small Maratha kingdom Jhansi\n"+

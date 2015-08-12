@@ -33,6 +33,8 @@ Template.view_sent_board.helpers({
 			return "(Closed On: "+moment(questionnaire.qollstionnaire_closed_on).format('MMM Do YYYY, h:mm a')+")";
 		}
 	},
+
+	
 });
 
 Template.view_sent_board.events({
@@ -74,6 +76,13 @@ Template.view_sent_board_results.helpers({
 			"style='color: white; cursor:pointer;' data-questionaire_id='"+questionaireId+
 			"' data-email_id='"+ email +"'>Resend</a>";
 		}
+	},
+	transform_txt : function(txt, cat, context, fib, tex) {
+	  var txt_1 = transform_fib(txt, cat, context, fib); // coming from preview.js
+
+	  var txt_2 = transform_tex(txt_1, tex); // coming from preview.js
+
+	  return txt_2;
 	},
 });
 

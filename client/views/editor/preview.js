@@ -20,42 +20,12 @@ Template.preview.helpers({
   qoll_type_abbr : function(idx) {
     return alphabetical[idx];
   },
-  transform_txt : function(txt, cat, context, fib) {
-    qlog.info('Printing fill in the blanks - ' + fib, filename);
-    if(cat != QollConstants.QOLL_TYPE.BLANK)
-      return txt;
+  transform_txt : function(txt, cat, context, fib, tex) {
+    var txt_1 = transform_fib(txt, cat, context, fib);
 
-    var disabled = '';
-    if(context === QollConstants.CONTEXT.READ)
-      disabled = 'DISABLED';
+    var txt_2 = transform_tex(txt_1, tex);
 
-    if(txt.match(QollRegEx.fib_transf))
-      qlog.info('hell this is printed', filename);
-
-    while (matches = QollRegEx.fib_transf.exec(txt)) {
-      //qlog.info('matches - ' + matches, filename);
-      var idx = matches[0].substring(1, matches[0].length-1);
-      idx = Number(idx)+1;
-
-            var placeholder = '';
-            var fib_val = '';
-            if(context === QollConstants.CONTEXT.READ) {
-              //put the read only values for fib
-              placeholder = idx + ':' + fib[idx-1];
-            } else {
-              if(fib == undefined)
-                fib_val = '';
-              else fib_val = fib[idx-1] == undefined ? '' : fib[idx-1];
-              placeholder ='';
-            }
-            
-            txt = txt.replace(matches[0], '<input class="textbox fib fib_write" type="text" placeholder="'+placeholder+ '" ' +disabled+' value="'+fib_val+'">');
-            //cntr++;
-            //qlog.info('##############=> ' + idx, filename);
-            //break;
-        }
-
-    return txt;
+    return txt_2;
   },
   get_units_html : function(q) {
     var unit_name = undefined, units = undefined;
@@ -120,3 +90,80 @@ Template.preview.helpers({
 Template.preview.onCreated(function(){
     this.subscribe('images');
 });
+
+
+
+transform_fib = function(txt, cat, context, fib) {
+  qlog.info('Printing fill in the blanks - ' + fib, filename);
+    if(cat != QollConstants.QOLL_TYPE.BLANK)
+      return txt;
+
+    var disabled = '';
+    if(context === QollConstants.CONTEXT.READ)
+      disabled = 'DISABLED';
+
+    if(txt.match(QollRegEx.fib_transf))
+      qlog.info('hell this is printed', filename);
+
+    while (matches = QollRegEx.fib_transf.exec(txt)) {
+      //qlog.info('matches - ' + matches, filename);
+      var idx = matches[0].substring(1, matches[0].length-1);
+      idx = Number(idx)+1;
+
+            var placeholder = '';
+            var fib_val = '';
+            if(context === QollConstants.CONTEXT.READ) {
+              //put the read only values for fib
+              placeholder = idx + ':' + fib[idx-1];
+            } else {
+              if(fib == undefined)
+                fib_val = '';
+              else fib_val = fib[idx-1] == undefined ? '' : fib[idx-1];
+              placeholder ='';
+            }
+            
+            txt = txt.replace(matches[0], '<input class="textbox fib fib_write" type="text" placeholder="'+placeholder+ '" ' +disabled+' value="'+fib_val+'">');
+            //cntr++;
+            //qlog.info('##############=> ' + idx, filename);
+            //break;
+        }
+
+    return txt;
+};
+
+transform_tex = function(txt, tex) {
+  qlog.info('Printing tex - ' + tex, filename);
+
+    if(txt.match(QollRegEx.tex_transf))
+      qlog.info('hell-tex this is printed: ' + txt, filename);
+
+    while (matches = QollRegEx.tex_transf.exec(txt)) {
+      //qlog.info('matches - ' + matches, filename);
+      console.log(matches);
+      console.log(matches[0]);
+
+      var idx = matches[0].substring(5, matches[0].length-1);
+      qlog.info('Index is ---------> ' +  idx, filename);
+
+      idx = Number(idx)+1;
+
+            var placeholder = '';
+            var tex_val = '';
+            if(tex == undefined)
+              tex_val = '';
+            else tex_val = tex[idx-1] == undefined ? '' : tex[idx-1];
+
+            qlog.info('Text is ---------> ' + tex[idx-1]  + '/' + idx, filename);
+            
+            // var html = katex.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
+            var html = '';
+            html = katex.renderToString(tex_val);
+
+            txt = txt.replace(matches[0], html);
+            //cntr++;
+            //qlog.info('##############=> ' + idx, filename);
+            //break;
+        }
+
+    return txt;
+};

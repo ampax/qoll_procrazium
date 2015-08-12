@@ -106,7 +106,10 @@
     					{{this.label}}
     				</button>
     			</div>
-    			<div class="col-md-8 col-xs-12"><p><h5>{{this.title}}</h5></p><p>{{this.qollText}}</p></div>
+    			<div class="col-md-8 col-xs-12"><p>
+    				<h5>{{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</h5></p>
+    				<p>{{{transform_txt this.qollText this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</p>
+    			</div>
     			<div class="col-md-2 col-xs-12">
         			<h5>{{this.response}}</h5>
 				</div>

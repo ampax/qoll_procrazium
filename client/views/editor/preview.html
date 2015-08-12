@@ -6,8 +6,8 @@
 
 		{{#each preview_content}}
 		<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>
-			<h4>{{this.qoll_idx_title}} {{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib}}}</h4>
-			<h5>{{{transform_txt this.text this.cat QollConstants.CONTEXT.READ this.fib}}}</h5>
+			<h4>{{this.qoll_idx_title}} {{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</h4>
+			<h5>{{{transform_txt this.text this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</h5>
 
 			{{{get_units_html this.unit_name this.units}}}
 
@@ -38,11 +38,10 @@
 	            Submit
 	          </span>
 	        {{/if}}
-
-			{{#each this.typesX}}
+	        {{#each this.typesX}}
 				<div class='col-md-12 col-xs-12 list-group-item'>
 					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy'>{{qoll_type_abbr this.index}}</span>
-					{{this.type}}
+					{{{transform_txt this.type ../cat QollConstants.CONTEXT.READ ../fib ../tex}}}
 					{{#if is_correct_answer this this.index QollConstants.CONTEXT.READ}}
 		              <i class="glyphicon glyphicon-check green"></i>
 		            {{/if}}

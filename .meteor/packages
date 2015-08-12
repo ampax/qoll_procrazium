@@ -21,7 +21,6 @@ mizzao:jquery-ui
 mrt:ace-embed
 mrt:datatables
 accounts-facebook
-sashko:katex
 pfafman:font-awesome-4
 
 wylio:mandrill
@@ -44,3 +43,4 @@ perak:markdown
 yong:meteor-videojs
 reactive-dict
 simple:reactive-method
+simple:katex
