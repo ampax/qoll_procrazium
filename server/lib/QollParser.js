@@ -229,20 +229,41 @@ QollParser = {
 				    type = DownTown.downtown(type, DownTownOptions.downtown_default());
 				    if(qoll_data[QollConstants.EDU.ANSWER] && qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans)) {
 				        var index = -1;
-				        if(!qoll_data[QollConstants.EDU.ANSWER].match(/\d/)) {
-				            index = qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
-				            qlog.info('Printing from the correct loooooooooooop answer 1111 ....' + index + '/'+qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0), filename);
+				        if(qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans_alpha)) {
+
+				        	//iterate over the alphabetical correct answers and see if the index matches x.index
+				        	var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
+				        	arrayOfAns.forEach(function(ansm){
+				        		qlog.info('---------------->*' + ansm+'*', filename);
+				        		index = ansm.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
+				        		if(index === x.index) {
+				        			x.isCorrect = 1;
+				        			qoll_data.answer_matched = 1;
+				        		}
+				        	});
+
+				            // index = qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+				            // qlog.info('Printing from the correct loooooooooooop answer 1111 ....' + index + '/'+qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0), filename);
 				        } else {
-				            index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
-				            qlog.info('Printing from the correct loooooooooooop answer 2222 ....' + index, filename);
+				            // index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
+				            var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
+				            qlog.info(arrayOfAns.join('/'), filename);
+				        	arrayOfAns.forEach(function(ansm){
+				        		index = parseInt(ansm);
+				        		qlog.info('---------------->**' + ansm+'**'+index+'**', filename);
+				        		if(index === x.index) {
+				        			x.isCorrect = 1;
+				        			qoll_data.answer_matched = 1;
+				        		}
+				        	});
 				        }
 				        
 				        qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
 
-				        if(index === ix) {
+				        /** if(index === ix) {
 				            x.isCorrect = 1;
 				            qoll_data.answer_matched = 1;
-				        }
+				        } **/
 				    }
 				    else if(type === qoll_data[QollConstants.EDU.ANSWER]) {
 				        x.isCorrect = 1;
