@@ -132,11 +132,13 @@ var formatQollstionnaireHtmlEmail = function(email, title, message, id, user_q_u
     //var enc_email = CryptoJS.enc.Utf16.parse('kaushik.anoop@gmail.com'); 
     // 00480065006c006c006f002c00200057006f0072006c00640021
     // var email = 'kaushik.anoop@gmail.com';
+    var brand_img_url = URLUtil.SITE_URL+'logos/brand.png';
+    qlog.info('Image url --------------------------------**********--> ' + brand_img_url, filename);
     
     var fmt_msg = 
     '<table>'+
         '<tr style="background-color: #FFF1FF; border: 1px solid #ddd; font-size 18px;">'+
-            '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><img src="'+URLUtil.SITE_URL+'/logos/2/2 50 px.png"/></a></td>'+
+            '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><img src="'+brand_img_url+'"/></a></td>'+
             '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><h4 style="font-size: 18px;">'+title+'</h4></a></td>'+
         '</tr>'+
         '<tr>'+
@@ -149,6 +151,8 @@ var formatQollstionnaireHtmlEmail = function(email, title, message, id, user_q_u
                '<td>&nbsp;</td><td>©2014 Millennials Venture Labs </td>'+
         '</tr>'+
     '</table>';
+
+    qlog.info(fmt_msg, filename);
 
     return fmt_msg;
 };

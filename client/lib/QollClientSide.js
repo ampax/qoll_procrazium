@@ -3,7 +3,7 @@ var filename='client/lib/QollClientSide.js';
 QollClientSide = {
 	//TODO
 	previewQollHtml : function(qolls) {
-		qlog.info('Printing preview qoll xxxx ============>' + JSON.stringify(qolls[0]), filename);
+		// qlog.info('Printing preview qoll xxxx ============>' + JSON.stringify(qolls[0]), filename);
 		var html = '';
 		qolls.map(function(qoll) {
 			html += "<span class='qoll-container' id='"+qoll.qollId+"_outer"+"'>";

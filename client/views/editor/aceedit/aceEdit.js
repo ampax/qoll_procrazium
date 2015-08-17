@@ -6,7 +6,8 @@ var test_qolls =
 "\# Quadratic Equations; form begin => f(\\sigma x^n)=0end\?\n"+
 "* txt Which of the following is a quadratic equation of the form beginax^2+bx+cend\n"+
 "*hint It is highest degree of two of the variable\n"+
-"* answer A\n"+
+"* Images - 6EkpFPFXsH9ATGron,iHJdkXovdadFnA4yC,ZJN6PvgsMn8R2ToFB\n"+
+"* answer A b e\n"+
 "- beginax^2+bx+cend\n"+
 "- beginax^3+bx^2+cx+dend\n"+
 "- beginax^4+bx^3+cx^2+dx+eend\n"+

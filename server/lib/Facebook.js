@@ -44,10 +44,10 @@ Facebook.prototype.post = function() {
 
 QFB.SocialFunFacebook = function(user) {
     var friends = QFB.getFriendsData(user.services.facebook.accessToken);
-    qlog.info('Recieved facebook friends ' + friends.data.length, filename);
-
+    
     var count = 1;
-    if(friends) {
+    if(friends && friends.data) {
+        qlog.info('Recieved facebook friends ' + friends.data.length, filename);
         friends.data.map(function(friend){
             //insert friends one by one into Social-Connect and establish connection with the user
             //qlog.info('Facebook friend ' + count++ + ' - ' + JSON.stringify(friend), filename);

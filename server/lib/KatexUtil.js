@@ -24,7 +24,7 @@ KatexUtil.toHtml = function(txt, katext_arr) {
         var html = '<span class="tex">'+tex_val+'</span>';
         
         txt = txt.replace(matches[0], html);
-        qlog.info('Printing the text after replacing tex ----------> ' + txt, filename);
+        // qlog.info('Printing the text after replacing tex ----------> ' + txt, filename);
     }
 
     return txt;
