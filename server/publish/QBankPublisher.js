@@ -773,7 +773,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 	//self.flush();
 
 	self.onStop(function() {
-		handle_quicker.stop();
+		if(handle_quicker) handle_quicker.stop();
 	});
 });
 

@@ -90,9 +90,11 @@ Accounts.onCreateUser(function(options, user){
     'access_mode' : QollConstants.QOLL.VISIBILITY.PUB});
 
   // we wait for Meteor to create the user before sending an email
-  Meteor.setTimeout(function() {
-    Accounts.sendVerificationEmail(user._id);
-  }, 2 * 1000);
+  if (!user.services.facebook && user.services.google) {
+    Meteor.setTimeout(function() {
+      Accounts.sendVerificationEmail(user._id);
+    }, 2 * 1000);
+  }
 
   return user;
 });

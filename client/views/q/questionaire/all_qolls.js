@@ -227,7 +227,7 @@ Template.all_qolls.events({
 		 "top": $('#'+qollId).offset().top + "px",
 		 "left": $('#'+qollId).offset().left + "px",
 		 });	*/
-	},/*
+	},
 	'click .facebook' : function(event) {
 		event.preventDefault();
 		var qollId = this._id;
@@ -238,9 +238,11 @@ Template.all_qolls.events({
 				qlog.info('Failed posting on the wall - ' + qollId + '/' + err, filename);
 			} else {
 				qlog.info('Posting on the wall - ' + qollId + ', message - ' + data, filename);
+				console.log(data);
+				alert('Posted the qoll on facebook wall');
 			}
 		});
-	},
+	},/*
 	'click .sendemail' : function(event) {
 		event.preventDefault();
 		var qollId = this._id;

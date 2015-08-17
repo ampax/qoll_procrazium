@@ -110,18 +110,20 @@ QFB.postOnWall = function(wallPost, accessToken, userId) {
         //var onComplete = future.resolver();
         graph.post('/me/feed',
             { 
+                name: 'Post on the wall',
                 message : wallPost,
-                description : 'Qoll for your opinion',
-                caption : 'Qoll for your opinion',
+                description : 'Take Qoll at Qoll.io',
+                caption : wallPost, //'Qoll for your opinion',
                 icon : 'http://www.qoll.io/img/QollBrand.png',
+                link : 'www.qoll.io',
             },
             function(err,result) {
             //return onComplete(err, result);
             if(err) {
-                console.log(err);
+                qlog.info(err, filename);
                 return 'ERROR: Failed to post {' + wallPost + '} to facebook wall!!';
             } else {
-                console.log(result);
+                qlog.info(result, filename);
                 return 'SUCCESS: Posted {' + wallPost + '} to facebook wall!!';
             }
         });
@@ -138,10 +140,10 @@ Meteor.methods({
         return data;
     },
     getFriendsData: function() {   
-	    var fb = new Facebook(Meteor.user().services.facebook.accessToken);
-	    var data = fb.getFriendsData();
-	    return data;
-	},
+        var fb = new Facebook(Meteor.user().services.facebook.accessToken);
+        var data = fb.getFriendsData();
+        return data;
+    },
     postOnWall: function(qollId) {
         var accessToken = Meteor.user().services.facebook.accessToken;
         var userId = Meteor.user().profile.fb_id;
