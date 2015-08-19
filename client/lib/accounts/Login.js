@@ -17,7 +17,7 @@ Accounts.ui.config({
         visible: true,
         validate: function(value, errorFunction) {
           if (!value) {
-            errorFunction("Please write your first name");
+            errorFunction("Please enter your first name");
             return false;
           } else {
             return true;
@@ -28,6 +28,14 @@ Accounts.ui.config({
         fieldLabel: 'Last name',
         inputType: 'text',
         visible: true,
+        validate: function(value, errorFunction) {
+          if (!value) {
+            errorFunction("Please enter your last name");
+            return false;
+          } else {
+            return true;
+          }
+        }
     }, /** {
         fieldName: 'gender',
         showFieldLabel: false,      // If true, fieldLabel will be shown before radio group
@@ -55,11 +63,11 @@ Accounts.ui.config({
             id: 1,
             label: 'United States',
             value: 'us'
-          }, {
+          }, /** {
             id: 2,
             label: 'Spain',
             value: 'es',
-        }],
+        } **/],
         visible: true
     }, {
         fieldName: 'terms',
