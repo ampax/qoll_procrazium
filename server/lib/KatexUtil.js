@@ -28,7 +28,7 @@ KatexUtil = {
 
         return txt;
     },
-    toText: function(txt, katext_arr) {
+    toPlainTxt: function(txt, katext_arr) {
         //Return if txt is undefined or null.
         if(txt == undefined || txt == null)
             return txt;

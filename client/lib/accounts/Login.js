@@ -1,5 +1,89 @@
 var filename = 'client/lib/accounts/Login.js';
+// ---------------------- new accounts ui config----------------------
+Accounts.ui.config({
+    requestPermissions: {
+		//facebook: ['email','id','name','first_name','last_name','username','gender','locale','age_range',
+	    //	'email', 'user_friends', 'user_location', 'user_events', 'friends_events', 'friends_location', 'friends_about_me',
+        //   'user_status', 'friends_status', 'read_friendlists'],
+        google: ['https://www.google.com/m8/feeds'],//['https://accounts.google.com/o/oauth2/auth?approval_prompt=force&access_type=offline'],//'https://www.google.com/m8/feeds', 
+        github:['user', 'public_repo']
+	},
+	requestOfflineToken: { google: true },
+    passwordSignupFields: 'USERNAME_AND_EMAIL_CONFIRM', //USERNAME_AND_EMAIL
+    extraSignupFields: [{
+        fieldName: 'first-name',
+        fieldLabel: 'First name',
+        inputType: 'text',
+        visible: true,
+        validate: function(value, errorFunction) {
+          if (!value) {
+            errorFunction("Please write your first name");
+            return false;
+          } else {
+            return true;
+          }
+        }
+    }, {
+        fieldName: 'last-name',
+        fieldLabel: 'Last name',
+        inputType: 'text',
+        visible: true,
+    }, /** {
+        fieldName: 'gender',
+        showFieldLabel: false,      // If true, fieldLabel will be shown before radio group
+        fieldLabel: 'Gender',
+        inputType: 'radio',
+        radioLayout: 'vertical',    // It can be 'inline' or 'vertical'
+        data: [{                    // Array of radio options, all properties are required
+            id: 1,                  // id suffix of the radio element
+            label: 'Male',          // label for the radio element
+            value: 'm'              // value of the radio element, this will be saved.
+          }, {
+            id: 2,
+            label: 'Female',
+            value: 'f',
+            checked: 'checked'
+        }],
+        visible: true
+    }, **/ {
+        fieldName: 'country',
+        fieldLabel: 'Country',
+        inputType: 'select',
+        showFieldLabel: true,
+        empty: 'Please select your country of residence',
+        data: [{
+            id: 1,
+            label: 'United States',
+            value: 'us'
+          }, {
+            id: 2,
+            label: 'Spain',
+            value: 'es',
+        }],
+        visible: true
+    }, {
+        fieldName: 'terms',
+        fieldLabel: 'I accept the terms and conditions',
+        inputType: 'checkbox',
+        visible: true,
+        saveToProfile: false,
+        validate: function(value, errorFunction) {
+            if (value) {
+                return true;
+            } else {
+                errorFunction('You must accept the terms and conditions.');
+                return false;
+            }
+        }
+    }]
+});
 
+// -------------------------------------------------------------------
+
+
+
+
+/**
 Accounts.ui.config({
 	requestPermissions: {
 		//facebook: ['email','id','name','first_name','last_name','username','gender','locale','age_range',
@@ -11,9 +95,10 @@ Accounts.ui.config({
 	requestOfflineToken: {
 		google: true
 	},
-	passwordSignupFields: 'USERNAME_AND_EMAIL',
+	passwordSignupFields: 'USERNAME_AND_EMAIL', USERNAME_AND_EMAIL_CONFIRM
 	//sendVerificationEmail: true,
 });
+**/
 
 Login = {};
 

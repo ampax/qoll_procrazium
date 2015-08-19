@@ -9,8 +9,6 @@ meteorhacks:fast-render
 jquery
 jparker:crypto-md5
 meteorhacks:npm
-accounts-base
-accounts-ui
 accounts-password
 accounts-google
 long:google-contacts
@@ -44,3 +42,5 @@ yong:meteor-videojs
 reactive-dict
 simple:reactive-method
 simple:katex
+ian:accounts-ui-bootstrap-3
+tap:i18n

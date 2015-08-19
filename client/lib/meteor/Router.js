@@ -41,8 +41,7 @@ UserPageController = RouteController.extend({
   data: function() {
     var findById = Meteor.users.findOne(this.params._idOrSlug);
     var findBySlug = Meteor.users.findOne({'profile.slug': this.params._idOrSlug});
-    qlog.info('found users findById - ' + JSON.stringify(findById) + ', findBySlug - ' 
-    	+ JSON.stringify(findBySlug) + ', slug - ' + this.params._idOrSlug);
+    
     if(typeof findById !== "undefined"){
       // redirect to slug-based URL
       Router.go(UserUtil.getProfileUrl(findById), {replaceState: true});

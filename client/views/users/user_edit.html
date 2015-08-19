@@ -5,9 +5,9 @@
 		<div class="row">
 			{{#with user}}
 
-			<h3>{{i18n "Account"}}</h3><span class="scs-msg green_1"></span><span class="err-msg red_1"></span>
+			<h3>Account</h3><span class="scs-msg green_1"></span><span class="err-msg red_1"></span>
 			<small class="red"> {{#if profileIncomplete}}
-				{{i18n "Please complete your profile below before continuing."}}
+				Please complete your profile below before continuing.
 				{{/if}} </small>
 			<hr class="divider"/>
 
@@ -15,7 +15,7 @@
 				<form class="form-horizontal" role="form">
 					<!--  User name input (disabled, can not be changed)  -->
 					<div class="form-group">
-						<label for="inputUsername" class="col-sm-2 control-label">{{i18n "Username"}}</label>
+						<label for="inputUsername" class="col-sm-2 control-label">Username</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="username" name="username" disabled value="{{userName}}" />
 						</div>
@@ -23,7 +23,7 @@
 
 					<!--  Group Name Search Using User Name/Email ID  -->
 					<div class="form-group">
-						<label for="inputName" class="col-sm-2 control-label">{{i18n "Search Group"}}</label>
+						<label for="inputName" class="col-sm-2 control-label">Search Group</label>
 						<div class="col-sm-10">
 							<div class="input-group">
 								<!-- input type="text" class="form-control" id="name" name="name" placeholder="Profile Name" value="{{profile.name}}" / -->
@@ -39,7 +39,7 @@
 
 					<!--  User group memberships   -->
 					<div class="form-group">
-						<label for="inputGroups" class="col-sm-2 control-label">{{i18n "Groups"}}</label>
+						<label for="inputGroups" class="col-sm-2 control-label">Groups</label>
 						<div class="col-sm-10">
 							<div class="panel panel-default panel-qoll-type-list" >
 								<div class="panel-heading">
@@ -55,32 +55,32 @@
 
 					<!-- Set user locale, page standard text display will change -->
 					<div class="form-group">
-						<label for="inputLanguage" class="col-sm-2 control-label">{{i18n "Language"}}</label>
+						<label for="inputLanguage" class="col-sm-2 control-label">Language</label>
 						<div class="col-sm-10">
 							<div class="radio-inline">
 								<label>
 									<input type="radio" name="locale" id="en" value="en" {{isLocale 'en'}}>
-									{{i18n "English"}} </label>
+									English </label>
 							</div>
 							<div class="radio-inline">
 								<label>
 									<input type="radio" name="locale" id="hi" value="hi" {{isLocale 'hi'}}>
-									{{i18n "Hindi"}} </label>
+									Hindi </label>
 							</div>
 							<div class="radio-inline">
 								<label>
 									<input type="radio" name="locale" id="fr" value="fr" {{isLocale 'fr'}}>
-									{{i18n "French"}} </label>
+									French </label>
 							</div>
 						</div>
 					</div>
 
         <!--  Demographic input  -->
         <div class="form-group">
-          <label for="inputGeoDemo" class="col-sm-2 control-label">{{i18n "Geo/Demographic"}}</label>
+          <label for="inputGeoDemo" class="col-sm-2 control-label">Geo/Demographic</label>
 
           <!-- DOB -->
-          <label for="inputDemographicDOB" class="col-sm-1 control-label">{{i18n "DOB"}}:</label>
+          <label for="inputDemographicDOB" class="col-sm-1 control-label">DOB:</label>
           <div class="col-sm-2">
             <input type="text" class="form-control" id="dob" name="dob" placeholder='mm/dd/yyyy' value="{{profile.dob}}" />
             <!-- input type="text" id="datepicker" -->
@@ -91,9 +91,9 @@
           <div class="col-sm-3">
             <!-- input type="text" class="form-control" id="sex" name="sex" placeholder='{{i18n "Sex"}}' value="{{profile.sex}}" / -->
             <select id="sex" class="form-control">
-              <option value="">{{i18n "Sex"}}</option>
-              <option value="male" {{isSex "male"}}>{{i18n "Male"}}</option>
-              <option value="female"  {{isSex "female"}}>{{i18n "Female"}}</option>
+              <option value="">Sex</option>
+              <option value="male" {{isSex "male"}}>Male</option>
+              <option value="female"  {{isSex "female"}}>Female</option>
             </select>
           </div>
 
@@ -122,7 +122,7 @@
 
 					<!--  Display name input  -->
 					<div class="form-group">
-						<label for="inputName" class="col-sm-2 control-label">{{i18n "Display Name"}}</label>
+						<label for="inputName" class="col-sm-2 control-label">Display Name</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="name" name="name" placeholder="Profile Name" value="{{profile.name}}" />
 						</div>
@@ -130,7 +130,7 @@
 
 					<!--  Email input  -->
 					<div class="form-group">
-						<label for="inputEmail" class="col-sm-2 control-label">{{i18n "Email"}}</label>
+						<label for="inputEmail" class="col-sm-2 control-label">Email</label>
 						<div class="col-sm-10">
 							<input type="email" class="form-control" id="email" name="email" placeholder="Email" value="{{userEmail}}" />
 						</div>
@@ -138,7 +138,7 @@
 
 					<!--  Bio input  -->
 					<div class="form-group">
-						<label for="inputBio" class="col-sm-2 control-label">{{i18n "Bio"}}</label>
+						<label for="inputBio" class="col-sm-2 control-label">Bio</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<textarea class="form-control" rows="3"  id="bio" name="bio" placeholder="Bio">{{userBio}}</textarea>
@@ -147,7 +147,7 @@
 
 					<!--  Twitter Username input  -->
 					<div class="form-group">
-						<label for="inputTwitterUName" class="col-sm-2 control-label">{{i18n "Twitter Username"}}</label>
+						<label for="inputTwitterUName" class="col-sm-2 control-label">Twitter Username</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="text" class="form-control" id="twitter" name="twitter" placeholder="Link Twitter User Name" value="{{getTwitter}}" />
@@ -156,7 +156,7 @@
 
 					<!--  Google Username input  -->
 					<div class="form-group">
-						<label for="inputGoogleUName" class="col-sm-2 control-label">{{i18n "Google Username"}}</label>
+						<label for="inputGoogleUName" class="col-sm-2 control-label">Google Username</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="text" class="form-control" id="google" name="google" placeholder="Link Google User Name" value="{{getGoogle}}" />
@@ -165,7 +165,7 @@
 
 					<!--  Facebook Username input  -->
 					<div class="form-group">
-						<label for="inputFacebookUName" class="col-sm-2 control-label">{{i18n "Facebook Username"}}</label>
+						<label for="inputFacebookUName" class="col-sm-2 control-label">Facebook Username</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="text" class="form-control" id="facebook" name="facebook" placeholder="Link Facebook User Name" value="{{getFacebook}}" />
@@ -174,7 +174,7 @@
 
 					<!--  GitHub Username input  -->
 					<div class="form-group">
-						<label for="inputGithubUName" class="col-sm-2 control-label">{{i18n "GitHub Username"}}</label>
+						<label for="inputGithubUName" class="col-sm-2 control-label">GitHub Username</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="text" class="form-control" id="github" name="github" placeholder="Link Github User Name" value="{{getGitHub}}" />
@@ -183,17 +183,17 @@
 
 					<!--  Site input  -->
 					<div class="form-group">
-						<label for="inputSite" class="col-sm-2 control-label">{{i18n "Site"}}</label>
+						<label for="inputSite" class="col-sm-2 control-label">Site</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="text" class="form-control" id="site" name="site" placeholder="Site" value="{{profile.site}}" />
 						</div>
 					</div>
 
-					<h3>{{i18n "Change Password"}}?</h3>
+					<h3>Change Password?</h3>
 					<!--  Change password  -->
 					<div class="form-group">
-						<label for="inputOldPass" class="col-sm-2 control-label">{{i18n "Old Password"}}</label>
+						<label for="inputOldPass" class="col-sm-2 control-label">Old Password</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="password" class="form-control" id="old_password" name="old_password" placeholder="Input Old Password" value="" />
@@ -201,7 +201,7 @@
 					</div>
 
 					<div class="form-group">
-						<label for="inputNewPass" class="col-sm-2 control-label">{{i18n "New Password"}}</label>
+						<label for="inputNewPass" class="col-sm-2 control-label">New Password</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="password" class="form-control" id="new_password" name="new_password" placeholder="Input New Password" value="" />
@@ -209,7 +209,7 @@
 					</div>
 
 					<div class="form-group">
-						<label for="inputNewPass1" class="col-sm-2 control-label">{{i18n "Confirm New Password"}}</label>
+						<label for="inputNewPass1" class="col-sm-2 control-label">Confirm New Password</label>
 						<div class="col-sm-10">
 							<!--input type="text" class="form-control" id="bio" name="bio" placeholder="Bio" value="{{profile.bio}}" /-->
 							<input type="password" class="form-control" id="new_password1" name="new_password1" placeholder="Confirm New Password" value="" />
@@ -225,7 +225,7 @@
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">
 							<button type="submit" class="btn btn-primary btn-qoll pull-left">
-								{{i18n "Submit"}}
+								Submit
 							</button>
 						</div>
 					</div>
@@ -251,18 +251,18 @@
 		{{#with user}}
 		{{#if profileIncomplete}}
 		<div>
-			{{i18n "Please complete your profile below before continuing."}}
+			Please complete your profile below before continuing.
 		</div>
 		{{/if}}
 		<form>
-			<h2>{{i18n "Account"}}</h2>
+			<h2>Account</h2>
 			<div class="control-group">
-				<label>{{i18n "Username"}}</label>
+				<label>Username</label>
 				<div class="controls">
 					<input id="username" name="username" disabled="disabled" type="text" value="{{userName}}" />
 				</div>
 				<p class="note">
-					{{i18n "Profile"}} URL: {{profileUrl}}
+					Profile URL: {{profileUrl}}
 				</p>
 			</div>
 			<!--       <div class="control-group">
@@ -272,69 +272,69 @@
 			</div>
 			</div> -->
 			<div class="control-group">
-				<label>{{i18n "Display Name"}}</label>
+				<label>Display Name</label>
 				<div class="controls">
 					<input name="name" type="text" value="{{profile.name}}" />
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "Email"}}</label>
+				<label>Email</label>
 				<div class="controls">
 					<input name="email" type="text" value="{{userEmail}}" />
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "Bio"}}</label>
+				<label>Bio</label>
 				<div class="controls">
 					<textarea name="bio" type="text">{{profile.bio}}</textarea>
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "Twitter Username"}}</label>
+				<label>Twitter Username</label>
 				<div class="controls">
 					<input name="twitter" type="text" value="{{getTwitter}}" />
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "Google Username"}}</label>
+				<label>Google Username</label>
 				<div class="controls">
 					<input name="google" type="text" value="{{getGoogle}}" />
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "Facebook Username"}}</label>
+				<label>Facebook Username</label>
 				<div class="controls">
 					<input name="facebook" type="text" value="{{getFacebook}}" />
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "GitHub Username"}}</label>
+				<label>GitHub Username</label>
 				<div class="controls">
 					<input name="github" type="text" value="{{getGitHub}}" />
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "Site"}}</label>
+				<label>Site</label>
 				<div class="controls">
 					<input name="site" type="text" value="{{profile.site}}" />
 				</div>
 			</div>
-			<h3>{{i18n "Change Password"}}?</h3>
+			<h3>Change Password?</h3>
 			<div class="control-group">
-				<label>{{i18n "Old Password"}}</label>
+				<label>Old Password</label>
 				<div class="controls">
 					<input name="old_password" type="password" value="" />
 				</div>
 			</div>
 			<div class="control-group">
-				<label>{{i18n "New Password"}}</label>
+				<label>New Password</label>
 				<div class="controls">
 					<input name="new_password" type="password" value="" />
 				</div>
 			</div>
 			<div class="form-actions">
-				<a href="/forgot_password">{{i18n "Forgot Password"}}?</a>
-				<input type="submit" class="button" value="{{i18n "Submit"}}" />
+				<a href="/forgot_password">Forgot Password?</a>
+				<input type="submit" class="button" value="Submit" />
 			</div>
 		</form>
 		{{/with}}

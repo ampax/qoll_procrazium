@@ -5,73 +5,13 @@ var filename = "client/views/header/landing_page.js";
 
 Template.landing_page.rendered = function() {
     qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................', filename);
-    //new WOW().init();
-    
-    /*$('.collapse-onclick').each(function() {
-        $(this).on("click", function () {
-            var $obj = $($(this).parents('.in')[0]);
-            $obj.animate({'height': '1px'}, function() {
-                if (!$obj.hasClass('loginButtons'))
-                {
-                    $obj.removeClass('in').addClass('collapse');
-                }
-            });
-        });
-    });*/
-
       // One page navigation
     $('.nav').singlePageNav({
         offset: $('.navbar').outerHeight()
     });
-
-    qlog.info('mobile and desktop config settings', filename);
-
-    if($('#mob-only').css('display') == 'none') {
-        qlog.info('mobileonly is hidden. removing', filename);
-        $('li#mob-only').remove();
-    }
-
-    if($('#desk-only').css('display') == 'none') {
-        qlog.info('desktop only is hidden. removing', filename);
-        $('li#desk-only').remove();
-    }
-
-    if(!Meteor.user()){
-        $('.login-link-text').text(i18n.translate("Sign Up/Sign In"));
-      }else{
-        qlog.info('Setting the extra byttons hereeeeeeeeeeeeeee...................', filename);
-        var close = i18n.translate("Close");
-        var edit_account = i18n.translate("Edit Account");
-        var view_profile = i18n.translate("View Profile");
-        var chang_passwd = i18n.translate("Change Password111");
-        var sign_out = i18n.translate("Sign Out");
-
-        //Change the text & Set the additional buttons for profile here
-        $('a.login-close-text').text(close);
-        $('div#login-buttons-open-change-password').text(chang_passwd);
-        $('div#login-buttons-logout').text(sign_out);
-        $('div#login-buttons-logout').before('<a href="/users/'+Meteor.user().profile.slug+'" class="account-link login-button button">'+view_profile+'</a>');
-        $('div#login-buttons-logout').before('<a href="/account" class="account-link login-button button">'+edit_account+'</a>');
-      }
 }
 
 
-/*Template.landing_page.events({
-    'click .smooth-scroll': function(event){
-        event.preventDefault();
-        if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
-            var target = $(this.hash);
-            target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
-            if (target.length) {
-                $('html,body').animate({
-                  scrollTop: target.offset().top
-                }, 1000);
-                return false;
-            }
-        }
-    }
-});
-*/
 Template.landing_page.events({
     'click .smooth-scroll': function(event){
         event.preventDefault();

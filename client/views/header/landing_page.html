@@ -3,31 +3,33 @@
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container-fluid">
         <div class="navbar-header">
-          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".navbar-collapse">
             <span class="sr-only">Toggle Navigation</span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
           <div id="navbrand">
-            <img src="/img/1 100 px.png" style="zoom: 44%;"/>
+            <!--img src="/img/1 100 px.png" style="zoom: 44%;"/-->
+            <img style="max-width:100px; margin-top: 7px;" src="/img/1 100 px.png"/>
           </div>
         </div>
         <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-right">
-            <li id="mob-only" class="qoll-login auth-buttons">{{> loginButtons align="right"}}</li>
+          <ul class="nav navbar-nav">
             {{#if currentUser}}
               <li><a target="_self" onclick="window.location.href='/quicker'">
-                <span class="btn btn-danger btn-sm btn-qoll dsb" role="button"> {{i18n "Qollboard"}}</span>
+                <span class="btn btn-danger btn-sm btn-qoll dsb" role="button"> Qollboard</span>
               </a>
             </li>
             {{/if}}
-            <li class="active"><a href="#main">{{i18n "Home"}}</a></li>
-            <li><a href="#about">{{i18n "Concept"}}</a></li>
-            <li><a href="#services">{{i18n "Explore"}}</a></li>
-            <li><a href="#blog">{{i18n "FAQ"}}</a></li>
-            <li><a href="#contact">{{i18n "Contact"}}</a></li>
-            <li id="desk-only" class="qoll-login auth-buttons">{{> loginButtons align="right"}}</li>
+            <li class="active"><a href="#main">Home</a></li>
+            <li><a href="#about">Concept</a></li>
+            <li><a href="#services">Explore</a></li>
+            <li><a href="#blog">FAQ</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {{> loginButtons}}
           </ul>
         </div>
       </div>

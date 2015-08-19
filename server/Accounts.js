@@ -90,7 +90,9 @@ Accounts.onCreateUser(function(options, user){
     'access_mode' : QollConstants.QOLL.VISIBILITY.PUB});
 
   // we wait for Meteor to create the user before sending an email
-  if (!user.services.facebook && user.services.google) {
+  qlog.info('Printing services - ' + user.services, filename);
+  if (!user.services.facebook && !user.services.google) {
+    qlog.info('Sending account verification email here', filename);
     Meteor.setTimeout(function() {
       Accounts.sendVerificationEmail(user._id);
     }, 2 * 1000);
@@ -105,6 +107,7 @@ Accounts.validateLoginAttempt(function(attempt){
 
   if (attempt.user && attempt.user.emails && !attempt.user.emails[0].verified ) {
     console.log('email not verified');
+    var reason = attempt.error? attempt.error.reason : 'Verify email please';
     //throw new Meteor.Error(100002, reason, 'Please check your email and verify user account [' + reason +']');
     throw new Meteor.Error(403, reason, 'Please check your email and verify user account [' + reason +']');
     return false; // the login is aborted
