@@ -29,6 +29,10 @@ Template.all_qolls.helpers({
 			return moment(qollSubmittedOn).format('MMM Do YYYY, h:mm a');
 		}
 	},
+	is_fb_user : function() {
+		var is_fb_user = Meteor.user().profile.fb_link != undefined;
+		return is_fb_user;
+	}
 });
 
 $.fn.toggleCheckbox = function() {

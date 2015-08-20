@@ -108,53 +108,30 @@ QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, use
         graph.setAccessToken(Meteor.user().services.facebook.accessToken);
         //var future = new Future();
         //var onComplete = future.resolver();
-
         graph.post('/me/feed',
             { 
-                /** name: 'Post on the wall',
-                message : wallPost,
-                description : 'Take Qoll at Qoll.io',
-                caption : wallPost, //'Qoll for your opinion',
-                icon : 'http://www.qoll.io/logos/brand.png',
-                link : 'www.qoll.io', **/
-
-                // ----------------
-
-                /** method: 'stream.publish',
-                message: wallPost,
-                attachment: {
-                    name: wallTitle,
-                    caption: 'Qoll for your opinion',
-                    description: (
-                     'description here'
-                    ),
-                    href: 'www.qoll.io'
-                },
-                action_links: [
-                   { text: 'Code', href: 'www.qoll.io' }
-                ],
-                user_prompt_message: 'Personal message here' **/
-
-                // ----------------
-
-                name: wallTitle,
-                message : wallPost,
+                name: wallPost,
+                message : wallTitle,
                 description : wallDescription,
                 caption : 'Take Qoll at Qoll.io',
                 icon : 'http://www.qoll.io/logos/brand.png',
                 link : 'www.qoll.io',
 
-                application: 'Qoll - Discovery by Collaboration',
-                created_time: new Date(),
+                /** name: wallTitle,
+                message : wallPost,
+                description : wallDescription,
+                caption : 'Take Qoll at Qoll.io',
+                icon : 'http://www.qoll.io/logos/brand.png',
+                link : 'www.qoll.io', **/
             },
-            function(response) {
+            function(err,result) {
             //return onComplete(err, result);
-            if(response && response.post_id) {
-                qlog.info('SUCCESS: Posted {' + wallPost + '/' + wallTitle + '/' + response.post_id + '} to facebook wall!!', filename);
-                return 'SUCCESS: Posted {' + wallPost + '/' + wallTitle + '} to facebook wall!!';
+            if(err) {
+                console.log(err);
+                return 'ERROR: Failed to post {' + wallPost + '} to facebook wall!!';
             } else {
-                qlog.info('ERROR: Failed to post {' + wallPost + '/' + wallTitle + '} to facebook wall!!', filename);
-                return 'ERROR: Failed to post {' + wallPost + '/' + wallTitle + '} to facebook wall!!';
+                console.log(result);
+                return 'SUCCESS: Posted {' + wallPost + '} to facebook wall!!';
             }
         });
         //Future.wait(future);
@@ -181,7 +158,7 @@ Meteor.methods({
         // Get qoll information and post title and qoll text to facebook
         var q = Qolls.QollDb.get({_id : qollId});
 
-        var wallPost =  q.title === q.qollText? q.qollText : q.title + ' ' + q.qollText;
+        var wallPost =  q.qollText;
         var wallTitle =  q.title? q.title : 'Qoll';
 
         /** START ::::: Replace the fill in the blanks if it is of FIB type **/
@@ -199,11 +176,12 @@ Meteor.methods({
         wallPost = KatexUtil.toTxt(wallPost, q.tex);
         wallTitle = KatexUtil.toTxt(wallTitle, q.tex);
 
-        var wallDescription = new Array();
+        var wallDescription = ''; // new Array();
 
         q.qollTypesX.forEach(function(typesX){
             var typesX_type = KatexUtil.toTxt(typesX.type, q.tex);
-            wallDescription.push('(' + (typesX.index+1) + ') ' + typesX_type);
+            // wallDescription.push('(' + (typesX.index+1) + ') ' + typesX_type);
+            wallDescription += '(' + (typesX.index+1) + ') ' + typesX_type + '\n';
         });
 
         qlog.info('Callling posting on facebook wall ...' + JSON.stringify(q) + '/' + accessToken, filename);
