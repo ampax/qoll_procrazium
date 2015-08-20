@@ -116,6 +116,7 @@ QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, use
                 caption : 'Take Qoll at Qoll.io',
                 //picture: 'http://www.qoll.io/logos/b.jpg',
                 picture: 'http://www.qoll.io/logos/2_logotype_250_px.png',
+                //picture: 'http://www.qoll.io/logos/2_logotype.png',
                 icon : 'http://www.qoll.io/logos/brand.png',
                 link : 'www.qoll.io',
 
@@ -130,10 +131,12 @@ QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, use
             //return onComplete(err, result);
             if(err) {
                 console.log(err);
+                qlog.error('ERROR: Failed to post {' + wallPost + '} to facebook wall!!', filename);
                 return 'ERROR: Failed to post {' + wallPost + '} to facebook wall!!';
             } else {
                 console.log(result);
-                return 'SUCCESS: Posted {' + wallPost + '} to facebook wall!!';
+                qlog.info('SUCCESS: Posted {Post: ' + wallPost + '/Post-ID: ' + JSON.stringify(result) + '} to facebook wall!!', filename);
+                return 'SUCCESS: Posted {Post: ' + wallPost + '/Post-ID: ' + result + '} to facebook wall!!';
             }
         });
         //Future.wait(future);
