@@ -114,6 +114,8 @@ QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, use
                 message : wallTitle,
                 description : wallDescription,
                 caption : 'Take Qoll at Qoll.io',
+                //picture: 'http://www.qoll.io/logos/b.jpg',
+                picture: 'http://www.qoll.io/logos/2_logotype_250_px.png',
                 icon : 'http://www.qoll.io/logos/brand.png',
                 link : 'www.qoll.io',
 
