@@ -1,0 +1,70 @@
+<template name='email_questionnaire'>
+
+	<table align="center" border="1" cellpadding="0" cellspacing="0" width="600">
+	<tr>
+		<td align="center" bgcolor="#312B23" style="padding: 13px 0 9px 0;">
+			<img src="http://qoll.io/logos/3/3.png" alt="Creating Email Magic" 
+					width="140" height="160" 
+					style="display: block; padding: 36px 0 30px 0; background-color: #312B23; border-color: firebrick;" />
+		</td>
+	</tr>
+
+	<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">
+	 
+		<table border="1" cellpadding="0" cellspacing="0" width="100%">
+
+		 <tr>
+		  <td style="font-style: oblique; font-size: large;">
+		   <span style="font-style: normal; font-weight: 700;">Title:</span> {{questionaire.title}}
+		  </td>
+		 </tr>
+		 <tr>
+		  <td style="padding: 20px 0 30px 0;">
+		   <span style="color: rgb(84, 85, 197); font-weight: 900;">{{{created_on questionaire.createdOn}}}</span>, 
+		   <span style="color: rgb(169, 113, 113); font-weight: 900;">{{{questionaire.createdByName}}}</span> 
+		   has invited you take a Qoll. Use the following link to take the Questionnaire at <a href="http://qoll.io">Qoll.io</a>
+		  </td>
+		 </tr>
+		 <tr>
+		  <td>
+		   Take Qoll >>
+		  </td>
+		 </tr>
+
+		</table>
+	</td>
+
+	 <tr>
+	  <td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">
+		 
+
+		 <table border="0" cellpadding="0" cellspacing="0" width="100%">
+		 <tr>
+		  
+		  <td width="75%">
+			 &reg; ©2014 Millennials Venture Labs 
+			</td>
+		  
+		  <td align="right">
+			 <table border="0" cellpadding="0" cellspacing="0">
+			  <tr>
+			   <td>
+			    <a href="http://qoll.io/">
+			     <img src="logos/3.png" alt="Twitter" width="38" height="38" style="display: block; background-color: #312B23;" border="0" />
+			    </a>
+			   </td>
+			  </tr>
+			 </table>
+		</td>
+
+		 </tr>
+		</table>
+
+
+		</td>
+	 </tr>
+	</table>
+
+	<!-- {{#each this.qollList}}
+	{{/each}} -->
+</template>

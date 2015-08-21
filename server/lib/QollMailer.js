@@ -80,13 +80,15 @@ Meteor.methods({
 
         var subject = q.title;
 
+        var created_on = moment(q.submittedOn).format('MMM Do YYYY, h:mm a');
+
         qlog.info('Prepared subject - ' + subject + ', post - ' + post + ', qollstionnaire_id - ' + qollstionnaire_id, filename);
 
         var responses = new Array();
         q.submittedTo.forEach(function(to, idx){
             qlog.info('Sending email to - ' + to + ', subject - ' + subject + ', post - ' + post, filename);
             to_tmp = CoreUtils.encodeEmail(to); //to.replace(/\./g,"&#46;");
-            responses.push(QollMailer.sendQollEmail(from_beau, to, subject, formatQollstionnaireHtmlEmail(to, subject, post, qollstionnaire_id, q.submittedToUUID[to_tmp])));
+            responses.push(QollMailer.sendQollEmail(from_beau, to, subject, formatQollstionnaireHtmlEmail_pretty(to, name, created_on, subject, post, qollstionnaire_id, q.submittedToUUID[to_tmp])));
         });
 
         return responses;
@@ -127,7 +129,7 @@ Meteor.methods({
     }
 });
 
-var formatQollstionnaireHtmlEmail = function(email, title, message, id, user_q_uuid) {
+var formatQollstionnaireHtmlEmail1 = function(email, title, message, id, user_q_uuid) {
     // Converts a String to word array
     //var enc_email = CryptoJS.enc.Utf16.parse('kaushik.anoop@gmail.com'); 
     // 00480065006c006c006f002c00200057006f0072006c00640021
@@ -185,3 +187,109 @@ var formatInvitationHtmlEmail = function(from, from_name, to, to_name) {
 
     return fmt_msg;
 };
+
+
+var formatQollstionnaireHtmlEmail_pretty = function(email, name, created_on, title, message, id, user_q_uuid) {
+    // Converts a String to word array
+    //var enc_email = CryptoJS.enc.Utf16.parse('kaushik.anoop@gmail.com'); 
+    // 00480065006c006c006f002c00200057006f0072006c00640021
+    // var email = 'kaushik.anoop@gmail.com';
+
+    var fmt_content = questionaire_part_1 + title + questionaire_part_3 + created_on + questionaire_part_5 
+                    + name + questionaire_part_7 
+                    + '<a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email">Take qoll</a>'
+                    + questionaire_part_9;
+
+    return fmt_content;
+};
+
+
+
+
+
+
+
+
+// -------------------- Following is the email content for sending questionaire in parts
+var questionaire_part_1 = '<table align="center" border="1" cellpadding="0" cellspacing="0" width="600">'+
+    '<tr>'+
+        '<td align="center" bgcolor="#312B23" style="padding: 13px 0 9px 0;">'+
+            '<img src="http://qoll.io/logos/3/3.png" alt="Creating Email Magic" '+
+                    'width="140" height="160" '+
+                    'style="display: block; padding: 36px 0 30px 0; background-color: #312B23; border-color: firebrick;" />'+
+        '</td>'+
+    '</tr>'+
+
+    '<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">'+
+     
+        '<table border="1" cellpadding="0" cellspacing="0" width="100%">'+
+
+         '<tr>'+
+          '<td style="font-style: oblique; font-size: large;">'+
+           '<span style="font-style: normal; font-weight: 700;">Title:</span>';
+
+
+
+
+            // questionaire_part_2 = ----- add questionnaire title at this point {{questionaire.title}}
+          
+
+ var questionaire_part_3 =         '</td>'+
+         '</tr>'+
+         '<tr>'+
+          '<td style="padding: 20px 0 30px 0;">'+
+           '<span style="color: rgb(84, 85, 197); font-weight: 900;">';
+
+           // questionaire_part_4 = ------------ add created on in formatted order {{{created_on questionaire.createdOn}}}
+
+var questionaire_part_5 =           '</span>, '+
+           '<span style="color: rgb(169, 113, 113); font-weight: 900;">';
+
+           // questionaire_part_6 ------------ add created by name here {{{questionaire.createdByName}}}
+
+var questionaire_part_7 =           '</span> '+
+           'has invited you take a Qoll. Use the following link to take the Questionnaire at <a href="http://qoll.io">Qoll.io</a>'+
+          '</td>'+
+         '</tr>'+
+         '<tr>'+
+          '<td>';
+
+
+          // questionaire_part_8 = ---------- add take qoll link at this point  Take Qoll >>
+
+var questionaire_part_9 =          '</td>'+
+         '</tr>'+
+
+        '</table>'+
+    '</td>'+
+
+     '<tr>'+
+      '<td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">'+
+         
+
+         '<table border="0" cellpadding="0" cellspacing="0" width="100%">'+
+         '<tr>'+
+          
+          '<td width="75%">'+
+             '&reg; ©2014 Millennials Venture Labs '+
+            '</td>'+
+          
+          '<td align="right">'+
+             '<table border="0" cellpadding="0" cellspacing="0">'+
+              '<tr>'+
+               '<td>'+
+                '<a href="http://qoll.io/">'+
+                 '<img src="http://qoll.io/logos/3/3.png" alt="Twitter" width="38" height="38" style="display: block; background-color: #312B23;" border="0" />'+
+                '</a>'+
+               '</td>'+
+              '</tr>'+
+             '</table>'+
+        '</td>'+
+
+         '</tr>'+
+        '</table>'+
+
+
+        '</td>'+
+     '</tr>'+
+    '</table>';

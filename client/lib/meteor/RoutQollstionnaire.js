@@ -166,6 +166,22 @@ QbankController = RouteController.extend({
 	},
 });
 
+IdLookUpEmailPreviewController = RouteController.extend({
+	findOptions : function() {
+		console.log("looking for  id "+this.params._id );
+		return { sort : { submittedOn : -1 }, _id : this.params._id,
+					context : QollConstants.CONTEXT.WRITE  };
+	},
+	waitOn : function() {return [Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
+								// Meteor.subscribe('QUESTIONAIRE_PROGRESS_PUBLISHER', this.findOptions()), 
+								Meteor.subscribe('RECIPIENTS_PUBLISHER'),
+								Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions())];
+	},
+	data : function() {
+		return { qollList : QollForQuestionaireId};
+	}
+});
+
 Router.map(function() {
 	if (Meteor.isCordova) {
 		this.route('view_inbox_cordova', {
@@ -274,6 +290,12 @@ Router.map(function() {
 		path: '/qbank',
 		controller : QbankController,
 		
+	});
+
+	this.route('email_questionnaire_preview', {
+	    path: '/email_questionnaire_preview/:_id',
+	    template: 'email_questionnaire',
+	    controller : IdLookUpEmailPreviewController,
 	});
 
 });
