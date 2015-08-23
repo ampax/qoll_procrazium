@@ -6,35 +6,16 @@
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="content-header">
-				<h1>
-	            	<!-- Toggle on small screen -->
-	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
-	                Draft Detail
-	            </h1>
-	        </div>
+			<div class="container-fluid">
 			
-			<hr class='divider divider-bottom-0'>
-			<!-- Keep all page content within the page-content inset div! -->
-			<div class="page-content inset inset-5">
-
 				<div class="row">
-					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
 						
-						<div class="col-md-1 col-xs-12 list-group-item-align">
-							<a href="{{ pathFor 'view_draft' }}" class='white-link make-clickable'>&larr; back</a>
+						<div class="col-md-2 col-sm-2 col-xs-2">
+							<a href="{{ pathFor 'view_draft' }}" class='black-link make-clickable'>&larr; back</a>
 						</div>
-						<div class="col-md-5 col-xs-12 list-group-item-align">
+						<div class="col-md-10 col-sm-10 col-xs-12">
 							Title: {{questionaire.title}} ({{questionaire.qoll_count}})
 						</div>
-						<div class='col-md-4 col-xs-0 list-group-item-align'>&nbsp;</div>
-						<div class="col-md-1 col-xs-12 list-group-item-align">
-							&nbsp;
-						</div>
-						<div class="col-md-1 col-xs-12 list-group-item-align">
-							&nbsp;
-						</div>
-					</div><!-- list-group-item list-group-item-heading -->
 				</div><!-- /row-->
 				{{> qolls_inner qollList = this.qollList  btns= draft_board_btns }}
 			</div>

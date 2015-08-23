@@ -1,6 +1,11 @@
 var filename='client/views/q/sent/view_draft.js';
 
 Template.view_draft.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	},
 	'click .archive-qoll-btn' : function(event) {
 		//event.preventDefault();
 		var questid = this._id;

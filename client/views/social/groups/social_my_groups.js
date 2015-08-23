@@ -6,6 +6,11 @@ Template.social_my_groups.rendered = function(){
 };
 
 Template.social_my_groups.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	},
 	'click .newgroup' : function() {
 		qlog.info('Clicked on the span toggle.');
 		//$( "div.form-static" ).slideToggle();

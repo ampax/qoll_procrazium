@@ -1,25 +1,17 @@
 <template name="social_my_groups">
-	{{> header_awesome}}
+	{{> header_awesome page_label="MY GROUPS"}}
 	<div id="wrapper">
 		<!-- Sidebar -->
 		{{> social_side_nav}}
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="content-header">
-	            <h1>
-	            	<!-- Toggle on small screen -->
-	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
-	                My Groups
-	            </h1>
-	        </div>
+			<div class="container-fluid">
 			
-			<hr class='divider divider-bottom-0'>
-			<!-- Keep all page content within the page-content inset div! -->
-			<div class="page-content inset inset-5 container">
+			<div class="page-content container">
 					
 					<!-- Nav tabs -->
-					<ul class="nav nav-tabs bs-tab-margin-top-0" role="tablist">
+					<ul class="nav nav-tabs" role="tablist">
 					  <li class="active"><a href="#owner" role="tab" data-toggle="tab">Owner</a></li>
 					  <li><a href="#subscriber" role="tab" data-toggle="tab">Subscriber</a></li>
 					  <!-- li><a href="#open_requests" role="tab" data-toggle="tab">Open Requests</a></li -->
@@ -41,6 +33,7 @@
 			</div>
 
 			{{> slide_up_group}}
+		</div>
 		</div>
 	</div>
 </template>
