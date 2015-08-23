@@ -706,11 +706,13 @@ text-overflow: ellipsis;
 
 /* Smartphones ----------- */
 @media only screen and (min-width: 760px) {
-  #mob-only { display: none; }
+  #mob-only { display: none !important; }
+  .mob-only { display: none !important; }
 }
 
 @media (max-width: 761px) {
     #desk-only { display: none !important; }
+    .desk-only { display: none !important; }
 }
 
 /* Start: Search input box style */
@@ -908,7 +910,7 @@ div.img-container {
 .qoll-comment-display-5 {
     font-size: small;
     font-style: oblique;
-    color: rgb(250, 247, 244);
+    color: rgb(88, 79, 70);
 }
 
 .qoll-comment-display-6 {

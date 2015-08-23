@@ -38,6 +38,11 @@ Template.view_sent_board.helpers({
 });
 
 Template.view_sent_board.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	},
 	'click button#close_questionnaire' : function(e, l) {
 		e.preventDefault();
 

@@ -1,27 +1,19 @@
 <template name="view_draft">
-	{{> header_awesome}}
+	{{> header_awesome page_label="DRAFT"}}
+
 	<div id="wrapper">
 		<!-- Sidebar -->
 		{{> qoll_side_nav}}
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="content-header">
-	            <h1>
-	            	<!-- Toggle on small screen -->
-	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
-	                Draft
-	            </h1>
-	        </div>
+			<div class="container-fluid">
 			
-			<hr class='divider divider-bottom-0'>
-			<!-- Keep all page content within the page-content inset div! -->
-			<div class="page-content inset inset-5">
 				<div class="row">
 	            	
-					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+					<div class="col-md-12 col-xs-12" >
 
-						
+					<div class="row">	
 						<div class="col-md-1 col-xs-12">
 							<!--input type="checkbox" class="qoll_selectall"/-->&nbsp;
 						</div>
@@ -38,8 +30,11 @@
 						<div class="col-md-2 col-xs-12">
 							&nbsp;
 						</div>
+					</div>
 					</div><!-- list-group-item list-group-item-heading -->
+				</div>
 					{{#each qolls}}
+					<div class="row">
 					<!-- Start of Qoll Section -->
 					<div class="col-md-12 col-xs-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
 
@@ -64,8 +59,9 @@
 						</div>
 					</div><!-- list-group-item list-group-item-success -->
 					<!-- End of Qoll Section here -->
+					</div><!-- /row-->
 					{{/each}}
-				</div><!-- /row-->
+				
 			</div>
 		</div>
 	</div>

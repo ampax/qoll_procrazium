@@ -7,9 +7,18 @@ Template.view_sent.helpers({
 			return "<span class='red_1'>"+moment(closed_on.closed_on).format('MMM Do YYYY, h:mm a')+"</span>";
 		}
 	},
+	page_label : function() {
+		qlog.info( 'mcmcmcmcmcmcmcmcmcmcmcmcmc', filename );
+		return "SENT";
+	}
 });
 
 Template.view_sent.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	},
 	'click .archive-qoll-btn' : function(event) {
 		event.preventDefault();
 		var questid = this._id;

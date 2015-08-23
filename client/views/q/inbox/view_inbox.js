@@ -20,3 +20,12 @@ Template.view_inbox.helpers({
 		}
 	},
 });
+
+
+Template.view_inbox.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	}
+});

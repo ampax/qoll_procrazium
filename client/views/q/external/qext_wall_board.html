@@ -1,0 +1,22 @@
+<template name="qext_wall_board">
+	<hr class='divider divider-bottom-0'>
+	<!-- Keep all page content within the page-content inset div! -->
+	<div class="page-content inset inset-5">
+
+		<div class="row">
+			<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+				
+				<div class="col-md-6 col-xs-12 list-group-item-align">
+					Title: {{questionaire.title}} ({{questionaire.qoll_count}})
+				</div>
+				
+				<div class="col-md-6 col-xs-12 list-group-item-align">
+					&nbsp;
+				</div>
+			</div><!-- list-group-item list-group-item-heading -->
+
+			
+		</div><!-- /row-->
+		{{> qext_qolls_inner qollList = this.qollList user_email_id = this.user_email_id qoll_portal= this.qoll_portal  btns= inbox_board_btns }}
+	</div>
+</template>

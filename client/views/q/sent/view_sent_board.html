@@ -1,22 +1,13 @@
 <template name="view_sent_board">
-	{{> header_awesome}}
+	{{> header_awesome page_label="SENT BOARD"}}
+
 	<div id="wrapper">
 		<!-- Sidebar -->
 		{{> qoll_side_nav}}
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="content-header">
-	            <h1>
-	            	<!-- Toggle on small screen -->
-	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
-	                Sent Detail
-	            </h1>
-	        </div>
-			
-			<hr class='divider divider-bottom-0'>
-			<!-- Keep all page content within the page-content inset div! -->
-			<div class="page-content inset inset-5">
+			<div class="container-fluid">
 
 				<div class="row">
 					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
@@ -31,7 +22,7 @@
 						<div class="col-md-2 col-xs-12 list-group-item-align">
 							Completion Rate &rarr; {{questionaire.respo_length}}/{{questionaire.recip_length}}
 						</div>
-						<div class="col-md-1 col-xs-12 list-group-item-align">
+						<div class="col-md-11 col-sm-11 col-xs-11 list-group-item-align">
 							&nbsp;
 						</div>
 					</div><!-- list-group-item list-group-item-heading -->

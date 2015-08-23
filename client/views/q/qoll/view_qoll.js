@@ -8,3 +8,11 @@ Template.view_qoll.rendered = function() {
 	//set the background of the selected box
 	$('li#qollshop').css('background-color', 'firebrick');
 };
+
+Template.view_qoll.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	}
+});

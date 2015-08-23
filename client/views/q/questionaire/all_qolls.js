@@ -40,6 +40,11 @@ $.fn.toggleCheckbox = function() {
 };
 
 Template.all_qolls.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	},
 	'click .qoll_selectall' : function(event) {
 		var my_checked = $('.qoll_selectall').prop("checked");
 		var checkBoxes = $('.qoll_selection');

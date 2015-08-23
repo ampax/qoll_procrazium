@@ -1,67 +1,53 @@
 <template name="view_sent">
-	{{> header_awesome}}
+	{{> header_awesome page_label="SENT"}}
+
 	<div id="wrapper">
 		<!-- Sidebar -->
 		{{> qoll_side_nav}}
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="content-header">
-	            <h1>
-	            	<!-- Toggle on small screen -->
-	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
-	                Sent
-	            </h1>
-	        </div>
+			<div class="container-fluid">
 			
-			<hr class='divider divider-bottom-0'>
 			<!-- Keep all page content within the page-content inset div! -->
-			<div class="page-content inset inset-5">
 				<div class="row">
 	            	
-					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
+					<div class="col-md-8 col-sm-8 col-xs-12">
+						<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
+					</div>
+					<div class="col-md-1 col-sm-1 desk-only">
+						Size
+					</div>
+					<div class="col-md-1 col-sm-1 desk-only">
+						Rate
+					</div>
+					<div class='col-md-2 col-sm-2 desk-only'>Closed On</div>
+				</div>
 
-						
-						<div class="col-md-1 col-xs-12">
-							<!--input type="checkbox" class="qoll_selectall"/-->&nbsp;
-						</div>
-						<div class="col-md-5 col-xs-12">
-							<input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" >
-						</div>
-						<div class="col-md-1 col-xs-12">
-							Size
-						</div>
-						<div class="col-md-1 col-xs-12">
-							Rate
-						</div>
-						<div class='col-md-2 col-xs-12'>Closed On</div>
-						<div class="col-md-2 col-xs-12">
-							&nbsp;
-						</div>
-					</div><!-- list-group-item list-group-item-heading -->
 					{{#each qolls}}
+				<div class="row">
 				<!-- Start of Qoll Section -->
-				<div class="col-md-12 col-xs-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
+				<div class="col-md-12 col-sm-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
 
 					
-					<div class="col-md-1 col-xs-12">
+					<div class="col-md-1 col-sm-1 col-xs-1">
 						<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
 					</div>
-					<div class="col-md-5 col-xs-12 make-clickable">
+					<div class="col-md-5 col-sm-5 col-xs-8 make-clickable">
 						<a href="{{ pathFor 'sentView'}}" class='black-link'>
 							{{{title}}}
 						</a>
 					</div>
-					<div class="col-md-1 col-xs-12">
+					<div class="col-md-1 col-sm-1 desk-only">
 						{{qoll_count}}
 					</div>
-					<div class="col-md-1 col-xs-12">
+					<div class="col-md-1 col-sm-1 desk-only">
 						{{respo_length}} / {{recips_count}}
 					</div>
-					<div class="col-md-2 col-xs-12">
+					<div class="col-md-2 col-sm-2 desk-only">
 						{{{closed_on this}}}
 					</div>
-					<div class="col-md-2 col-xs-12">
+					<div class="col-md-2 col-sm-2 col-xs-3">
 						<span class="fa-stack fa-md sendemail btn-primary glossy" title="Resend the questionnaire">
 							<i class="fa fa-square-o fa-stack-2x"></i>
 							<i class="fa fa-envelope-o fa-stack-1x"></i>
@@ -73,8 +59,8 @@
 					</div>
 				</div><!-- list-group-item list-group-item-success -->
 				<!-- End of Qoll Section here -->
-				{{/each}}
 				</div><!-- /row-->
+				{{/each}}
 			</div>
 		</div>
 	</div>

@@ -78,9 +78,12 @@ Template.view_inbox_board.events({
 		$('.row-confirm').addClass('is-invisible');
 		$('.row-submit').addClass('is-invisible');
 		$('.row-submitted').removeClass('is-invisible');
+	},
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
 	}
 });
-
 
 Template.view_inbox.rendered = function(){
 	$('li#inbox').css('background-color', 'firebrick');
