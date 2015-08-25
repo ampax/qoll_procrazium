@@ -18,7 +18,7 @@ span.toggle {
 
 .qbank_pop{
 	position:fixed;
-	right:24px;
+	right:2px;
 	bottom:0px;
 	/*height: 300px;
 	max-height: 500px;*/
@@ -80,16 +80,17 @@ span.toggle {
 	clear:both;
 	/**height:300px;*/
 	max-height: 250px;
-	width:545px;
+	width:100px;
 	border-left : 1px solid #ccc;
 	border-right : 1px solid #ccc;
+	border-top:  : 1px solid #ccc;
 	border-bottom:  : 1px solid #ccc;
 	background:#fff;
 	padding:15px;
 	overflow: auto;
 	z-index: 3;
 	position: relative;
-	/**display: none;**/
+	display: none;
 }
 
 div.qbank_pop > div.pop-nav {
@@ -101,7 +102,7 @@ div.qbank_pop > div.pop-nav {
 	padding-left: 7px;
 	padding-bottom: 0px;
 	font-weight:100;
-	display: block;
+	display: none;
 }
 
 div.qbank_pop > div.save-nav {
@@ -113,7 +114,7 @@ div.qbank_pop > div.save-nav {
 	padding-left: 7px;
 	padding-bottom: 0px;
 	font-weight:100;
-	display: block;
+	display: none;
 }
 
 div.qbank_pop > div.pop-nav > div.pop-nav-title {
@@ -136,4 +137,64 @@ div.fill_100_pct {
 div#content1 {
 	overflow:scroll;
 }
+
+@media (max-width: 768px) {
+	.qbank_pop .form-static{
+		clear:both;
+		/**height:300px;*/
+		max-height: 190px;
+		width:100%;
+		border: 1px solid #ccc;
+		background:#fff;
+		padding:15px;
+		/**overflow: auto;**/
+		z-index: 3;
+		position: relative;
+		display: none;
+	}
+
+	.qbank_pop .form-scroll{
+		clear:both;
+		/**height:300px;*/
+		max-height: 250px;
+		width:100%;
+		border-left : 1px solid #ccc;
+		border-right : 1px solid #ccc;
+		border-bottom:  : 1px solid #ccc;
+		background:#fff;
+		padding:15px;
+		overflow: auto;
+		z-index: 3;
+		position: relative;
+		display: none;
+	}
+
+	div.qbank_pop > div.pop-nav {
+		height: 40px;
+		width: 100%;
+		background: #404040;
+		color: white;
+		padding-top: 12px;
+		padding-left: 7px;
+		padding-bottom: 0px;
+		font-weight:100;
+		display: none;
+	}
+
+	div.qbank_pop > div.save-nav {
+		height: 40px;
+		width: 100%;
+		background: #E6E6E6;
+		color: white;
+		padding-top: 12px;
+		padding-left: 7px;
+		padding-bottom: 0px;
+		font-weight:100;
+		display: none;
+	}
+
+
+}
+
+
 

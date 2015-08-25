@@ -205,6 +205,13 @@ Template.all_qolls.events({
 			//Set the appropriate count in the header here
 			cnt++;
 			$("span[id='cnt']").html(cnt);
+
+			if(cnt > 0) {
+				// make the create new questionnaire visible
+				qlog.info('Making the add button visible at this point - ' + cnt, filename);
+				// $('.form-scroll-info').attr('display', 'block');
+				$(".form-scroll-info").show();
+			}
 		} else {//If this is not already selected, we are removing the existing qoll
 			var target = $("span[id='"+qollId+"_outer']");
 		    qlog.info('removing this qoll - ' + qollId, filename);
@@ -214,6 +221,13 @@ Template.all_qolls.events({
 		    //Set the appropriate count in the header here
 			cnt--;
 			$("span[id='cnt']").html(cnt);
+
+			if(cnt == 0) {
+				// make the create new questionnaire invisible at this point
+				qlog.info('Making the add button in-visible at this point - ' + cnt, filename);
+				// $('.form-scroll-info').attr('display', 'none');
+				$(".form-scroll-info").hide();
+			}
 		}
 	},
 	'click .edit-qoll-btn' : function(event) {

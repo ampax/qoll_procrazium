@@ -38,9 +38,11 @@ var filename='client/views/questionaire/slide_up_bank.js';
   },
   'click span.toggle' : function() {
     qlog.info('Clicked on the span toggle.');
+    $( "div.form-scroll-info" ).slideToggle();
     $( "div.form-static" ).slideToggle();
     $( "div.form-scroll" ).slideToggle();
-    $( "div.form-scroll-info" ).slideToggle();
+    $( "div.pop-nav" ).slideToggle();
+    $( "div.save-nav" ).slideToggle();
   },
   'click button.store' : function() {
     qlog.info('Clicked on store. Will be sending/storing the questonnaire at this point. ' , filename);
