@@ -19,7 +19,9 @@
 				<div class="row">
 						
 					<div class="col-md-2 col-sm-2 col-xs-2">
-						<a href="{{ pathFor 'view_inbox' }}" class='black-link make-clickable'>&larr; back</a>
+						<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
+						  <span class="glyphicon glyphicon-chevron-left">Back</span>
+						</button>
 					</div>
 					<div class="col-md-10 col-sm-10 col-xs-10">
 						<span class="qoll-comment-display-6">{{{questionaire.createdByName}}} </span> 

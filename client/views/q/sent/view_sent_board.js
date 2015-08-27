@@ -62,6 +62,10 @@ Template.view_sent_board.events({
 			}
 		});
 	},
+	'click button#bkButton' : function(e,t){
+		e.preventDefault();
+		Router.go('view_sent');
+	},
 });
 
 Template.view_sent_board_results.helpers({

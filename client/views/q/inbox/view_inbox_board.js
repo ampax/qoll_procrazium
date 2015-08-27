@@ -82,7 +82,11 @@ Template.view_inbox_board.events({
 	'click #menu-toggle' : function(e,t) {
 		e.preventDefault();
         $("#wrapper").toggleClass("toggled");
-	}
+	},
+	'click button#bkButton' : function(e,t){
+		e.preventDefault();
+		Router.go('view_inbox');
+	},
 });
 
 Template.view_inbox.rendered = function(){

@@ -14,5 +14,9 @@ Template.view_qoll.events({
 		e.preventDefault();
         $("#wrapper").toggleClass("toggled");
         qlog.info('togggggggggggggled ......', filename);
-	}
+	},
+	'click button#bkButton' : function(e,t){
+		e.preventDefault();
+		Router.go('all_qolls');
+	},
 });

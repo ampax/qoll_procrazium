@@ -11,3 +11,11 @@ Template.view_draft_board.rendered = function(){
 	//set the background of the rendered box
 	$('li#draft').css('background-color', 'firebrick');
 };
+
+
+Template.view_draft_board.events({
+	'click button#bkButton' : function(e,t){
+		e.preventDefault();
+		Router.go('view_draft');
+	},
+});
