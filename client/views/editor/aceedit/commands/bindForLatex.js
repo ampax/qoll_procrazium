@@ -6,8 +6,8 @@ bindForLatexInline = function(editor) {
 	editor.getSession().setMode("ace/mode/text");
 
 	//editor.insert("$$");
-	editor.insert("{inline}{/inline}");
-	editor.navigateLeft(9);
+	editor.insert("begin  end");
+	editor.navigateLeft(4);
 	editor.focus();
 }
 

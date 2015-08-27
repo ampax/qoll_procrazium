@@ -32,10 +32,10 @@ bindToolBarForQoll = function(editor) {
 bindToolBarForQollFib = function(editor) {
 	console.log('Initializing for qoll');
 	editor.navigateFileEnd();
-	editor.insert("\n# (Title must start with #)\n");
-	editor.insert("* Hint Starts with * Hint\n");
+	editor.insert("\n# \n");
+	editor.insert("* Hint \n");
 	//editor.insert("* Note Starts with * Note\n");
-	editor.insert("* Text _fill_ in the _blanks_\n");
+	editor.insert("* Text Create a _fill_ in the _blanks_\n");
 
 	// Calculate total number of lines
 	var len = editor.session.getLength();
@@ -46,13 +46,13 @@ bindToolBarForQollFib = function(editor) {
 bindToolBarForQollMulti = function(editor) {
 	console.log('Initializing for qoll');
 	editor.navigateFileEnd();
-	editor.insert("\n# (Title must start with #)\n");
-	editor.insert("* Hint Starts with * Hint\n");
-	editor.insert("* Text Additional text can be provided starting with '* text'\n");
-	editor.insert("*answer 3\n");
-	editor.insert("- A\n");
-	editor.insert("- B\n");
-	editor.insert("- C\n");
+	editor.insert("\n# \n");
+	editor.insert("* Text \n");
+	editor.insert("* Hint \n");
+	editor.insert("* ans 1 \n");
+	editor.insert("- \n");
+	editor.insert("- \n");
+	editor.insert("- \n");
 
 	// Calculate total number of lines
 	var len = editor.session.getLength();
