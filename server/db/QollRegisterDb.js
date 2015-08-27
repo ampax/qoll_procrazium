@@ -190,7 +190,8 @@ Meteor.methods({
 		var correct_answers = new Array();
 		if(type === QollConstants.QOLL.TYPE.MULTIPLE) {
 			qoll.qollTypesX.map(function(val, index){
-				qlog.info(index +" $$$ "+ JSON.stringify(val) + " $$$ " + qollTypeVal + " $$$ " + qollTypeIx + " $$$ " + answered_or_unanswered, filename);
+				// qlog.info(index +" $$$ "+ JSON.stringify(val) + " $$$ " + qollTypeVal + " $$$ " + qollTypeIx + " $$$ " + answered_or_unanswered, filename);
+				qlog.info(index + " $$$ " + val.isCorrect + " $$$ " + val.index + " $$$ " + qoll._id, filename);
 				if(val.isCorrect)
 					correct_answers.push(index);
 			});

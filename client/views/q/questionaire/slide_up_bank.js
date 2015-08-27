@@ -36,7 +36,7 @@ var filename='client/views/questionaire/slide_up_bank.js';
     qlog.info('Clicked on the slider div');
     $( "div.slider" ).slideToggle();
   },
-  'click span.toggle' : function() {
+  'click button.toggle' : function() {
     qlog.info('Clicked on the span toggle.');
     $( "div.form-scroll-info" ).slideToggle();
     $( "div.form-static" ).slideToggle();

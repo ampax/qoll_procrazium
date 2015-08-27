@@ -138,11 +138,11 @@ div#content1 {
 	overflow:scroll;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
 	.qbank_pop .form-static{
 		clear:both;
 		/**height:300px;*/
-		max-height: 190px;
+		max-height: 130px;
 		width:100%;
 		border: 1px solid #ccc;
 		background:#fff;
@@ -156,7 +156,7 @@ div#content1 {
 	.qbank_pop .form-scroll{
 		clear:both;
 		/**height:300px;*/
-		max-height: 250px;
+		max-height: 210px;
 		width:100%;
 		border-left : 1px solid #ccc;
 		border-right : 1px solid #ccc;
@@ -183,6 +183,69 @@ div#content1 {
 
 	div.qbank_pop > div.save-nav {
 		height: 40px;
+		width: 100%;
+		background: #E6E6E6;
+		color: white;
+		padding-top: 12px;
+		padding-left: 7px;
+		padding-bottom: 0px;
+		font-weight:100;
+		display: none;
+	}
+
+
+}
+
+
+@media (max-width: 768px) {
+	.qbank_pop .form-static{
+		clear:both;
+		/**height:300px;
+		max-height: 36%/190px;*/
+		max-height: 170px;
+		width:100%;
+		border: 1px solid #ccc;
+		background:#fff;
+		padding:15px;
+		/**overflow: auto;**/
+		z-index: 3;
+		position: relative;
+		display: none;
+	}
+
+	.qbank_pop .form-scroll{
+		clear:both;
+		/**height:300px;
+		max-height: 48%/250px;*/
+		max-height: 300px;
+		width:100%;
+		border-left : 1px solid #ccc;
+		border-right : 1px solid #ccc;
+		border-bottom:  : 1px solid #ccc;
+		background:#fff;
+		padding:15px;
+		overflow: auto;
+		z-index: 3;
+		position: relative;
+		display: none;
+	}
+
+	div.qbank_pop > div.pop-nav {
+		/*height: 40px;*/
+		max-height: 40px;
+		width: 100%;
+		background: #404040;
+		color: white;
+		padding-top: 12px;
+		padding-left: 7px;
+		padding-bottom: 0px;
+		font-weight:100;
+		display: none;
+	}
+
+	div.qbank_pop > div.save-nav {
+		/*height: 40px;*/
+		max-height: 40px;
 		width: 100%;
 		background: #E6E6E6;
 		color: white;
