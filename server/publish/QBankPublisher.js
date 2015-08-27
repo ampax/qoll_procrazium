@@ -505,7 +505,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
 							} else {
 								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
-								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email);
+								/** q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email); **/
 							}
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
@@ -575,7 +576,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
 							} else {
 								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
-								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email);
+								/** q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email); **/
 							}
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
