@@ -17,6 +17,11 @@ Template.view_my_group.helpers({
 });
 
 Template.view_my_group.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	},
 	'keyup input#add_usrs_to_grp': function (e) {
 		e.preventDefault();
 		var usr_search_val = $('#add_usrs_to_grp').val();

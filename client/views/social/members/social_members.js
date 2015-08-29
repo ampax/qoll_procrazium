@@ -13,6 +13,11 @@ Template.social_members.helpers({
 });
 
 Template.social_members.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+        qlog.info('togggggggggggggled ......', filename);
+	},
 	'click .newgroup' : function() {
 		qlog.info('Clicked on the span toggle.');
 		//$( "div.form-static" ).slideToggle();

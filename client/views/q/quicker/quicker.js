@@ -4,3 +4,7 @@ Template.quicker.helpers({
 		return {del:false, edit:false, graph:false, send:false } ;
 	},
 });
+
+Template.quicker.rendered = function(){
+	$('li#quicker').css('background-color', 'firebrick');
+};

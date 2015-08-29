@@ -1,13 +1,27 @@
 <template name="quicker">
-    {{> header_awesome}}
-<p class="lead">
-<div class="container" id="qoll-container-id">
+    {{> header_awesome page_label="QUICKER"}}
 
-  <!-- Starting of the row for all qolls -->
-  {{> qolls_inner qollList = this.qollList  btns= inbox_board_btns }}
+    <div id="wrapper">
+		<!-- Sidebar -->
+		<!-- {{> qoll_side_nav}} -->
+		{{> all_side_nav}}
 
-</div>
-</p> 
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+		<div class="container-fluid">
+
+			<p class="lead">
+			<div class="container" id="qoll-container-id">
+
+			  <!-- Starting of the row for all qolls -->
+			  {{> qolls_inner qollList = this.qollList  btns= inbox_board_btns }}
+
+			</div>
+			</p>
+
+			</div>
+		</div>
+	</div> 
 </template>
 
 

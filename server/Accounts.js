@@ -98,6 +98,17 @@ Accounts.onCreateUser(function(options, user){
     }, 2 * 1000);
   }
 
+  Meteor.setTimeout(function() {
+    // send an email to the team telling who has joined just now
+    Meteor.call("sendWhoJoinedEmail", user._id, function(error, msg) {
+      if (error) {
+        qlog.error('Error happened while sending who joined email; who: ' + user._id + ', error: ' + error, filename);;
+      } else {
+        qlog.info('Sent who joined email to the team; who: ' + user._id + ', msg: ' + msg, filename);
+      }
+    });
+  }, 4 * 1000);
+
   return user;
 });
 

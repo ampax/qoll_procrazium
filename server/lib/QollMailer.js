@@ -59,6 +59,9 @@ QollMailer.sendQollEmail = function(from, to, subject, msg) {
 };
 
 Meteor.methods({
+    sendWhoJoinedEmail : function(user_id) {
+      return whoJoinedEmail( user_id );
+    },
     sendContactUsEmail : function(from, to, subject, msg) {
         return QollMailer.sendContactUsEmail(from, to, subject, msg);
     },
@@ -129,36 +132,6 @@ Meteor.methods({
     }
 });
 
-var formatQollstionnaireHtmlEmail1 = function(email, title, message, id, user_q_uuid) {
-    // Converts a String to word array
-    //var enc_email = CryptoJS.enc.Utf16.parse('kaushik.anoop@gmail.com'); 
-    // 00480065006c006c006f002c00200057006f0072006c00640021
-    // var email = 'kaushik.anoop@gmail.com';
-    var brand_img_url = URLUtil.SITE_URL+'logos/brand.png';
-    qlog.info('Image url --------------------------------**********--> ' + brand_img_url, filename);
-    
-    var fmt_msg = 
-    '<table>'+
-        '<tr style="background-color: #FFF1FF; border: 1px solid #ddd; font-size 18px;">'+
-            '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><img src="'+brand_img_url+'"/></a></td>'+
-            '<td><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email"><h4 style="font-size: 18px;">'+title+'</h4></a></td>'+
-        '</tr>'+
-        '<tr>'+
-               '<td>&nbsp;</td><td><h5 style="font-size: 14px;">'+message+'</h5></td>'+
-        '</tr>'+
-        '<tr>'+
-                '<td colspan="2"><a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email">Take qoll</a></td>'
-        '</tr>'+
-        '<tr>'+
-               '<td>&nbsp;</td><td>©2014 Millennials Venture Labs </td>'+
-        '</tr>'+
-    '</table>';
-
-    qlog.info(fmt_msg, filename);
-
-    return fmt_msg;
-};
-
 
 var formatInvitationHtmlEmail = function(from, from_name, to, to_name) {
     // Converts a String to word array
@@ -195,10 +168,10 @@ var formatQollstionnaireHtmlEmail_pretty = function(email, name, created_on, tit
     // 00480065006c006c006f002c00200057006f0072006c00640021
     // var email = 'kaushik.anoop@gmail.com';
 
-    var fmt_content = questionaire_part_1 + title + questionaire_part_3 + created_on + questionaire_part_5 
+    var fmt_content = questionaire_header + questionaire_part_1 + title + questionaire_part_3 + created_on + questionaire_part_5 
                     + name + questionaire_part_7 
                     + '<a href="'+URLUtil.SITE_URL+'ext_email_board/'+user_q_uuid+'/'+id+'/'+email+'/email">Take qoll</a>'
-                    + questionaire_part_9;
+                    + questionaire_part_9 + questionaire_footer;
 
     return fmt_content;
 };
@@ -206,12 +179,55 @@ var formatQollstionnaireHtmlEmail_pretty = function(email, name, created_on, tit
 
 
 
+var whoJoinedEmail = function( user_id ) {
+  var user_crsr = Meteor.users.find({ "_id" : user_id });
+  if( user_crsr == undefined )
+    return;
+
+  var user = user_crsr.fetch()[0];
+
+  var recips = new Array();
+  recips.push("cozenlabs@gmail.com");
+  recips.push("procrzium@gmail.com");
+  recips.push("kaushik.amit@gmail.com");
+  recips.push("kaushik.anoop@gmail.com");
+  /** recips.push(
+    {
+       "email":"procrzium@gmail.com",
+       "name":"Procrazium Kaushik"
+    }
+  );
+
+  recips.push(
+    {
+       "email":"cozenlabs@gmail.com",
+       "name":"Cozenlabs Kaushik",
+       "type":"to"
+    }
+  ); **/
+
+  var fmt_content = questionaire_header + new_usr_email_1 
+                    + new_usr_email_2 + user.profile.name //
+                    + new_usr_email_4 + user.profile.email //
+                    + new_usr_email_6 + moment(new Date()).format('MMM Do YYYY, h:mm a') //
+                    + new_usr_email_8;
+
+  /** QollMailer.sendQollEmail('webmaster@qoll.io', "kaushik.anoop@gmail.com", 'FYI: New user joined', fmt_content)
+  return QollMailer.sendQollEmail('webmaster@qoll.io', "procrzium@gmail.com", 'FYI: New user joined', fmt_content); **/
+
+  return QollMailer.sendQollEmail('webmaster@qoll.io', recips, 'FYI: New user joined', fmt_content);
+}
+
+var whoVerifiedEmail = function(email, user_id, service, joined_on) {
+  //TODO
+}
+
 
 
 
 
 // -------------------- Following is the email content for sending questionaire in parts
-var questionaire_part_1 = '<table align="center" border="1" cellpadding="0" cellspacing="0" width="600">'+
+var questionaire_header = '<table align="center" border="1" cellpadding="0" cellspacing="0" width="600">'+
     '<tr>'+
         '<td align="center" bgcolor="#312B23" style="padding: 13px 0 9px 0;">'+
             '<img src="http://qoll.io/logos/3/3.png" alt="Creating Email Magic" '+
@@ -220,9 +236,9 @@ var questionaire_part_1 = '<table align="center" border="1" cellpadding="0" cell
         '</td>'+
     '</tr>'+
 
-    '<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">'+
+    '<td bgcolor="#ffffff" style="padding: 40px 30px 40px 30px;">';
      
-        '<table border="1" cellpadding="0" cellspacing="0" width="100%">'+
+var questionaire_part_1 =        '<table border="1" cellpadding="0" cellspacing="0" width="100%">'+
 
          '<tr>'+
           '<td style="font-style: oblique; font-size: large;">'+
@@ -260,8 +276,9 @@ var questionaire_part_7 =           '</span> '+
 var questionaire_part_9 =          '</td>'+
          '</tr>'+
 
-        '</table>'+
-    '</td>'+
+        '</table>';
+
+var questionaire_footer =    '</td>'+
 
      '<tr>'+
       '<td bgcolor="#ee4c50" style="padding: 30px 30px 30px 30px;">'+
@@ -292,4 +309,36 @@ var questionaire_part_9 =          '</td>'+
 
         '</td>'+
      '</tr>'+
+    '</table>';
+
+
+// New user joined/verified email content
+var new_usr_email_1 = '<table border="0" cellpadding="0" cellspacing="0" width="100%">';
+
+var  new_usr_email_2 =   '<tr>'+
+      '<td style="padding: 20px 0 30px 0;">'+
+       'New user account created at <a href="http://qoll.io">Qoll.io</a>'+
+      '</td>'+
+     '</tr>'+
+
+     '<tr>'+
+      '<td style="padding: 20px 0 30px 0;">'+
+       '<span style="color: rgb(84, 85, 197); font-weight: 900;">';
+
+var new_usr_email_3 = 'Procrazium Kaushik';
+
+var new_usr_email_4 = '</span><br>'+
+       '<span style="color: rgb(84, 85, 197); font-weight: 900;">';
+
+var new_usr_email_5 = 'procrazium@gmail.com';
+
+var new_usr_email_6 = '</span><br>'+
+       '<span style="rgb(169, 113, 113); font-weight: 900; font-weight: 900;">';
+
+var new_usr_email_7 = '08/29/2014';
+
+var new_usr_email_8 = '</span><br>'+
+      '</td>'+
+     '</tr>'+
+
     '</table>';
