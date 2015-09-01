@@ -29,4 +29,9 @@ Template.qolleditor.events({
 		event.preventDefault();
 		qlog.info('You clicked me dummy!', filename);
 	}**/
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+	},
+	
 });
