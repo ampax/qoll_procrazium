@@ -9,47 +9,48 @@
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="container-fluid">
+			<div class="container-fluid container">
 			
 				<div class="row">
 	            	
 						<div class="col-md-8 col-sm-8 col-xs-12">
 							&nbsp;<!--input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" -->
 						</div>
-						<div class='col-md-2 col-sm-2  desk-only'>&nbsp;</div>
 						<div class="col-md-1 col-sm-1  desk-only">
 							Size
 						</div>
 						<div class="col-md-1 col-sm-1  desk-only">
 							Recips
 						</div>
+						<div class='col-md-2 col-sm-2  desk-only'>&nbsp;</div>
 					
 				</div>
 					{{#each qolls}}
 					<div class="row">
 					<!-- Start of Qoll Section -->
-					<div class="col-md-12 col-xs-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
+						<div class="col-md-12 col-xs-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
 
-						
-						<div class="col-md-1 col-xs-12">
-							<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
-						</div>
-						<div class="col-md-7 col-xs-12 make-clickable">
-							<a href="{{ pathFor 'draftView' }}" class='black-link'>
-								{{{title}}}
-							</a>
-						</div>
-						<div class="col-md-1 col-xs-12">
-							{{qoll_count}}
-						</div>
-						<div class="col-md-1 col-xs-12">
-							{{recips_count}}
-						</div>
-						<div class="col-md-2 col-xs-12">
-							<span class="pull-left archive-qoll-btn glossy"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>&nbsp;
-							<span class="pull-left send-qoll-btn glossy"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
-						</div>
-					</div><!-- list-group-item list-group-item-success -->
+							<div class="row">
+								<div class="col-md-1 col-sm-1 col-xs-1">
+									<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
+								</div>
+								<div class="col-md-7 col-sm-7 col-xs-8 make-clickable">
+									<a href="{{ pathFor 'draftView' }}" class='black-link'>
+										{{{title}}}
+									</a>
+								</div>
+								<div class="col-md-1 col-sm-1 desk-only">
+									{{qoll_count}}
+								</div>
+								<div class="col-md-1 col-sm-1 desk-only">
+									{{recips_count}}
+								</div>
+								<div class="col-md-1 col-sm-2 col-xs-3">
+									<span class="pull-left archive-qoll-btn glossy-action r-marge"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+									<span class="pull-left send-qoll-btn glossy-action"><i class="glyphicon glyphicon-send blue ios-enabled"></i></span>
+								</div>
+							</div>
+						</div><!-- list-group-item list-group-item-success -->
 					<!-- End of Qoll Section here -->
 					</div><!-- /row-->
 					{{/each}}

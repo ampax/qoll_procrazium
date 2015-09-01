@@ -7,33 +7,19 @@
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="container-fluid">
+			<div class="container-fluid container">
 				<div class="row">
-					<div class="col-md-2 col-sm-2 col-xs-2">
-						&nbsp;
-					</div>
-					<div class="col-md-12 col-sm-12" >
-						<span class="qoll-comment-display-5">Title: {{questionaire.title}} ({{questionaire.qoll_count}}) </span>
-					</div>
-				</div>
-				<div class="row">
-						
-					<div class="col-md-2 col-sm-2 col-xs-2">
+					<div class="col-md-1 col-sm-1 col-xs-12">
 						<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
 						  <span class="glyphicon glyphicon-chevron-left">Back</span>
 						</button>
 					</div>
-					<div class="col-md-10 col-sm-10 col-xs-10">
+					<div class="col-md-11 col-sm-11 col-xs-12" style="font-size: medium; font-weight: bold;">
+						<span class="qoll-comment-display-5">Title: {{questionaire.title}} ({{questionaire.qoll_count}}) </span>
 						<span class="qoll-comment-display-6">{{{questionaire.createdByName}}} </span> 
 						<span class="qoll-comment-display-7">{{{created_on questionaire.createdOn}}} </span>
 					</div>
-					<!--div class="col-md-1 col-xs-12 list-group-item-align">
-						&nbsp;
-					</div-->
-
-					<!-- div class='col-md-12 col-xs-12 list-group-item-align'>{{> progress_bar}} - {{progress}}</div -->
-
-				</div><!-- /row-->
+				</div>
 
 				{{> qolls_inner qollList = this.qollList  btns= inbox_board_btns }}
 				<br>

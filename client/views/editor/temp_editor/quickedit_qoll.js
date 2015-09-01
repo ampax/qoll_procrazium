@@ -143,6 +143,14 @@ Template.quickedit_qoll.helpers({
 
 
 Template.quickedit_qoll.events({
+    'click #menu-toggle' : function(e,t) {
+        e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+    },
+    'click button#bkButton' : function(e,t){
+        e.preventDefault();
+        Router.go('all_qolls');
+    },
     "change .myFileInput": function(event, template) {
         console.log('I am called ....');
         /**var files = event.target.files;
@@ -214,3 +222,8 @@ Template.quickedit_qoll.onCreated(function(){
 
 	this.subscribe('images');
 });
+
+Template.quickedit_qoll.rendered = function() {
+    //set the background of the selected box
+    $('li#qollshop').css('background-color', 'firebrick');
+};

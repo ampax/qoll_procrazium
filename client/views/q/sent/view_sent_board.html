@@ -8,27 +8,19 @@
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="container-fluid">
+			<div class="container-fluid container">
 
 				<div class="row">
-					<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
 						
-						<div class="col-md-1 col-xs-12 list-group-item-align">
+						<div class="col-md-1 col-sm-1 col-xs-12">
 							<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
 							  <span class="glyphicon glyphicon-chevron-left">Back</span>
 							</button>
 						</div>
-						<div class="col-md-5 col-xs-12 list-group-item-align">
+						<div class="col-md-11 col-sm-11 col-xs-12 list-group-item-align" style="font-size: medium; font-weight: bold;">
 							Title: {{questionaire.title}} ({{questionaire.qoll_count}})
-						</div>
-						<div class='col-md-3 col-xs-0 list-group-item-align'>&nbsp;</div>
-						<div class="col-md-2 col-xs-12 list-group-item-align">
 							Completion Rate &rarr; {{questionaire.respo_length}}/{{questionaire.recip_length}}
 						</div>
-						<div class="col-md-11 col-sm-11 col-xs-11 list-group-item-align">
-							&nbsp;
-						</div>
-					</div><!-- list-group-item list-group-item-heading -->
 				</div><!-- /row-->
 			<!--	<h4>Stats:- </h4>
 				{{> stats_table}}

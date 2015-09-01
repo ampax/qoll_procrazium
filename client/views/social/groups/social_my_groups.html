@@ -7,9 +7,9 @@
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="container-fluid">
+			<div class="container-fluid container">
 			
-			<div class="page-content container">
+			<!--div class="page-content"-->
 					
 					<!-- Nav tabs -->
 					<ul class="nav nav-tabs" role="tablist">
@@ -21,17 +21,15 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 					  <div class="tab-pane active" id="owner">
-					  	Owner ...
 					  	{{> owned_templ groups=groups }}
 					  </div>
 					  <div class="tab-pane" id="subscriber">
-					  	Subscriber ...
-						  {{> subsc_templ groups=subsc_groups }}
+					  	  {{> subsc_templ groups=subsc_groups }}
 						</div>
 					  <div class="tab-pane" id="open_requests">Open Requests ...</div>
 					</div>
 
-			</div>
+			<!--/div-->
 
 			{{> slide_up_group}}
 		</div>
@@ -43,21 +41,17 @@
 	<div class='row'>
 		{{#each groups}}
 		<div class='list-group-item list-group-item-success list-group-social'>
-	  		<div class="col-md-7 col-xs-12 make-clickable">
+	  		<div class="col-md-7 col-sm-7 col-xs-6 make-clickable">
 	  			<a href="{{ pathFor 'ownedGroupView' }}" class='black-link'>
 			  		<span class='title-qoll'>{{groupName}}</span> - {{groupDesc}}
 			  	</a>
 		  	</div>
 
-		  	<div class="col-md-2 col-xs-6">
+		  	<div class="col-md-4 col-sm-4 col-xs-4">
 		  		Size : {{groupSize}}<br> Access : {{pubOrPvt}}<br>  Author : {{author_email}}
 		  	</div>
 
-		  	<div class="col-md-2 col-xs-6">
-		  		&nbsp;
-		  	</div>
-
-		  	<div class="col-md-1 col-xs-1">
+		  	<div class="col-md-1 col-sm-1 col-xs-2">
 		  		<span class="pull-left archive-grp round-button-clear-sm"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
 		  	</div>
 		  </div>
@@ -69,21 +63,17 @@
 	<div class='row'>
 		{{#each groups}}
 		<div class='list-group-item list-group-item-success list-group-social'>
-	  		<div class="col-md-7 col-xs-12 make-clickable">
+	  		<div class="col-md-7 col-sm-7 col-xs-6 make-clickable">
 	  			<a href="{{ pathFor 'subscGroupView' }}" class='black-link'>
 			  		<span class='title-qoll'>{{groupName}}</span> - {{groupDesc}}
 			  	</a>
 		  	</div>
 
-		  	<div class="col-md-2 col-xs-6">
+		  	<div class="col-md-4 col-sm-4 col-xs-4">
 		  		Size : {{groupSize}}<br> Access : {{pubOrPvt}}<br>  Author : {{author_email}}
 		  	</div>
 
-		  	<div class="col-md-2 col-xs-6">
-		  		&nbsp;
-		  	</div>
-
-		  	<div class="col-md-1 col-xs-1">
+		  	<div class="col-md-1 col-sm-1 col-xs-2">
 		  		<span class="pull-left archive-grp round-button-clear-sm"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
 		  	</div>
 		  </div>

@@ -14,6 +14,10 @@ Template.view_draft_board.rendered = function(){
 
 
 Template.view_draft_board.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+	},
 	'click button#bkButton' : function(e,t){
 		e.preventDefault();
 		Router.go('view_draft');

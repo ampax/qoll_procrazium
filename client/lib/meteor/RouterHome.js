@@ -32,7 +32,8 @@ Router.map(function(){
 
 	  if (Meteor.isClient) {
 	    this.route('landing', {
-			template : 'landing_page',
+			//template : 'landing_page',
+			template : 'home_page',
 			path: '/',
 		});
 	  }

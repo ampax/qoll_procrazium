@@ -1,7 +1,7 @@
 <template name="list_card_long">
 	{{#each contacts}}
-	<div class="row">
-		<div class='col-md-4 list-enclosure'>
+	<div class="row list-enclosure">
+		<div class='col-md-5 col-sm-5 col-xs-5'>
 			<div class="entityblock profile profile-pic-long-list">
 				<img src="/img/ghost_avatar.png" alt="Ghost Avatar" class="avatar-image">
 			</div>
@@ -9,15 +9,15 @@
 				{{name}}
 			</div>
 		</div>
-		<div class='col-md-4 list-enclosure'>
+		<div class='col-md-5 col-sm-5 col-xs-5'>
 			<div class="profile-content-1">
 				{{email}}
 			</div>
 		</div>
-		<div class='col-md-3 list-enclosure'>
+		<!-- div class='col-md-3 list-enclosure'>
 			&nbsp;
-		</div>
-		<div class='col-md-1 list-enclosure' >
+		</div -->
+		<div class='col-md-2 col-sm-2 col-xs-2' >
 			{{> sel_button contact=this}}
 		</div>
 	</div>

@@ -8,3 +8,10 @@ Template.quicker.helpers({
 Template.quicker.rendered = function(){
 	$('li#quicker').css('background-color', 'firebrick');
 };
+
+Template.quicker.events({
+	'click #menu-toggle' : function(e,t) {
+		e.preventDefault();
+        $("#wrapper").toggleClass("toggled");
+	},
+});

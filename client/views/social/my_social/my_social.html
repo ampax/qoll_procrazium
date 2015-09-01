@@ -3,29 +3,23 @@
 	<div id="wrapper">
 		<!-- Sidebar -->
 		<!-- {{> social_side_nav}} -->
-		{{> all_side_nav}}
+	{{> all_side_nav}}
 
-		<!-- Page content -->
-		<div id="page-content-wrapper">
-			<div class="content-header">
-	            <h1>
-	            	<!-- Toggle on small screen -->
-	                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
-	                Social
-	            </h1>
-	        </div>
-			
-			<hr class='divider divider-bottom-0'>
-			<!-- Keep all page content within the page-content inset div! -->
-			<div class="page-content inset inset-5 container">
+	<div id="page-content-wrapper">
+		<div class="container-fluid container">
+
+			<!-- Page content -->
+			<!-- div class="page-content" -->
+				<!-- Keep all page content within the page-content inset div! -->
 				<div class="row">
 					<div class="col-md-12 col-xs-12">
 	            	{{> list_card_long contacts=friends btn_ctx='my_social' }}
 					</div><!-- /column-->
 				</div><!-- /row-->
-			</div>
 
-			{{> slide_up_group}}
+				{{> slide_up_group}}
+			<!-- /div -->
 		</div>
 	</div>
+</div>
 </template>

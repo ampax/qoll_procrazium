@@ -64,6 +64,7 @@ Template.view_sent_board.events({
 	},
 	'click button#bkButton' : function(e,t){
 		e.preventDefault();
+		qlog.info('Navigating to sent-qolls now', filename);
 		Router.go('view_sent');
 	},
 });

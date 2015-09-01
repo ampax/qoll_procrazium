@@ -275,8 +275,8 @@ li.group-strip-long {
 
 /**** START : list group strip ****/
 div.list-enclosure {
-	height: 3em;
-	background-color: #d9edf7;
+	/** height: 3em;
+	background-color: #d9edf7; **/
   	border-bottom-style: ridge;
   	border-bottom-color: lemonchiffon;
 }
