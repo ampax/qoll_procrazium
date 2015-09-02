@@ -12,8 +12,8 @@ initWithGoogleDev = function(){
 		//old interface - https://code.google.com/apis/console/b/0/?noredirect#project:126862771796:overview
 	    //new interface - https://console.developers.google.com/project
 	    //redirect uri - http://localhost:3000/_oauth/google?close
-		"secret":"lXbTWe9BtVpkldnUt8sTIgH8",
-		"clientId":"864439868862-1ae1bk9q8da378vpufqk7us70rvupi76.apps.googleusercontent.com",
+		"secret":"1QYX4loolOoV-mzm_80p9JX4",
+		"clientId":"775190671310-n19etrb7ph4pmlqkkoe5c4svcu9f7b88.apps.googleusercontent.com",
 	});
 }
 
@@ -25,7 +25,7 @@ initWithGoogleServer = function(){
 
 	Accounts.loginServiceConfiguration.insert({
 		service : "google",
-	    clientId : "1032957758612.apps.googleusercontent.com",
-	    secret : "1032957758612@developer.gserviceaccount.com"
+	    clientId : "775190671310-n19etrb7ph4pmlqkkoe5c4svcu9f7b88.apps.googleusercontent.com",
+	    secret : "1QYX4loolOoV-mzm_80p9JX4"
 	});
 }
