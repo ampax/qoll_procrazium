@@ -18,7 +18,10 @@ Template.header_awesome.events({
     },
     'click #login-buttons-google' : function(event, tmpl) {
         Login.loginWithService('google');
-    }
+    },
+    'click .btn-Google1' : function(event, tmpl) {
+        Login.loginWithService('google');
+    },
    /* 'click .dsb': function() {
     event.preventDefault();
     Router.go('dashboard');

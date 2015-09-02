@@ -181,6 +181,7 @@ var formatQollstionnaireHtmlEmail_pretty = function(email, name, created_on, tit
 
 var whoJoinedEmail = function( user_id ) {
   var user_crsr = Meteor.users.find({ "_id" : user_id });
+  qlog.info('New user with the id - ' + user_id + ' joined ...', filename);
   if( user_crsr == undefined )
     return;
 

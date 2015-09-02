@@ -6,16 +6,25 @@ Ggl.SocialFunGoogle = function(user){
 	var config = Accounts.loginServiceConfiguration.findOne({service: 'google'});
 
 	var opts= { 
+		email: user.services.google.email,
 		consumerKey: config.clientId,
 	    consumerSecret: config.secret,
 	    token: user.services.google.accessToken,
-	    refreshToken: user.services.google.refreshToken
+	    refreshToken: user.services.google.refreshToken,
+
 	};
 
-	var gcontacts = new GoogleContacts(opts);
-	gcontacts.refreshAccessTokenSync = Meteor._wrapAsync(gcontacts.refreshAccessToken.bind(gcontacts));
+	qlog.info('Fetching users google contacts now ----', filename);
+	qlog.info(JSON.stringify(config), filename);
+	qlog.info(JSON.stringify(user), filename);
+	qlog.info(JSON.stringify(opts), filename);
 
-	gcontacts.refreshAccessTokenSync(opts.refreshToken, function (err, accessToken)
+	var gcontacts = new GoogleContacts(opts);
+	// gcontacts.refreshAccessToken opts.refreshToken, (err, accessToken);
+	gcontacts.refreshAccessToken = Meteor._wrapAsync(gcontacts.refreshAccessToken.bind(gcontacts));
+	// gcontacts.refreshAccessTokenSync = Meteor.wrapAsync(gcontacts.refreshAccessToken.bind(gcontacts));
+
+	gcontacts.refreshAccessToken(opts.refreshToken, function (err, accessToken)
     {
         if(err && err!=null)
         {
@@ -34,7 +43,7 @@ Ggl.SocialFunGoogle = function(user){
 		    function(err, contact)
 		    {
 		    	if(err) {
-		    		console.log('Error happened while getting google contacts - ' + err);
+		    		console.log('=======> Error happened while getting google contacts <======== - ' + err);
 		    	} else {
 				    var count = 1;
 			    	contact.map(function(c){
@@ -45,7 +54,7 @@ Ggl.SocialFunGoogle = function(user){
 			    		//console.log('Contact  ' + count++ + ' - ' + JSON.stringify(c));
 			    		SocialDb.insertSocialConnect(user._id, c.email, c);
 			    	});
-			    	qlog.info('Contacts imported from google - ' + contact.length, filename);
+			    	qlog.info('========> Contacts imported from google <======== - ' + contact.length, filename);
 			    }
 		    });
         }
