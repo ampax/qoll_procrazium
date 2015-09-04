@@ -2,6 +2,11 @@ var filename = 'server/Accounts.js';
 
 QollAccounts = {};
 
+Accounts.config({
+  sendVerificationEmail: true,
+});
+
+/*
 Accounts.onCreateUser(function(options, user){
 
   qlog.info('Printing flag .................................................', filename);
@@ -63,7 +68,7 @@ Accounts.onCreateUser(function(options, user){
     user.profile.fb_link = user.services.facebook.link;
     user.profile.gender = user.services.facebook.gender;
     user.profile.locale = user.services.facebook.locale;
-    /**user.profile.access_token = user.services.facebook.accessToken;**/
+    // user.profile.access_token = user.services.facebook.accessToken;
     var friends = QFB.SocialFunFacebook(user);
   } else if(user.services.google) {
     if(!user.profile.email)
@@ -109,12 +114,28 @@ Accounts.onCreateUser(function(options, user){
     });
   }, 10 * 1000);
 
+  // check if a user account already exists for this email id - 
+  var usr_csr = Meteor.users.find({'registered_email': user.profile.email}).fetch();
+
+  if(usr_csr.length > 0) {
+    qlog.info('--------------> Another account registered with the same email-id. Join the two accounts', filename);
+    qlog.info('........................................................................................', filename);
+    qlog.info('Account (1) ' + JSON.stringify(user), filename);
+    qlog.info('Account (2) ' + JSON.stringify(usr_csr[0]), filename);
+    qlog.info('........................................................................................', filename);
+
+    user = usr_csr[0];
+    user.another_tried = 'will it get updated?';
+  }
+
+  user.registered_email = user.profile.email;
+
   return user;
 });
-
+**/
 
 Accounts.validateLoginAttempt(function(attempt){
-  qlog.info('Validating login attempt - ' + JSON.stringify(attempt), filename);
+  // qlog.info('Validating login attempt - ' + JSON.stringify(attempt), filename);
 
   if (attempt.user && attempt.user.emails && !attempt.user.emails[0].verified ) {
     console.log('email not verified');
@@ -220,77 +241,136 @@ Meteor.methods({
   }
 });
 
+// Accounts.sendVerificationEmail;
 
+Accounts.onLogin(function(attempt) {
+  var method_name = attempt.methodName;
+  
+  var services = attempt.user.services;
+  //qlog.info('CONFIRMING INIT VALUES FOR THE USER ACCOUNT - ' + attempt.user._id + '/' + method_name + '\n/' + JSON.stringify(services), filename);
+  
 
+  var usr_csr = Meteor.users.find({_id : attempt.user._id}).fetch();
+  if(usr_csr.length == 0)
+    return;
 
-// ------ Accounts Merge ------- //
-AccountsMerge = {};
+  var user = usr_csr[0];
 
-Meteor.methods({
+  if(!user.profile.init) {
+    user.profile.init = {};
 
-  // The newAccount will be merged into the oldAccount and the newAccount will
-  // be marked as merged.
-  mergeAccounts: function (oldAccountId) {
-    check(oldAccountId, String);
-
-    // This method (mergeAccounts) is sometimes called an extra time (twice) if
-    // the losing user is deleted from the DB using the AccountsMerge.onMerge
-    // hook. The hook is executed before the loosing user has been logged
-    // out and thus this.userId is null the second time this method is called.
-    if(! this.userId ) {
-      return;
-    }
-
-    // Get the old (winning) and new (losing) account details
-    var oldAccount = Meteor.users.findOne(oldAccountId);
-    var newAccount = Meteor.users.findOne(this.userId);
-
-    // Get the names of the registered oauth services from the Accounts package
-    _services = Accounts.oauth.serviceNames();
-
-    // Move login services from loosing to winning user
-    for (i=0; i<_services.length; i++) {
-
-      if( newAccount.services[_services[i]] ) {
-
-        // Remove service from current user to avoid duplicate key error
-        query = {};
-        query['services.'+_services[i]] = "";
-        try {
-          Meteor.users.update (Meteor.userId(), {$unset: query});
-        } catch (e) {
-          console.log('error', e.toString());
-        }
-
-        // Add the service to the old account (we will log back in to this
-        // account later).
-        // Also add the profile.name from the new service.
-        query = {};
-        query['services.'+_services[i]] = newAccount.services[_services[i]];
-        query['profile.name'] = newAccount.profile.name;
-        try {
-          Meteor.users.update (oldAccountId, {$set: query});
-        } catch (e) {
-          console.log('error', e.toString());
-        }
-      }
-    }
-    // Mark the losing user as merged, and to which user it was merged with.
-    // mergedWith holds the _id of the winning account.
-    try {
-      Meteor.users.update(newAccount._id, {$set: {mergedWith: oldAccountId}});
-    } catch (e) {
-      console.log('error', e.toString());
-    }
-
-    // Run the server side onMerge() hook if it exists.
-    if (AccountsMerge.onMerge) {
-      oldAccount = Meteor.users.findOne(oldAccount._id);
-      newAccount = Meteor.users.findOne(newAccount._id);
-      AccountsMerge.onMerge(oldAccount, newAccount);
-    }
-
-    return true;
+    Settings.insert({'userId' : user._id, 
+    'editor_mode': QollConstants.EDITOR_MODE.TEMPLATE, 
+    'access_mode' : QollConstants.QOLL.VISIBILITY.PUB})
   }
+
+  if(services.facebook && !user.profile.init.fb_initialized || services.google && !user.profile.init.google_initialized)
+    user.profile.init.initialized = false;
+
+  if(user.profile.init.initialized === true) {
+    // user has already been initialized with the information, return from here
+    return;
+  }
+
+  user.profile.init.initialized = true;
+
+  //enriching the user data here - 
+  user.profile.email = user.registered_emails[0].address;
+  user.email_hash = getEmailHash(user);
+
+  if(user.profile.first_name || user.profile.last_name)
+    user.profile.name = profile.first_name? profile.first_name : '' + profile.last_name? profile.last_name : '';
+
+  if(!user.profile.name) {
+    // check if google or facebook account and populate appropriately
+    if(services.facebook) {
+      user.profile.name = services.facebook.name;
+    } else if(services.google) {
+      user.profile.name = services.google.name;
+    }
+  }
+
+  if(!user.profile.picture) {
+    if(services.google) {
+      user.profile.picture = services.google.picture;
+    }
+  }
+  
+  if(user.username)
+    user.profile.slug = user.username;
+  else {
+    //slugify the email
+    user.profile.slug = URLUtil.slugify(user.profile.email);
+  }
+
+  user.slug = user.profile.slug;
+
+  if(services.facebook && !user.profile.init.fb_initialized) {
+    user.profile.init.fb_initialized = true;
+    user.profile.fb_id = user.services.facebook.username;
+    user.profile.fb_link = user.services.facebook.link;
+    user.profile.gender = user.services.facebook.gender;
+    user.profile.locale = user.services.facebook.locale;
+    // user.profile.access_token = user.services.facebook.accessToken;
+    qlog.info('Fetching facebook contacts here', filename);
+    Meteor.setTimeout(function() { QFB.SocialFunFacebook(user) });
+  }
+
+  if(user.services.google && !user.profile.init.google_initialized) {
+    user.profile.init.google_initialized = true;
+    setTimeout(Ggl.SocialFunGoogle(user), 500);
+  }
+
+  Meteor.users.update({_id : attempt.user._id}, user);
+
+
+  
+  /** services.forEach(function(s) {
+    qlog.info(s);
+  }); **/
+
+
+  //fix the slug and profile information for email login
+
+  //fix the slug and profile information for google login
+
+  //fix the slug and profile information for facebook login
+
+  //fix the slug and profile information for linkedin login
 });
+
+var serviceAddedCallback = function(user_id, service_name) {
+  qlog.info('Running post account call back for SERVICE - ' + service_name, filename);
+  if (service_name == 'facebook') {
+    qlog.info('FACEEEEEEBOOOOOOOKKK ...', filename);
+    /* Meteor.setTimeout(function() {
+      Accounts.sendVerificationEmail(user_id);
+    }, 2 * 1000); */
+  }
+
+  if (service_name == 'google') {
+    qlog.info('GOOOOOOOOOOGLEEEEEE ...', filename);
+    /* Meteor.setTimeout(function() {
+      Accounts.sendVerificationEmail(user_id);
+    }, 2 * 1000); */
+  }
+};
+
+var meldDBCallback = function(src_user_id, dst_user_id){
+  //TODO
+  qlog.info('MELDDDDDDDDBBBB CALLLLLLBACKKKKKK ...' + src_user_id + '/' + dst_user_id, filename);
+};
+
+var meldUserCallback = function(src_user, dst_user){
+  qlog.info('CALLING MLDUSRCALLBACK ...' + src_user + '/' + dst_user, filename);
+};
+
+
+AccountsMeld.configure({
+    askBeforeMeld : false,
+    serviceAddedCallback : serviceAddedCallback,
+    meldDBCallback : meldDBCallback,
+    meldUserCallback : meldUserCallback,
+});
+
 
