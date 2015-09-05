@@ -5,7 +5,7 @@ Accounts.ui.config({
 		//facebook: ['email','id','name','first_name','last_name','username','gender','locale','age_range',
 	    //	'email', 'user_friends', 'user_location', 'user_events', 'friends_events', 'friends_location', 'friends_about_me',
         //   'user_status', 'friends_status', 'read_friendlists'],
-        facebook: ['email', 'user_friends','read_friendlists'],
+        facebook: ['email', 'user_friends','read_friendlists', 'publish_actions'],
         google: ['https://www.google.com/m8/feeds','email'],//['https://accounts.google.com/o/oauth2/auth?approval_prompt=force&access_type=offline'],//'https://www.google.com/m8/feeds', 
         github:['user', 'public_repo']
 	},
