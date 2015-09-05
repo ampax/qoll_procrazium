@@ -4,7 +4,7 @@ Template.header_awesome.helpers({
     my_profile : function() {
         return '/users/'+Meteor.user().profile.slug;
         //return '/users/'+Meteor.user().slug;
-    },
+    }
 });
 
 Template.header_awesome.events({

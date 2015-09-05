@@ -3,6 +3,7 @@ accounts-facebook@1.0.4
 accounts-google@1.0.4
 accounts-oauth@1.1.5
 accounts-password@1.1.1
+accounts-twitter@1.0.4
 aldeed:autoform@5.4.1
 aldeed:collection2@2.3.3
 aldeed:simple-schema@1.3.3
@@ -10,6 +11,7 @@ andruschka:bootstrap-image-gallery@0.0.5
 anti:i18n@0.4.3
 autoupdate@1.2.1
 base64@1.0.3
+bengott:avatar@0.7.6
 binary-heap@1.0.3
 blaze@2.1.2
 blaze-tools@1.0.3
@@ -64,6 +66,7 @@ iron:router@1.0.9
 iron:url@1.0.9
 jparker:crypto-core@0.1.0
 jparker:crypto-md5@0.1.1
+jparker:gravatar@0.3.1
 jquery@1.11.3_2
 json@1.0.3
 lai:collection-extensions@0.1.4
@@ -100,6 +103,7 @@ mrt:datatables@0.1.3
 npm-bcrypt@0.7.8_2
 npm-container@1.1.0
 oauth@1.1.4
+oauth1@1.1.4
 oauth2@1.1.3
 observe-sequence@1.0.6
 ordered-dict@1.0.3
@@ -129,6 +133,7 @@ templating@1.1.1
 tmeasday:paginated-subscription@0.2.4
 tracker@1.0.7
 twbs:bootstrap@3.3.5
+twitter@1.1.4
 ui@1.0.6
 underscore@1.0.3
 url@1.0.4

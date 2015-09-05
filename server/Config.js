@@ -12,6 +12,7 @@ Meteor.startup(function(){
 		initWithGitDev();
 		initWithFacebookDev();
 		initWithGoogleDev();
+		initWithTwitterDev()
 
 		/**var InitUserForProfile = 'InitDefaultProfile';
 		//use this to find if this init has already run. Else initizlize.
@@ -29,6 +30,7 @@ Meteor.startup(function(){
 		initWithGitServer();
 		initWithFacebookServer();
 		initWithGoogleServer();
+		initWithTwitterServer();
 	}
 
 });

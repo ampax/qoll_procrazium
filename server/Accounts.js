@@ -264,7 +264,9 @@ Accounts.onLogin(function(attempt) {
     'access_mode' : QollConstants.QOLL.VISIBILITY.PUB})
   }
 
-  if(services.facebook && !user.profile.init.fb_initialized || services.google && !user.profile.init.google_initialized)
+  if(services.facebook && !user.profile.init.fb_initialized 
+      || services.google && !user.profile.init.google_initialized
+      || services.twitter && !user.profile.init.twitter_initialized)
     user.profile.init.initialized = false;
 
   if(user.profile.init.initialized === true) {
@@ -275,7 +277,8 @@ Accounts.onLogin(function(attempt) {
   user.profile.init.initialized = true;
 
   //enriching the user data here - 
-  user.profile.email = user.registered_emails[0].address;
+  user.profile.email = user.registered_emails? user.registered_emails[0].address
+                        : user.emails? user.emails[0].address : '';
   user.email_hash = getEmailHash(user);
 
   if(user.profile.first_name || user.profile.last_name)
@@ -287,20 +290,26 @@ Accounts.onLogin(function(attempt) {
       user.profile.name = services.facebook.name;
     } else if(services.google) {
       user.profile.name = services.google.name;
+    } else if(services.twitter) {
+      // nothing
     }
   }
 
   if(!user.profile.picture) {
     if(services.google) {
       user.profile.picture = services.google.picture;
+    } else if(services.twitter) {
+      user.profile.picture = services.twitter.profile_image_url;
     }
   }
   
   if(user.username)
     user.profile.slug = user.username;
-  else {
+  else if(user.profile.email && user.profile.email != '') {
     //slugify the email
     user.profile.slug = URLUtil.slugify(user.profile.email);
+  } else if(services && services.twitter) {
+    user.profile.slug = services.twitter.screenName;
   }
 
   user.slug = user.profile.slug;
