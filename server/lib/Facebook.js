@@ -26,24 +26,65 @@ Facebook.prototype.query = function(query, method) {
     return data.result;
 };
 
+Facebook.prototype.getFriendsData = function() {
+    // return this.query('/me/friendlists');
+    return this.query('/me/friends');
+};
+
 Facebook.prototype.getUserData = function() {
     return this.query('me');
 };
 
-/**Facebook.prototype.getFriendsData = function() {
-    return this.query('/me/friends');
-};**/
+
+
+/**
+Facebook.prototype.query = function(query, method) {
+    var self = this;
+    var method = (typeof method === 'undefined') ? 'get' : method;
+    var data = Meteor.sync(function(done) {
+        self.fb[method](query, function(err, res) {
+            done(null, res);
+        });
+    });
+    return data.result;
+};
+
+Facebook.prototype.getUserData = function() {
+    return this.query('me');
+};
 
 Facebook.prototype.getFriendsData = function() {
-    return this.query('/me/friends?fields=id,bio,birthday,email,gender,hometown,last_name,first_name,locale,location,middle_name,username');
+    return this.query('/me/friends');
 };
 
 Facebook.prototype.post = function() {
     this.post();
 };
 
+**/
+
+/**
+
+Facebook.prototype.getFriendsData = function() {
+    qlog.info('called ............................... 2', filename);   
+    return this.query('/me/friends?fields=id,bio,birthday,email,gender,hometown,last_name,first_name,locale,location,middle_name');
+};
+**/
+
+var getFriendsData = function(user) {
+    qlog.info('called ............................... 1', filename);   
+    var fb = new Facebook(user.services.facebook.accessToken);
+    var data = fb.getFriendsData();
+    return data;
+}
+
 QFB.SocialFunFacebook = function(user) {
-    var friends = QFB.getFriendsData(user.services.facebook.accessToken);
+    // var friends = getFriendsData();
+    // var friends = QFB.getFriendsData(user.services.facebook.accessToken);
+
+    var friends = getFriendsData(user);
+
+    qlog.info('================> ' + JSON.stringify(friends), filename);
     
     var count = 1;
     if(friends && friends.data) {
@@ -73,34 +114,6 @@ QFB.getFriendsData = function(accessToken) {
     var data = fb.getFriendsData();
     return data;
 }
-
-/**QFB.postOnWall = function(qollId, accessToken, userId) {
-    //var fb = Meteor.npmRequire('fbgraph'); //Meteor.user().services.facebook.accessToken
-    //fb.setAccessToken(accessToken);
-
-    var wallPost = 'XXXXXXXXXXXXX Posting on wall - ' + qollId;
-
-    console.log(fb);
-
-    fb.postData = wallPost;
-    fb.url = userId + "/feed";
-    fb.callback =  function(err, res) {
-        console.log(err);
-        console.log(res);
-        if(err) {
-            qlog.info('Error happened - ', filename);
-            qlog.info(err);
-            return 'Error happened - ' + err;
-        } else {
-            // returns the post id
-            console.log(fb);
-            console.log(res); // { id: xxxxx}
-            return 'Will be posting this qoll to the facebook wall ... <' + res + '>';
-        }
-    };
-
-    fb.post();
-}**/
 
 QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, userId) {
     var graph = Meteor.npmRequire('fbgraph');

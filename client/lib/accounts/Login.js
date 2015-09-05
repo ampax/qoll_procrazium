@@ -13,7 +13,7 @@ Accounts.ui.config({
 	forceApprovalPrompt: { google: true },
     passwordSignupFields: 'USERNAME_AND_EMAIL_CONFIRM', //USERNAME_AND_EMAIL
     extraSignupFields: [{
-        fieldName: 'first-name',
+        fieldName: 'first_name',
         fieldLabel: 'First name',
         inputType: 'text',
         visible: true,
@@ -26,7 +26,7 @@ Accounts.ui.config({
           }
         }
     }, {
-        fieldName: 'last-name',
+        fieldName: 'last_name',
         fieldLabel: 'Last name',
         inputType: 'text',
         visible: true,
