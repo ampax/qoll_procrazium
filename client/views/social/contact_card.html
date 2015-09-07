@@ -1,5 +1,38 @@
 <template name="list_card_long">
 	{{#each contacts}}
+
+	<div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12 list-group-item">
+			<div class="row">
+				<div class='col-md-5 col-sm-5 col-xs-5'>
+					<div class="entityblock profile profile-pic-long-list">
+						<img src="/img/ghost_avatar.png" alt="Ghost Avatar" class="avatar-image">
+					</div>
+					<div class="profile-content-1">
+						{{name}}
+					</div>
+				</div>
+				<div class='col-md-5 col-sm-5 col-xs-5'>
+					<div class="profile-content-1">
+						{{email}}
+					</div>
+				</div>
+				<!-- div class='col-md-3 list-enclosure'>
+					&nbsp;
+				</div -->
+				<div class='col-md-2 col-sm-2 col-xs-2' >
+					{{> sel_button contact=this}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	{{/each}}
+</template>
+
+<template name="list_card_long1">
+	{{#each contacts}}
 	<div class="row list-enclosure">
 		<div class='col-md-5 col-sm-5 col-xs-5'>
 			<div class="entityblock profile profile-pic-long-list">

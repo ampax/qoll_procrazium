@@ -10,7 +10,6 @@ var GroupSubscribeHooks = {
 
         var groups = [];
 
-        /*
         group_name_str.forEach(function(gn){
         	var matches = QollRegEx.groupForAuthor.exec(gn);
         	//groups.push({'group_name' : matches[1], 'author' : matches[2]});
@@ -53,7 +52,6 @@ var GroupSubscribeHooks = {
 			});
 		});
 
-	*/
 
         this.done();
 
