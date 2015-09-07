@@ -146,44 +146,56 @@ Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
       var groups = user.groups;
       if(!groups) groups = [];
 
-      var group_ids = [];
-      groups.map(function(group){
-        group_ids.push(group.groupId);
-      });
+      var usr = Meteor.users.find({_id : this.userId}, {reactive : true}).observe({
+        added : function(item, idx) {
+          //qlog.info('Added user for this session - ' + JSON.stringify(item), filename);
+          var groups = item.groups;
+          if(!groups) groups = [];
 
-      var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
-        added : function(grp, idx){
-          var handle_usr= Meteor.users.findOne(grp.submittedBy);
+          var group_ids = [];
+          groups.map(function(group){
+            group_ids.push(group.groupId);
+          });
 
-          /** Need to fix the users instead of bypassing it here **/
-          if(handle_usr == undefined || handle_usr.username == undefined)
-            return;
+          //console.log('added ' + group_ids);
 
-          grp = extractGroupInfo(grp);
-          grp.author_email = UserUtil.getEmail(handle_usr);
-          grp.social_ctx = 'group-subsc';
-          
-          qlog.info('============> Publishing my subscript groups to user - ' + JSON.stringify(grp), filename);
-          self.added('user-subscription-groups', grp._id, grp);
+          var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
+            added : function(grp, idx){
+              //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              self.added('user-subscription-groups', grp._id, grp);
+            },
+            changed : function(grp, idx){
+              //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              self.changed('user-subscription-groups', grp._id, grp);
+            }
+          });
         },
-        changed : function(grp, idx) {
-          var handle_usr= Meteor.users.findOne(grp.submittedBy);
+        changed : function(item, idx){
+          //qlog.info('Changed user for this session - ' + JSON.stringify(item), filename);
 
-          /** Need to fix the users instead of bypassing it here **/
-          if(handle_usr == undefined || handle_usr.username == undefined)
-            return;
+          var groups = item.groups;
+          if(!groups) groups = [];
 
-          grp = extractGroupInfo(grp);
-          grp.author_email = UserUtil.getEmail(handle_usr);
-          grp.social_ctx = 'group-subsc';
-          
-          qlog.info('============> Publishing my subscript groups to user - ' + JSON.stringify(grp), filename);
-          self.changed('user-subscription-groups', grp._id, grp);
+          var group_ids = [];
+          groups.map(function(group){
+            group_ids.push(group.groupId);
+          });
+
+          //console.log('changed ' + group_ids);
+
+          var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
+            added : function(grp, idx){
+              //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              self.added('user-subscription-groups', grp._id, grp);
+            },
+            changed : function(grp, idx){
+              //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              self.changed('user-subscription-groups', grp._id, grp);
+            }
+          });
         },
-        removed : function(grp){
-          self.removed('user-subscription-groups', grp._id);
-        }
       });
+      
     }
   }
 });
@@ -193,48 +205,43 @@ Meteor.publish('QOLL_MY_GROUP_QUERY', function(options){
   var self = this;
   var uuid = Meteor.uuid();
   var initializing = true;
+  var handle = undefined;
 
   qlog.info('Grouppublish; uuid: ' + uuid, filename);
   //db.QOLL.find({'submittedTo':'usr3322@qoll','action':'send'})
   if(this.userId) {//first publish specialized qolls to this user
-//qlog.info('Grouppublish USERID --------->>>>>'+this.userId);
-    
-      
-    var gpsraw= QollGroups.find({'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}},{reactive:false});
-        var allUserGroups = [];
-        gpsraw.forEach(function (grpEntry){
-        allUserGroups.push(grpEntry.groupName);
-        self.added('qoll-groups', grpEntry._id, {name:grpEntry.groupName});
-        });
+    qlog.info('Grouppublish USERID --------->>>>>'+this.userId);
 
-
-    var handle = QollGroups.find({'submittedBy':this.userId, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {$sort: {'createdOn':-1}, reactive : true }).observe({
+    var handle = QollGroups//.find({'submittedBy': 'TdWExitjsByuQ6gCQ', 'status' : {$ne : 'archive'}})
+    .find({'submittedBy':this.userId, 'status' : {$ne : QollConstants.STATUS.ARCHIVE}}, 
+      {sort : {'submittedOn' : -1}, reactive : true})
+    .observe({
       added : function(grp, idx){
-        var handle_usr= Meteor.users.findOne(grp.submittedBy);
-
+        var handle_usr= Meteor.users.findOne({'_id' : grp.submittedBy});
+        
         /** Need to fix the users instead of bypassing it here **/
-        if(handle_usr == undefined || handle_usr.username == undefined)
+        if(handle_usr == undefined || handle_usr.slug == undefined)
           return;
 
         grp = extractGroupInfo(grp);
         grp.author_email = UserUtil.getEmail(handle_usr);
         grp.social_ctx = 'group-owner';
         
-        qlog.info('============> Publishing my groups to user - ' + JSON.stringify(grp), filename);
+        //qlog.info('============> Publishing my groups to user - ' + JSON.stringify(grp), filename);
         self.added('my-groups', grp._id, grp);
       },
       changed : function(grp, idx) {
-        var handle_usr= Meteor.users.findOne(grp.submittedBy);
+        var handle_usr= Meteor.users.findOne({'_id' : grp.submittedBy});
 
         /** Need to fix the users instead of bypassing it here **/
-        if(handle_usr == undefined || handle_usr.username == undefined)
+        if(handle_usr == undefined || handle_usr.slug == undefined)
           return;
 
         grp = extractGroupInfo(grp);
         grp.author_email = UserUtil.getEmail(handle_usr);
         grp.social_ctx = 'group-owner';
         
-        qlog.info('============> Publishing my groups to user - ' + JSON.stringify(grp), filename);
+        //qlog.info('============> Publishing my groups to user - ' + JSON.stringify(grp), filename);
         self.changed('my-groups', grp._id, grp);
       },
       removed : function(grp){
@@ -253,6 +260,7 @@ Meteor.publish('QOLL_MY_GROUP_QUERY', function(options){
   });
 
 });
+
 
 Meteor.publish('GROUP_FOR_ID_QUERY', function(options){
   var self = this;

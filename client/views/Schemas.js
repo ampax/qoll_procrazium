@@ -40,6 +40,16 @@ Schemas.quick_qoll = new SimpleSchema({
   }
 });
 
+Schemas.custom_group_subscribe = new SimpleSchema({
+  group_name: {
+    type: [String],
+    label: "",
+    // regEx: SimpleSchema.RegEx.Email,
+    max: 500,
+    optional: true
+  },
+});
+
 
 
 /****** This is contact us collection less schema ******/

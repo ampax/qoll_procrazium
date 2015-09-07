@@ -937,6 +937,17 @@ div.img-container {
     color: rgb(28, 28, 81);
 }
 
+.qoll-comment-display-8 {
+    font-size: xx-small;
+    font-style: oblique;
+    font-weight: 800;
+    color: rgb(30, 78, 24);
+}
+
+.qoll-comment-display-8:hover {
+    color: white;
+}
+
 .r-marge {
     margin-right: 5px;
 }
@@ -980,4 +991,12 @@ div.img-container {
 }
 
 /* End: Group page tab */
+
+
+
+/* xautocomplete styling */
+.xpopover {
+    overflow: visible !important;
+    position: fixed !important;
+}
 

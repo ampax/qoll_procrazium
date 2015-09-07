@@ -13,19 +13,19 @@
 					
 					<!-- Nav tabs -->
 					<ul class="nav nav-tabs" role="tablist">
-					  <li class="active"><a href="#owner" role="tab" data-toggle="tab">Owner</a></li>
-					  <li><a href="#subscriber" role="tab" data-toggle="tab">Subscriber</a></li>
+					  <li class="active"><a href="#subscriber" role="tab" data-toggle="tab">Subscriber</a></li>
+					  <li><a href="#owner" role="tab" data-toggle="tab">Owner</a></li>
 					  <!-- li><a href="#open_requests" role="tab" data-toggle="tab">Open Requests</a></li -->
 					</ul>
 
 					<!-- Tab panes -->
 					<div class="tab-content">
-					  <div class="tab-pane active" id="owner">
-					  	{{> owned_templ groups=groups }}
-					  </div>
-					  <div class="tab-pane" id="subscriber">
+						<div class="tab-pane active" id="subscriber">
 					  	  {{> subsc_templ groups=subsc_groups }}
 						</div>
+					  <div class="tab-pane" id="owner">
+					  	{{> owned_templ groups=groups }}
+					  </div>
 					  <div class="tab-pane" id="open_requests">Open Requests ...</div>
 					</div>
 
@@ -60,6 +60,50 @@
 </template>
 
 <template name='subsc_templ'>
+	{{#autoForm schema=customGroupSubscribeSchema resetOnSuccess="true" id="groupSubscribeForm" type="normal"}}
+	<fieldset>
+
+	<div class="row">
+		<div class='list-group-item list-group-item-success'>
+	      <div class="col-md-12 col-sm-12 col-xs-12">
+	      	<div class="row">
+		      	<!-- div class="col-md-1 col-sm-1 col-xs-1"><span class="title-qoll">Search</span></div -->
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					
+							<div>
+							{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+						          formid="groupSubscribeForm" name="group_name"
+						          renderKey="name" fieldref="group_ref" call="fetch_user_groups" 
+						          renderfunction="renderGroupsNdOwners"}}
+
+						    </div>
+						
+
+						<!-- input type="text" class="form-control green_bg_5" placeholder="Start typing author's email to search and click from the search results to add the group" default="" id="group_search" data-step="1">
+						<span class="input-group-btn bs_input_btn">
+					        <button class="btn btn-primary bs_input_btn" type="button" id="subscribe">Subscribe</button>
+					    </span -->
+					<!-- /input-group -->
+				</div> <!-- col-sm-10 -->
+			</div>
+			<div class="row">
+				<div class="col-md-2 col-sm-2 col-xs-7" style="margin-left: -69px;">
+					<button class="ui button btn-primary bs_input_btn" type="submit">Subscribe</button>
+				</div>
+				<div class="col-md-10 col-sm-10 col-xs-5">&nbsp;</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12" style="font-size: xx-small;font-style: oblique; color: rgb(56, 50, 50);">
+					Search for groups by typing group owners name or email id and select from the list shown
+				</div>
+			</div>
+
+	      </div>
+	  </div>
+  </div>
+
+  <hr class="divider">
+
 	<div class='row'>
 		{{#each groups}}
 		<div class='list-group-item list-group-item-success list-group-social'>
@@ -79,5 +123,17 @@
 		  </div>
 	  	{{/each}}
 	</div>
+
+	</fieldset>
+	{{/autoForm}}
+</template>
+
+
+<template name="custom_group_subscribe_to">
+    <td class="qoll-auto-complete qoll-comment-only-hover">
+    	<span class="qoll-comment-display-2">{{this.name}}</span>
+    	<span class="qoll-comment-display-3">{{this.email}}</span>
+    	<span class="qoll-comment-display-8"><u>{{this.group_name}}</u></span>
+    </td>
 </template>
 

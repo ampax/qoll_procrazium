@@ -643,10 +643,47 @@ Meteor.methods({
         }
 
         // qlog.info('Result till this point - ' + JSON.stringify(results), filename);
-
+        /*
         results.push({'name' : 'dummy1', 'email' : 'dummy1@gmail.com'});
         results.push({'name' : 'dummy2', 'email' : 'dummy2@gmail.com'});
         results.push({'name' : 'dummy3', 'email' : 'dummy3@gmail.com'});
+        */
+
+        return results;
+    },
+    fetch_user_groups: function(query){
+        qlog.info("Getting groups for user in Query: " + query, filename);
+        if(query.search(/,/) != -1) {
+          var query = split(query);
+          query = query[query.length-1];
+        }
+        qlog.info('Extracted groups query string - ' + query, filename);
+
+        var results = new Array();
+        var user_id = Meteor.userId();
+
+        var friend_ids = new Array();
+
+        if(query != '') {
+          var users = Meteor.users.find({ $or: [{'registered_emails.address': {$regex: '^.*'+query+'.*$', $options: 'i'}}, 
+                      {'profile.email': {$regex: '^.*'+query+'.*$', $options: 'i'}},
+                      {'profile.name': {$regex: '^.*'+query+'.*$', $options: 'i'}} ] }).fetch();
+
+          users.forEach(function(ue){
+            qlog.info('Email for qoll connect is =======> ' + JSON.stringify(ue), filename);
+            if(ue.groupsCreated && ue.groupsCreated.length > 0) {
+              // add all the user created groups to the array
+              ue.groupsCreated.forEach(function(g){
+                results.push({'name' : ue.profile.name, 'email' : ue.profile.email, 
+                  'group_name' : g.groupName, 'group_id' : g.groupId, 'group_ref' : g.groupName + '(Author: '+ue.profile.email+')'});
+              });
+            }
+          });
+        }
+
+        /**results.push({'name' : 'dummy1', 'email' : 'dummy1@gmail.com', 'group_name' : 'Dummy Group 1', 'group_id' : 'Dummy Id 1'});
+        results.push({'name' : 'dummy2', 'email' : 'dummy2@gmail.com', 'group_name' : 'Dummy Group 2', 'group_id' : 'Dummy Id 2'});
+        results.push({'name' : 'dummy3', 'email' : 'dummy3@gmail.com', 'group_name' : 'Dummy Group 3', 'group_id' : 'Dummy Id 3'});**/
 
         return results;
     },

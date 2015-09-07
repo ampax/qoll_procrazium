@@ -69,10 +69,16 @@ Meteor.methods({
 		var author_id = handle_usr._id;
 		var my_id = Meteor.userId();
 		var handle_me = Meteor.users.findOne(my_id);
+
+		if(!handle_me.groups) handle_me.groups = [];
 		var groups_me = handle_me.groups;
 
 		var just_groups = [];
 
+		console.log(author_id);
+		console.log(my_id);
+		console.log(groups_me);
+		
 		if(HashUtil.checkArray(groups_me)) {
 			groups_me.map(function(g){
 				just_groups.push(g.groupName);
@@ -83,18 +89,19 @@ Meteor.methods({
 
 
 		var new_group = {"groupOwner" : author_id, "groupName" : group_name};
-		qlog.info("-------------------->" + just_groups + '' + new_group.groupName);
 		if(!_.contains(just_groups, group_name)) {
 			//Update the user and the groups table now
+			qlog.info('***'+author_id + '/' + group_name+'***');
 			var handle_gp = QollGroups.findOne({'submittedBy': author_id, 'groupName' : group_name});
 			new_group.groupId = handle_gp._id;
 			//QollGroups.find({'submittedBy': author_id, 'groupName' : group_name});
 			//qlog.info('Printing the group ---------->' + JSON.stringify(handle_gp) + '/' + author_id + '/' + handle_me.profile.email, filename);
 			var userEmails = handle_gp.userEmails;
+			console.log(userEmails);
 			if(!_.contains(userEmails, handle_me.profile.email)) {
-			qlog.info('Pusing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
-			userEmails.push(handle_me.profile.email);
-			QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmails}});
+				qlog.info('Pushing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
+				userEmails.push(handle_me.profile.email);
+				QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmails}});
 			} else {
 				qlog.info('Not Pusing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
 			}
