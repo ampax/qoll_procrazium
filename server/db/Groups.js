@@ -74,10 +74,6 @@ Meteor.methods({
 		var groups_me = handle_me.groups;
 
 		var just_groups = [];
-
-		console.log(author_id);
-		console.log(my_id);
-		console.log(groups_me);
 		
 		if(HashUtil.checkArray(groups_me)) {
 			groups_me.map(function(g){
@@ -91,13 +87,13 @@ Meteor.methods({
 		var new_group = {"groupOwner" : author_id, "groupName" : group_name};
 		if(!_.contains(just_groups, group_name)) {
 			//Update the user and the groups table now
-			qlog.info('***'+author_id + '/' + group_name+'***');
+			qlog.warn('***'+author_id + '/' + group_name+'***', filename);
 			var handle_gp = QollGroups.findOne({'submittedBy': author_id, 'groupName' : group_name});
 			new_group.groupId = handle_gp._id;
 			//QollGroups.find({'submittedBy': author_id, 'groupName' : group_name});
 			//qlog.info('Printing the group ---------->' + JSON.stringify(handle_gp) + '/' + author_id + '/' + handle_me.profile.email, filename);
 			var userEmails = handle_gp.userEmails;
-			console.log(userEmails);
+			qlog.debug(userEmails);
 			if(!_.contains(userEmails, handle_me.profile.email)) {
 				qlog.info('Pushing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
 				userEmails.push(handle_me.profile.email);
