@@ -54,7 +54,7 @@ Schemas.custom_questionnaire = new SimpleSchema({
   title: {
     type: String,
     label: "Title",
-    max: 50
+    max: 300
   },
   send_to: {
     type: [String],
