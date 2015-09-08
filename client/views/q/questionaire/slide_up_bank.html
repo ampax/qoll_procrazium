@@ -1,139 +1,74 @@
 <template name="slide_up_bank">
-	
+	{{#autoForm schema=customQuestionnaireSchema id="questionnaireForm" type="normal"}}
 	<div class="qbank_pop">
 		<div class='pop-nav'>
 			<div class='row'>
-			<div class='col-md-11 col-sm-11 col-xs-10'>New Questionnaire (<span id='cnt'>0</span>)</div>
-			<div class='col-md-1 col-sm-1 col-xs-2 pop-nav-actions'>
-				<!-- span class="glyphicon glyphicon-minus toggle"></span>&nbsp; -->
+				<div class='col-md-11 col-sm-11 col-xs-10'>New Questionnaire (<span id='cnt'>0</span>)</div>
+					<div class='col-md-1 col-sm-1 col-xs-2 pop-nav-actions'>
+						<!-- span class="glyphicon glyphicon-minus toggle"></span>&nbsp; -->
 
-			<button type="button" class="btn btn-danger btn-number toggle" style="margin-left: -30px;">
-                  <span class="glyphicon glyphicon-minus"></span>
-            </button>
-
-				<!-- span class="input-group-btn">
-	              <button type="button" class="btn btn-danger btn-number" data-type="plus" data-field="quant">
-	                  <span class="glyphicon glyphicon-minus toggle"></span>
-	              </button>
-	          </span -->
-			</div>
-			</div>
+						<button type="button" class="btn btn-danger btn-number toggle" style="margin-left: -30px;">
+			                  <span class="glyphicon glyphicon-minus"></span>
+			            </button>
+					</div>
+				</div>
 		</div>
 
 		<div class="form-static">
 
-			<div class="input-group input-group-sm fill_100_pct">
+			<!-- div class="input-group input-group-sm fill_100_pct">
 				<input type="text" class="qollstionnaire-title form-control" placeholder="Enter Qollstionnaire title ..." default="Qollstionnaire title" >
+			</div -->
+
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12">
+			        {{> afQuickField name="title"}}
+			    </div>
 			</div>
 
-			<div class="input-group input-group-sm minor-margin">
-				<span class="input-group-btn">
+			<div class="row">
+				<div class="col-md-6 col-sm-6 col-xs-6">
+			        <!-- {{> afQuickField name="tags"}} -->
+
+			        {{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+			          formid="questionnaireForm" name="tags"
+			          renderKey="name" fieldref="tag" call="fetch_tags" 
+			          renderfunction="renderTags"}}
+			    </div>
+			    <div class="col-md-6 col-sm-6 col-xs-6">
+			        {{> afQuickField name="end_time"}}
+			    </div>
+			</div>
+
+			<div class="row">
+				<div class='col-md-12 col-sm-12 col-xs-12'>
+				<!-- span class="input-group-btn">
 			     	<button type="button" class="btn btn-primary qollQbankToggle qoll-width-1">Qoll To:<sup class="red">*</sup></button>
 			    </span>
-			    <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1">
+			    <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1" -->
+
+			    {{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+		          formid="questionnaireForm" name="send_to"
+		          renderKey="name" fieldref="email" call="fetch_my_emails" 
+		          renderfunction="renderQollToEmails"}}
+		      </div>
 			</div>
 
-			<div class="input-group input-group-sm minor-margin">
+			<!--div class="input-group input-group-sm minor-margin">
 				<span class="input-group-btn">
 			     	<button type="button" class="btn btn-primary qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
 			    </span>
 		    
 				 <input type="text" class="form-control" placeholder="Add Tags: Space separated tags ..." default="" id="add-tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1">
-			</div>
-
-			<!-- Add the times here -->
-		<div class="input-group input-group-sm minor-margin col-md-12">
-			<span class="input-group-btn  ">
-				<button type="button" class="btn btn-info qoll-width-1"  >
-					Start Time
-				</button> </span>
-
-			<input id="qollsenddate" class="hasDatepicker form-control" type="text"  placeholder="Leave blank to send manually">
-			<span class="input-group-addon ">
-				<select class="qstion_send_hour">
-					<!--option value="HH">HH</option -->
-					<option value="01">01</option>
-					<option value="02">02</option>
-					<option value="03">03</option>
-					<option value="04">04</option>
-					<option value="05">05</option>
-					<option value="06">06</option>
-					<option value="07">07</option>
-					<option value="08">08</option>
-					<option value="09">09</option>
-					<option value="10">10</option>
-					<option value="11">11</option>
-					<option value="12" selected="selected">12</option>
-				</select>
-				<select class="qstion_send_min">
-					<option value="00">00</option>
-					<option value="05">05</option>
-					<option value="10">10</option>
-					<option value="15">15</option>
-					<option value="20">20</option>
-					<option value="25">25</option>
-					<option value="30">30</option>
-					<option value="35">35</option>
-					<option value="40">40</option>
-					<option value="45">45</option>
-					<option value="50">50</option>
-					<option value="55">55</option>
-				</select>
-				<select class="qstion_send_ampm">
-					<option value="AM">AM</option>
-					<option value="PM">PM</option>
-				</select> </span>
-		</div><!-- /start-time input-group -->
-		<div class="input-group input-group-sm minor-margin col-md-12">
-			<span class="input-group-btn  ">
-				<button type="button" class="btn btn-info qoll-width-1"  >
-					End Time
-				</button> </span>
-
-			<input id="qollenddate" class="hasDatepicker form-control" type="text"  placeholder="Leave blank to close manually">
-			<span class="input-group-addon ">
-				<select class="qstion_end_hour">
-					<!--option value="HH">HH</option -->
-					<option value="01">01</option>
-					<option value="02">02</option>
-					<option value="03">03</option>
-					<option value="04">04</option>
-					<option value="05">05</option>
-					<option value="06">06</option>
-					<option value="07">07</option>
-					<option value="08">08</option>
-					<option value="09">09</option>
-					<option value="10">10</option>
-					<option value="11">11</option>
-					<option value="12" selected="selected">12</option>
-				</select>
-				<select class="qstion_end_min">
-					<option value="00">00</option>
-					<option value="05">05</option>
-					<option value="10">10</option>
-					<option value="15">15</option>
-					<option value="20">20</option>
-					<option value="25">25</option>
-					<option value="30">30</option>
-					<option value="35">35</option>
-					<option value="40">40</option>
-					<option value="45">45</option>
-					<option value="50">50</option>
-					<option value="55">55</option>
-				</select>
-				<select class="qstion_end_ampm">
-					<option value="AM">AM</option>
-					<option value="PM">PM</option>
-				</select> </span>
-		</div><!-- /end-time input-group -->
+			</div-->
 
 		<br>
-		</div><!-- End: /form-static here -->
+		</div>
 		<div class="form-scroll">
-			<div class="input-group input-group-sm minor-margin col-md-12" id="content1"><!-- /Start of the content here -->
-				<p class='init-info'>Select by clicking the checkbox to craete a questionaire.</p>
-			</div><!-- /End of the content here -->
-		</div><!-- End: /form-scroll here -->
+			<div class="input-group input-group-sm minor-margin col-md-12" id="content1">
+				<!--p class='init-info'>Select by clicking the checkbox to craete a questionaire.</p -->
+			</div>
+		</div>
 
 		<div class="form-scroll-info">
 			<span class="input-group-btn">
@@ -145,8 +80,12 @@
 		</div><!-- End: /form-scroll here -->
 
 		<div class='save-nav'>
-			<button type="button" class="btn btn-primary store">Store</button>
-			<button type="button" class="btn btn-primary send">Send</button>
+			<div class='col-md-6 col-sm-6 col-xs-12'>
+				{{> afFieldInput name="state" type="select-radio-inline" firstOption="true" options=sendOrStore}}
+			</div>
+			<div class='col-md-6 col-sm-6 col-xs-12'>
+				<button type="submit" class="btn btn-primary">Submit</button>
+			</div>
 			<!-- <span class="fa-stack fa-md facebook btn-primary">
 			  <i class="fa fa-square-o fa-stack-2x"></i>
 			  <i class="fa fa-facebook fa-stack-1x"></i>
@@ -159,5 +98,10 @@
 		</div>
 
 	</div><!-- End: /qbank_pop here -->
+	{{/autoForm}}
+</template>
 
+
+<template name="tags_autocomplete">
+    <td class="qoll-auto-complete">{{this.tag}}</td>
 </template>

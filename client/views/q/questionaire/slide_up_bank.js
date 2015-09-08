@@ -1,13 +1,74 @@
 var filename='client/views/questionaire/slide_up_bank.js';
-/*
- * JQuery functions for slideout feedback form
- * 
- * Sets up a sliding form on click of a feedback button
- * On submit button will send the data to a php script
- *
- */
 
- Template.slide_up_bank.rendered = function() {
+
+Template.registerHelper("sendOrStore", function() {
+    return {
+      stored: 'Store',
+      sent : 'Send'
+    };
+});
+
+
+// ---- hook
+var QuestionnaireHooks = {
+    onSubmit: function(insertDoc, updateDoc, currentDoc) {
+        this.event.preventDefault();
+        var title = insertDoc.title;
+        var tags = insertDoc.tags;
+        var end_time = insertDoc.end_time;
+        var send_to = insertDoc.send_to;
+        var state = insertDoc.state;
+
+        var allqollids = [];
+        $('.qoll').each(function() {
+          var qoll = $(this);
+          qlog.info('Will be storing qoll with id: ' + qoll.id + '/' + this.id, filename);
+          allqollids.push(this.id);
+        });
+
+        console.log(title);
+        console.log(tags);
+        console.log(end_time);
+        console.log(send_to);
+        console.log(state);
+        console.log(allqollids);
+
+        if(allqollids.length == 0) {
+          alert('Select qolls to create the questionnaire');
+          return false;
+        }
+
+        var jsn = {title : title, tags : tags, end_time : end_time, recips : send_to, action : state, allqollids : allqollids};
+
+        qlog.info(JSON.stringify(jsn), filename);
+
+        createQuestionnaire(jsn)
+
+        return false;
+
+        // AutoForm.resetForm('questionnaireForm')
+
+        // return true;
+    },
+};
+
+AutoForm.addHooks('questionnaireForm', QuestionnaireHooks);
+
+
+
+
+
+
+
+
+Template.slide_up_bank.helpers({
+  customQuestionnaireSchema: function() {
+    return Schemas.custom_questionnaire;
+  },
+});
+
+
+Template.slide_up_bank.rendered = function() {
   qlog.info("Initializing autocomplete ... ", filename);
   Meteor.subscribe('RECIPIENTS_PUBLISHER');
   QollAutoComplete.init("input#recipient_search");
@@ -15,23 +76,6 @@ var filename='client/views/questionaire/slide_up_bank.js';
 };
 
  Template.slide_up_bank.events({
-
-  'keyup .recipient' : function() {
-
-    QollAutoComplete.autocomplete({
-      element : 'input#recipient_search', // DOM identifier for the element
-      collection : Recipients, // MeteorJS collection object (published object)
-      field : 'groupName', // Document field name to search for
-      limit : 0, // Max number of elements to show
-      sort : {
-        groupName : 1
-      },
-      mode : 'multi',
-      delimiter : ';'
-    });
-    // Sort object to filter results with
-    //filter: { 'gender': 'female' }}); // Additional filtering
-  },
   'click div.slider' : function() {
     qlog.info('Clicked on the slider div');
     $( "div.slider" ).slideToggle();
@@ -331,4 +375,81 @@ var filename='client/views/questionaire/slide_up_bank.js';
   }, **/
 
  });
+
+// perform all the core operations here and move the custom to store and send blocks in the AutoForm hook
+var createQuestionnaire = function(jsn) {
+    qlog.info(jsn.action + ' the questionnaire ...' , filename);
+
+    var allqollids = jsn.allqollids;
+
+    var emailsandgroups = jsn.recips;
+    var title = jsn.title;
+    var tagArr = jsn.tags;
+
+    var qollstionnaire = {};
+    qollstionnaire.emails = jsn.recips;
+    qollstionnaire.title = jsn.title.trim();
+    qollstionnaire.tags = jsn.tags;
+    qollstionnaire.status = jsn.action;
+
+    qollstionnaire.qollids = allqollids;
+
+    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, jsn.action, allqollids, function(err, qollstionnaire_id) {
+      var target = jQuery(".qbank-error-msg");
+      if (err) {
+        qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);
+        target.html("Failed, try again...");
+        target.fadeOut(1600, function() {
+          //target.html(store_html);
+        });
+        return -1;
+      } else {
+        qlog.info("Added qoll-master-content with id: " + qollstionnaire_id, filename);
+        //Wipe out the values inserted in the slide-up editor now
+        jQuery("input.qollstionnaire-title").val('');
+        jQuery("span#cnt").html('0');
+        $('span.qoll-container').remove();
+
+        
+        target.html("Qoll Saved...");
+        jQuery(".qollstionnaire-title").val('');
+        $('.qoll_selection').prop("checked", false);
+        $('.qoll_selectall').prop("checked", false);
+    
+        target.fadeOut(2400, function() {
+          target.html(store_html);
+          target.removeAttr("style");
+          qlog.info('Adding store-qoll button back: ' + store_html, filename);
+        });
+
+        if('send' === jsn.action) {
+          // Send questionnaire email now
+          qlog.info('Sending questionnaire to recepients now - ' + emailsandgroups + '/' + qollstionnaire_id);
+          Meteor.call('sendQollstionnaireMail', qollstionnaire_id, function(err, data) {
+            if (err) {
+              qlog.info('Failed sending the email - ' + qollstionnaire_id + '/' + err, filename);
+            } else {
+              qlog.info('Sent the email - ' + qollstionnaire_id + ', message - ' + data, filename);
+            }
+          });
+
+          QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Sent questionaire ...');
+        } else {
+          QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Stored questionaire ...');
+        }
+
+        return qollstionnaire_id;
+      }
+    });
+
+  };
+
+
+
+renderTags = function(x) {
+    // qlog.info('called render qoll to emails method', filename);
+    // console.log(x);
+    return Blaze.toHTMLWithData(Template.tags_autocomplete, x);
+    // return x.email + x.name;
+};
 

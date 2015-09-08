@@ -23,7 +23,7 @@ span.toggle {
 	/*height: 300px;
 	max-height: 500px;*/
 	overflow: visible;
-	z-index: 3;
+	/* z-index: 3; */
 	/*resize:both;*/
 }
 
@@ -49,13 +49,13 @@ span.toggle {
 .qbank_pop .form-static{
 	clear:both;
 	/**height:300px;*/
-	max-height: 190px;
+	max-height: 240px;
 	width:545px;
 	border: 1px solid #ccc;
 	background:#fff;
 	padding:15px;
 	/**overflow: auto;**/
-	z-index: 3;
+	/* z-index: 3; */
 	position: relative;
 	display: none;
 }
@@ -71,7 +71,7 @@ span.toggle {
 	background:#fff;
 	padding:15px;
 	overflow: auto;
-	z-index: 3;
+	/* z-index: 3; */
 	position: relative;
 	display: none;
 }
@@ -88,7 +88,7 @@ span.toggle {
 	background:#fff;
 	padding:15px;
 	overflow: auto;
-	z-index: 3;
+	/* z-index: 3; */
 	position: relative;
 	display: none;
 }
@@ -115,6 +115,10 @@ div.qbank_pop > div.save-nav {
 	padding-bottom: 0px;
 	font-weight:100;
 	display: none;
+}
+
+div.qbank_pop > div.save-nav > div > div > label.radio-inline {
+	color: black !important;
 }
 
 div.qbank_pop > div.pop-nav > div.pop-nav-title {
@@ -148,7 +152,7 @@ div#content1 {
 		background:#fff;
 		padding:15px;
 		/**overflow: auto;**/
-		z-index: 3;
+		/* z-index: 3; */
 		position: relative;
 		display: none;
 	}
@@ -164,7 +168,7 @@ div#content1 {
 		background:#fff;
 		padding:15px;
 		overflow: auto;
-		z-index: 3;
+		/* z-index: 3; */
 		position: relative;
 		display: none;
 	}
@@ -208,7 +212,7 @@ div#content1 {
 		background:#fff;
 		padding:15px;
 		/**overflow: auto;**/
-		z-index: 3;
+		/* z-index: 3; */
 		position: relative;
 		display: none;
 	}
@@ -225,7 +229,7 @@ div#content1 {
 		background:#fff;
 		padding:15px;
 		overflow: auto;
-		z-index: 3;
+		/* z-index: 3; */
 		position: relative;
 		display: none;
 	}
@@ -235,7 +239,7 @@ div#content1 {
 		max-height: 40px;
 		width: 100%;
 		background: #404040;
-		color: white;
+		color: white; 
 		padding-top: 12px;
 		padding-left: 7px;
 		padding-bottom: 0px;

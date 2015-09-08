@@ -31,3 +31,36 @@ Meteor.publish('QOLL_TAG_PUBLISHER', function(tag) {
 
 	}
 });
+
+Meteor.methods({
+	fetch_tags: function(query){
+        
+        if(query.search(/,/) != -1) {
+          var query = split(query);
+          query = query[query.length-1];
+        }
+        
+        var results = new Array();
+
+        results.push({'tag' : query});
+
+        if(query != '') {
+          var tags = QollTags.find({'tag': {$regex: '^.*'+query+'.*$', $options: 'i'}} ).fetch();
+          tags.forEach(function(t){
+          	results.push({'tag' : t.tag});
+          });
+        }
+
+        /** 
+        results.push({'tag' : 'dummy1'});
+        results.push({'tag' : 'dummy2'});
+        results.push({'tag' : 'dummy3'}); 
+        **/
+
+        return results;
+    },
+});
+
+var split = function(val){
+  return val.split( /,\s*/ );
+};

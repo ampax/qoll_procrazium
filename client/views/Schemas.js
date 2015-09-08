@@ -50,6 +50,34 @@ Schemas.custom_group_subscribe = new SimpleSchema({
   },
 });
 
+Schemas.custom_questionnaire = new SimpleSchema({
+  title: {
+    type: String,
+    label: "Title",
+    max: 50
+  },
+  send_to: {
+    type: [String],
+    label: "Send To",
+    max: 500
+  },
+  tags: {
+    type: [String],
+    label: "Tags",
+    max: 500
+  },
+  end_time: {
+    type: String,
+    label: "Deadline",
+    max: 500,
+    optional: true
+  },
+  state: {
+    type: String,
+    optional: false,
+  },
+});
+
 
 
 /****** This is contact us collection less schema ******/
