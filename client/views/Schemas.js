@@ -75,6 +75,12 @@ Schemas.custom_questionnaire = new SimpleSchema({
   state: {
     type: String,
     optional: false,
+    defaultValue: 'stored'
+    /** autoform: {
+      afFieldInput: {
+        firstOption: "Store"
+      }
+    } **/
   },
 });
 
