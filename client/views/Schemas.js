@@ -76,13 +76,25 @@ Schemas.custom_questionnaire = new SimpleSchema({
     type: String,
     optional: false,
     defaultValue: 'stored'
-    /** autoform: {
-      afFieldInput: {
-        firstOption: "Store"
-      }
-    } **/
   },
 });
+
+
+Schemas.custom_markdown_menu_options = new SimpleSchema({
+  share_with: {
+    type: [String],
+    label: "Share With",
+    max: 500,
+    optional: false
+  },
+  tags: {
+    type: [String],
+    label: "Tags",
+    max: 500,
+    optional: true,
+  },
+});
+
 
 
 

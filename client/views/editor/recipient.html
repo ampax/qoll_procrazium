@@ -1,58 +1,52 @@
 <template name="recipient">
-	
-	<div class="row">
-	<div class="col-md-12 col-xs-12 well well-sm">
+  {{#autoForm schema=customMarkMenuOptSchema id="recipientForm" type="normal"}}
 
-		<div class="input-group input-group-sm">
-   	
-		   	<span class="input-group-btn">
-		     	<button type="button" class="btn btn-primary qoll-width-1">Attributes:<sup class="red">*</sup></button>
-		    </span>
-		    <div class="control-group">
-			  	<div class="controls">
-			  		<label class="control-label control-label-1">&nbsp; Access :&rarr;</label>
-				    <label class="radio-inline">
-					  <input type="radio" name="attribute_access" id="public" value="public" {{is_pub}}> Private
-					</label>
-					<label class="radio-inline">
-					  <input type="radio" name="attribute_access" id="private" value="private" {{is_pvt}}> Restricted
-					</label>
+  <div class="row">
+		<div class='list-group-item list-group-item-success'>
+	      <div class="col-md-6 col-sm-6 col-xs-12">
+		      	<div class="row">
+			  		<div class="col-md-12 col-xs-12">
+			  			{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+					          formid="recipientForm" name="share_with"
+					          renderKey="name" fieldref="email" call="fetch_my_emails" 
+					          renderfunction="renderQollToEmails"}}
+			  		</div>
+		      	</div>
+		      	<div class="row">
+			  		<div class="col-md-12 col-xs-12" style="font-size: xx-small;font-style: oblique; color: rgb(56, 50, 50);">
+			  			Search by typing. You can also add from the wildcard groups - Public or Teachers.
+			  		</div>
+		      	</div>
+			</div>
 
-					{{#if is_group_enabled}}
-					&nbsp;&nbsp;&nbsp;<input type="text" class="recipient_grp add-group textbox" placeholder="Add groups for sharing (no emails) ..." default="self" id="recipient_search_grp" data-intro="Search and add groups to qolls created ..." data-step="1">
-					{{/if}}
-				</div><!-- controls -->
-			</div><!-- control-group -->
-
-		</div><!-- /input-group --><!-- br -->
-
-    	<!-- div class="input-group input-group-sm">
-   	
-		   	<span class="input-group-btn">
-		     	<button type="button" class="btn btn-primary qollQbankToggle qoll-width-1"  >Qoll To: <span class="caret"></span></button>
-		    </span>
-	    
-			 <input type="text" class="recipient form-control" placeholder="Send To: Recipients seperated by comma ..." default="procrazium@gmail.com" id="recipient_search" data-intro="Start by creating a comma separated list of recipient group-names and/or emails. Group names support autocomplete." data-step="1">
-
-		</div></input-group --><br>
-
-		<div class="input-group input-group-sm">
-
-			 <span class="input-group-btn">
-		     	<button type="button" class="btn btn-info qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
-		    </span>
-	    
-			 <input type="text" class="tags form-control" placeholder="Add Tags: Space separated tags ..." default="" id="tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1">
-
-		</div><!-- /input-group -->
-	</div>
-
-	<div class="col-md-12 col-xs-12">
-		<div class="input-group input-group-sm">
-			<button type="button" id="store" class="btn btn-primary btn-md store">Store</button> &nbsp;
-			<!-- button type="button" id="send" class="btn btn-primary btn-md send">Send</button -->
+			<div class="col-md-6 col-sm-6 col-xs-12">
+		      	<div class="row">
+			  		<div class="col-md-12 col-xs-12">
+			  			{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+					          formid="recipientForm" name="tags"
+					          renderKey="name" fieldref="tag" call="fetch_tags" 
+					          renderfunction="renderTags"}}
+			  		</div>
+		      	</div>
+		      	<div class="row">
+			  		<div class="col-md-12 col-xs-12" style="font-size: xx-small;font-style: oblique; color: rgb(56, 50, 50);">
+			  			Search or add a new tag for the Qolls (<span class="red">Qolls will always be shared with the company</span>).
+			  		</div>
+		      	</div>
+			</div>
 		</div>
 	</div>
-	</div>
-	
+
+	<!-- div class="row">
+		<div class="col-md-12 col-sm-12 col-xs-12">
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</div>
+	</div -->
+
+	{{> toolbar}}
+
+	{{> aceEditor}}
+
+  {{/autoForm}}
 </template>
+

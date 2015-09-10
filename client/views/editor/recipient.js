@@ -1,5 +1,52 @@
 var filename = "client/views/editor/recipient.js";
 
+
+var MarkdownQollHooks = {
+    onSubmit: function(insertDoc, updateDoc, currentDoc) {
+        this.event.preventDefault();
+        
+        var share_with = insertDoc.share_with;
+        var tags = insertDoc.tags;
+        var edtr = ace.edit("aceEditor");
+		var content = edtr.getValue();
+
+		console.log(share_with);
+        console.log(tags);
+        console.log(content);
+
+        var access = 'private';
+        var qollIdToEdit = undefined;
+        var accessGroups = share_with;
+        var emailsandgroups = undefined;
+
+        Meteor.call("addQollMaster", content, emailsandgroups, tags, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, undefined, function(error, msg) {
+			if (error) {
+				qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
+	          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg.msg);
+			} else {
+				QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg.msg);
+				edtr.setValue('', 1);
+				$('div.xmultiple').html('');
+			}
+		});
+
+        /**
+        var jsn = {title : title, tags : tags, end_time : end_time, recips : send_to, action : state, allqollids : allqollids};
+
+        qlog.info(JSON.stringify(jsn), filename);
+
+        createQuestionnaire(jsn)
+        **/
+
+        return false;
+    },
+};
+
+
+AutoForm.addHooks('recipientForm', MarkdownQollHooks);
+
+
+
 Template.recipient.helpers({
 	is_pub : function() {
 		return QollEditorUtil.checkAccessMode(QollConstants.QOLL.VISIBILITY.PUB) ? 'checked' : '';
@@ -10,7 +57,10 @@ Template.recipient.helpers({
 	},
 	is_group_enabled : function() {
 		return QollEditorUtil.checkAccessMode(QollConstants.QOLL.VISIBILITY.PVT);
-	}
+	},
+	customMarkMenuOptSchema: function() {
+	    return Schemas.custom_markdown_menu_options;
+	},
 });
 
 //This will be used to convert the html to markdown in case it is ckEditor that user has selected
@@ -31,7 +81,7 @@ Template.recipient.helpers({
 			(iii) If it is a single qoll, set the mode single, if multiple, set the mode questionnaire
 **/
 Template.recipient.events({
-	'click .store' : function(event) {
+	'click .store1' : function(event) {
 		event.preventDefault();
 		var content = 'undefined';
 		var markdown = 'undefined';
@@ -131,7 +181,7 @@ Template.recipient.events({
 
 		qlog.info('Storing the qoll now - ' + content, filename);
 	},
-	'click .send' : function(event) {
+	'click .send1' : function(event) {
 		var content = 'undefined';
 		var markdown = 'undefined';
 		var access = $("input:radio[name=attribute_access]:checked").val();

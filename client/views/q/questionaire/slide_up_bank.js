@@ -13,6 +13,7 @@ Template.registerHelper("sendOrStore", function() {
 var QuestionnaireHooks = {
     onSubmit: function(insertDoc, updateDoc, currentDoc) {
         this.event.preventDefault();
+        
         var title = insertDoc.title;
         var tags = insertDoc.tags;
         var end_time = insertDoc.end_time;
@@ -25,13 +26,6 @@ var QuestionnaireHooks = {
           qlog.info('Will be storing qoll with id: ' + qoll.id + '/' + this.id, filename);
           allqollids.push(this.id);
         });
-
-        console.log(title);
-        console.log(tags);
-        console.log(end_time);
-        console.log(send_to);
-        console.log(state);
-        console.log(allqollids);
 
         if(allqollids.length == 0) {
           alert('Select qolls to create the questionnaire');
