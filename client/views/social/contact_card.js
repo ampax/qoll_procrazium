@@ -11,3 +11,15 @@ Template.list_card.helpers({
         return connect.social_type === 'qoll';
     },
 });
+
+
+Template.list_card_long.helpers({
+	gravtar : function(email) {
+		qlog.info('email - ' + email, filename)
+		if(!email) return '/img/ghost_avatar.png';
+
+		var grav_url = Gravatar.imageUrl(email, {secure : true});
+		qlog.info('Printing the gravtar url = ' + grav_url, filename);
+		return grav_url;
+	}
+});
