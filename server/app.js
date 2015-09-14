@@ -15,12 +15,10 @@ var connectOptions = {
 
 var mongo_url = SITE_URL.replace(/http/, 'mongodb') + '/meteor';
 
-qlog.info('Starting cluster connection and connecting to mongodb - ' + mongo_url, filename);
+qlog.warn('Starting cluster connection and connecting to mongodb - ' + mongo_url, filename);
 
 // Cluster.connect("mongodb://localhost:3001/meteor");
 
-/**
 Cluster.connect(mongo_url);
 Cluster.register("qollserver");
 Cluster.allowPublicAccess("qollserver");
-**/
