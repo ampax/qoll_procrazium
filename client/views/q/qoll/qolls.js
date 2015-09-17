@@ -282,10 +282,12 @@ Template.qolls_inner.events({
 		} else {
 			if (chk.hasClass('border-selected')) {
 				chk.removeClass('border-selected');
+				chk.closest('div.list-group-item').removeClass('qoll-background-selected')
 				answered_or_unanswered = 'unanswered';
 			} else {
 				chk.addClass('border-selected');
 				answered_or_unanswered = 'answered';
+				chk.closest('div.list-group-item').addClass('qoll-background-selected')
 			}
 		}
 
