@@ -19,6 +19,6 @@ qlog.warn('Starting cluster connection and connecting to mongodb - ' + mongo_url
 
 // Cluster.connect("mongodb://localhost:3001/meteor");
 
-Cluster.connect(mongo_url);
-Cluster.register("qollserver");
-Cluster.allowPublicAccess("qollserver");
+//Cluster.connect(mongo_url);
+//Cluster.register("qollserver");
+//Cluster.allowPublicAccess("qollserver");
