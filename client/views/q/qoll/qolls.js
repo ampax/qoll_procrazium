@@ -294,7 +294,7 @@ Template.qolls_inner.events({
 		var answerIndex = this.item.index;
 		var answerVal = this.item.value;
 
-		qlog.info(qollstionnaireId + ' ### ' + qollId + ' ### ' + answerVal + ' ### ' + answerIndex + ' ### ' + answered_or_unanswered, filename);
+		// qlog.info(qollstionnaireId + ' ### ' + qollId + ' ### ' + answerVal + ' ### ' + answerIndex + ' ### ' + answered_or_unanswered, filename);
 		
 		if (qollstionnaireId) {
 												//	qsnrid, 		qollId, qollTypeVal, qollTypeIx, qollPortal, 					userId, 	answered_or_unanswered

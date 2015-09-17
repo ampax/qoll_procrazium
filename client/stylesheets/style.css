@@ -634,6 +634,10 @@ text-overflow: ellipsis;
     border-color: #00FF00 !important;
 }
 
+.qoll-background-selected {
+    background-color: #8799A9 !important;
+}
+
 .option-selected {
     background-color: rgb(209, 208, 215) !important;
 }

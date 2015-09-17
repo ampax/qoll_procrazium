@@ -1,29 +1,24 @@
 <template name="single_qoll_options">
-	      <div class="col-md-12 col-xs-12 list-group-item">
-        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{qollType.index}}">
+  {{#with item=qollType parent=qoll}}
+	      <div class="col-md-12 col-xs-12 list-group-item {{is_chk_selected_bg item.index  parent.q }}">
+        <div class="col-md-10 col-xs-10 indent-littlebit" id="{{item.index}}">
           {{#if is_not_blank_type qoll.q.cat}}
-          {{#with item=qollType parent=qoll}}
+          
           <span class="badge pull-left {{get_qoll_resp_class ../qoll.q.context}} {{qoll_abbr_class item.index ../qoll.q.context}} {{is_chk_selected item.index  parent.q }} 
-          {{check_selected parent._id item.index}}  glossy">
+          {{check_selected parent._id item.index}}  glossy" id="{{parent.q._id}}_{{item.index}}">
           
             {{qoll_type_abbr item.index}}
           </span>
-          {{/with}}
+          
           {{/if}}
-            &nbsp;<span>{{{transform_txt qollType.value qoll.cat}}}</span>
+            &nbsp;<span>{{{transform_txt item.value qoll.cat}}}</span>
         </div>
         <div class="col-md-2 col-xs-2">
-            {{#if is_correct_answer qoll.q.qollTypesX qollType.index qoll.q.context}}
+            {{#if is_correct_answer qoll.q.qollTypesX item.index qoll.q.context}}
               <i class="glyphicon glyphicon-check green"></i>
             {{/if}}
-            <span class="badge pull-right fulltoggle">{{value_at qoll.stats qollType.index}}</span>
+            <span class="badge pull-right fulltoggle">{{value_at qoll.stats item.index}}</span>
         </div>
-        {{#with  value_at qoll.answers qollType.index}}
-        <div class="col-md-12 col-xs-12  list-group-item-info">
-            
-            Answered By:  {{comma_seperate this}}
-           
-        </div>
-         {{/with}}
       </div>
+  {{/with}}
 </template>

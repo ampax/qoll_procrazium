@@ -44,11 +44,13 @@ Template.single_qoll_options.helpers({
 		if (qollTypeReg[idx] === 1)
 			return 'border-selected';
 	},
+	//
 	is_chk_selected_bg : function(idx,qoll) {
 		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
 		if(qoll.myresponses && qoll.myresponses.length>idx){
 			if(qoll.myresponses[idx]){
-				return 'option-selected';
+				//return 'option-selected';
+				return 'qoll-background-selected';
 			}else{
 				return '';
 			}
@@ -57,7 +59,8 @@ Template.single_qoll_options.helpers({
 		if (qollTypeReg == undefined)
 			return '';
 		if (qollTypeReg[idx] === 1)
-			return 'option-selected';
+			//return 'option-selected';
+			return 'qoll-background-selected';
 	},
 	is_correct_answer : function(qollTypesX, idx, context) {
 		if(context === QollConstants.CONTEXT.WRITE) return false;
