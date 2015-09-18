@@ -10,31 +10,6 @@ var filename="server/lib/QollMailer.js";
 
 QollMailer = {};
 
-//var nodemailer = Meteor.require('nodemailer');
-
-QollMailer.sendContactUsEmail = function(from, to, subject, msg) {
-    // create reusable transport method (opens pool of SMTP connections)
-    /**var smtpTransport = nodemailer.createTransport("SMTP",{
-        service: "Gmail",
-        auth: {
-            user: "webmaster@qoll.io",
-            pass: "Kaushik793"
-        }
-    });**/
-
-    // setup e-mail data with unicode symbols
-    qlog.info("Sending mail from: " + from, filename);
-    var mailOptions = {
-        from: from, // sender address
-        to: to, // list of receivers
-        subject: from +" : "+ subject, //"Hello ✔", // Subject line
-        text: msg, // plaintext body
-        html: msg // html body
-    };
-
-    //Email.send(mailOptions);
-};
-
 QollMailer.sendQollEmail = function(from, to, subject, msg) {
 
     Meteor.Mandrill.send(
@@ -63,7 +38,7 @@ Meteor.methods({
       return whoJoinedEmail( user_id );
     },
     sendContactUsEmail : function(from, to, subject, msg) {
-        return QollMailer.sendContactUsEmail(from, to, subject, msg);
+        return QollMailer.sendQollEmail(from, to, subject, msg);
     },
     sendQollstionnaireMail : function(qollstionnaire_id, userId) {
         qlog.info('------------------- Called sending the questionnaire method -------------------');

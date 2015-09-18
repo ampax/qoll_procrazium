@@ -99,6 +99,11 @@ Router.map(function() {
 		path : '/howto'
 	});
 
+	this.route('contact_us', {
+		template : 'contact_us',
+		path : '/contact_us'
+	});
+
 });
 
 
