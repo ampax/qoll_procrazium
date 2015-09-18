@@ -5,8 +5,9 @@ Template.contact_us.events({
         event.preventDefault();
         var name = $('#Name').val();
         var from = $('#Email').val();
-        var to = "webmaster@qoll.io";
+        // var to = "webmaster@qoll.io";
         // var to = "procrazium@gmail.com";
+        var to = "cozenlabs@gmail.com";
         var msg = $('#Message').val();
         var subject = "Qoll User Contacting: " + name;
 
