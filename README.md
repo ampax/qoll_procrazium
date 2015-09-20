@@ -250,6 +250,46 @@ meteor reset
 Now you can start adding server side code for mark-down processing. If you add client-side processing, it
 will not work. Search for downtown handlebar template to get an idea.
 
+##Installing imagemagic##
+We will be using wget to install this (you can do the same using curl or any other linux/mac utility)
+
+Install wget (on mac), if you already dont have it [wget]- 
+```
+cd ~/Downloads
+curl -O http://ftp.gnu.org/gnu/wget/wget-1.15.tar.gz
+tar -zxvf wget-1.15.tar.gz
+cd wget-1.15/
+./configure
+
+// if error happens? - configure: error: --with-ssl was given, but GNUTLS is not available. do following - 
+./configure --with-ssl=openssl
+
+make
+sudo make install
+// wget installed in the following location - 
+/usr/local/bin/wget
+
+// clean the download folder now
+rm -rf ~/Downloads/wget*
+```
+
+Installing graphicsmagic now [graphicsmagic] -
+```
+cd ~/Downloads
+wget http://sourceforge.net/projects/graphicsmagick/files/graphicsmagick/1.3.21/GraphicsMagick-1.3.21.tar.gz
+tar -zxvf GraphicsMagick-1.3.21.tar.gz
+cd GraphicsMagick-1.3.21/
+./configure
+
+make
+sudo make install
+
+// confirm the installation
+gm display
+```
+
+
+
 
 ##Additional resources##
 
@@ -258,3 +298,6 @@ Learn how to write better mark-down (.md/README.md) files - [daringfireball]
 [daringfireball]: http://daringfireball.net/projects/markdown/syntax "Write Better Markdown"
 [meteor-npm]: https://github.com/arunoda/meteor-npm "Add npm to meteor"
 [complete-npm-integration]: http://meteorhacks.com/complete-npm-integration-for-meteor.html "Complete Npm Integration"
+[wget]: http://coolestguidesontheplanet.com/install-and-configure-wget-on-os-x/ "wget"
+[graphicsmagic]: http://www.graphicsmagick.org/INSTALL-unix.html "read more here"
+
