@@ -59,7 +59,7 @@ Meteor.methods({
 			'tags' : tags,
 			//'attributes' : attributes,
 			'qollFormat' : qollFormat,
-			'imageIds'	 : selImgIds
+			'imageIds'	 : qollData[QollConstants.EDU.IMGS]
 		};
 
 		var qollId;
@@ -68,14 +68,14 @@ Meteor.methods({
 			qollId = collection_forqoll.insert(qoll_to_insert);
 		}
 		else{
-			qlog.info('ABOUT to inplace edit qoll with id - ' + qollIdtoUpdate, filename);
+			qlog.info('ABOUT to inplace edit qoll with id $$$$$$$$$$$$$$$$$$ >>>> ' + qollIdtoUpdate, filename);
 			qoll_to_insert._id=qollIdtoUpdate;
 			qollId =qollIdtoUpdate;
 			collection_forqoll.update(qollIdtoUpdate,qoll_to_insert,{upsert:false},function(err,obj){
 				if(err)
-					qlog.info('recieved error - ' + err, filename);
+					qlog.info('recieved error $$$$$$$$$$$$$$ >>>>>>>>>>>>> ' + err, filename);
 				if(!err){
-					qlog.info('SUCCESS inplace edit qoll with id - ' + obj._id, filename);
+					qlog.info('SUCCESS inplace edit qoll with id $$$$$$$$$$$$$$$$ >>>>>>>>>>>>>>>>>>>> ' + obj._id, filename);
 				}
 			});
 		}
@@ -194,26 +194,32 @@ Meteor.methods({
 	},
 
 	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
-		qlog.info('----------------- Inserting into qoll master -----------------', filename);
+		qlog.info('----------------- Inserting into qoll master -----------------> ' + selImgIds, filename);
 		//Store the tags
 		if(tags != undefined)
 			var err_msg = QollTagsDb.storeTags(tags);
 
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
 
-		var qollIds = new Array();
+		// var qollIds = new Array();
 		var parsedQoll = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 		
 		qlog.info('Parsed the qoll =====>\n' + parsedQoll, filename);
 
-		parsedQoll.qollCombo.forEach(function(combo){
+		/**** parsedQoll.qollCombo.forEach(function(combo){
 			var qollRawId = Qolls.QollRawDb.insert(combo.master);
 			combo.qoll.qollRawId = qollRawId;
 			
 			var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
-			combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.selImgIds)
+			combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS])
 			qollIds.push(qid);
-		});
+
+			if(combo.qoll.qollData[QollConstants.EDU.IMGS] && combo.qoll.qollData[QollConstants.EDU.IMGS].length > 0) {
+				qlog.info('Creating qoll with images - ' + combo.qoll.qollData[QollConstants.EDU.IMGS], filename);
+			}
+		}); *****/
+
+		var qollIds = persistParsedQoll(parsedQoll);
 
 		// create a questionnaire if need be
 		// (1) no email and groups attached
@@ -257,14 +263,9 @@ Meteor.methods({
 			{'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 
 			'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
 
-		// Qolls.QollMasterDb();
+		var parsedQoll = QollParser.parseQollMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 
-		// var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
-
-		var qollids = QollParser.parseQollMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
-
-
-		qlog.info('=================> ' + qollids[0], filename);
+		var qollIds = persistParsedQoll(parsedQoll);
 
 		// create a questionnaire if need be
 		// (1) no email and groups attached
@@ -384,3 +385,22 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 	}
 	return {questinfo: questinfo, questId: questId};
 };
+
+var persistParsedQoll = function(parsedQoll) {
+	var qollIds = new Array();
+
+	parsedQoll.qollCombo.forEach(function(combo){
+		var qollRawId = Qolls.QollRawDb.insert(combo.master);
+		combo.qoll.qollRawId = qollRawId;
+		
+		var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
+		combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS])
+		qollIds.push(qid);
+
+		if(combo.qoll.qollData[QollConstants.EDU.IMGS] && combo.qoll.qollData[QollConstants.EDU.IMGS].length > 0) {
+			qlog.info('Creating qoll with images - ' + combo.qoll.qollData[QollConstants.EDU.IMGS], filename);
+		}
+	});
+
+	return qollIds;
+}

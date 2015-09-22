@@ -110,7 +110,7 @@ Router.map(function(){
 		template: 'quickedit_qoll',
 		path : '/qoll_edit/:_id',
 		waitOn: function(){
-			qlog.info('Editting the qoll for id', filename);
+			qlog.info('Editting the qoll for id ' +this.params._id, filename);
 			Meteor.subscribe('QOLL_IMAGES');
 
 			Meteor.subscribe('RAW_QOLL_FOR_ID_PUBLISHER', {_id : this.params._id});

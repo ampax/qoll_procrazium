@@ -13,21 +13,27 @@ var QuickQollEditHooks = {
         var type = QollConstants.EDITOR_MODE.QUICK;
 
         var qoll_txt = '\n# ' + title + '\n*text ' + text;
+
+        if(sel_img_ids && sel_img_ids.length > 0) {
+            qoll_txt = qoll_txt + '\n* Images - ' + sel_img_ids.join();
+        }
+
         options.forEach(function(opt){
             qoll_txt = qoll_txt + '\n- ' + opt;
         });
 
 
+        console.log(sel_img_ids);
 
         console.log(qoll_txt);
 
-        console.log('========================>>>>');
+        /** console.log('========================>>>>');
         console.log(insertDoc);
         console.log('========================>>>>');
         console.log(updateDoc);
         console.log('========================');
         console.log(currentDoc);
-        console.log('========================');
+        console.log('========================'); **/
 
         // return;
 
@@ -49,6 +55,7 @@ var QuickQollEditHooks = {
             } else {
                 // QollError.message(QollConstants.MSG_TYPE.SUCCESS, 'Success: ' + msg.msg);
                 Session.set("selected_image_ids", new Array());
+                Router.go('/qoll_board/'+qollIdToEdit);
             }
         });
 
@@ -88,6 +95,12 @@ Template.quickedit_qoll.helpers({
 
 		var q = RawQollForId.find({_id : id}).fetch()[0];
 
+        if(q) {
+            var img_ids = q.imageIds;
+            if(!img_ids) img_ids = new Array();
+            Session.set("selected_image_ids", img_ids);
+        }
+
 		return RawQollForId.find({_id : id}).fetch()[0];
 
 		//var retq = {'title' : q.title, 'text' : q.qollText};
@@ -100,9 +113,11 @@ Template.quickedit_qoll.helpers({
 		var id = Session.get('edit_qoll_id');
 		var doc = RawQollForId.find({_id : id}).fetch()[0];
 
-		/** var img_ids = doc.imageIds;
-		if(!img_ids) img_ids = new Array();
-		Session.set("selected_image_ids", img_ids); **/
+		if(doc) {
+            var img_ids = doc.imageIds;
+    		if(!img_ids) img_ids = new Array();
+    		Session.set("selected_image_ids", img_ids);
+        }
 
 		return doc;
 	},

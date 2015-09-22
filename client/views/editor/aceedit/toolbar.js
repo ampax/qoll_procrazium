@@ -180,6 +180,42 @@ Template.toolbar.events({
 
         console.log(Session.get("selected_image_ids"));
     },
+    "change .myFileInput": function(event, template) {
+        console.log('I am called ....');
+        /**var files = event.target.files;
+        for (var i = 0, ln = files.length; i < ln; i++) {
+            console.log(files[i]);
+          // Images.insert(files[i], function (err, fileObj) {
+            // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
+          //});
+        }**/
+
+        FS.Utility.eachFile(event, function(file) {
+            console.log(file);
+            // if the image type is GIF, then store it as it is
+
+            // if the image type is anything other than GIF, convert it to JPEG and store it
+            var newFile = new FS.File(file);
+            var galleryId = Meteor.user()._id;
+            newFile.metadata = { owner : Meteor.user()._id, gallery : galleryId };
+
+            QollImages.insert(newFile, function (err, fileObj) {
+                if(err) {
+                    qlog.info('Error happened while processing/storing the image - ' + err, filename);
+                    console.error(err);
+                } else {
+                    // Inserted new doc with ID fileObj._id, and kicked off the data upload using HTTP
+                    qlog.info('Inserted the image - ' + fileObj._id, filename);
+                    console.log(fileObj);
+                    console.log('URL is ===================>');
+                    //console.log(fileObj.url);
+                    //fileObj.metadata.url = '/cfs/files/images/' + this._id;
+                    //QollImages.update(Meteor.user()._id, fileObj);
+                }
+              
+            });
+        });
+    },
 });
 
 

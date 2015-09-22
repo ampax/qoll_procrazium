@@ -164,7 +164,7 @@ QollParser = {
                     qlog.info('This is hint -> ' + part, filename);
                     qoll_data[QollConstants.EDU.HINT] = part.replace(QollRegEx.hint, '');
                 } else if(part.match(QollRegEx.imgs)) {
-                    qlog.info('This is images -> ' + part, filename);
+                    qlog.info('This is iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiimages -> ' + part, filename);
                     qoll_data[QollConstants.EDU.IMGS] = part.replace(QollRegEx.imgs, '').split(',');
                 } else if(part.match(QollRegEx.unit)) {
                     part = part.replace(QollRegEx.unit, '');
@@ -186,6 +186,12 @@ QollParser = {
                     qlog.info('##############=> ' + part, filename);
                 }
             });
+
+			// at this point, populate imgs with selImgIds
+			if(selImgIds && selImgIds.length > 0) {
+				if(!qoll_data[QollConstants.EDU.IMGS]) qoll_data[QollConstants.EDU.IMGS] = [];
+				qoll_data[QollConstants.EDU.IMGS] = _.union(qoll_data[QollConstants.EDU.IMGS], selImgIds);
+			}
 
 			var ix =0; ix =0;
 			while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
@@ -307,7 +313,7 @@ QollParser = {
             if(qoll_data[QollConstants.EDU.CAT] === undefined)
             	qoll_data[QollConstants.EDU.CAT] = qollType;
 
-            qlog.info('##########=>'+JSON.stringify(qoll_data), filename);
+            qlog.info('########## qoll_data=>'+JSON.stringify(qoll_data), filename);
 
 			/**
 			* Qoll Data will have the following attributes in the end
