@@ -19,6 +19,10 @@ Template.view_inbox.helpers({
 			return moment(qollstionnaireCreatedOn).format('MMM Do YYYY, h:mm a');
 		}
 	},
+	facebook_qoll : function(length_class) {
+		if(length_class === 'facebook-qoll')
+			return true;
+	},
 });
 
 

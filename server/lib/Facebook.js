@@ -115,7 +115,7 @@ QFB.getFriendsData = function(accessToken) {
     return data;
 }
 
-QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, userId) {
+QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, userId, qollstionnaire_id) {
     var graph = Meteor.npmRequire('fbgraph');
     if(Meteor.user().services.facebook.accessToken) {
         graph.setAccessToken(Meteor.user().services.facebook.accessToken);
@@ -131,7 +131,8 @@ QFB.postOnWall = function(wallTitle, wallPost, wallDescription, accessToken, use
                 picture: 'http://www.qoll.io/logos/2_logotype_250_px.png',
                 //picture: 'http://www.qoll.io/logos/2_logotype.png',
                 icon : 'http://www.qoll.io/logos/brand.png',
-                link : 'www.qoll.io',
+                // link : 'www.qoll.io',
+                link : URLUtil.SITE_URL + '/ext_wall_board/' + qollstionnaire_id + '/facebook',
 
                 /** name: wallTitle,
                 message : wallPost,
@@ -203,7 +204,14 @@ Meteor.methods({
         });
 
         qlog.info('Callling posting on facebook wall ...' + JSON.stringify(q) + '/' + accessToken, filename);
-        var data = QFB.postOnWall(wallTitle, wallPost, wallDescription, accessToken, userId);
+
+        // create an anonymous questionnaire (if one is already not there) before posting the qoll
+        var qollids = new Array();
+        qollids.push(qollId);
+        var qollstionnaire_id = Meteor.call('addAnonymousQollstionnaire', 'Register your responses by clicking the choices please', qollids, 'facebook');
+        qlog.info('Callling posting on facebook wall ...' + JSON.stringify(q) + '/' + accessToken + '/' + qollstionnaire_id, filename);
+        
+        var data = QFB.postOnWall(wallTitle, wallPost, wallDescription, accessToken, userId, qollstionnaire_id);
         return data;
     },
 });

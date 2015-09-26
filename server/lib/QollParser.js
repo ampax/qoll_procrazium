@@ -42,7 +42,7 @@ QollParser = {
             // d.txt = d.txt.replace(/\\/, "");
 
             while ((matches = QollRegEx.tex_1.exec(d.txt)) != null) {
-            	qlog.info('TEEEEEEX ======> ' + matches[1].substring(0, matches[1].length), filename);
+            	//qlog.info('TEEEEEEX ======> ' + matches[1].substring(0, matches[1].length), filename);
 				d.tex_arr.push(matches[1].substring(0, matches[1].length));
 				tex_replace.push(matches[0]);
 			}
@@ -53,8 +53,8 @@ QollParser = {
 				cntr++;
 			});
         }
-        if(d.tex_arr && d.tex_arr.length > 0)
-        	qlog.info('Printing TEX ------> ' + JSON.stringify({'txt' : d.txt, 'tex_arr' : d.tex_arr}), filename);
+        //if(d.tex_arr && d.tex_arr.length > 0)
+        //	qlog.info('Printing TEX ------> ' + JSON.stringify({'txt' : d.txt, 'tex_arr' : d.tex_arr}), filename);
         return {'txt' : d.txt, 'tex_arr' : d.tex_arr};
 	},
 	//Parse the data from markdown editor
@@ -95,7 +95,7 @@ QollParser = {
             var cntr =0;
             var foundTitle=0;
             qoll_parts.map(function(part){
-                qlog.info('---------------------------> ' + part, filename);
+                //qlog.info('---------------------------> ' + part, filename);
                 part = part.replace(/&nbsp;/g, ' ');
                 //* Start: Find and replace TEX expressions *//
                 var tmp = QollParser.parseTex({'txt' : part, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]});
@@ -182,8 +182,11 @@ QollParser = {
                     });
 
                     //qoll_star_attributes[QollConstants.EDU.UNITS] = part.replace(QollRegEx.unit, '');
+                } else if(part.match(QollRegEx.exp)) {
+                    qlog.info('This is explanation -> ' + part, filename);
+                    qoll_data[QollConstants.EDU.EXPL] = part.replace(QollRegEx.exp, '');
                 } else {
-                    qlog.info('##############=> ' + part, filename);
+                    qlog.info('##############*^*^*^*^*^**^**=> ' + part, filename);
                 }
             });
 
@@ -240,7 +243,7 @@ QollParser = {
 				        	//iterate over the alphabetical correct answers and see if the index matches x.index
 				        	var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
 				        	arrayOfAns.forEach(function(ansm){
-				        		qlog.info('---------------->*' + ansm+'*', filename);
+				        		//qlog.info('---------------->*' + ansm+'*', filename);
 				        		index = ansm.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
 				        		if(index === x.index) {
 				        			x.isCorrect = 1;
@@ -256,7 +259,7 @@ QollParser = {
 				            qlog.info(arrayOfAns.join('/'), filename);
 				        	arrayOfAns.forEach(function(ansm){
 				        		index = parseInt(ansm);
-				        		qlog.info('---------------->**' + ansm+'**'+index+'**', filename);
+				        		//qlog.info('---------------->**' + ansm+'**'+index+'**', filename);
 				        		if(index === x.index) {
 				        			x.isCorrect = 1;
 				        			qoll_data.answer_matched = 1;

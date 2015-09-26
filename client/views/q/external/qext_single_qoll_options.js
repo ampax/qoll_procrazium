@@ -8,7 +8,7 @@ Template.qext_single_qoll_options.helpers({
 	},
 	qoll_abbr_class : function(idx, context) {
 		//qlog.info('GOT IX ' + idx, filename);
-		console.log(context);
+		// console.log(context);
 		if(context === QollConstants.CONTEXT.WRITE){
 			return "class_" + idx;
 		} else {
@@ -16,7 +16,7 @@ Template.qext_single_qoll_options.helpers({
 		}
 	},
 	get_qoll_resp_class : function(context) {
-		console.log(context);
+		// console.log(context);
 		if(context === QollConstants.CONTEXT.WRITE) {
 			return 'qoll-response-val';
 		} else return 'qoll-response-val-none';
@@ -116,13 +116,13 @@ Template.qext_single_qoll_options.helpers({
 		}
 	},
 	get_register_class : function(context) {
-		console.log(context);
+		// console.log(context);
 		if(context === QollConstants.CONTEXT.READ) {
 			return 'register-blank-none';
 		} else return 'register-blank';
 	},
 	get_register_bg_class : function(context) {
-		console.log(context);
+		// console.log(context);
 		if(context === QollConstants.CONTEXT.READ) {
 			return 'white_bg_5';
 		} else return 'green_bg_1';

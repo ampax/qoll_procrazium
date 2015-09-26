@@ -251,10 +251,27 @@ Template.qext_qolls_inner.helpers({
 Template.qext_qolls_inner.events({
 	'click .qoll-response-val' : function(event) {
 		event.preventDefault();
+
 		var chk = $(event.target);
 		var qoll =this.parent.q;
-		var extUserEmailId = this.parent.user_email_id;
 		var qollPortal = this.parent.qoll_portal;
+
+		var extUserEmailId = undefined;
+		var sessionUUID = undefined;
+
+		qlog.info('========================clicked to register response *' + qollPortal+'*', filename);
+
+		if('facebook' == qollPortal) {
+			extUserEmailId = $('#email').val();
+			sessionUUID = Session.get('sessionUUID');
+			qlog.info('==============> '+extUserEmailId, filename);
+		} else if('email' === qollPortal) {
+			extUserEmailId = this.parent.user_email_id;
+		} else {
+			alert('We do not support registering from this link. Please contact Qoll team with more info.');
+			return false;
+		}
+
 		//If not a multiple choice question, remove the border-selected
 		console.log(this);
 		qlog.info('XXXXXXXXXXXXXXXXXXXXX - ' + qoll + '/' + qoll.isMultiple + '/' + extUserEmailId);
@@ -282,12 +299,28 @@ Template.qext_qolls_inner.events({
 		qlog.info('the aindex =' + answerVal + '/' + answerIndex, filename);
 
 		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.EMAIL;
-		if (qollstionnaireId && extUserEmailId) {
+		if (qollstionnaireId && extUserEmailId && qollPortal === QollConstants.QOLL_PORTAL.EMAIL) {
 			Meteor.call('ExQoll_AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, qollPortal, extUserEmailId, function(err, qollRegId) {
 				if (err) {
 					qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
 				} else {
 					qlog.info('Registered qoll with id: ' + qollRegId + answerVal, filename);
+					var saved_target = $('#' + qollId).find('span.saved-msg');
+					saved_target.html('Response saved ...');
+					saved_target.fadeOut(6400, 'swing', function() {
+						saved_target.html('');
+						saved_target.removeAttr("style");
+					});
+					qlog.info('The target is ----->' + chk.attr('class'), filename);
+				}
+			});
+		} else if (qollstionnaireId && qollPortal === QollConstants.QOLL_PORTAL.FACEBOOK) {
+			Meteor.call('FB_AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, qollPortal, extUserEmailId, sessionUUID, function(err, sUUID) {
+				if (err) {
+					qlog.error('Failed registering for facebook: ' + qollId + ' : ' + err, filename);
+				} else {
+					qlog.info('Registered with facebook for ssuid: ' + sUUID + '/' + qollstionnaireId + '/' + qollId, filename);
+					Session.set("sessionUUID", sUUID);
 					var saved_target = $('#' + qollId).find('span.saved-msg');
 					saved_target.html('Response saved ...');
 					saved_target.fadeOut(6400, 'swing', function() {

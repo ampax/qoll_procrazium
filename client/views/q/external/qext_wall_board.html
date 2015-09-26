@@ -1,22 +1,27 @@
 <template name="qext_wall_board">
 	<hr class='divider divider-bottom-0'>
 	<!-- Keep all page content within the page-content inset div! -->
-	<div class="page-content inset inset-5">
+	<div class="page-content">
 
 		<div class="row">
 			<div class="col-md-12 col-xs-12 list-group-item list-group-item-heading" >
-				
-				<div class="col-md-6 col-xs-12 list-group-item-align">
-					Title: {{questionaire.title}} ({{questionaire.qoll_count}})
+				<div class="col-md-4 col-sm-2 col-xs-11 list-group-item-align">
+					<span class="qoll-comment-display-9">Respond anonymousely or provide <b>email for accuracy</b></span>
 				</div>
-				
-				<div class="col-md-6 col-xs-12 list-group-item-align">
+				<div class="col-md-2 col-sm-2 col-xs-4 list-group-item-align">
+					<span class="qoll-comment-display-9">
+						Email (<u>optional</u>)
+					</span>
+				</div>
+				<div class="col-md-4 col-sm-4 col-xs-7">
+					<input type="text" class="form-control" id="email" name="email" placeholder="Email <optional>" value="" />
+				</div>
+				<div class="col-md-2 col-sm-2 col-xs-1 list-group-item-align">
 					&nbsp;
 				</div>
-			</div><!-- list-group-item list-group-item-heading -->
+			</div>
+		</div>
 
-			
-		</div><!-- /row-->
 		{{> qext_qolls_inner qollList = this.qollList user_email_id = this.user_email_id qoll_portal= this.qoll_portal  btns= inbox_board_btns }}
 	</div>
 </template>

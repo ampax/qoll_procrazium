@@ -265,16 +265,21 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 			qlog.info('Found user - ' + JSON.stringify(user), filename);
 
+			var facebookQuestId = fetchUsersFacebookQuestionnaires(user._id);
+			qlog.info('FACEBOOK Questionnaire ID: ' + facebookQuestId, filename);
+
 			//handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT})
 
-			handle_questionaires = Qollstionnaire.find({ 'submittedTo' : UserUtil.getEmail(user), 'status' : QollConstants.STATUS.SENT }, 
+			handle_questionaires = Qollstionnaire.find(
+				{$or: [{ 'submittedTo' : UserUtil.getEmail(user), 'status' : QollConstants.STATUS.SENT }, {_id : {$in : facebookQuestId}}]}, 
 				{ sort : { 'submittedOn' : -1}, reactive : true }
 			).observe({
 				added : function(item, idx){
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
+					length_class = item.anonymous_type && item.anonymous_type === QollConstants.QOLL_PORTAL.FACEBOOK ? 'facebook-qoll' : length_class;
 					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-						recips_count : item.submittedTo.length, submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
-						length_class : length_class};
+						recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, 
+						closed_on : item.qollstionnaireClosedOn, length_class : length_class};
 					
 					var resp = QollstionnaireResponses.findOne({
 						qollstionnaireid : item._id,
@@ -299,9 +304,10 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 				},
 				changed : function(item, idx) {
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
+					length_class = item.anonymous_type && item.anonymous_type === QollConstants.QOLL_PORTAL.FACEBOOK ? 'facebook-qoll' : length_class;
 					var pub = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-						recips_count : item.submittedTo.length, submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
-						length_class : length_class};
+						recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, 
+						closed_on : item.qollstionnaireClosedOn, length_class : length_class};
 					
 					var resp = QollstionnaireResponses.findOne({
 						qollstionnaireid : item._id,
@@ -366,7 +372,7 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
 					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.submittedTo.length, submitted_on : item.submittedOn, category : item.category,
+							recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, category : item.category,
 							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
 
 					if(findoptions.stats){
@@ -397,7 +403,7 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 				},
 				changed : function(item, idx) {
 					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
-							recips_count : item.submittedTo.length, submitted_on : item.submittedOn, category : item.category,
+							recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, category : item.category,
 							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
 
 					if(findoptions.stats){
@@ -1370,5 +1376,15 @@ var filterCommentForWriteCtx= function(comments, this_email_id) {
 	});
 
 	return filtered_comments;
+};
+
+var fetchUsersFacebookQuestionnaires = function(userid) {
+	var facebookQuestId = new Array();
+
+	QollstionnaireResponses.find({usrid : userid, qollPortal : 'facebook'}).map(function(qr){
+		facebookQuestId.push(qr.qollstionnaireid);
+	});
+
+	return facebookQuestId;
 };
 

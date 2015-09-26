@@ -16,10 +16,9 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
     var q = Qolls.QollstionnaireDb.get({_id : findoptions._id});
 
-    if(q.submittedToUUID[CoreUtils.encodeEmail(extUserEmailId)] !== userQUUID) q = undefined;
-    // submittedToUUID[CoreUtils.encodeEmail(extUserEmailId)] : userQUUID
-
-    qlog.info('Found questionnaire =====> ' + JSON.stringify(q), filename);
+    //if(q.submittedToUUID && q.submittedToUUID[CoreUtils.encodeEmail(extUserEmailId)] !== userQUUID) q = undefined;
+    
+    qlog.info('Found questionnaire +++++++++++=====> ' + JSON.stringify(q), filename);
 
     if(user) qlog.info('Fetched user with email - ' + extUserEmailId + ' ::: ' + JSON.stringify(user), filename);
 	if (q) {
@@ -40,6 +39,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 			qlog.info('Find questionnaire for id : ' + findoptions._id, filename);
 			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
 				added : function(item, idx){
+					qlog.info('1=1=1=1=1=1=1==>'+JSON.stringify(item), filename);
 					var qolls = [];
 					var counter = 1;
 					item.qollids.map(function(qid){
@@ -67,7 +67,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 							q2 = QollKatexUtil.populateIfTex(q2, t);
 
-							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
+							qlog.info('Pushing qolls to client 2=2=2=2=2=2=2=2=> ' + JSON.stringify(q2.fib), filename);
 
 							qolls.push(q2);
 						});
@@ -75,7 +75,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 					var quest = {title : item.title, qoll_count	: item.qollids.length};
 
-					//qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
+					qlog.info('Pushing qolls to client 3=3=3=3=3=3=3=3=3=> ' + JSON.stringify(qolls), filename);
 
 					qlog.info('Questionnaire detail - ' + JSON.stringify(quest), filename);
 

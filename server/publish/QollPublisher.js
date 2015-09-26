@@ -169,6 +169,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						context 		: findoptions.context,
 						isMultiple		: item.isMultiple,
 						imageIds		: item.imageIds,
+						explanation		: item.explanation,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -219,6 +220,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						context 			: findoptions.context,
 						isMultiple			: item.isMultiple,
 						imageIds			: item.imageIds,
+						explanation		: item.explanation,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -283,6 +285,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						context 			: findoptions.context,
 						isMultiple			: item.isMultiple,
 						imageIds			: item.imageIds,
+						explanation			: item.explanation,
 
 						_id : item._id
 					};
@@ -375,6 +378,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 							context 		: findoptions.context,
 							isMultiple		: item.isMultiple,
 							imageIds		: item.imageIds,
+							explanation		: item.explanation,
 
 							_id 			: item._id
 						};
@@ -445,6 +449,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				context 		: findoptions.context,
 				isMultiple		: item.isMultiple,
 				imageIds		: item.imageIds,
+				explanation		: item.explanation,
 				_id 			: item._id
 			};
 			if (item.is_parent)
@@ -857,7 +862,22 @@ Meteor.publish('All_MY_ACTIVE_QOLLS', function(findoptions) {
 
 Meteor.publish('qolls_for_ids', function(findoptions) {
   qlog.info('Publishing qolls for ids - ' + findoptions.qollids, filename);
-  return Qolls.QollDb.getAll( { _id : { $in : qollids }} );
+  return Qolls.QollDb.getAll( { _id : { $in : [findoptions.qollids] }} );
+});
+
+Meteor.publish('QOLL_FOR_ID', function(findoptions) {
+	var self = this;
+	var handle_qoll_for_id = undefined;
+
+  	var handle_qoll_for_id = Qoll.find( { _id : findoptions._id } ).observe({
+		added : function(item, idx){
+			self.added('qoll-for-id', item._id, fetchMyConciseQollInfo(item));
+		}
+	});
+
+	self.onStop(function() {
+		if(handle_qoll_for_id != undefined) handle_qoll_for_id.stop();
+	});
 });
 
 var fetchConciseQollInfo = function(item) {
@@ -970,6 +990,7 @@ var extractQollDetails = function(q) {
 		isMultiple		: q.isMultiple,
 		imageIds		: q.imageIds,
 		_id 			: q._id,
-		qollRawId 		: q.qollRawId
+		qollRawId 		: q.qollRawId,
+		explanation		: q.explanation,
 	};
 };

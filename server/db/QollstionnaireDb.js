@@ -3,7 +3,6 @@ var filename='server/db/Qollstionnaire.js';
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
 	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids, user_id) {
-		qlog.info('Storing the questionaire - ' + JSON.stringify(qollstionnaire), filename);
 		var qollstionnaire = {};
 
 
@@ -94,6 +93,50 @@ Meteor.methods({
 			var err_msg = QollTagsDb.storeTags(qollstionnaire.tags);
 			qlog.info('Printing tags return results - ' + err_msg, filename);
 		}
+
+		return qollstionnaire_id;
+	},
+
+	addAnonymousQollstionnaire : function(title, qollids, anonymous_type) {/** facebook, google, twitter, anonymous**/
+		// create an anonymous questionnaire here, register the responses for some id
+		var qollstionnaire = {};
+		var tags = new Array();
+
+		var qolls = Qolls.QollDb.getAll( { _id : { $in : qollids }} );
+
+		qolls.map(function(q){
+			if(q.tags) tags = tags.concat(q.tags);
+		});
+
+
+		qlog.info('ANONYMOUS ============================> printing user-id from mobile app ' + Meteor.userId(), filename);
+
+
+		//if(user_id) {
+			// request coming from the mobile app, set this user-id
+			qollstionnaire.submittedBy = Meteor.userId();
+		//}
+
+		qollstionnaire.title = title;
+		qollstionnaire.tags = tags;
+		qollstionnaire.status = QollConstants.STATUS.SENT;
+		qollstionnaire.qollids = qollids;
+
+		qollstionnaire.category = 'anonymous';
+
+		qollstionnaire.qolls_to_comments = {};
+
+		// add uuid to the questionnaire
+		qollstionnaire.quuid = CoreUtils.generateUUID();
+
+		qollstionnaire.anonymous_type = anonymous_type;
+
+		qollstionnaire.submittedTo = [];
+		qollstionnaire.submittedToUUID = {};
+		qollstionnaire.submittedToGroup = [];
+		qollstionnaire.qolls_to_email = {};
+
+		var qollstionnaire_id = Qolls.QollstionnaireDb.insert(qollstionnaire);
 
 		return qollstionnaire_id;
 	},

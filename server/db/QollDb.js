@@ -28,7 +28,7 @@ Meteor.methods({
 	*						types, typesX, visibility, complexity, isMultiple ) 
 	**/
 	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
-	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds) {
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation) {
 		var collection_forqoll = Qoll; 
 
 		var qoll_to_insert = {
@@ -59,7 +59,8 @@ Meteor.methods({
 			'tags' : tags,
 			//'attributes' : attributes,
 			'qollFormat' : qollFormat,
-			'imageIds'	 : qollData[QollConstants.EDU.IMGS]
+			'imageIds'	 : qollData[QollConstants.EDU.IMGS],
+			'explanation' : qollData.explanation,
 		};
 
 		var qollId;
@@ -394,7 +395,8 @@ var persistParsedQoll = function(parsedQoll) {
 		combo.qoll.qollRawId = qollRawId;
 		
 		var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
-		combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS])
+		combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS],
+		combo.qoll.explanation)
 		qollIds.push(qid);
 
 		if(combo.qoll.qollData[QollConstants.EDU.IMGS] && combo.qoll.qollData[QollConstants.EDU.IMGS].length > 0) {

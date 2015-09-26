@@ -599,6 +599,9 @@ Meteor.methods({
           qoll_friend_ids.push(qf.friend_id);
         });
         // qlog.info('Qoll friends ids: ' + qoll_friend_ids, filename);
+
+        results.push({'name' : '', 'email' : query});
+
         if(query != '') {
           var user_emails = Meteor.users.find({'profile.name': {$regex: '^.*'+query+'.*$', $options: 'i'}, _id : {$in : qoll_friend_ids}}, 
             {'profile.name' : 1, 'profile.email' : 1}).fetch();

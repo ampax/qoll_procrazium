@@ -116,6 +116,7 @@ Qolls.QollstionnaireDb = {
 			visibility 					: qollstionnaire.visibility,
 			category 					: qollstionnaire.category,
 			quuid						: qollstionnaire.quuid,
+			anonymous_type				: qollstionnaire.anonymous_type,
 		});
 
 		return questId;

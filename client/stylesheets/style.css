@@ -557,6 +557,10 @@ span.qoll-toolbar-plain {
     background-color : #FFF1FF; /** this is default background color of single choice rows **/
 }
 
+.facebook-qoll {
+    background-color: #7FC0F9;
+}
+
 .list-group-item-heading {
 	color: #FFF;
 	background-color: #878787;/**rgba(50, 118, 177, 0.56);**/
@@ -946,6 +950,12 @@ div.img-container {
     font-style: oblique;
     font-weight: 800;
     color: rgb(30, 78, 24);
+}
+
+.qoll-comment-display-9 {
+    font-size: medium;
+    font-style: oblique;
+    color: rgb(105, 5, 5);
 }
 
 .qoll-comment-display-8:hover {

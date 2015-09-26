@@ -3,7 +3,7 @@ Template.preview.helpers({
     var data = preview_data.get("preview_data");
     var qolls = [];
     var tqolls = [];
-    // qlog.info('======================================================================================' +data, filename);
+    qlog.info('======================================================================================' +data, filename);
 
     if(data) {
       qolls = ReactiveMethod.call('parse_downtown', data, DownTownOptions.downtown_default());
