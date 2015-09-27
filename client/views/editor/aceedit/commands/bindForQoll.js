@@ -49,7 +49,8 @@ bindToolBarForQollMulti = function(editor) {
 	editor.insert("\n# \n");
 	editor.insert("* Text \n");
 	editor.insert("* Hint \n");
-	editor.insert("* ans 1 \n");
+	editor.insert("* answer a \n");
+	editor.insert("* explanation \n");
 	editor.insert("- \n");
 	editor.insert("- \n");
 	editor.insert("- \n");
