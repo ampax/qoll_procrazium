@@ -214,37 +214,43 @@ Meteor.publish('ALL_QOLL_USERS', function() {
         added : function(quser, idx){
           //populate the user and publish
           quser = collectQollUserInfo(quser);
-          var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
-          quser.social_ctx = 'social-qoll-user';
 
-          if(qoll_friend) {
-            quser.friend_request_status = qoll_friend.status;
-            quser.friend_request_initiated_on = qoll_friend.initiated_on;
-            quser.social_ctx = 'social-qoll-user-req-sent';
-          }
+          if(quser) {
+            var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
+            quser.social_ctx = 'social-qoll-user';
 
-          qlog.info('Publishing connect to client - ' +user._id + '////' + JSON.stringify(quser), filename);
+            if(qoll_friend) {
+              quser.friend_request_status = qoll_friend.status;
+              quser.friend_request_initiated_on = qoll_friend.initiated_on;
+              quser.social_ctx = 'social-qoll-user-req-sent';
+            }
 
-          if(qoll_friend && qoll_friend.status != QollConstants.STATUS.CONFIRMED || !qoll_friend) {
-            self.added('all-qoll-users', quser._id, quser);
+            qlog.info('Publishing connect to client - ' +user._id + '////' + JSON.stringify(quser), filename);
+          
+            if(qoll_friend && qoll_friend.status != QollConstants.STATUS.CONFIRMED || !qoll_friend) {
+              self.added('all-qoll-users', quser._id, quser);
+            }
           }
         },
         changed : function(quser, idx){
           quser = collectQollUserInfo(quser);
-          var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
-          quser.social_ctx = 'social-qoll-user';
 
-          if(qoll_friend) {
-            quser.friend_request_status = qoll_friend.status;
-            quser.friend_request_initiated_on = qoll_friend.initiated_on;
-            quser.social_ctx = 'social-qoll-user-req-sent';
-          }
+          if(quser) {
+              var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
+              quser.social_ctx = 'social-qoll-user';
 
-          qlog.info('Publishing connect to client - ' + JSON.stringify(quser), filename);
+              if(qoll_friend) {
+                quser.friend_request_status = qoll_friend.status;
+                quser.friend_request_initiated_on = qoll_friend.initiated_on;
+                quser.social_ctx = 'social-qoll-user-req-sent';
+              }
 
-          if(qoll_friend && qoll_friend.status != QollConstants.STATUS.CONFIRMED || !qoll_friend) {
-            self.changed('all-qoll-users', quser._id, quser);
-          }
+              qlog.info('Publishing connect to client - ' + JSON.stringify(quser), filename);
+            
+              if(qoll_friend && qoll_friend.status != QollConstants.STATUS.CONFIRMED || !qoll_friend) {
+                self.changed('all-qoll-users', quser._id, quser);
+              }
+            }
         },
         removed : function(quser){
           self.removed('all-qoll-users', quser._id);
@@ -272,26 +278,30 @@ Meteor.publish('MY_QOLL_CONNECTS', function() {
         added : function(contact, idx){
           //populate the group with creaters information and publish
           var connect= Meteor.users.findOne({_id : contact.friend_id});
-          connect = collectQollUserInfo(connect);
+          if(connect) {
+            connect = collectQollUserInfo(connect);
 
-          connect.friend_request_status = contact.status;
-          connect.friend_request_initiated_on = contact.initiated_on;
-          connect.social_ctx = 'my-social-connects';
+            connect.friend_request_status = contact.status;
+            connect.friend_request_initiated_on = contact.initiated_on;
+            connect.social_ctx = 'my-social-connects';
 
-          qlog.info('Pushing qoll-connect to the client - ' + JSON.stringify(connect), filename);
-          self.added('my-qoll-connects', connect._id, connect);
+            qlog.info('Pushing qoll-connect to the client - ' + JSON.stringify(connect), filename);
+            self.added('my-qoll-connects', connect._id, connect);
+          }
         },
         changed : function(contact, idx){
           //populate the group with creaters information and publish
           var connect= Meteor.users.findOne({_id : contact.friend_id});
-          connect = collectQollUserInfo(connect);
+          if(connect) {
+            connect = collectQollUserInfo(connect);
 
-          connect.friend_request_status = contact.status;
-          connect.friend_request_initiated_on = contact.initiated_on;
-          connect.social_ctx = 'my-social-connects';
+            connect.friend_request_status = contact.status;
+            connect.friend_request_initiated_on = contact.initiated_on;
+            connect.social_ctx = 'my-social-connects';
 
-          qlog.info('Pushing qoll-connect to the client - ' + JSON.stringify(connect), filename);
-          self.changed('my-qoll-connects', connect._id, connect);
+            qlog.info('Pushing qoll-connect to the client - ' + JSON.stringify(connect), filename);
+            self.changed('my-qoll-connects', connect._id, connect);
+          }
         },
         removed : function(contact){
           qlog.info('Removed connect-item with id: ' + contact.friend_id);
@@ -321,28 +331,32 @@ Meteor.publish('MY_QOLL_CONNECTS_OP_REQS', function() {
         added : function(contact, idx){
           //populate the group with creaters information and publish
           var connect= Meteor.users.findOne({_id : contact.friend_id});
-          connect = collectQollUserInfo(connect);
+          if(connect) {
+            connect = collectQollUserInfo(connect);
 
-          connect.friend_request_status = contact.status;
-          connect.friend_request_initiated_on = contact.initiated_on;
-          connect.is_receiver = true;
-          connect.social_ctx = 'my-qoll-connects-open-reqs';
+            connect.friend_request_status = contact.status;
+            connect.friend_request_initiated_on = contact.initiated_on;
+            connect.is_receiver = true;
+            connect.social_ctx = 'my-qoll-connects-open-reqs';
 
-          qlog.info('Pushing my-qoll-connects-open-reqs to the client - ' + JSON.stringify(connect), filename);
-          self.added('my-qoll-connects-open-reqs', connect._id, connect);
+            qlog.info('Pushing my-qoll-connects-open-reqs to the client - ' + JSON.stringify(connect), filename);
+            self.added('my-qoll-connects-open-reqs', connect._id, connect);
+          }
         },
         changed : function(contact, idx){
           //populate the group with creaters information and publish
           var connect= Meteor.users.findOne({_id : contact.friend_id});
-          connect = collectQollUserInfo(connect);
+          if(connect) {
+            connect = collectQollUserInfo(connect);
 
-          connect.friend_request_status = contact.status;
-          connect.friend_request_initiated_on = contact.initiated_on;
-          connect.is_receiver = true;
-          connect.social_ctx = 'my-qoll-connects-open-reqs';
+            connect.friend_request_status = contact.status;
+            connect.friend_request_initiated_on = contact.initiated_on;
+            connect.is_receiver = true;
+            connect.social_ctx = 'my-qoll-connects-open-reqs';
 
-          qlog.info('Pushing my-qoll-connects-open-reqs to the client - ' + JSON.stringify(connect), filename);
-          self.changed('my-qoll-connects-open-reqs', connect._id, connect);
+            qlog.info('Pushing my-qoll-connects-open-reqs to the client - ' + JSON.stringify(connect), filename);
+            self.changed('my-qoll-connects-open-reqs', connect._id, connect);
+          }
         },
         removed : function(contact){
           qlog.info('Removed my-qoll-connects-open-reqs with id: ' + contact.friend_id);
@@ -357,28 +371,32 @@ Meteor.publish('MY_QOLL_CONNECTS_OP_REQS', function() {
         added : function(contact, idx){
           //populate the group with creaters information and publish
           var connect= Meteor.users.findOne({_id : contact.user_id});
-          connect = collectQollUserInfo(connect);
+          if(connect) {
+            connect = collectQollUserInfo(connect);
 
-          connect.friend_request_status = contact.status;
-          connect.friend_request_initiated_on = contact.initiated_on;
-          connect.is_receiver = false;
-          connect.social_ctx = 'my-qoll-connects-open-rec-reqs';
+            connect.friend_request_status = contact.status;
+            connect.friend_request_initiated_on = contact.initiated_on;
+            connect.is_receiver = false;
+            connect.social_ctx = 'my-qoll-connects-open-rec-reqs';
 
-          qlog.info('Pushing my-qoll-connects-open-rec-reqs to the client - ' + JSON.stringify(connect), filename);
-          self.added('my-qoll-connects-open-rec-reqs', connect._id, connect);
+            qlog.info('Pushing my-qoll-connects-open-rec-reqs to the client - ' + JSON.stringify(connect), filename);
+            self.added('my-qoll-connects-open-rec-reqs', connect._id, connect);
+          }
         },
         changed : function(contact, idx){
           //populate the group with creaters information and publish
           var connect= Meteor.users.findOne({_id : contact.user_id});
-          connect = collectQollUserInfo(connect);
+          if(connect) {
+            connect = collectQollUserInfo(connect);
 
-          connect.friend_request_status = contact.status;
-          connect.friend_request_initiated_on = contact.initiated_on;
-          connect.is_receiver = false;
-          connect.social_ctx = 'my-qoll-connects-open-rec-reqs';
+            connect.friend_request_status = contact.status;
+            connect.friend_request_initiated_on = contact.initiated_on;
+            connect.is_receiver = false;
+            connect.social_ctx = 'my-qoll-connects-open-rec-reqs';
 
-          qlog.info('Pushing my-qoll-connects-open-rec-reqs to the client - ' + JSON.stringify(connect), filename);
-          self.changed('my-qoll-connects-open-rec-reqs', connect._id, connect);
+            qlog.info('Pushing my-qoll-connects-open-rec-reqs to the client - ' + JSON.stringify(connect), filename);
+            self.changed('my-qoll-connects-open-rec-reqs', connect._id, connect);
+          }
         },
         removed : function(contact){
           qlog.info('Removed my-qoll-connects-open-reqs with id: ' + contact.friend_id);
@@ -419,23 +437,27 @@ Meteor.publish('MEMBERS_FOR_GROUP_ID_1', function(options) {
         //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
         //every addition, update should be added to the list
         added : function(quser, idx){
-          //populate the user and publish
-          quser = collectQollUserInfo(quser);
-          quser.social_ctx = options.ctx;
-          quser.ctx = options.ctx;
+          if(quser) {
+            //populate the user and publish
+            quser = collectQollUserInfo(quser);
+            quser.social_ctx = options.ctx;
+            quser.ctx = options.ctx;
 
-          qlog.info('Publishing connect to client - ' +user._id + '////' + JSON.stringify(quser), filename);
+            qlog.info('Publishing connect to client - ' +user._id + '////' + JSON.stringify(quser), filename);
 
-          self.added('members-for-group-id', quser._id, quser);
+            self.added('members-for-group-id', quser._id, quser);
+          }
         },
         changed : function(quser, idx){
-          quser = collectQollUserInfo(quser);
-          quser.social_ctx = options.ctx;
-          quser.ctx = options.ctx;
-          
-          qlog.info('Publishing connect to client - ' + JSON.stringify(quser), filename);
+          if(quser) {
+            quser = collectQollUserInfo(quser);
+            quser.social_ctx = options.ctx;
+            quser.ctx = options.ctx;
+            
+            qlog.info('Publishing connect to client - ' + JSON.stringify(quser), filename);
 
-          self.changed('members-for-group-id', quser._id, quser);
+            self.changed('members-for-group-id', quser._id, quser);
+          }
         },
         removed : function(quser){
           self.removed('members-for-group-id', quser._id);
@@ -560,6 +582,7 @@ var collectContactInfo = function(connect) {
 };
 
 var collectQollUserInfo = function(user) {
+  if(!user) return user;
   return {
     _id           :   user._id,
     createdAt     :   user.createdAt,
