@@ -213,9 +213,10 @@ Meteor.publish('ALL_QOLL_USERS', function() {
         //every addition, update should be added to the list
         added : function(quser, idx){
           //populate the user and publish
-          quser = collectQollUserInfo(quser);
-
           if(quser) {
+            quser = collectQollUserInfo(quser);
+
+          
             var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
             quser.social_ctx = 'social-qoll-user';
 
@@ -233,9 +234,9 @@ Meteor.publish('ALL_QOLL_USERS', function() {
           }
         },
         changed : function(quser, idx){
-          quser = collectQollUserInfo(quser);
-
           if(quser) {
+              quser = collectQollUserInfo(quser);
+
               var qoll_friend = QollFriends.findOne({user_id : user._id, friend_id : quser._id});
               quser.social_ctx = 'social-qoll-user';
 
