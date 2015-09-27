@@ -185,6 +185,9 @@ QollParser = {
                 } else if(part.match(QollRegEx.exp)) {
                     qlog.info('This is explanation -> ' + part, filename);
                     qoll_data[QollConstants.EDU.EXPL] = part.replace(QollRegEx.exp, '');
+                    // convert explanation into a JSON of elements. let us manage images and TEX here
+                    //qoll_data[QollConstants.EDU.EXPL] = {'txt' : part.replace(QollRegEx.exp, '')};
+                    //qoll_data[QollConstants.EDU.EXPL][QollConstants.EDU.TEX] = [];
                 } else {
                     qlog.info('##############*^*^*^*^*^**^**=> ' + part, filename);
                 }

@@ -95,7 +95,7 @@ Template.preview.onCreated(function(){
 
 transform_fib = function(txt, cat, context, fib) {
   qlog.info('Printing fill in the blanks - ' + fib, filename);
-    if(cat != QollConstants.QOLL_TYPE.BLANK)
+    if(cat != QollConstants.QOLL_TYPE.BLANK || !fib)
       return txt;
 
     var disabled = '';
@@ -133,6 +133,8 @@ transform_fib = function(txt, cat, context, fib) {
 
 transform_tex = function(txt, tex) {
   qlog.info('Printing tex - ' + tex, filename);
+
+    if(!tex) return txt;
 
     if(txt.match(QollRegEx.tex_transf))
       qlog.info('hell-tex this is printed: ' + txt, filename);

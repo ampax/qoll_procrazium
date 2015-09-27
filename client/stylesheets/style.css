@@ -1018,3 +1018,7 @@ div.img-container {
     z-index : 1 !important;
 }
 
+
+span.pre {
+  white-space: pre;
+}

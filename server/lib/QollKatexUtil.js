@@ -9,6 +9,8 @@ QollKatexUtil = {
 			q.qollText = KatexUtil.toHtml(q.qollText, item.tex);
 			q.hint = KatexUtil.toHtml(q.hint, item.tex);
 
+            q.explanation = KatexUtil.toHtml(q.explanation, item.tex);
+
 			//qollTypes - map over and do the reverse-parsing here
             //qlog.info('Printing the qoll iiiiiiiiiiiid - ' + JSON.stringify(item), filename);
             //qlog.info('qollTypes ==============>' + item.qollTypes, filename);

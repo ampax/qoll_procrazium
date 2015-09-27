@@ -505,6 +505,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							//if submitted, do not let register any more answers
 							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
 								q2.context = QollConstants.CONTEXT.READ;
+							} else {
+								q2.explanation = undefined;
 							}
 
 							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed' || findoptions.context === QollConstants.CONTEXT.READ) {
@@ -576,6 +578,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							//if submitted, do not let register any more answers
 							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
 								q2.context = QollConstants.CONTEXT.READ;
+							} else {
+								q2.explanation = undefined;
 							}
 
 							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed' || findoptions.context === QollConstants.CONTEXT.READ) {
@@ -706,6 +710,16 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 								else q2.fib = [];
 							}
 
+							// if time between response submission and now is more than 30 seconds, show explanation
+							var now = new Date();
+							var responseTime = resp && resp.responses[qid] && resp.responses[qid].submittedOn? resp.responses[qid].submittedOn : now;
+							var timeLapse = (now.getTime() - responseTime.getTime())/1000;
+							qlog.info('TTTTTTTTTime lapse => ' + timeLapse, filename);
+							if(timeLapse < 30) {
+								// do not show the answer yet
+								q2.explanation = undefined;
+							}
+
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib) + 
 								'/' + JSON.stringify(resp) + '/' + item._id + '/' + user._id, filename);
 
@@ -731,7 +745,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 						
 						var q = Qoll.find({_id : qid}).map(function(t){
 							var thisresponse; 
-							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							var responseTime = resp && resp.responses[qid] && resp.responses[qid].submittedOn? resp.responses[qid].submittedOn : now;
 							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
 							
 							var q2 = extractQollDetails(t);
@@ -752,6 +766,15 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 								if(response != undefined)
 									q2.fib = response.response;
 								else q2.fib = [];
+							}
+
+							// if time between response submission and now is more than 30 seconds, show explanation
+							var now = new Date();
+							var responseTime = thisresponse && thisresponse.qollstionnaireSubmittedOn? thisresponse.qollstionnaireSubmittedOn : now;
+							var timeLapse = (now.getTime() - responseTime.getTime())/1000;
+							if(timeLapse < 30) {
+								// do not show the answer yet
+								q2.explanation = undefined;
 							}
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
@@ -1189,7 +1212,8 @@ var extractQollDetails = function(q) {
 		isMultiple		: q.isMultiple,
 		imageIds		: q.imageIds,
 		_id 			: q._id,
-		qollRawId 		: q.qollRawId
+		qollRawId 		: q.qollRawId,
+		explanation		: q.explanation,
 	};
 };
 

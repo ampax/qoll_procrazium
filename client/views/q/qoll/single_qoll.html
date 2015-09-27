@@ -76,9 +76,12 @@
     </div>
 
     {{#if q.explanation}}
+      <br>
       <div class="row">
         <div class="col-md-12 col-xs-12">
-          <span class="qoll-comment-display-9">Explanation: </span><h5>{{q.explanation}}</h5>
+          <span class="qoll-comment-display-9">Explanation: </span>
+          <!-- <h5><pre>{{{q.explanation.txt}}}</pre></h5> -->
+          <h5><pre>{{{transform_txt q.explanation q.cat QollConstants.CONTEXT.READ q.fib}}}</pre></h5>
         </div>
       </div>
     {{/if}}
