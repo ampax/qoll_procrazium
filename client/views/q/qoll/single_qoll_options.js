@@ -16,7 +16,7 @@ Template.single_qoll_options.helpers({
 		}
 	},
 	get_qoll_resp_class : function(context) {
-		console.log(context);
+		// console.log(context);
 		if(context === QollConstants.CONTEXT.WRITE) {
 			return 'qoll-response-val';
 		} else return 'qoll-response-val-none';
@@ -86,7 +86,19 @@ Template.single_qoll_options.helpers({
 		//console.info('hghghghghghghghgg -------- ' + cat, filename);
 		return _.contains([QollConstants.QOLL_TYPE.BLANK, QollConstants.QOLL_TYPE.BLANK_DBL], cat);
 	},
-	transform_txt : function(txt, cat, myanswer) {
+	//transform_txt : function(txt, cat, myanswer) {
+	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
+		//method defined in preview.js
+		var txt_1 = transform_fib(txt, cat, context, fib);
+
+		//method defined in preview.js
+	    var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
+
+	    // txt_2 = txt_2 + "\\({a1x^3+z=0}\\)";
+
+	    return txt_2;
+	},
+	transform_txt1 : function(txt, cat, myanswer) {
 		//return txt;
 		if(cat != QollConstants.QOLL_TYPE.BLANK)
 			return txt;

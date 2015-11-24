@@ -37,7 +37,16 @@ Schemas.quick_qoll = new SimpleSchema({
   },
   'qollTypes.$': {
     type: String
-  }
+  },
+  explanation: {
+    type: String,
+    label: "Explanation",
+    max: 2000,
+    optional: true,
+    autoform: {
+      rows: 10
+    }
+  },
 });
 
 Schemas.custom_group_subscribe = new SimpleSchema({

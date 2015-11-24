@@ -19,7 +19,11 @@ var MarkdownQollHooks = {
         var accessGroups = share_with;
         var emailsandgroups = undefined;
 
-        Meteor.call("addQollMaster", content, emailsandgroups, tags, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, undefined, function(error, msg) {
+        var tex_mode = $("input[type='radio'][name='texPref']:checked").val();
+
+		qlog.info('==========================> ' + tex_mode, filename);
+
+        Meteor.call("addQollMaster", content, emailsandgroups, tags, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, undefined, tex_mode, function(error, msg) {
 			if (error) {
 				qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
 	          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg.msg);

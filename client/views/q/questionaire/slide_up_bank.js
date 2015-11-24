@@ -59,6 +59,17 @@ Template.slide_up_bank.helpers({
   customQuestionnaireSchema: function() {
     return Schemas.custom_questionnaire;
   },
+  transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
+    //method defined in preview.js
+    var txt_1 = transform_fib(txt, cat, context, fib);
+
+    //method defined in preview.js
+      var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
+
+      // txt_2 = txt_2 + "\\({a1x^3+z=0}\\)";
+
+      return txt_2;
+  },
 });
 
 

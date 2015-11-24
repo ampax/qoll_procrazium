@@ -53,6 +53,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
 							q2.qoll_idx_title = '(Q'+counter+++')';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
@@ -65,7 +66,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 							q2 = QollRandomizer.randomize(q2);
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							qlog.info('Pushing qolls to client 2=2=2=2=2=2=2=2=> ' + JSON.stringify(q2.fib), filename);
 
@@ -94,6 +95,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
 							q2.qoll_idx_title = '(Q'+counter+++')';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
@@ -106,7 +108,7 @@ Meteor.publish('EXT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 							q2 = QollRandomizer.randomize(q2);
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
@@ -199,6 +201,7 @@ Meteor.publish('EXT_EMBEDDED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
 							q2.qoll_idx_title = '(Q'+counter+++')';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
@@ -211,7 +214,7 @@ Meteor.publish('EXT_EMBEDDED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 							q2 = QollRandomizer.randomize(q2);
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
@@ -240,6 +243,7 @@ Meteor.publish('EXT_EMBEDDED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
 							q2.qoll_idx_title = '(Q'+counter+++')';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
@@ -252,7 +256,7 @@ Meteor.publish('EXT_EMBEDDED_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 							q2 = QollRandomizer.randomize(q2);
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
 
@@ -298,6 +302,8 @@ var extractQollDetails = function(q) {
 		cat 			: q.cat,
 		answer 			: q.answer,
 		fib 			: q.fib,
+		tex 			: q.tex,
+		texMode			: q.texMode? q.texMode : QollConstants.TEX_MODE.MATHJAX,
 		hint 			: q.hint,
 		unit_name 		: q.unit_name,
 		unit 			: q.unit,

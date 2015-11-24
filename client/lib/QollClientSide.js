@@ -1,9 +1,11 @@
 var filename='client/lib/QollClientSide.js';
 
+
 QollClientSide = {
 	//TODO
 	previewQollHtml : function(qolls) {
 		// qlog.info('Printing preview qoll xxxx ============>' + JSON.stringify(qolls[0]), filename);
+		var counter = 1;
 		var html = '';
 		qolls.map(function(qoll) {
 			html += "<span class='qoll-container' id='"+qoll.qollId+"_outer"+"'>";
@@ -15,7 +17,7 @@ QollClientSide = {
             html += '<div class="row">';
                 html += '<div class="col-xs-8">';
                 if (qoll.qollTitle) {
-                    html += '<h4>' + qoll.qollTitle + '</h4>';
+                    html += '<h4>' + transform_tex(transform_fib(qoll.qollTitle, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter) + '</h4>';
                 } 
                 html += '</div>';
 
@@ -28,7 +30,7 @@ QollClientSide = {
             // END OF ROW
             html += '</div>';
 
-			html += '<h5>' + qoll.qollText + '</h5>';
+			html += '<h5>' + transform_tex(transform_fib(qoll.qollText, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter) + '</h5>';
 
 			var types = qoll['types'];
 			var ans;
@@ -40,7 +42,7 @@ QollClientSide = {
 					if (t.isCorrect) {
 						html += "<div class='col-md-12 col-xs-12 list-group-item'>";
 						html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
-						html += t.type;
+						html += transform_tex(transform_fib(t.type, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter);
 						//html += "</div>";
 						//html+= "<div class='col-md-2 col-xs-2 list-group-item'>";
 						html += "<i class='glyphicon glyphicon-check pull-right green'></i>";
@@ -48,7 +50,7 @@ QollClientSide = {
 					} else {
 						html += "<div class='col-md-12 col-xs-12 list-group-item'>";
 						html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
-						html += t.type;
+						html += transform_tex(transform_fib(t.type, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter);
 						html += "</div>";
 					}
 

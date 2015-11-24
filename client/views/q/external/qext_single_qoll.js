@@ -74,7 +74,19 @@ Template.qext_single_qoll.helpers({
 
 		return qollText;
 	},
-	transform_txt : function(txt, cat, context, fib) {
+	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
+		qlog.info('+-+-+-+-+-+-+--====> '+txt +'/'+ cat +'/'+ context +'/'+ fib +'/'+ tex +'/'+ tex_mode +'/'+ qoll_idx, filename);
+		//method defined in preview.js
+		var txt_1 = transform_fib(txt, cat, context, fib);
+
+		//method defined in preview.js
+	    var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
+
+	    // txt_2 = txt_2 + "\\({a1x^3+z=0}\\)";
+
+	    return txt_2;
+	},
+	transform_txt1 : function(txt, cat, context, fib) {
 		qlog.info('Printing fill in the blanks - ' + fib, filename);
 		if(cat != QollConstants.QOLL_TYPE.BLANK)
 			return txt;

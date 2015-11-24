@@ -146,9 +146,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						qollTypes 		: translateToIndexedArray(item.qollTypes),
 						qollTypesX 		: item.qollTypesX,
 
+						idx 			: idx,
 						cat 			: item.cat,
 						answer 			: item.answer,
 						fib 			: item.fib,
+						tex 			: item.tex,
+						texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 						hint 			: item.hint,
 						unit_name 		: item.unit_name,
 						unit 			: item.unit,
@@ -184,7 +187,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					q.myAnswers = reg;
 					
 
-					q = QollKatexUtil.populateIfTex(q, item);
+					// q = QollKatexUtil.populateIfTex(q, item);
 
 					self.added('all-qolls', item._id, q);
 
@@ -197,9 +200,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						qollTypes 			: translateToIndexedArray(item.qollTypes),
 						qollTypesX 			: item.qollTypesX,
 
+						idx 				: idx,
 						cat 				: item.cat,
 						answer 				: item.answer,
 						fib 				: item.fib,
+						tex 				: item.tex,
+						texMode				: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 						hint 				: item.hint,
 						unit_name 			: item.unit_name,
 						unit 				: item.unit,
@@ -234,7 +240,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
 					
-					q = QollKatexUtil.populateIfTex(q, item);
+					// q = QollKatexUtil.populateIfTex(q, item);
 
 					self.changed('all-qolls', item._id, q);
 
@@ -265,9 +271,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						qollText 			: item.qollText,
 						qollTypes 			: translateToIndexedArray(item.qollTypes),
 
+						idx 				: idx,
 						cat 				: item.cat,
 						answer 				: item.answer,
 						fib 				: [],//item.fib,
+						tex 				: item.tex,
+						texMode				: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 						hint 				: item.hint,
 						unit_name 			: item.unit_name,
 						unit 				: item.unit,
@@ -298,7 +307,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					q.qollTypeVal = reg.qollTypeVal;
 					q.myAnswers = reg;
 					
-					q = QollKatexUtil.populateIfTex(q, item);
+					// q = QollKatexUtil.populateIfTex(q, item);
 
 					self.added('all-qolls', item._id, q);
 					//qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
@@ -358,9 +367,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 							qollText 		: item.qollText,
 							qollTypes 		: translateToIndexedArray(item.qollTypes),
 
+							idx 			: idx,
 							cat 			: item.cat,
 							answer 			: item.answer,
 							fib 			: [],//item.fib,
+							tex 			: item.tex,
+							texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 							hint 			: item.hint,
 							unit_name 		: item.unit_name,
 							unit 			: item.unit,
@@ -391,7 +403,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						q.qollTypeVal = reg.qollTypeVal;
 						q.myAnswers = reg;
 						
-						q = QollKatexUtil.populateIfTex(q, item);
+						// q = QollKatexUtil.populateIfTex(q, item);
 
 						self.added('all-qolls', item._id, q);
 						//qlog.info('Adding another DIRECT RECIEVED qoll --------->>>>>'+item._id,filename);
@@ -430,9 +442,12 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				qollText 		: item.qollText,
 				qollTypes 		: translateToIndexedArray(item.qollTypes),
 
+				idx 			: idx,
 				cat 			: item.cat,
 				answer 			: item.answer,
 				fib 			: [],//item.fib,
+				tex 			: item.tex,
+				texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 				hint 			: item.hint,
 				unit_name 		: item.unit_name,
 				unit 			: item.unit,
@@ -461,7 +476,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 			q.qollTypeVal = reg.qollTypeVal;
 			q.myAnswers = reg;
 			
-			q = QollKatexUtil.populateIfTex(q, item);
+			// q = QollKatexUtil.populateIfTex(q, item);
 
 			self.added('all-qolls', item._id, q);
 
@@ -518,9 +533,12 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					qollText 		: item.qollText,
 					qollTypes 		: translateToIndexedArray(item.qollTypes),
 
+					idx 			: idx,
 					cat 			: item.cat,
 					answer 			: item.answer,
 					fib 			: item.fib,
+					tex 			: item.tex,
+					texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 					hint 			: item.hint,
 					unit_name 		: item.unit_name,
 					unit 			: item.unit,
@@ -548,7 +566,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				q.qollTypeVal = reg.qollTypeVal;
 				q.myAnswers = reg;
 				
-				q = QollKatexUtil.populateIfTex(q, item);
+				// q = QollKatexUtil.populateIfTex(q, item);
 
 				self.added('all-open-qolls', item._id, q);
 				//qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
@@ -561,9 +579,12 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 					qollText 		: item.qollText,
 					qollTypes 		: translateToIndexedArray(item.qollTypes),
 
+					idx 			: idx,
 					cat 			: item.cat,
 					answer 			: item.answer,
 					fib 			: item.fib,
+					tex 			: item.tex,
+					texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 					hint 			: item.hint,
 					unit_name 		: item.unit_name,
 					unit 			: item.unit,
@@ -591,7 +612,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				q.qollTypeVal = reg.qollTypeVal;
 				q.myAnswers = reg;
 				
-				q = QollKatexUtil.populateIfTex(q, item);
+				// q = QollKatexUtil.populateIfTex(q, item);
 
 				self.changed('all-open-qolls', item._id, q);
 				//qlog.info('Adding another self published qoll --------->>>>>'+item._id,filename);
@@ -894,7 +915,7 @@ var fetchConciseQollInfo = function(item) {
 				_id : item._id
 			};
 
-	q = QollKatexUtil.populateIfTex(q, item);
+	// q = QollKatexUtil.populateIfTex(q, item);
 
 	return q;
 };
@@ -916,7 +937,7 @@ var fetchMyConciseQollInfo = function(item) {
 				_id : item._id
 			};
 			
-	q = QollKatexUtil.populateIfTex(q, item);
+	// q = QollKatexUtil.populateIfTex(q, item);
 
 	return q;
 };
@@ -937,7 +958,7 @@ var fetchMyRecConciseQollInfo = function(item) {
 				_id : item._id
 			};
 
-	q = QollKatexUtil.populateIfTex(q, item);
+	// q = QollKatexUtil.populateIfTex(q, item);
 
 	return q;
 };
@@ -973,6 +994,8 @@ var extractQollDetails = function(q) {
 		cat 			: q.cat,
 		answer 			: q.answer,
 		fib 			: q.fib,
+		tex 			: item.tex,
+		texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 		hint 			: q.hint,
 		unit_name 		: q.unit_name,
 		unit 			: q.unit,

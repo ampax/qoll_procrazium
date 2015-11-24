@@ -28,7 +28,7 @@ Meteor.methods({
 	*						types, typesX, visibility, complexity, isMultiple ) 
 	**/
 	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
-	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation) {
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation, texMode) {
 		var collection_forqoll = Qoll; 
 
 		var qoll_to_insert = {
@@ -39,6 +39,7 @@ Meteor.methods({
 			'answer' : qollData[QollConstants.EDU.ANSWER],
 			'fib' : qollData[QollConstants.EDU.FIB],
 			'tex' : qollData[QollConstants.EDU.TEX],
+			'texMode' : texMode,
 			'hint' : qollData[QollConstants.EDU.HINT],
 			'unit_name' : qollData[QollConstants.EDU.UNIT_NAME],
 			'unit' : qollData[QollConstants.EDU.UNITS],
@@ -194,31 +195,18 @@ Meteor.methods({
 		});
 	},
 
-	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
+	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
 		qlog.info('----------------- Inserting into qoll master -----------------> ' + selImgIds, filename);
 		//Store the tags
 		if(tags != undefined)
 			var err_msg = QollTagsDb.storeTags(tags);
 
-		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
+		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds, 'texMode' : texMode});
 
 		// var qollIds = new Array();
-		var parsedQoll = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
+		var parsedQoll = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds, texMode);
 		
 		qlog.info('Parsed the qoll =====>\n' + parsedQoll, filename);
-
-		/**** parsedQoll.qollCombo.forEach(function(combo){
-			var qollRawId = Qolls.QollRawDb.insert(combo.master);
-			combo.qoll.qollRawId = qollRawId;
-			
-			var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
-			combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS])
-			qollIds.push(qid);
-
-			if(combo.qoll.qollData[QollConstants.EDU.IMGS] && combo.qoll.qollData[QollConstants.EDU.IMGS].length > 0) {
-				qlog.info('Creating qoll with images - ' + combo.qoll.qollData[QollConstants.EDU.IMGS], filename);
-			}
-		}); *****/
 
 		var qollIds = persistParsedQoll(parsedQoll);
 
@@ -396,7 +384,7 @@ var persistParsedQoll = function(parsedQoll) {
 		
 		var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
 		combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS],
-		combo.qoll.explanation)
+		combo.qoll.explanation, combo.qoll.texMode)
 		qollIds.push(qid);
 
 		if(combo.qoll.qollData[QollConstants.EDU.IMGS] && combo.qoll.qollData[QollConstants.EDU.IMGS].length > 0) {

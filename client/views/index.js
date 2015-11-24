@@ -25,3 +25,5 @@ Template.user_loggedin.events({
 	    //logoutFromService();
 	}
 });*/
+
+

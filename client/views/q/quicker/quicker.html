@@ -1,4 +1,6 @@
 <template name="quicker">
+	{{> qjax}}
+
     {{> header_awesome page_label="QUICKER"}}
 
     <div id="wrapper">
@@ -11,6 +13,24 @@
 		<div class="container-fluid">
 
 			<p class="lead">
+				<!-- {{#mathjax}} $$ Ax^3+ax^2+bx+c = 0 $$ {{/mathjax}}
+				{{#mathjax}}
+					$$ x = {-b \pm \sqrt{b^2-4ac} \over 2a} $$
+
+					$$ ax^2+bx+c = 0 $$
+
+					$$ r'$\alpha_i > \beta_i$' $$
+
+					$$ r'$\frac{3}{4} \binom{3}{4} \stackrel{3}{4}$' $$
+
+					$$ r'$s(t) = \mathcal{A}\mathrm{sin}(2 \omega t)$' $$
+
+					$$ r'$\sum_{i=0}^\infty x_i$' $$
+
+
+				{{/mathjax}} -->
+
+				<div style="visibility: hidden;height: 0px;">{{#mathjax}} $$ Ax^3+ax^2+bx+c = 0  $$ {{/mathjax}}</div>
 			<div class="container" id="qoll-container-id">
 
 			  <!-- Starting of the row for all qolls -->

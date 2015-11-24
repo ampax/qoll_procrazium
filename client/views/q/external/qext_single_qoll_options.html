@@ -10,7 +10,7 @@
           </span>
           {{/with}}
           {{/if}}
-            &nbsp;<span>{{{transform_txt qollType.value qoll.cat}}}</span>
+          &nbsp;<span>{{{transform_txt qollType.value qoll.q.cat qoll.q.context qoll.q.fib qoll.q.tex qoll.q.texMode qoll.q.idx}}}</span>
         </div>
         <div class="col-md-2 col-xs-2">
             {{#if is_correct_answer qoll.q.qollTypesX qollType.index qoll.q.context}}

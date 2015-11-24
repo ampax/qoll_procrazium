@@ -32,7 +32,19 @@ Template.all_qolls.helpers({
 	is_fb_user : function() {
 		var is_fb_user = Meteor.user().profile.fb_link != undefined;
 		return is_fb_user;
-	}
+	},
+	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
+		qlog.info('+-+-+-+-+-+-+--====> '+txt +'/'+ cat +'/'+ context +'/'+ fib +'/'+ tex +'/'+ tex_mode +'/'+ qoll_idx, filename);
+		//method defined in preview.js
+		var txt_1 = transform_fib(txt, cat, context, fib);
+
+		//method defined in preview.js
+	    var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
+
+	    // txt_2 = txt_2 + "\\({a1x^3+z=0}\\)";
+
+	    return txt_2;
+	},
 });
 
 $.fn.toggleCheckbox = function() {
@@ -193,10 +205,20 @@ Template.all_qolls.events({
 		var cnt = Number($("span[id='cnt']").html());
 		qlog.info('Printing whether the checkbox is selected ' + isChecked, filename);
 		if(isChecked) {//If this is already selected, we are adding a new qoll
+			var tex = this.tex;
+			var fib = this.fib;
+			var cat = this.cat;
+			var context = QollConstants.CONTEXT.READ;
+			var texMode = this.texMode;
+
 			var qollText = this.qollText;
 			var qollTitle = this.qollTitle;
 			var qollTypesX = this.qollTypesX;
-			var html = QollClientSide.previewQollHtml([{qollId : qollId, qollTitle : qollTitle, qollText : qollText, types : qollTypesX}]);
+
+			qlog.info('=========> ' + fib + '/' + cat + '/' + context, filename);
+
+			var html = QollClientSide.previewQollHtml([{qollId : qollId, qollTitle : qollTitle, qollText : qollText, types : qollTypesX,
+														tex : tex, fib : fib, cat : cat, context : context, texMode : texMode }]);
 			//qlog.info('The html is: ' + html, filename);
 			//qlog.info('Printed the qoll-selection checkbox - ' + qollId + '/' + qollText + '/' + qollTypesX, filename);
 			qlog.info('adding this qoll - ' + qollId, filename);

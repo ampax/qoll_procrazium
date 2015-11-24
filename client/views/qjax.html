@@ -1,0 +1,61 @@
+<template name="qjax">
+	<div id="dumb">
+		<script>
+		    QJax = function () {
+
+		    	// alert('Loading the mathjax expressions now ....');
+		    if(MathJax) {
+		      MathJax.Hub.Config({
+		        showProcessingMessages: false,
+		        messageStyle: "none",
+		        tex2jax: {
+		          inlineMath: [['$', '$'], ["\\(", "\\)"]],
+		          processEscapes: true
+		        },
+		        CommonHTML: { linebreaks: { automatic: true } },
+		        "HTML-CSS": { linebreaks: { automatic: true } },
+		        SVG: { linebreaks: { automatic: true } },
+		        MathMenu: {
+		        styles: {
+		          ".MathJax_Menu": {"z-index":2001}
+		        }
+		        },
+		        AuthorInit: function () {
+		          MathJax.Hub.Register.StartupHook("MathMenu Ready",function () {MathJax.Menu.BGSTYLE["z-index"] = 2000;});
+		        },
+		        //tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]},
+		        TeX: { equationNumbers: { autoNumber: "AMS" } },
+		        MMLorHTML: {
+		          prefer: { 
+		            MSIE: "SVG", //"MML", 
+		            Firefox: "SVG", //"HTML", 
+		            Safari: "SVG", //"HTML", 
+		            Chrome: "SVG", //"HTML", 
+		            Opera: "SVG", //"HTML", 
+		            other: "HTML" 
+		          }
+		        }
+		      });
+
+		      MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
+
+		      IRLibLoader.load('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full');
+		      IRLibLoader.load('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full&delayStartupUntil=onload');
+
+
+		    }};
+		    //QJax(); 
+	    </script>
+	    <script> 
+	    	//aceEditor
+	    	document.addEventListener('DOMNodeInserted', function () {
+			   if(MathJax) {
+			   	QJax();
+			   }
+			});
+	    </script>
+	    <script type="text/x-mathjax-config">
+	    	//QJax();
+	    </script>
+	</div>
+</template>

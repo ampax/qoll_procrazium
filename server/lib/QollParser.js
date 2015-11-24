@@ -59,7 +59,7 @@ QollParser = {
 	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
-	parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds) {
+	parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
         var parsedQoll = {};
         parsedQoll.qollCombo = new Array();
 
@@ -69,9 +69,9 @@ QollParser = {
 
         qolls.map(function(q){
         	// ******************** no insertion at this point, storing in a hash to insert later
-        	var qoll_master = {qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds}
+        	var qoll_master = {qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds, texMode: texMode}
         	// var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds});
-            q = ToMarkdown.convert(q);
+            // q = ToMarkdown.convert(q);
 
             qlog.info('Markdown converted qoll is - ' + q, filename);
 
@@ -83,6 +83,7 @@ QollParser = {
             var typesX = new Array();
             qoll_data[QollConstants.EDU.FIB] = [];
             qoll_data[QollConstants.EDU.TEX] = [];
+            qoll_data.texMode = texMode;
 		
 
 			//fetch the qoll level attributes here. split the qoll string on * and then apply
@@ -335,7 +336,7 @@ QollParser = {
 						emails : emailsandgroups, isparent : undefined, 
 						parentid : undefined, tags : tags, 
 						qollFormat : qollFormat, qollIdtoUpdate : qollIdtoUpdate, 
-						accessGroups : accessGroups, selImgIds : selImgIds};
+						accessGroups : accessGroups, selImgIds : selImgIds, texMode : texMode};
 
 			parsedQoll.qollCombo.push({master : qoll_master, qoll : qls});
 
@@ -388,14 +389,20 @@ QollParser = {
 Meteor.methods({
 	// parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, 
 		// visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds)
-	parseQollPreview : function(qollMaster) {
+	parseQollPreview : function(qollMaster, texMode) {
 		var parsedQoll = QollParser.parseQollMaster(qollMaster, undefined, undefined, undefined, undefined, 
-										 undefined, undefined, undefined, undefined, undefined);
+										 undefined, undefined, undefined, undefined, undefined, texMode);
+
+		qlog.info('TEX_PREF =>> ' + texMode, filename);
 
 		var qolls = new Array();
 
 		parsedQoll.qollCombo.forEach(function(combo, idx){
-			combo.qoll.qollData.qoll_idx_title = '(Q' + (idx+1) + ')';
+			var t = idx+1;
+			var p = '(Q' + t + ')';
+			combo.qoll.qollData.idx = t;
+			combo.qoll.qollData.qoll_idx_title = '(Q' + t + ')';
+			combo.qoll.qollData.qoll_idx = p;
 
 			// convert all text expressions and put the katex display content here
 			

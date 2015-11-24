@@ -36,6 +36,9 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						qollRawId 		: item.qollRawId,
 						qollTypesX 		: item.qollTypesX,
 						cat 			: item.cat,
+						fib 			: item.fib,
+						tex 			: item.tex,
+						texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 						unit_name 		: item.unit_name,
 						unit 			: item.unit,
 						visibility 		: item.visibility,
@@ -44,7 +47,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						isOwner			: item.submittedBy == user._id,
 					};
 
-					q = QollKatexUtil.populateIfTex(q, item);
+					// q = QollKatexUtil.populateIfTex(q, item);
 
 					self.added('qbank_summary', item._id, q);
 
@@ -60,6 +63,9 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						qollRawId 		: item.qollRawId,
 						qollTypesX 		: item.qollTypesX,
 						cat 			: item.cat,
+						fib 			: item.fib,
+						tex 			: item.tex,
+						texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
 						unit_name 		: item.unit_name,
 						unit 			: item.unit,
 						visibility 		: item.visibility,
@@ -68,7 +74,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						isOwner			: item.submittedBy == user._id,
 					};
 
-					q = QollKatexUtil.populateIfTex(q, item);
+					// q = QollKatexUtil.populateIfTex(q, item);
 
 					self.changed('qbank_summary', item._id, q);
 
@@ -488,6 +494,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
 							q2.qoll_idx_title = '(Q'+counter+++')';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
@@ -500,7 +507,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 							q2 = QollRandomizer.randomize(q2);
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							//if submitted, do not let register any more answers
 							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
@@ -561,6 +568,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							var q2 = extractQollDetails(t);
 							q2.myresponses = thisresponse;
 							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
 							q2.qoll_idx_title = '(Q'+counter+++')';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
@@ -573,7 +581,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 							q2 = QollRandomizer.randomize(q2);
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							//if submitted, do not let register any more answers
 							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
@@ -699,7 +707,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							// For quicker, show all the comments all the time
 							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
@@ -757,7 +765,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
-							q2 = QollKatexUtil.populateIfTex(q2, t);
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
 							// For quicker, show all the comments all the time
 							q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
@@ -1195,6 +1203,7 @@ var extractQollDetails = function(q) {
 		answer 			: q.answer,
 		fib 			: q.fib,
 		tex 			: q.tex,
+		texMode			: q.texMode? q.texMode : QollConstants.TEX_MODE.MATHJAX,
 		hint 			: q.hint,
 		unit_name 		: q.unit_name,
 		unit 			: q.unit,

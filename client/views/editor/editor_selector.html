@@ -20,6 +20,16 @@
 		<label class="radio-inline">
 		  <input type="radio" name="editorPref" id="template" value="template" {{is_template}}> Quick
 		</label>
+		&nbsp;&nbsp;&nbsp;&nbsp;
+		<label class="control-label">&nbsp; TeX Mode :&rarr;</label>
+
+		<label class="radio-inline">
+		  <input type="radio" name="texPref" id="mathjax" value="mathjax" {{is_mathjax}}> MathJax
+		</label>
+
+		<label class="radio-inline">
+		  <input type="radio" name="texPref" id="katex" value="katex" {{is_katex}}> KaTeX
+		</label>
 	</div>
 	</div>
 </template>

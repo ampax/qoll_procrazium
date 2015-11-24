@@ -1,10 +1,12 @@
 <template name="single_qoll">
-	   <div class="col-md-12 col-xs-12 list-group-item qoll-seperator {{#if is_parent}} list-group-item-heading{{/if}} bg-qoll" id='{{q._id}}'>
+     <div class="col-md-12 col-xs-12 list-group-item qoll-seperator {{#if is_parent}} list-group-item-heading{{/if}} bg-qoll" id='{{q._id}}'>
       
       <div class="col-md-10 col-xs-12">
-        <h4>{{q.qoll_idx_title}} {{{transform_txt q.qollTitle q.cat q.context q.fib}}}</h4>
+        <h4>{{q.qoll_idx_title}} {{{transform_txt q.qollTitle q.cat q.context q.fib q.tex q.texMode q.idx}}}</h4>
 
-        <h5>{{{transform_txt q.qollText q.cat q.context q.fib}}}</h5>
+        <h5>{{{transform_txt q.qollText q.cat q.context q.fib q.tex q.texMode q.idx}}}</h5>
+
+        <!-- {{#mathjax}} $$ Ax^3+ax^2+bx+c = 0 $$ {{/mathjax}} -->
 
         {{{get_units_html q.unit_name q.units}}}
         
@@ -81,7 +83,7 @@
         <div class="col-md-12 col-xs-12">
           <span class="qoll-comment-display-9">Explanation: </span>
           <!-- <h5><pre>{{{q.explanation.txt}}}</pre></h5> -->
-          <h5><pre>{{{transform_txt q.explanation q.cat QollConstants.CONTEXT.READ q.fib}}}</pre></h5>
+          <h5><pre>{{{transform_txt q.explanation q.cat QollConstants.CONTEXT.READ q.fib q.tex q.texMode q.idx}}}</pre></h5>
         </div>
       </div>
     {{/if}}

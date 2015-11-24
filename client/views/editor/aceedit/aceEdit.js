@@ -66,23 +66,29 @@ Template.aceEditor.rendered = function() {
 
 Template.aceEditor.events({
   'keyup .aceEditor': function(e, t) {
-    qlog.info('Printing on keyup ......................', filename);
+    /**qlog.info('Printing on keyup ......................', filename);
     Meteor.setTimeout(function(){
       qlog.info('Printing this after 5 seconds ... will I?', filename);
-    }, 5000);
+    }, 5000);**/
   },
 });
 
 
 var editorPreviewRefresh = function() {
     Meteor.setTimeout(function(){
-      qlog.info('Printing this after 5 seconds ... will I?', filename);
+      // qlog.info('Printing this after 5 seconds ... will I?', filename);
 
       var editor = ace.edit("aceEditor");
+      var tex_pref = $('input[name=texPref]:checked').val();
+
+      var qoll_focus_attrib = AceEditUtil.qollFocusAttribs(editor);
+
       var parsed_qoll;
 
       // set the data in the reactive variable
       preview_data.set("preview_data", editor.getValue() );
+      preview_data.set("tex_pref", tex_pref);
+      preview_data.set("qoll_focus_attrib", qoll_focus_attrib);
       /** Meteor.call('parse_downtown', editor.getValue(), DownTownOptions.downtown_default(), function(err, val) {
         console.log(val);
         //qlog.info("Rec data from server: " + JSON.stringify(val), filename);
@@ -98,7 +104,7 @@ var editorPreviewRefresh = function() {
           editor.setHighlightActiveLine(true);
         }
       });**/
-    }, 5000);
+    }, 2000);
 }
 
 var findCurrentQoll = function(str,pos){

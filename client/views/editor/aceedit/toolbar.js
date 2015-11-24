@@ -42,8 +42,7 @@ Template.toolbar.events({
 		bindForBlockQuotes(editor);
 	},
 	'click .sendqoll' : function(event) {
-		event.preventDefault()
-		console.log("Send qoll at this event ...");
+		event.preventDefault();
 		var editor = ace.edit("aceEditor");
 		var qoll_editor_content = editor.getValue();
 		var recips = jQuery("input#recipient_search").val();
@@ -52,8 +51,7 @@ Template.toolbar.events({
 		storeEditorContents(editor, recips, tags, QollConstants.QOLL_ACTION_SEND);
 	},
 	'click .storqoll' : function(event) {
-		event.preventDefault()
-		console.log("Store qoll at this event ...");
+		event.preventDefault();
 		var editor = ace.edit("aceEditor");
 		var qoll_editor_content = editor.getValue();
 		var recips = jQuery("input#recipient_search").val();
@@ -269,6 +267,10 @@ storeEditorContents = function(editor, recips, tags, action) {
 	var editor_content = editor.getValue();
 	var target = jQuery(".toolbar-storqoll");
 	var store_html = target.html();
+	var tex_mode = $("input[type='radio'][name='texPref']:checked").val();
+
+	qlog.info('==========================> ' + tex_mode, filename);
+
 	target.html("<i class='fa fa-spinner fa-spin toolbar-buttons-link'></i>Saving...");
 
 	var emailsandgroups = [];

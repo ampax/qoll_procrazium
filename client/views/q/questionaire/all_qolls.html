@@ -33,7 +33,10 @@
 							{{#each imgs imageIds}}
 					          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 20%;" data-gallery id="{{this._id}}"/>
 					        {{/each}}
-							<span class='title-qoll'>{{{qollTitle}}}</span> - {{{qollText}}} <span class="qoll-comment-display-3">{{ submitted_on submittedOn }}</span>
+					        
+					        <span class='title-qoll'>
+								{{{transform_txt qollTitle cat QollConstants.CONTEXT.WRITE fib tex texMode idx}}}</span> - 
+								{{{transform_txt qollText cat QollConstants.CONTEXT.WRITE fib tex texMode idx}}} <span class="qoll-comment-display-3">{{ submitted_on submittedOn }}</span>
 						</a>
 					</div>
 					<div class="col-md-1 col-sm-1 col-xs-1 desk-only">

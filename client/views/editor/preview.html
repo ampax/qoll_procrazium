@@ -1,13 +1,19 @@
 <template name="preview">
-	<div class="col-md-6 col-xs-12">
+	<div class="col-md-6 col-xs-12" style="height: 450px; overflow: scroll;">
 		<!-- {{#each preview_content}}
 			{{> single_qoll q= this  btns= ../btns}}
 		{{/each}} -->
 
+		<!-- div id="MathDiv">
+		  The answer you provided is: \({}\).
+		</div -->
+		<div style="visibility: hidden;height: 0px;">{{#mathjax}} $$ Ax^3+ax^2+bx+c = 0  $$ {{/mathjax}}</div>
+		
 		{{#each preview_content}}
 		<div class='col-md-12 col-xs-12 list-group-item bg-qoll qoll-seperator'>
-			<h4>{{this.qoll_idx_title}} {{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</h4>
-			<h5>{{{transform_txt this.text this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</h5>
+			<h4>(Q{{this.idx}}) {{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib this.tex this.texMode this.idx}}}</h4>
+
+			<h5>{{{transform_txt this.text this.cat QollConstants.CONTEXT.READ this.fib this.tex this.texMode this.idx}}}</h5>
 
 			{{{get_units_html this.unit_name this.units}}}
 
@@ -41,7 +47,7 @@
 	        {{#each this.typesX}}
 				<div class='col-md-12 col-xs-12 list-group-item'>
 					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy'>{{qoll_type_abbr this.index}}</span>
-					{{{transform_txt this.type ../cat QollConstants.CONTEXT.READ ../fib ../tex}}}
+					{{{transform_txt this.type ../cat QollConstants.CONTEXT.READ ../fib ../tex ../texMode ../idx}}}
 					{{#if is_correct_answer this this.index QollConstants.CONTEXT.READ}}
 		              <i class="glyphicon glyphicon-check green"></i>
 		            {{/if}}
@@ -53,7 +59,7 @@
 		      <div class="col-md-12 col-xs-12">
 		        <span class="qoll-comment-display-9">Explanation: </span>
 		        <!--<h5><pre>{{{this.explanation.txt}}}</pre></h5> -->
-		        <h5><pre>{{{transform_txt this.explanation this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</pre></h5>
+		        <h5><pre>{{{transform_txt this.explanation this.cat QollConstants.CONTEXT.READ this.fib this.tex this.texMode this.idx}}}</pre></h5>
 		      </div>
 		    </div>
 		    {{/if}}
@@ -63,3 +69,4 @@
 
 	</div>
 </template>
+
