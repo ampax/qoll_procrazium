@@ -65,6 +65,10 @@ Accounts.ui.config({
             id: 1,
             label: 'United States',
             value: 'us'
+          },{
+            id: 2,
+            label: 'India',
+            value: 'india'
           }, /** {
             id: 2,
             label: 'Spain',

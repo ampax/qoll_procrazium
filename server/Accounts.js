@@ -282,7 +282,7 @@ Accounts.onLogin(function(attempt) {
   user.email_hash = getEmailHash(user);
 
   if(user.profile.first_name || user.profile.last_name)
-    user.profile.name = profile.first_name? profile.first_name : '' + profile.last_name? profile.last_name : '';
+    user.profile.name = user.profile.first_name? user.profile.first_name : '' + user.profile.last_name? user.profile.last_name : '';
 
   if(!user.profile.name) {
     // check if google or facebook account and populate appropriately
@@ -303,6 +303,8 @@ Accounts.onLogin(function(attempt) {
     }
   }
   
+  qlog.info('---------------------> user name is ------------> ' + user.username, filename);
+
   if(user.username)
     user.profile.slug = user.username;
   else if(user.profile.email && user.profile.email != '') {
