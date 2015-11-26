@@ -20,8 +20,10 @@ var filename='client/views/questionaire/slide_up_bank.js';
     //$( "div.slider" ).slideToggle();
   },
   'click button.create' : function() {
-    
     qlog.info('Clicked on the create button ...', filename);
+
+    var target = jQuery("span#creategrpid-scs");
+
     var group_desc = jQuery("input.group-desc").val();
     var group_name = jQuery("input#group-name").val();
     var group_memb = jQuery("input#members").val();
@@ -31,6 +33,28 @@ var filename='client/views/questionaire/slide_up_bank.js';
     var invt = $("input:radio[name=attribute_invt]:checked").val();
     var size = $("input:radio[name=attribute_size]:checked").val();
     var ended = $("input:radio[name=attribute_ended]:checked").val();
+
+
+    var err_msg = undefined;
+    if(group_name === '' || group_name == undefined) {
+      err_msg = 'Group name is required';
+    }
+
+    if(group_desc === '' || group_desc == undefined) {
+      err_msg = 'Group description is required';
+    }
+
+    if(err_msg) {
+      var target = jQuery("span#creategrpid-err");
+      target.html(err_msg);
+      target.fadeOut(2400, function() {
+        target.html('');
+        target.show();
+      });
+
+      return;
+    }
+
 
     var user_emails = [];
     if(group_memb) {
@@ -53,12 +77,19 @@ var filename='client/views/questionaire/slide_up_bank.js';
     Meteor.call("updateCreateUserGroup", group_name, group_desc, user_emails, group_domn, access, invt, size, ended, function(error, gid){
         if(!error){ 
             qlog.info("Updated/created users with group-id: " + gid, filename);
-        } else {
-            qlog.info("Failed to create group: " + error, filename);
+
+            target.html("Created group - " + group_name);
+            target.fadeOut(1600, function() {
+              target.html('');
+              target.show();
+            });
+
             jQuery("input.group-desc").val('');
             jQuery("input#group-name").val('');
             jQuery("input#members").val('');
             jQuery("input#domain").val('');
+        } else {
+            qlog.info("Failed to create group: " + error, filename);
         }
         
     });
