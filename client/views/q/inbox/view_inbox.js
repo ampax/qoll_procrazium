@@ -19,6 +19,20 @@ Template.view_inbox.helpers({
 			return moment(qollstionnaireCreatedOn).format('MMM Do YYYY, h:mm a');
 		}
 	},
+	ending_on : function(qollstionnaireEndingOn) {
+		// console.log(qollstionnaireCreatedOn);
+
+		if(!qollstionnaireEndingOn) return '';
+		else {
+
+			var dt_now = new Date();
+			if(dt_now > qollstionnaireEndingOn){
+				return "<u>Closed:</u> "+moment(qollstionnaireEndingOn).format('MMM Do YYYY, h:mm a');
+			} else {
+				return "<u>Deadline:</u> "+moment(qollstionnaireEndingOn).format('MMM Do YYYY, h:mm a');
+			}
+		}
+	},
 	facebook_qoll : function(length_class) {
 		if(length_class === 'facebook-qoll')
 			return true;

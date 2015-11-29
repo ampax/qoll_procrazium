@@ -13,7 +13,8 @@ var test_qolls =
 "- beginax^4+bx^3+cx^2+dx+eend\n"+
 "- beginx = {-b pm \\sqrt ((b^2-4ac) * 2a})end\n"+
 "- beginx = {-b \\pm \\sqrt{b^2-4ac} \\over 2a}end\n"+
-"- beginf(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi)\\,e^{2 \\pi i \\xi x} \\,d\\xiend\n\n"+
+"- beginf(x) = \\int_{-\\infty}^\\infty \\hat f(\\xi)\\,e^{2 \\pi i \\xi x} \\,d\\xiend\n"+
+"- begin \\ce{SO4^2- + Ba^2+ -> BaSO4 v} end\n\n" +
 
 "\# Who was Rani laxmibai\?\n"+
 "* text Identify the women from a small kingdom in northern part of U.P. to have fought with English rule in 1857, died in 1858\n"+

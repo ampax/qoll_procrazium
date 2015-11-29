@@ -14,10 +14,13 @@
 						  <span class="glyphicon glyphicon-chevron-left">Back</span>
 						</button>
 					</div>
-					<div class="col-md-11 col-sm-11 col-xs-12" style="font-size: medium; font-weight: bold;">
-						<span class="qoll-comment-display-5">Title: {{questionaire.title}} ({{questionaire.qoll_count}}) </span>
+					<div class="col-md-8 col-sm-8 col-xs-9" style="font-size: medium; font-weight: bold;">
+						<span class="qoll-comment-display-5">Titlexx: {{questionaire.title}} ({{questionaire.qoll_count}}) </span>
 						<span class="qoll-comment-display-6">{{{questionaire.createdByName}}} </span> 
 						<span class="qoll-comment-display-7">{{{created_on questionaire.createdOn}}} </span>
+					</div>
+					<div class="col-md-3 col-sm-3 col-xs-3" style="font-size: medium; font-weight: bold;">
+						<div id="countdown">{{{deadline questionaire.end_time}}} </div>
 					</div>
 				</div>
 
@@ -35,7 +38,7 @@
 				{{#if is_submitted questionaire}}
 				<div class="row row-submitted"><div class="col-md-12 col-xs-12">
 					<button type="button" id="submitted_questionnaire" class="btn btn-primary btn-lg disabled btn-block">
-						Submitted Questionnaire
+						{{is_submitted_caption questionaire}}
 					</button>
 				</div></div>
 				{{/if}}

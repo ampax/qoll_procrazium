@@ -399,7 +399,9 @@ var createQuestionnaire = function(jsn) {
 
     qollstionnaire.qollids = allqollids;
 
-    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, jsn.action, allqollids, function(err, qollstionnaire_id) {
+    qollstionnaire.end_time = jsn.end_time;
+
+    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, jsn.action, allqollids, undefined, jsn.end_time, function(err, qollstionnaire_id) {
       var target = jQuery(".qbank-error-msg");
       if (err) {
         qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);

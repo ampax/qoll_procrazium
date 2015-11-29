@@ -1,5 +1,7 @@
 var filename='client/views/q/inbox/view_inbox_board.js';
 
+// var mc = Meteor.npmRequire('moment-countdown');
+
 Template.view_inbox_board.helpers({
 	inbox_board_btns : function() {
 		return {del:false, edit:false, graph:false, send:false } ;
@@ -11,8 +13,12 @@ Template.view_inbox_board.helpers({
 		return QuestionaireProgress.findOne();
 	},
 	is_submitted : function(questionaire) {
-		qlog.info('=====================================', filename);
+		qlog.info('===================================== ' + JSON.stringify(questionaire), filename);
 		console.log(questionaire.qollstionnaireSubmitted);
+
+		if(questionaire && questionaire.qollstionnaire_closed === 'closed')
+			return true;
+
 		if(questionaire && questionaire.qollstionnaireSubmitted === true)
 			return true;
 
@@ -21,7 +27,34 @@ Template.view_inbox_board.helpers({
 	is_not_submitted : function(questionaire) {
 		qlog.info('=====================================', filename);
 		console.log(questionaire.qollstionnaireSubmitted);
-		console.log(questionaire.qollstionnaireSubmitted === true);
+
+		if(questionaire && questionaire.qollstionnaire_closed === 'closed')
+			return false;
+
+		if(questionaire && questionaire.qollstionnaireSubmitted === true)
+			return false;
+
+		return true;
+	},
+	is_submitted_caption : function(questionaire) {
+		qlog.info('===================================== ' + JSON.stringify(questionaire), filename);
+		console.log(questionaire.qollstionnaireSubmitted);
+
+		if(questionaire && questionaire.qollstionnaire_closed === 'closed')
+			return "Closed Questionnaire";
+
+		if(questionaire && questionaire.qollstionnaireSubmitted === true)
+			return "Submitted Questionnaire";
+
+		return "Unknown";
+	},
+	is_not_submitted_caption : function(questionaire) {
+		qlog.info('=====================================', filename);
+		console.log(questionaire.qollstionnaireSubmitted);
+
+		if(questionaire && questionaire.qollstionnaire_closed === 'closed')
+			return false;
+
 		if(questionaire && questionaire.qollstionnaireSubmitted === true)
 			return false;
 
@@ -34,6 +67,14 @@ Template.view_inbox_board.helpers({
 		else {
 			// return qollstionnaireSubmittedOn;
 			return moment(qollstionnaireCreatedOn).format('MMM Do YYYY, h:mm a');
+		}
+	},
+	deadline : function(qollstionnaireDeadline) {
+		if(!qollstionnaireDeadline) return '';
+		else {
+			// return qollstionnaireSubmittedOn;
+			// return moment(qollstionnaireDeadline).format('MMM Do YYYY, h:mm a');
+			return qollstionnaireDeadline;
 		}
 	},
 });
@@ -98,6 +139,24 @@ Template.view_inbox_board.rendered = function(){
 	$('li#inbox').css('background-color', 'firebrick');
 	//$("#buttons").sticky({topSpacing:70});
 	//$("#authorinfo").sticky({topSpacing:160});
+
+	var dt_now = new Date();
+	var dt_str = $('#countdown').html();
+
+	if (dt_str === ' ' || dt_str === '') return;
+
+	var dt = new Date(dt_str);
+	var dt1 = moment(dt).format('YYYY/MM/DD hh:mm:ss A');
+
+	console.log(dt+'bbbbbbbb'+dt_str+'<-xxxxxxxxxxxxxxxxxxxxxxxxxxx-> '+dt1);
+
+	$('#countdown').countdown(dt1, function(event) {
+		if(dt_now > dt){
+			$(this).html("<span class='red_1'>Closed: " + dt1+"</span>");
+		} else {
+			$(this).html(event.strftime("<span class='red_1'>%D days</span> <span class='red_2'>%H:%M:%S</span>"));
+		}
+	});
 	
 };
 

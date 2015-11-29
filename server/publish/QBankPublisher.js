@@ -304,6 +304,7 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 						pub.createdByEmail = editor.profile.email;
 						pub.createdByName = editor.profile.name;
 						pub.createdOn = item.submittedOn;
+						pub.end_time = item.end_time;
 					}
 
 					self.added('recvd-questionaire', item._id, pub);
@@ -332,6 +333,7 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 						pub.createdByEmail = editor.profile.email;
 						pub.createdByName = editor.profile.name;
 						pub.createdOn = item.submittedOn;
+						pub.end_time = item.end_time;
 					}
 
 					self.changed('recvd-questionaire', item._id, pub);
@@ -381,6 +383,17 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 							recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, category : item.category,
 							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
 
+					// check if the questionaire has ended and close it appropriately
+					var dt_now = new Date();
+					qlog.info("+++++++++++++++++++>>>>>1 dt_now is - " + dt_now + ", end_time is - " + item.end_time, filename);
+					if(item.end_time && dt_now >= item.end_time && item.qollstionnaireClosed != 'closed'){
+						qlog.info("+++++++++++++++++++>>>>>2 dt_now is - " + dt_now + ", end_time is - " + item.end_time, filename);
+						QollstionnaireFns.close_questionnaire(item._id, 'qollops');
+						questionaire.qollstionnaire_closed = 'closed';
+						questionaire.qollstionnaire_closed_on = dt_now;
+					}
+
+
 					if(findoptions.stats){
 						var r = getQuestionnaireResponses(item);
 						questionaire.stats = r.stats;
@@ -401,6 +414,7 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						questionaire.createdByEmail = editor.profile.email;
 						questionaire.createdByName = editor.profile.name;
 						questionaire.createdOn = item.submittedOn;
+						questionaire.end_time = item.end_time;
 					}
 
 					qlog.info('+++++++++++++++++> ' + JSON.stringify(questionaire), filename);
@@ -412,6 +426,16 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 							recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, category : item.category,
 							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
 
+					
+
+					// check if the questionaire has ended and close it appropriately
+					var dt_now = new Date();
+					if(item.end_time && dt_now >= item.end_time && item.qollstionnaireClosed != 'closed'){
+						QollstionnaireFns.close_questionnaire(item._id, 'qollops');
+						questionaire.qollstionnaire_closed = 'closed';
+						questionaire.qollstionnaire_closed_on = dt_now;
+					}
+
 					if(findoptions.stats){
 						var r = getQuestionnaireResponses(item);
 						questionaire.stats = r.stats;
@@ -432,6 +456,7 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						questionaire.createdByEmail = editor.profile.email;
 						questionaire.createdByName = editor.profile.name;
 						questionaire.createdOn = item.submittedOn;
+						questionaire.end_time = item.end_time;
 					}
 
 					self.changed('questionaire-for-id', item._id, questionaire);
@@ -706,6 +731,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.qoll_idx_title = '(Q).';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
+							q2.end_time = item.end_time;
 
 							// q2 = QollKatexUtil.populateIfTex(q2, t);
 
@@ -764,6 +790,7 @@ Meteor.publish('QUICKER_PUBLISHER', function(findoptions) {
 							q2.qoll_idx_title = '(Q).';
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
+							q2.end_time = item.end_time;
 
 							// q2 = QollKatexUtil.populateIfTex(q2, t);
 

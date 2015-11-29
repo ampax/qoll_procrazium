@@ -1,8 +1,19 @@
 var filename='server/db/Qollstionnaire.js';
 
+QollstionnaireFns = {
+
+	close_questionnaire : function(questionnaire_id, user_id) {
+		qlog.info('Closing the questionnaire ' + questionnaire_id + ' for ' + user_id + ' now ...', filename);
+		var resp_msg = {};
+		Qolls.QollstionnaireDb.update({_id : questionnaire_id}, {qollstionnaireClosed : 'closed', qollstionnaireClosedOn : new Date(), closedBy : user_id});
+		return {'msg' : 'Questionnaire Closed ...'};
+	}
+
+};
+
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids, user_id) {
+	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids, user_id, end_time) {
 		var qollstionnaire = {};
 
 
@@ -49,6 +60,7 @@ Meteor.methods({
 		qollstionnaire.tags = tags;
 		qollstionnaire.status = status;
 		qollstionnaire.qollids = qollids;
+		qollstionnaire.end_time = end_time;
 
 		if(qollstionnaire.qollids.length === 1)
 			qollstionnaire.category = 'quicker';
@@ -162,11 +174,7 @@ Meteor.methods({
 	},
 
 	close_questionnaire : function(questionnaire_id, user_id) {
-		var resp_msg = {};
-
-		Qolls.QollstionnaireDb.update({_id : questionnaire_id, submittedBy : user_id}, {qollstionnaireClosed : 'closed', qollstionnaireClosedOn : new Date()});
-
-		return {'msg' : 'Questionnaire Closed ...'};
+		return QollstionnaireFns.close_questionnaire(questionnaire_id, user_id);
 	},
 
 	resend_submitted_questionnaire : function(questionnaire_id, email_id) {

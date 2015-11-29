@@ -76,11 +76,20 @@ Schemas.custom_questionnaire = new SimpleSchema({
     max: 500
   },
   end_time: {
-    type: String,
+    type: Date,
     label: "Deadline",
+    optional: true,
+    autoform: {
+      afFieldInput: {
+        type: "bootstrap-datetimepicker"
+      }
+    }
+  },/**{
+    type: String,
+    label: "Deadline11",
     max: 500,
     optional: true
-  },
+  }**/
   state: {
     type: String,
     optional: false,
