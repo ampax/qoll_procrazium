@@ -13,7 +13,7 @@ QollstionnaireFns = {
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids, user_id, end_time) {
+	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids, user_id, end_time, qoll_attributes) {
 		var qollstionnaire = {};
 
 
@@ -61,6 +61,7 @@ Meteor.methods({
 		qollstionnaire.status = status;
 		qollstionnaire.qollids = qollids;
 		qollstionnaire.end_time = end_time;
+		qollstionnaire.qoll_attributes = qoll_attributes;
 
 		if(qollstionnaire.qollids.length === 1)
 			qollstionnaire.category = 'quicker';

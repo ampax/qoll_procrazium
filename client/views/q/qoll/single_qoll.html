@@ -3,7 +3,6 @@
       
       <div class="col-md-10 col-xs-12">
         <h4>{{q.qoll_idx_title}} {{{transform_txt q.qollTitle q.cat q.context q.fib q.tex q.texMode q.idx}}}</h4>
-
         <h5>{{{transform_txt q.qollText q.cat q.context q.fib q.tex q.texMode q.idx}}}</h5>
 
         <!-- {{#mathjax}} $$ Ax^3+ax^2+bx+c = 0 $$ {{/mathjax}} -->
@@ -29,6 +28,10 @@
           <div class="{{get_hint_visibility q.qoll_response.usedHint}} red_1" id="hint">
             <h5>{{{q.hint}}} {{#if q.qoll_response.usedHint}} <u>(Already used hint)</u>{{/if}}</h5>
           </div>
+        {{/if}}
+
+        {{#if q.qoll_attributes}}
+          <span class="red_1" style="font-size: large">{{q.qoll_attributes.weight}} Points</span>
         {{/if}}
 
         {{#if is_blank_type q.cat}}

@@ -23,7 +23,7 @@ QollClientSide = {
 
                 html += '<div class="col-xs-1"><h4>Pts:</h4></div>';
     
-                html += '<div class="col-xs-2"><input class="form-control input-small" type="text"></div>';
+                html += '<div class="col-xs-2"><input class="form-control input-small wght" type="text" value="10"></div>';
 
                 html += '<div class="col-xs-1">&nbsp;</div>';
 
@@ -47,11 +47,17 @@ QollClientSide = {
 						//html+= "<div class='col-md-2 col-xs-2 list-group-item'>";
 						html += "<i class='glyphicon glyphicon-check pull-right green'></i>";
 						html += "</div>";
+						//html += "<div class='col-md-2 col-xs-2 list-group-item'>";
+						//html += '<input class="form-control input-small" type="text">';
+						//html += "</div>";
 					} else {
 						html += "<div class='col-md-12 col-xs-12 list-group-item'>";
 						html += "<span class='badge pull-left qoll-response-val class_" + idx + " glossy'>" + alphabetical[idx] + "</span>";
 						html += transform_tex(transform_fib(t.type, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter);
 						html += "</div>";
+						//html += "<div class='col-md-2 col-xs-2 list-group-item'>";
+						//html += '<input class="form-control input-small" type="text">';
+						//html += "</div>";
 					}
 
 					idx = idx + 1;

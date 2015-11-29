@@ -118,6 +118,7 @@ Qolls.QollstionnaireDb = {
 			quuid						: qollstionnaire.quuid,
 			anonymous_type				: qollstionnaire.anonymous_type,
 			end_time					: qollstionnaire.end_time,
+			qoll_attributes				: qollstionnaire.qoll_attributes,
 		});
 
 		return questId;

@@ -524,6 +524,9 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
+							if(item.qoll_attributes)
+								q2.qoll_attributes = item.qoll_attributes[t._id];
+
 							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
 								if(response != undefined)
 									q2.fib = response.response;
@@ -557,7 +560,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id,
 								 status : item.status, qollstionnaireClosed : item.qollstionnaireClosed, 
-								 qollstionnaireClosedOn : item.qollstionnaireClosedOn};
+								 qollstionnaireClosedOn : item.qollstionnaireClosedOn, qollAttributes : item.qoll_attributes};
 
 					if(resp && resp.qollstionnaireSubmitted == true) {
 						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
@@ -598,6 +601,9 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 							q2.context = findoptions.context;
 							q2.qoll_response = response;
 
+							if(item.qoll_attributes)
+								q2.qoll_attributes = item.qoll_attributes[t._id];
+
 							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
 								if(response != undefined)
 									q2.fib = response.response;
@@ -631,7 +637,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 
 					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id,
 								 status : item.status, qollstionnaireClosed : item.qollstionnaireClosed, 
-								 qollstionnaireClosedOn : item.qollstionnaireClosedOn};
+								 qollstionnaireClosedOn : item.qollstionnaireClosedOn, qollAttributes : item.qoll_attributes};
 
 					if(resp && resp.qollstionnaireSubmitted == true) {
 						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
