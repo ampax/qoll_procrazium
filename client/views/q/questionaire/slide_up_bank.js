@@ -31,10 +31,17 @@ var QuestionnaireHooks = {
           qoll_attributes[this.id] = {};
 
           var wght = $(this).find('input.wght').val();
+          var hint_penalty = $(this).find('input.hint_penalty').val();
 
           qoll_attributes[this.id]['weight'] = wght;
+          if(hint_penalty) qoll_attributes[this.id]['hint_penalty'] = hint_penalty;
 
         });
+        
+        /**qlog.info("=======================================");
+        console.log(qoll_attributes);
+        qlog.info("=======================================");
+        return false;**/
 
         if(allqollids.length == 0) {
           alert('Select qolls to create the questionnaire');

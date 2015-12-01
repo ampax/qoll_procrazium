@@ -249,24 +249,7 @@ Template.qolls_inner.helpers({
 });
 
 Template.qolls_inner.events({
-	/**'click': function(){
-	 qlog.info('Selected to qoll: ' + this._id + ', qollText: ' + qollText, filename);
-	 Session.set('selected_qoll_id', this._id);
-	 Session.set('qollId', this._id);
-	 },**/
 
-	'click a.yes' : function(event) {
-		event.preventDefault();
-		if (Meteor.userId()) {
-			var qollId = this._id;
-			//Session.get('selected_qoll_id');
-			qlog.info('Registering qoll for: ' + qollId + '/yes', filename);
-			Meteor.call('registerQoll', qollId, 'yes', function(err, qollRegId) {
-				qlog.info('Registered qoll with id: ' + qollRegId + '/yes', filename);
-			});
-			ReactiveDataSource.refresh('qollstat' + qollId);
-		}
-	},
 	'click .qoll-response-val' : function(event) {
 		event.preventDefault();
 		var chk = $(event.target);
@@ -452,29 +435,6 @@ Template.qolls_inner.events({
 		 "top": $('#'+qollId).offset().top + "px",
 		 "left": $('#'+qollId).offset().left + "px",
 		 });	*/
-	},
-	'click a.no' : function(event) {
-		event.preventDefault();
-		if (Meteor.userId()) {
-			var qollId = this._id;
-			qlog.info('Registering qoll for: ' + qollId + '/no', filename);
-			Meteor.call('registerQoll', qollId, 'no', function(err, qollRegId) {
-				if (err) {
-					qlog.error('Failed while answering the qoll: ' + qollId + '/' + err, filename);
-				} else {
-					qlog.info('Registered qoll with id: ' + qollRegId + '/' + qollId + '/no', filename);
-				}
-			});
-		}
-	},
-
-	'click a.maybe' : function(event) {
-		event.preventDefault();
-		if (Meteor.userId()) {
-			var qollId = this._id;
-			qlog.info('Registering qoll for: ' + qollId + '/maybe' + event, filename);
-
-		}
 	},
 
 	'click .render-chart-btn' : function(event) {

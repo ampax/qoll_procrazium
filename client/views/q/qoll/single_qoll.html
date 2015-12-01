@@ -32,6 +32,9 @@
 
         {{#if q.qoll_attributes}}
           <span class="red_1" style="font-size: large">{{q.qoll_attributes.weight}} Points</span>
+          {{#if q.qoll_attributes.hint_penalty}}
+            <span class="red_1" style="font-size: large"> ({{q.qoll_attributes.hint_penalty}}% for hint)</span>
+          {{/if}}
         {{/if}}
 
         {{#if is_blank_type q.cat}}

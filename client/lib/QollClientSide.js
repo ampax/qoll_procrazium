@@ -32,6 +32,14 @@ QollClientSide = {
 
 			html += '<h5>' + transform_tex(transform_fib(qoll.qollText, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter) + '</h5>';
 
+			//html += '<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip"';
+            //html += '	data-placement="left" title="Partial credit will be deducted..." id="show_hint">Hint';
+          	//html += '</button>';
+          	//html += '<div class="red_1" id="hint">'
+          	if(qoll.hint && qoll.hint != 'null' && qoll.hint != '')
+            	html += '<div class="col-xs-10"><h5 class="red_1">HINT: '+ qoll.hint +'</h5></div>  <div class="col-xs-2"> <input class="form-control input-small hint_penalty" style="width:34px;" type="text" value="-30">%</div>';
+          	//html += '</div>';
+        
 			var types = qoll['types'];
 			var ans;
 

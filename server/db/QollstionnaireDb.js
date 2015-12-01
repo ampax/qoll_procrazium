@@ -63,6 +63,13 @@ Meteor.methods({
 		qollstionnaire.end_time = end_time;
 		qollstionnaire.qoll_attributes = qoll_attributes;
 
+		var total_weight = 0;
+		_.values(qoll_attributes).forEach(function(e){
+			total_weight = +total_weight + +e.weight;
+		});
+
+		qollstionnaire.total_weight = total_weight;
+
 		if(qollstionnaire.qollids.length === 1)
 			qollstionnaire.category = 'quicker';
 		else

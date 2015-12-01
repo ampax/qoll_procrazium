@@ -163,6 +163,8 @@ Meteor.methods({
 		// AddQollstionnaireResponse(response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, userId);
 	},
 	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal, userId, answered_or_unanswered) {
+		qlog.info(qollTypeVal + '<<<===============>>>' + qollTypeIx, filename);
+
 		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
 		if(!userId) userId = Meteor.userId();
 
@@ -174,7 +176,264 @@ Meteor.methods({
 		});
 		if (!qsnr)
 			return;
-		qlog.info(" Adding qollstionnaire response for xxx " + qsnrid);
+		qlog.info(" Adding qollstionnaire response for xxxyyy " + qsnrid);
+
+		var qoll = Qoll.findOne({
+			_id : qollId
+		});
+		var type;type = qoll.cat;
+
+		var weight = qsnr.qoll_attributes[qollId].weight;
+
+		var hint_penalty = qsnr.qoll_attributes[qollId].hint_penalty;
+		if(hint_penalty) hint_penalty = Math.abs(hint_penalty);
+		else hint_penalty = 0;
+
+		var correct_ans = new Array();
+		qoll.qollTypesX.forEach(function(qt){
+			if(qt.isCorrect)
+				correct_ans.push(true);
+			else correct_ans.push(null);
+		});
+
+		var dt_now = new Date();
+
+		var resp_record = QollstionnaireResponses.findOne({
+			qollstionnaireid : qsnrid,
+			usrid : userId
+		});
+
+		if(!resp_record) {
+			// initialize with dummy response body and put the init values in it
+			var responses = {};
+			qsnr.qollids.forEach(function(qid){
+				var qll = Qoll.findOne({ _id : qid });
+				var tmp = new Array();
+				qll.qollTypes.forEach(function(qt){
+					tmp.push(null);
+				});
+
+				var rsp = {};
+				rsp.submittedOn = dt_now;
+				rsp.response = tmp;
+				rsp.type = type;
+				rsp.iscorrect = undefined;
+				rsp.usedHint = false;
+
+				responses[qid] = rsp;
+			});
+
+			resp_record = {
+				"qollstionnaireid" 			: qsnrid,
+			    "usrid" 					: userId,
+			    "qollPortal" 				: qollPortal,
+			    "responses" 				: responses,
+			    "qollstionnaireSubmitted" 	: false,
+				"qollstionnaireSubmittedOn" : undefined,
+			};
+
+			if(resp_record.responses[qollId].response[qollTypeIx] == null)
+				resp_record.responses[qollId].response[qollTypeIx] = true;
+			else resp_record.responses[qollId].response[qollTypeIx] = null;
+
+			resp_record.responses[qollId].submittedOn = dt_now;
+
+			resp_record.responses[qollId].iscorrect = _.isEqual(correct_ans, resp_record.responses[qollId].response);
+
+			if(resp_record.responses[qollId].iscorrect) resp_record.responses[qollId].weight_earned = weight;
+			else resp_record.responses[qollId].weight_earned = 0;
+
+			resp_record.total_weight_earned = resp_record.responses[qollId].weight_earned;
+
+			QollstionnaireResponses.insert(resp_record);
+
+		} else {
+
+			if(resp_record.responses[qollId].response[qollTypeIx] == null)
+				resp_record.responses[qollId].response[qollTypeIx] = true;
+			else resp_record.responses[qollId].response[qollTypeIx] = null;
+
+			resp_record.responses[qollId].submittedOn = dt_now;
+
+			resp_record.responses[qollId].iscorrect = _.isEqual(correct_ans, resp_record.responses[qollId].response);
+
+			if(resp_record.responses[qollId].iscorrect) {
+				if(resp_record.responses[qollId].usedHint) 
+					resp_record.responses[qollId].weight_earned = (1 - hint_penalty/100 ) * weight;
+				else resp_record.responses[qollId].weight_earned = weight;
+			} else resp_record.responses[qollId].weight_earned = 0;
+
+			// update questionnaire performance now
+			var total_weight_earned = 0;
+			_.values(resp_record.responses).forEach(function(r){
+				if(r.weight_earned) total_weight_earned = +total_weight_earned + +r.weight_earned;
+			});
+
+			resp_record.total_weight_earned = total_weight_earned;
+
+			qlog.info("==========> " + resp_record.responses[qollId].response, filename);
+			qlog.info("==========> " + correct_ans, filename);
+
+			QollstionnaireResponses.update({_id : resp_record._id}, {$set : resp_record});
+
+		}
+		
+		
+	},
+	registerHint : function(qollId, qsnrid) {
+		var qollPortal = QollConstants.QOLL_PORTAL.QOLL;
+		var userId = Meteor.userId();
+
+		var thisemail = UserUtil.getCurrentUserEmail();
+		var usrid = userId;
+		// find questionnaire
+		var qsnr = Qollstionnaire.findOne({
+			_id : qsnrid
+		});
+		if (!qsnr)
+			return;
+		qlog.info(" Adding qollstionnaire response for xxxyyy " + qsnrid);
+
+		var qoll = Qoll.findOne({
+			_id : qollId
+		});
+		var type;type = qoll.cat;
+
+		var weight = qsnr.qoll_attributes[qollId].weight;
+
+		var hint_penalty = qsnr.qoll_attributes[qollId].hint_penalty;
+		if(hint_penalty) hint_penalty = Math.abs(hint_penalty);
+		else hint_penalty = 0;
+
+		var correct_ans = new Array();
+		qoll.qollTypesX.forEach(function(qt){
+			if(qt.isCorrect)
+				correct_ans.push(true);
+			else correct_ans.push(null);
+		});
+
+		var dt_now = new Date();
+
+		var resp_record = QollstionnaireResponses.findOne({
+			qollstionnaireid : qsnrid,
+			usrid : userId
+		});
+
+		if(!resp_record) {
+			// initialize with dummy response body and put the init values in it
+			var responses = {};
+			qsnr.qollids.forEach(function(qid){
+				var qll = Qoll.findOne({ _id : qid });
+				var tmp = new Array();
+				qll.qollTypes.forEach(function(qt){
+					tmp.push(null);
+				});
+
+				var rsp = {};
+				rsp.submittedOn = dt_now;
+				rsp.response = tmp;
+				rsp.type = type;
+				rsp.iscorrect = undefined;
+				rsp.usedHint = false;
+
+				responses[qid] = rsp;
+			});
+
+			resp_record = {
+				"qollstionnaireid" 			: qsnrid,
+			    "usrid" 					: userId,
+			    "qollPortal" 				: qollPortal,
+			    "responses" 				: responses,
+			    "qollstionnaireSubmitted" 	: false,
+				"qollstionnaireSubmittedOn" : undefined,
+			};
+
+			resp_record.responses[qollId].submittedOn = dt_now;
+
+			resp_record.responses[qollId].usedHint = true;
+
+			QollstionnaireResponses.insert(resp_record);
+
+		} else {
+
+			resp_record.responses[qollId].submittedOn = dt_now;
+
+			resp_record.responses[qollId].usedHint = true;
+
+			if(resp_record.responses[qollId].iscorrect) {
+				resp_record.responses[qollId].weight_earned = (1 - hint_penalty/100 ) * weight;
+			} else resp_record.responses[qollId].weight_earned = 0;
+
+			QollstionnaireResponses.update({_id : resp_record._id}, {$set : resp_record});
+
+		}
+	},
+	registerHint1 : function(qollId, qsnrid) {
+		//TODO: store the hint use with the 
+		var thisemail = UserUtil.getCurrentUserEmail();
+		var usrid = this.userId;
+		// find questionnaire
+		var qsnr = Qollstionnaire.findOne({ _id : qsnrid});
+
+		if (!qsnr)
+			return;
+
+		qlog.info(" Adding qollstionnaire response for  " + qsnrid);
+
+		var qoll = Qoll.findOne({ _id : qollId });
+		var type;type = qoll.cat;
+
+		var resp = QollstionnaireResponses.findOne({qollstionnaireid : qsnrid, usrid : this.userId});
+
+		if (!resp) {
+			createRespObject(qsnrid, usrid, type, qoll, undefined, true);
+		} else {
+			var updatepaths;
+			updatepaths = {};
+			if (resp.responses['' + qollId]) {
+				//TODO
+				updatepaths['responses.' + qollId + '.usedHint'] = true; //iscorrect
+				return QollstionnaireResponses.update({
+					_id : resp._id
+				}, {
+					$set : updatepaths
+				});
+			} else {
+				//TODO
+				var newresponse;
+				newresponse = {};
+				newresponse = {
+					submittedOn : new Date(),
+					response : [],
+					type : type,
+					iscorrect : undefined,
+					usedHint : true
+
+				};
+				
+				updatepaths['responses.' + qollId] = newresponse;
+				return QollstionnaireResponses.update({
+					_id : resp._id
+				}, {
+					$set : updatepaths
+				});
+			}
+			//Update the questionnaire and set usedHint flag for qoll
+		}
+	},
+	AddQollstionnaireResponse1 : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal, userId, answered_or_unanswered) {
+		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
+		if(!userId) userId = Meteor.userId();
+
+		var thisemail = UserUtil.getCurrentUserEmail();
+		var usrid = userId;
+		// find questionnaire
+		var qsnr = Qollstionnaire.findOne({
+			_id : qsnrid
+		});
+		if (!qsnr)
+			return;
+		qlog.info(" Adding qollstionnaire response for xxxyyyy " + qsnrid);
 
 		var resp = QollstionnaireResponses.findOne({
 			qollstionnaireid : qsnrid,
@@ -318,7 +577,7 @@ Meteor.methods({
 			}
 		}
 	},
-	registerHint : function(qollId, qsnrid) {
+	registerHint1 : function(qollId, qsnrid) {
 		//TODO: store the hint use with the 
 		var thisemail = UserUtil.getCurrentUserEmail();
 		var usrid = this.userId;

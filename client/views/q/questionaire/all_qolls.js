@@ -214,11 +214,12 @@ Template.all_qolls.events({
 			var qollText = this.qollText;
 			var qollTitle = this.qollTitle;
 			var qollTypesX = this.qollTypesX;
+			var hint = this.hint;
 
-			qlog.info('=========> ' + fib + '/' + cat + '/' + context, filename);
+			qlog.info('=========>xxxxxxxxxxxxxx ' + fib + '/' + cat + '/' + context + '/' + hint, filename);
 
 			var html = QollClientSide.previewQollHtml([{qollId : qollId, qollTitle : qollTitle, qollText : qollText, types : qollTypesX,
-														tex : tex, fib : fib, cat : cat, context : context, texMode : texMode }]);
+														tex : tex, fib : fib, cat : cat, context : context, texMode : texMode, hint : hint }]);
 			//qlog.info('The html is: ' + html, filename);
 			//qlog.info('Printed the qoll-selection checkbox - ' + qollId + '/' + qollText + '/' + qollTypesX, filename);
 			qlog.info('adding this qoll - ' + qollId, filename);

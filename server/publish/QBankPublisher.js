@@ -45,6 +45,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						complexity 		: item.complexity,
 						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
+						hint 			: item.hint,
 					};
 
 					// q = QollKatexUtil.populateIfTex(q, item);
@@ -72,6 +73,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						complexity 		: item.complexity,
 						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
+						hint 			: item.hint,
 					};
 
 					// q = QollKatexUtil.populateIfTex(q, item);
@@ -381,7 +383,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 				added : function(item, idx){
 					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
 							recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, category : item.category,
-							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
+							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn,
+							total_weight : item.total_weight};
 
 					// check if the questionaire has ended and close it appropriately
 					var dt_now = new Date();
@@ -391,6 +394,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						QollstionnaireFns.close_questionnaire(item._id, 'qollops');
 						questionaire.qollstionnaire_closed = 'closed';
 						questionaire.qollstionnaire_closed_on = dt_now;
+
+						if(resp) questionaire.total_weight_earned = resp.total_weight_earned;
 					}
 
 
@@ -405,6 +410,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 					if(resp) {
 						questionaire.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
 						questionaire.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+
+						if(resp.qollstionnaireSubmitted) questionaire.total_weight_earned = resp.total_weight_earned;
 					}
 
 					var editorarr = Meteor.users.find({"_id" : item.submittedBy}).fetch();
@@ -424,7 +431,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 				changed : function(item, idx) {
 					var questionaire = {_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, 
 							recips_count : item.submittedTo?item.submittedTo.length:0, submitted_on : item.submittedOn, category : item.category,
-							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn};
+							qollstionnaire_closed : item.qollstionnaireClosed, qollstionnaire_closed_on : item.qollstionnaireClosedOn,
+							total_weight : item.total_weight};
 
 					
 
@@ -434,6 +442,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 						QollstionnaireFns.close_questionnaire(item._id, 'qollops');
 						questionaire.qollstionnaire_closed = 'closed';
 						questionaire.qollstionnaire_closed_on = dt_now;
+
+						if(resp) questionaire.total_weight_earned = resp.total_weight_earned;
 					}
 
 					if(findoptions.stats){
@@ -447,6 +457,8 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 					if(resp) {
 						questionaire.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
 						questionaire.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+
+						if(resp.qollstionnaireSubmitted) questionaire.total_weight_earned = resp.total_weight_earned;
 					}
 
 					var editorarr = Meteor.users.find({"_id" : item.submittedBy}).fetch();
