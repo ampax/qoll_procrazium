@@ -92,14 +92,36 @@
     					{{this.label}}
     				</button>
     			</div>
-    			<div class="col-md-8 col-xs-12"><p>
+    			<div class="col-md-6 col-xs-12"><p>
     				<h5>{{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</h5></p>
     				<p>{{{transform_txt this.qollText this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</p>
     			</div>
     			<div class="col-md-2 col-xs-12">
-        			<h5>{{this.response}}</h5>
+        			<h5>{{this.response}}
+	        			{{#if this.usedHint}}
+	        				,<span class="red_1">hint used</span>
+	        			{{/if}}
+        			</h5>
 				</div>
-				<div class="col-md-1 col-xs-12">{{{this.iscorrect}}}</div>
+				<div class="col-md-1 col-xs-12">
+					{{#if this.weight_earned}}
+						<h5 class="blue_1">{{this.weight_earned}}</h5>
+					{{else}}
+						<h5 class="blue_1">0</h5>
+					{{/if}}
+				</div>
+				<div class="col-md-1 col-xs-12">
+					{{#if this.hint_penalty}}
+						<h5 class="red_1">-{{this.hint_penalty}}</h5>
+					{{/if}}
+				</div>
+				<div class="col-md-1 col-xs-12">
+					{{#if this.iscorrect}}
+						Correct
+					{{else}}
+						InCorrect
+					{{/if}}
+				</div>
 			</div>
 			<br>
 		{{/each}}

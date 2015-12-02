@@ -30,10 +30,14 @@
           </div>
         {{/if}}
 
+        {{#if q.show_result}}
+          <span class="blue_1" style="font-size: large">{{q.qoll_response.weight_earned}} /</span>
+        {{/if}}
+
         {{#if q.qoll_attributes}}
-          <span class="red_1" style="font-size: large">{{q.qoll_attributes.weight}} Points</span>
+          <span class="blue_1" style="font-size: large">{{q.qoll_attributes.weight}} Points</span>
           {{#if q.qoll_attributes.hint_penalty}}
-            <span class="red_1" style="font-size: large"> ({{q.qoll_attributes.hint_penalty}}% for hint)</span>
+            <span class="blue_1" style="font-size: large"> ({{q.qoll_attributes.hint_penalty}}% for hint)</span>
           {{/if}}
         {{/if}}
 

@@ -258,9 +258,10 @@ Meteor.methods({
 			resp_record.responses[qollId].iscorrect = _.isEqual(correct_ans, resp_record.responses[qollId].response);
 
 			if(resp_record.responses[qollId].iscorrect) {
-				if(resp_record.responses[qollId].usedHint) 
+				if(resp_record.responses[qollId].usedHint) {
 					resp_record.responses[qollId].weight_earned = (1 - hint_penalty/100 ) * weight;
-				else resp_record.responses[qollId].weight_earned = weight;
+					resp_record.responses[qollId].hint_penalty = ( hint_penalty/100 ) * weight;
+				} else resp_record.responses[qollId].weight_earned = weight;
 			} else resp_record.responses[qollId].weight_earned = 0;
 
 			// update questionnaire performance now
@@ -362,6 +363,7 @@ Meteor.methods({
 
 			if(resp_record.responses[qollId].iscorrect) {
 				resp_record.responses[qollId].weight_earned = (1 - hint_penalty/100 ) * weight;
+				resp_record.responses[qollId].hint_penalty = ( hint_penalty/100 ) * weight;
 			} else resp_record.responses[qollId].weight_earned = 0;
 
 			QollstionnaireResponses.update({_id : resp_record._id}, {$set : resp_record});
