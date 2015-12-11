@@ -100,7 +100,6 @@ mobile-status-bar@1.0.3
 momentjs:moment@2.10.6
 mongo@1.1.0
 mongo-livedata@1.0.8
-mrt:ace-embed@0.0.4
 mrt:datatables@0.1.3
 mrt:mathjax@0.6.3
 npm-bcrypt@0.7.8_2

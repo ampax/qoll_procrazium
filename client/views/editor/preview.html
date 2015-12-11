@@ -37,6 +37,10 @@
 	          <div class="red_1" id="hint">
 	            <h5>{{{this.hint}}}<u>(Already used hint)</u></h5>
 	          </div>
+	        {{else }}
+	        	<div class="red_1" id="hint">
+		            <h5>Add some hint</h5>
+		          </div>
 	        {{/if}}
 
 	        {{#if is_blank_type this.cat}}
@@ -61,6 +65,14 @@
 		        <span class="qoll-comment-display-9">Explanation: </span>
 		        <!--<h5><pre>{{{this.explanation.txt}}}</pre></h5> -->
 		        <span class="explanation">{{{transform_txt this.explanation this.cat QollConstants.CONTEXT.READ this.fib this.tex this.texMode this.idx}}}</span>
+		      </div>
+		    </div>
+		    {{else}}
+		    <div class="row">
+		      <div class="col-md-12 col-xs-12">
+		        <span class="qoll-comment-display-9">Explanation: </span>
+		        <!--<h5><pre>{{{this.explanation.txt}}}</pre></h5> -->
+		        <span class="explanation">Explanation will be show after response has been registered ...</span>
 		      </div>
 		    </div>
 		    {{/if}}
