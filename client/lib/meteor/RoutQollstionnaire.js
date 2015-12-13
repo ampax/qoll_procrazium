@@ -183,36 +183,11 @@ IdLookUpEmailPreviewController = RouteController.extend({
 });
 
 Router.map(function() {
-	if (Meteor.isCordova) {
-		this.route('view_inbox_cordova', {
-			template : 'view_inbox_cordova',
-			path : '/inbox_cordova',
-			controller : InboxController,
-		});
-		this.route('add_qolls_cordova', {
-			template : 'add_qolls_cordova',
-			path : '/add_qolls_cordova',
-			controller : InboxController,
-		});
-		this.route('all_qolls_cordova', {
-        template : 'all_qolls_cordova',
-        path : '/all_qolls_cordova',
-        controller : QbankController,
-
-       });
-	  }
-
-	  if (Meteor.isClient) {
-	    this.route('view_inbox', {
-			template : 'view_inbox',
-			path : '/inbox',
-			controller : InboxController,
-		});
-	  }
-
-
-
-
+	this.route('view_inbox', {
+		template : 'view_inbox',
+		path : '/inbox',
+		controller : InboxController,
+	});
 
 	this.route('qid', {
 		template : 'qolls',
