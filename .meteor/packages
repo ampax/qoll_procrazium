@@ -49,7 +49,6 @@ jparker:gravatar
 mrt:mathjax
 manuelschoebel:wait-on-lib
 zimme:active-route
-ejson
 tsega:bootstrap3-datetimepicker@=3.1.3_3
 aldeed:autoform-bs-datetimepicker
 hilios:jquery.countdown
