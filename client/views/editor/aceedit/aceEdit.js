@@ -45,60 +45,17 @@ var test_qolls =
 
 Template.aceEditor.rendered = function() {
   var editor = ace.edit("aceEditor");
-  // editor.setTheme("ace/theme/twilight");
-  // editor.setHighlightActiveLine(true);
-  // editor.getSession().setMode("ace/mode/example");
-  //editor.getSession().setMode("ace/mode/html");
-
-  //var example = require("ace/mode/example").Mode;
-  //editor.getSession().setMode("ace/mode/example");
-  //editor.getSession().setMode("ace/mode/java");
-
-  var langTools = ace.require("ace/ext/language_tools");
-
-  editor.setTheme("ace/theme/twilight");
-  editor.getSession().setMode("ace/mode/example");
+  editor.setTheme("ace/theme/dawn"); 
+  //dawn,dreamweaver,eclipse,github,idle_fingers,kr_theme,solarized_light
   editor.setHighlightActiveLine(true);
-
-  qlog.info('Editor mode ---------------->>>>>>>> ' + JSON.stringify(editor.getSession().getMode()), filename);
-
+  editor.getSession().setMode("ace/mode/text");
   editor.getSession().setUseWrapMode(true);
 
   editor.getSession().on('change', editorPreviewRefresh);
 
   editor.setOptions({
-      enableBasicAutocompletion: true,
-      enableSnippets: true,
-      enableLiveAutocompletion: true
+      enableBasicAutocompletion: true
   });
-
-  // autocompletion for TeX
-  var texCompleter = {
-      getCompletions: function(editor, session, pos, prefix, callback) {
-          if (prefix.length === 0) { callback(null, []); return; }
-
-          callback(null, _.values(AceEditTextNotations).map(function(tex_notation) {
-            return { name: tex_notation.tex, value: tex_notation.tex, score: 1, meta: tex_notation.tex };
-          }));
-          /** $.getJSON(
-              "http://rhymebrain.com/talk?function=getRhymes&word=" + prefix,
-              function(wordList) {
-                  // wordList like [{"word":"flow","freq":24,"score":300,"flags":"bc","syllables":"1"}]
-                  callback(null, wordList.map(function(ea) {
-                      return {name: ea.word, value: ea.word, score: ea.score, meta: "rhyme"}
-                  }));
-              }) **/
-      }
-  }
-  langTools.addCompleter(texCompleter);
-
-  editor.commands.on("afterExec", function(e){ 
-     if (e.command.name == "insertstring"&&/^[\w.]$/.test(e.args)) { 
-         editor.execCommand("startAutocomplete");
-     } 
-  }); 
-
-
   editor.focus();
 
   if(URLUtil.isDev()) {

@@ -16,11 +16,9 @@ QollClientSide = {
             // CREATE ROW FOR QOLL TITLE & PTS
             html += '<div class="row">';
                 html += '<div class="col-xs-8">';
-                if (qoll.qollTitle && qoll.qollTitle != '') {
+                if (qoll.qollTitle) {
                     html += '<h4>' + transform_tex(transform_fib(qoll.qollTitle, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter) + '</h4>';
-                } else {
-                	html += '<h4>Add some qoll title here</h4>';
-                }
+                } 
                 html += '</div>';
 
                 html += '<div class="col-xs-1"><h4>Pts:</h4></div>';
@@ -32,11 +30,7 @@ QollClientSide = {
             // END OF ROW
             html += '</div>';
 
-            if(qoll.qollText && qoll.qollText != ''){
-				html += '<h5>' + transform_tex(transform_fib(qoll.qollText, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter) + '</h5>';
-			} else {
-				html += '<h5>Add some text here ...</h5>';
-			}
+			html += '<h5>' + transform_tex(transform_fib(qoll.qollText, qoll.cat, qoll.context, qoll.fib), qoll.tex, qoll.texMode, counter) + '</h5>';
 
 			//html += '<button type="button" class="btn btn-warning pull-right" data-toggle="tooltip"';
             //html += '	data-placement="left" title="Partial credit will be deducted..." id="show_hint">Hint';

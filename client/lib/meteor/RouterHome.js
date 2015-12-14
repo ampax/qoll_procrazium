@@ -11,7 +11,7 @@ Router.map(function(){
 		
 	});**/
 
-	/**if (Meteor.isCordova) {
+	if (Meteor.isCordova) {
 	    this.route('landing_signin', {
 			template : 'signin_qoll_cordova',
 			path: '/',
@@ -36,20 +36,15 @@ Router.map(function(){
 			template : 'home_page',
 			path: '/',
 		});
-	  } **/
+	  }
 
-	this.route('landing', {
-		//template : 'landing_page',
-		template : 'home_page',
-		path: '/',
-	});
-
+	/**
 	this.route('landing', {
 		template : 'landing_page',
 		path: '/landing',
 		
 	});
-	
+	**/
 });
 
 /**
