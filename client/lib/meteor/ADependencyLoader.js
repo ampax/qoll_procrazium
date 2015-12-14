@@ -1,4 +1,4 @@
-var filename='ALibLoader.js';
+var filename='ADependencyLoader.js';
 
 // Required to load the library before Routers are initialized
 
