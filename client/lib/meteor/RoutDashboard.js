@@ -1,5 +1,9 @@
 var filename = 'client/lib/meteor/RoutDashboard.js';
 
+QollCollections = require('lib/collections/Qolls');
+QollContsts = require('lib/QollConstants');
+// var qollCollections = QollCollections();
+
 QollsController = RouteController.extend({
 	template : 'qolls',
 	increment : 10,
