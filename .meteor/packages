@@ -3,7 +3,9 @@
 # 'meteor add' and 'meteor remove' will edit this file for you,
 # but you can also edit it by hand.
 
+meteor-platform
 iron:router
+meteorhacks:fast-render
 jquery
 jparker:crypto-md5
 meteorhacks:npm
@@ -14,6 +16,7 @@ long:google-contacts
 
 npm-container
 mizzao:jquery-ui
+mrt:ace-embed
 mrt:datatables
 accounts-facebook
 pfafman:font-awesome-4
@@ -49,21 +52,7 @@ jparker:gravatar
 mrt:mathjax
 manuelschoebel:wait-on-lib
 zimme:active-route
+ejson
 tsega:bootstrap3-datetimepicker@=3.1.3_3
 aldeed:autoform-bs-datetimepicker
 hilios:jquery.countdown
-oauth2
-standard-minifiers
-meteor-base
-mobile-experience
-mongo
-blaze-html-templates
-session
-tracker
-logging
-reload
-random
-spacebars
-check
-mrt:require
-meteorhacks:fast-render

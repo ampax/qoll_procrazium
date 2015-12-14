@@ -62,11 +62,6 @@ Template.preview.helpers({
     return alphabetical[idx];
   },
   transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
-
-    if(!txt) {
-      return '<span>Add some text here</span>';
-    }
-
     var txt_1 = transform_fib(txt, cat, context, fib);
 
     var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);

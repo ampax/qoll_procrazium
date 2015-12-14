@@ -1,9 +1,5 @@
 var filename = 'client/lib/meteor/RoutDashboard.js';
 
-QollCollections = require('lib/collections/Qolls');
-QollContsts = require('lib/QollConstants');
-// var qollCollections = QollCollections();
-
 QollsController = RouteController.extend({
 	template : 'qolls',
 	increment : 10,
@@ -46,7 +42,7 @@ QuickerQollsController = RouteController.extend({
 		return parseInt(this.params.qollsLimit) || this.increment;
 	},
 	findOptions : function() {
-		return { sort : { submittedOn : -1 }, limit : this.limit(), context : 'write' };
+		return { sort : { submittedOn : -1 }, limit : this.limit(), context : QollConstants.CONTEXT.WRITE };
 	},
 	waitOn : function() {
 		[//Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), 
