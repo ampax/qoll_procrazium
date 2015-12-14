@@ -1,5 +1,8 @@
 IReceivedQuestionaire = new Meteor.Collection("recvd-questionaire");
 
+QollCollections = require('lib/collections/Qolls');
+QollContsts = require('lib/QollConstants');
+
 InboxController = RouteController.extend({
 	findOptions : function() {
 		return { sort : { submittedOn : -1 }, context : QollConstants.CONTEXT.WRITE };

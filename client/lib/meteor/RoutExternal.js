@@ -1,5 +1,8 @@
 var filename='client/lib/meteor/RoutExternal.js';
 
+QollCollections = require('lib/collections/Qolls');
+QollContsts = require('lib/QollConstants');
+
 ExtEmailBoardController = RouteController.extend({
 	findOptions : function() {
 		// Reverses the word array to a readable String
