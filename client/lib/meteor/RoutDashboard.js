@@ -1,14 +1,5 @@
 var filename = 'client/lib/meteor/RoutDashboard.js';
 
-
-(function() {
-	console.log('==================================================================', filename);
-	require(["lib/QollConstants", "lib/logger"], function(QollConstants, logger){
-		qlog.info("............ QollConstants & logger loaded ..............", filename);
-	});
-})();
-
-
 QollsController = RouteController.extend({
 	template : 'qolls',
 	increment : 10,
@@ -51,7 +42,7 @@ QuickerQollsController = RouteController.extend({
 		return parseInt(this.params.qollsLimit) || this.increment;
 	},
 	findOptions : function() {
-		return { sort : { submittedOn : -1 }, limit : this.limit(), context : QollConstants.CONTEXT.WRITE };
+		return { sort : { submittedOn : -1 }, limit : this.limit(), context : 'write' };
 	},
 	waitOn : function() {
 		[//Meteor.subscribe('All_QOLL_PUBLISHER', this.findOptions()), 
