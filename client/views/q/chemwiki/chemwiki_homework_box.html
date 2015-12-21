@@ -1,0 +1,65 @@
+<template name="chemwiki_homework_box">
+	<!-- {{> header_awesome page_label="INBOX BOARD"}} -->
+
+		<!-- Page content -->
+			<div class="container-fluid container">
+				<div class="row">
+					<div class="col-md-1 col-sm-1 col-xs-12">
+						<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
+						  <span class="glyphicon glyphicon-chevron-left">Back</span>
+						</button>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-9" style="font-size: small; font-weight: bold;">
+						<span class="qoll-comment-display-5">Title: {{questionaire.title}} ({{questionaire.qoll_count}} qolls) </span>
+						<span class="qoll-comment-display-6">{{{questionaire.createdByName}}} </span> 
+						<span class="qoll-comment-display-7">{{{created_on questionaire.createdOn}}} </span>
+					</div>
+
+					<div class="col-md-2 col-sm-2 col-xs-1 qoll-comment-display-7" style="font-size: small; font-weight: bold;">
+						{{#if questionaire.total_weight_earned}}
+							{{questionaire.total_weight_earned}} /
+						{{/if}}
+						{{questionaire.total_weight}} Points
+					</div>
+
+					<div class="col-md-3 col-sm-3 col-xs-3" style="font-size: small; font-weight: bold;">
+						<div id="countdown">{{{deadline questionaire.end_time}}} </div>
+					</div>
+				</div>
+
+				{{> qolls_inner qollList = this.qollList  btns= inbox_board_btns }}
+				<br>
+
+				{{#if is_not_submitted questionaire}}
+				<div class="row row-submit"><div class="col-md-12 col-xs-12">
+					<button type="button" id="submit_questionnaire" class="btn btn-primary btn-lg btn-block">
+						Submit Questionnaire
+					</button>
+				</div></div>
+				{{/if}}
+
+				{{#if is_submitted questionaire}}
+				<div class="row row-submitted"><div class="col-md-12 col-xs-12">
+					<button type="button" id="submitted_questionnaire" class="btn btn-primary btn-lg disabled btn-block">
+						{{is_submitted_caption questionaire}}
+					</button>
+				</div></div>
+				{{/if}}
+
+				<div class="row row-confirm is-invisible">
+					<div class="col-md-6 col-xs-6">
+						<button type="button" 
+							id="confirm_submission" 
+							class="btn btn-primary btn-lg btn-block"
+							data-questionaire_id="{{questionaire._id}}">
+							Confirm Submission
+						</button>
+					</div>
+					<div class="col-md-6 col-xs-6">
+						<button type="button" id="cancel_submission" class="btn btn-primary btn-lg btn-block">
+							Cancel Submission
+						</button>
+					</div>
+				</div>
+			</div>
+</template>

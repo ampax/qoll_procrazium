@@ -183,32 +183,19 @@ IdLookUpEmailPreviewController = RouteController.extend({
 });
 
 Router.map(function() {
-	if (Meteor.isCordova) {
-		this.route('view_inbox_cordova', {
-			template : 'view_inbox_cordova',
-			path : '/inbox_cordova',
-			controller : InboxController,
-		});
-		this.route('add_qolls_cordova', {
-			template : 'add_qolls_cordova',
-			path : '/add_qolls_cordova',
-			controller : InboxController,
-		});
-		this.route('all_qolls_cordova', {
-        template : 'all_qolls_cordova',
-        path : '/all_qolls_cordova',
-        controller : QbankController,
+	this.route('view_inbox', {
+		template : 'view_inbox',
+		path : '/inbox',
+		controller : InboxController,
+	});
 
-       });
-	  }
 
-	  if (Meteor.isClient) {
-	    this.route('view_inbox', {
-			template : 'view_inbox',
-			path : '/inbox',
-			controller : InboxController,
-		});
-	  }
+	/**************** Chemwiki route ****************/
+	this.route('view_inbox_chemwiki', {
+		template : 'chemwiki_homework',
+		path : '/inbox_chemwiki',
+		controller : InboxController,
+	});
 
 
 
@@ -232,6 +219,13 @@ Router.map(function() {
 		controller: IdLookUpInboxController
 	});
 
+	/************* Chemwiki route ***************/
+	this.route('inboxView_chemwiki', {
+		template : 'chemwiki_homework_box',
+		path : '/inbox_chemwiki_board/:_id',
+		controller: IdLookUpInboxController
+	});
+
 	
 
 	//sent page and board templates/path
@@ -244,6 +238,19 @@ Router.map(function() {
 	this.route('view_sent', {
 		template : 'view_sent',
 		path : '/sent',
+		controller : SentController,
+	});
+
+	/******* Chemwiki route *****************/
+	this.route('sentView_chemwiki', {
+		template : 'chemwiki_sent_board',
+		path : '/sent_chemwiki_board/:_id',
+		controller: IdLookUpSentController,
+	});
+
+	this.route('view_sent_chemwiki', {
+		template : 'chemwiki_sent',
+		path : '/sent_chemwiki',
 		controller : SentController,
 	});
 

@@ -56,3 +56,7 @@ ejson
 tsega:bootstrap3-datetimepicker@=3.1.3_3
 aldeed:autoform-bs-datetimepicker
 hilios:jquery.countdown
+mrt:require
+service-configuration
+http
+jparker:crypto-aes

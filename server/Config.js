@@ -12,7 +12,10 @@ Meteor.startup(function(){
 		initWithGitDev();
 		initWithFacebookDev();
 		initWithGoogleDev();
-		initWithTwitterDev()
+		initWithTwitterDev();
+
+		ServiceConfig.remove('chemwiki');
+		ServiceConfig.insert(ServiceConfig.Generic.Dev);
 
 		/**var InitUserForProfile = 'InitDefaultProfile';
 		//use this to find if this init has already run. Else initizlize.
@@ -31,6 +34,9 @@ Meteor.startup(function(){
 		initWithFacebookServer();
 		initWithGoogleServer();
 		initWithTwitterServer();
+
+		ServiceConfig.remove('chemwiki');
+		ServiceConfig.insert(ServiceConfig.Generic.Prod);
 	}
 
 });

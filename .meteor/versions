@@ -65,8 +65,14 @@ iron:location@1.0.9
 iron:middleware-stack@1.0.9
 iron:router@1.0.9
 iron:url@1.0.9
+jparker:crypto-aes@0.1.0
+jparker:crypto-base64@0.1.0
+jparker:crypto-cipher-core@0.1.1
 jparker:crypto-core@0.1.0
+jparker:crypto-evpkdf@0.1.1
 jparker:crypto-md5@0.1.1
+jparker:crypto-mode@0.1.1
+jparker:crypto-padding@0.1.0
 jparker:gravatar@0.4.1
 jquery@1.11.3_2
 json@1.0.3
@@ -103,6 +109,7 @@ mongo-livedata@1.0.8
 mrt:ace-embed@0.0.4
 mrt:datatables@0.1.3
 mrt:mathjax@0.6.3
+mrt:require@0.1.0
 npm-bcrypt@0.7.8_2
 npm-container@1.1.0
 oauth@1.1.4

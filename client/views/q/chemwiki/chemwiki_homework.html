@@ -1,0 +1,66 @@
+<template name="chemwiki_homework">
+	<!--{{> header_awesome page_label="INBOX"}}-->
+	
+		
+		<!-- Page content -->
+		<div class="container-fluid container">
+			
+			<!-- Keep all page content within the page-content inset div! -->
+			<!-- div class="page-content inset inset-5" -->
+				<div class="row">
+						
+					<div class="col-md-8 col-sm-8 col-xs-12">
+						&nbsp;<!--input type="text" class="filter-by-tag form-control" placeholder="Filter by typing tags ..." default="Qollstionnaire title" -->
+					</div>
+					<div class="col-md-1 col-sm-1  desk-only">
+						Size
+					</div>
+					<div class="col-md-1 col-sm-1  desk-only">
+						Recips
+					</div>
+					<div class="col-md-2 col-sm-2 desk-only">
+						Submitted On
+					</div>
+
+				</div>
+
+				
+				{{#each qolls}}
+				<div class="row">
+				<!-- Start of Qoll Section -->
+				<div class="col-md-12 col-sm-12 col-xs-12 list-group-item list-group-item-success {{length_class}}" id='qdiv_{{_id}}'>
+					<div class="row">
+
+					
+						<div class="col-md-1 col-sm-1 col-xs-1">
+							<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
+							{{#if facebook_qoll length_class}}
+								<i class="fa fa-facebook fa-stack-1x blue_3"></i>
+							{{/if}}
+						</div>
+						<div class="col-md-7 col-sm-7 col-xs-11 make-clickable">
+							<a href="{{ pathFor 'inboxView_chemwiki' }}" class='black-link'>
+								{{{title}}} 
+								<span class="qoll-comment-display-2">{{{createdByName}}} </span> 
+								<span class="qoll-comment-display-3">{{{created_on createdOn}}} </span>
+								<span class="qoll-comment-display-8">{{{ending_on end_time}}} </span>
+							</a>
+						</div>
+						<div class="col-md-1 col-sm-1 desk-only">
+							{{qoll_count}}
+						</div>
+						<div class="col-md-1 col-sm-1 desk-only">
+							{{recips_count}}
+						</div>
+						<div class="col-md-2 col-sm-2 desk-only">
+							{{submitted_on qollstionnaireSubmittedOn}}
+						</div>
+					</div>
+				</div><!-- list-group-item list-group-item-success -->
+				<!-- End of Qoll Section here -->
+				</div><!-- /row-->
+				{{/each}}
+				
+			<!-- /div -->
+		</div>
+</template>

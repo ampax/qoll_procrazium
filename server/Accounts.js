@@ -136,7 +136,6 @@ Accounts.onCreateUser(function(options, user){
 
 Accounts.validateLoginAttempt(function(attempt){
   // qlog.info('Validating login attempt - ' + JSON.stringify(attempt), filename);
-
   if (attempt.user && attempt.user.emails && !attempt.user.emails[0].verified ) {
     console.log('email not verified');
     var reason = attempt.error? attempt.error.reason : 'Verify email please';
@@ -238,6 +237,12 @@ Meteor.methods({
   },
   addCurrentUserToMailChimpList: function(){
     addToMailChimpList(Meteor.user());
+  },
+  findUserByToken : function(token) {
+    var decryptToken = CryptoJS.AES.decrypt(token, 'ChemWiki20151220JCM').toString(CryptoJS.enc.Utf8);
+    //console.log(decryptToken);
+    var usr = Meteor.users.findOne({"services.chemwiki.accessToken.hashedToken" : decryptToken});
+    return {email : usr.email, password : 'chemwikidummypassword'};
   }
 });
 

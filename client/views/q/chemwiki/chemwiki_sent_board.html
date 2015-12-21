@@ -1,0 +1,156 @@
+<template name="chemwiki_sent_board">
+	<!-- {{> header_awesome page_label="SENT BOARD"}} -->
+
+			<div class="container-fluid container">
+
+				<div class="row">
+						
+						<div class="col-md-1 col-sm-1 col-xs-12">
+							<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
+							  <span class="glyphicon glyphicon-chevron-left">Back</span>
+							</button>
+						</div>
+						<div class="col-md-11 col-sm-11 col-xs-12 list-group-item-align" style="font-size: medium; font-weight: bold;">
+							Title: {{questionaire.title}} ({{questionaire.qoll_count}})
+							Completion Rate &rarr; {{questionaire.respo_length}}/{{questionaire.recip_length}}
+						</div>
+				</div><!-- /row-->
+			<!--	<h4>Stats:- </h4>
+				{{> stats_table}}
+			-->
+			<div class="row">
+				<div class="col-md-12 col-xs-12" >
+
+					{{#if is_quicker questionaire.category}}
+						{{> pieDistribution}}
+					{{/if}}
+
+					{{#if is_not_quicker questionaire.category}}
+						{{> columnDistribution}}
+					{{/if}}
+
+				</div>
+
+			</div>
+
+				{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
+				
+				<br>
+				<!--{{#if can_close questionaire}} -->
+			    <button class="btn btn-danger btn-lg btn-block {{can_close questionaire}}" 
+			    	id="close_questionnaire"
+			    	data-questionaire_id="{{questionaire._id}}">
+				  Close Questionnaire
+				</button>
+				<!--{{/if}}-->
+
+				<!--{{#if is_closed questionaire}}-->
+				<button class="btn btn-default btn-lg btn-block {{is_closed questionaire}}">
+				  Closed Questionnaire <span class='red_1'>{{closed_on questionaire}}</span>
+				</button>
+				<!--{{/if}}-->
+				<br><br>
+
+				{{> view_sent_board_results stats = qoll_list.stats questionaire=qoll_list.questionaire }}
+			</div>
+</template>
+
+<template name="chemwiki_view_sent_board_results">
+	{{#each stats}} 
+		<div class="row respondent-bg">
+			<div class="col-md-8 col-xs-8">
+				<h5 class="">{{this.name}}</h5>
+			</div>
+
+			<div class="col-md-3 col-xs-3">
+				<h5 id="submitted{{this.email}}">{{submitted_on qollstionnaireSubmittedOn}}</h5>
+			</div>
+
+			<div class="col-md-1 col-xs-1 pull-right">
+				<h5 class="">{{{resend_submitted qollstionnaireSubmittedOn this.questionaire_id this.email}}}</h5>
+			</div>
+		</div>
+
+		{{#each this.responses}}
+			<div class="row respondent-row-style">
+    			<div class="col-md-1 col-xs-12">
+    				<button class="button button-small respondent-bg" 
+    				data-title="{{this.title}}" 
+    				data-questionaire_id="{{questId}}"
+    				data-qid="{{this.qoll_id}}"
+    				data-responder_id="{{this.email}}"
+    				data-data1="{{this}}">
+    					{{this.label}}
+    				</button>
+    			</div>
+    			<div class="col-md-6 col-xs-12"><p>
+    				<h5>{{{transform_txt this.title this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</h5></p>
+    				<p>{{{transform_txt this.qollText this.cat QollConstants.CONTEXT.READ this.fib this.tex}}}</p>
+    			</div>
+    			<div class="col-md-2 col-xs-12">
+        			<h5>{{this.response}}
+	        			{{#if this.usedHint}}
+	        				,<span class="red_1">hint used</span>
+	        			{{/if}}
+        			</h5>
+				</div>
+				<div class="col-md-1 col-xs-12">
+					{{#if this.weight_earned}}
+						<h5 class="blue_1">{{this.weight_earned}}</h5>
+					{{else}}
+						<h5 class="blue_1">0</h5>
+					{{/if}}
+				</div>
+				<div class="col-md-1 col-xs-12">
+					{{#if this.hint_penalty}}
+						<h5 class="red_1">-{{this.hint_penalty}}</h5>
+					{{/if}}
+				</div>
+				<div class="col-md-1 col-xs-12">
+					{{#if this.iscorrect}}
+						Correct
+					{{else}}
+						InCorrect
+					{{/if}}
+				</div>
+			</div>
+			<br>
+		{{/each}}
+	{{/each}}
+</template>
+
+
+<template name="chemwiki_stats_table">
+	<table id="example" class="table" cellspacing="0" width="100%">
+        <thead>
+            <tr>
+	            {{#each questionaire.stats_labels }}
+	            	<th>{{label}}</th>
+	            {{/each}}
+            </tr>
+        </thead>
+ 
+        <tfoot>
+            <tr>
+                {{#each questionaire.stats_labels }}
+	            	<th>{{label}}</th>
+	            {{/each}}
+            </tr>
+        </tfoot>
+ 
+        <tbody>
+        	{{#each questionaire.stats }}
+				<tr>
+	                <td>{{name}}</td>
+	                {{#each responses}}
+	                	<td>
+	                		{{response}}
+	                		{{#if unit_selected}},<span class='green_1'><u>Unit:</u> {{unit_selected}}</span>{{/if}}
+	                		{{#if usedHint}},<span class='red_1'>Hint</span>{{/if}}
+	                	</td>
+	                {{/each}}
+	            </tr>
+			{{/each}}
+        </tbody>
+    </table>
+</template>
