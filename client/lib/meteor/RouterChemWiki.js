@@ -9,7 +9,7 @@ Router.map(function(){
 			qlog.info('........ Recieved request to authorize a user from ChemWiki .........', filename);
 	    	// console.log(this.params); //Contains params
 
-	    	ExtAuth.AuthorizeExternalRequest(this.params.secret, this.params.appId, this.params.emailId);
+	    	// ExtAuth.AuthorizeExternalRequest(this.params.secret, this.params.appId, this.params.emailId);
 
 	    	/** Meteor.call('authorizeExternalRequest', this.params.secret, this.params.appId, this.params.emailId, function(err, response) {
 				if (err) {
