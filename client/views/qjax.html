@@ -4,7 +4,7 @@
 		    QJax = function () {
 
 		    	// alert('Loading the mathjax expressions now ....');
-		    if(MathJax) {
+		    if(MathJax != undefined) {
 		      MathJax.Hub.Config({
 		        showProcessingMessages: false,
 		        messageStyle: "none",
@@ -42,16 +42,17 @@
 
 		      MathJax.Hub.Queue(["Typeset",MathJax.Hub]);
 
-		      IRLibLoader.load('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full');
-		      IRLibLoader.load('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full&delayStartupUntil=onload');
+		      //IRLibLoader.load('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full');
+		      //IRLibLoader.load('http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full&delayStartupUntil=onload');
 
-		    }};
+		    }}
+
 		    //QJax(); 
 	    </script>
 	    <script> 
 	    	//aceEditor
 	    	document.addEventListener('DOMNodeInserted', function () {
-			   if(MathJax) {
+			   if(MathJax != undefined) {
 			   	QJax();
 			   }
 			});
@@ -59,5 +60,7 @@
 	    <script type="text/x-mathjax-config">
 	    	//QJax();
 	    </script>
+	    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full/"></script>
+	    <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML-full&delayStartupUntil=onload/"></script>
 	</div>
 </template>

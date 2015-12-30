@@ -59,7 +59,7 @@ QollParser = {
 	},
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
-	parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
+	parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, topics, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
         var parsedQoll = {};
         parsedQoll.qollCombo = new Array();
 
@@ -69,7 +69,7 @@ QollParser = {
 
         qolls.map(function(q){
         	// ******************** no insertion at this point, storing in a hash to insert later
-        	var qoll_master = {qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds, texMode: texMode}
+        	var qoll_master = {qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, topics: topics, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds, texMode: texMode}
         	// var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds});
             // q = ToMarkdown.convert(q);
 
@@ -334,7 +334,7 @@ QollParser = {
 			var qls = {action : action, qollData : qoll_data, 
 						qollRawId : undefined, qollMasterId : qollMasterId, 
 						emails : emailsandgroups, isparent : undefined, 
-						parentid : undefined, tags : tags, 
+						parentid : undefined, tags : tags, topics : topics,
 						qollFormat : qollFormat, qollIdtoUpdate : qollIdtoUpdate, 
 						accessGroups : accessGroups, selImgIds : selImgIds, texMode : texMode};
 
@@ -390,7 +390,7 @@ Meteor.methods({
 	// parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, action, 
 		// visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds)
 	parseQollPreview : function(qollMaster, texMode) {
-		var parsedQoll = QollParser.parseQollMaster(qollMaster, undefined, undefined, undefined, undefined, 
+		var parsedQoll = QollParser.parseQollMaster(qollMaster, undefined, undefined, undefined, undefined, undefined, 
 										 undefined, undefined, undefined, undefined, undefined, texMode);
 
 		qlog.info('TEX_PREF =>> ' + texMode, filename);

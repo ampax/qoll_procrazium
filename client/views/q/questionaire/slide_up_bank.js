@@ -471,8 +471,15 @@ var createQuestionnaire = function(jsn) {
 
 renderTags = function(x) {
     // qlog.info('called render qoll to emails method', filename);
-    // console.log(x);
+    //console.log(x);
     return Blaze.toHTMLWithData(Template.tags_autocomplete, x);
+    // return x.email + x.name;
+};
+
+renderTopics = function(x) {
+    // qlog.info('called render qoll to emails method', filename);
+    //console.log(x);
+    return Blaze.toHTMLWithData(Template.topics_autocomplete, x);
     // return x.email + x.name;
 };
 

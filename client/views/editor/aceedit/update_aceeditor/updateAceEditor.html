@@ -1,0 +1,58 @@
+<template name="updateQoll">
+	{{> header_awesome  page_label="UPDATE QOLL(S)"}}
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<!-- {{> qoll_side_nav}} -->
+		{{> all_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="container-fluid container">
+				{{#each qolls}}
+					{{> updateAceEditor qoll=this}}
+				{{/each}}
+			</div>
+		</div>
+	</div>
+</template>
+
+
+<template name="updateAceEditor">
+{{#autoForm schema=customMarkMenuOptSchema id="updateQollAceForm" type="normal" doc=mydoc}}
+<div class="row row_ace list-group-item list-group-item-success" style="padding-top: 50px; padding-bottom: 20px;">
+	<div class="col-md-6 col-xs-12">
+		<div class="row">
+			<div class="col-md-12 col-xs-12">
+					{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+			          formid="updateQollAceForm" name="tags"
+			          renderKey="name" fieldref="tag" call="fetch_tags" 
+			          renderfunction="renderTags"}}
+		  	</div>
+			<div class="col-md-12 col-xs-12">
+				<div id='aceEditor' style="height: 250px;">
+					{{qoll.rawQoll.qollText}}
+					<!-- # Quadratic Equations; form begin => f(\sigma x^n)=0end? * txt Which of the following is a quadratic equation of the form beginax^2+bx+cend *hint It is highest degree of two of the variable * Images - 6EkpFPFXsH9ATGron,iHJdkXovdadFnA4yC,ZJN6PvgsMn8R2ToFB * answer A b e - beginax^2+bx+cend - beginax^3+bx^2+cx+dend - beginax^4+bx^3+cx^2+dx+eend - beginx = {-b pm \sqrt ((b^2-4ac) * 2a})end - beginx = {-b \pm \sqrt{b^2-4ac} \over 2a}end - beginf(x) = \int_{-\infty}^\infty \hat f(\xi)\,e^{2 \pi i \xi x} \,d\xiend - begin \ce{SO4^2- + Ba^2+ -> BaSO4 v} end -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-6 col-xs-12">
+	<div class="row">
+		<div class="col-md-12 col-xs-12">
+				{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+		          formid="updateQollAceForm" name="topics"
+		          renderKey="name" fieldref="topic" call="fetch_topics" 
+		          renderfunction="renderTopics"}}
+	  	</div>
+	  	<div class="col-md-12 col-xs-12">
+			{{> preview}}
+		</div>
+	</div>
+	</div>
+</div>
+<div class="row"><div class="col-md-12 col-xs-12">
+<button type="submit" class="btn btn-primary toolbar-buttons-right" style="margin-top: -4px;">Update</button>
+</div></div>
+{{/autoForm}}
+</template>

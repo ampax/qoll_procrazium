@@ -126,7 +126,31 @@ Router.map(function(){
 			//TODO
 		},
 		data: function() {
-			return {'all_images' : QollImagesPub.find()};
+			return {'all_images' : QollImagesPub.find(), 'qoll' : RawQollForId.findOne()};
+		}
+	});
+
+	this.route('update_qoll', {
+		template: 'updateQoll',
+		path : '/update_qoll/:_id',
+		waitOn: function(){
+			qlog.info('Editting the qoll for id ' +this.params._id, filename);
+			Meteor.subscribe('QOLL_IMAGES');
+
+			Meteor.subscribe('RAW_QOLL_FOR_ID_PUBLISHER', {_id : this.params._id});
+			Session.set('edit_qoll_id', this.params._id);
+		},
+		/**onBeforeAction: [function(){
+			qlog.info('Before for qoll-editor ...', filename);
+		}, function(){
+			//this is next in line to the first subscribe function
+			//active_nav();
+		}],**/
+		onAfterAction: function(){
+			//TODO
+		},
+		data: function() {
+			return {'all_images' : QollImagesPub.find(), qolls: RawQollForId.find({})};
 		}
 	});
 });

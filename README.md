@@ -295,6 +295,10 @@ gm display
 
 Learn how to write better mark-down (.md/README.md) files - [daringfireball]
 
+IBPS [BankPoQuestionBank]
+
+[BankPoQuestionBank]: http://bankpoclerk.com/community/ibps/papers "Bank PO Question Bank"
+
 [daringfireball]: http://daringfireball.net/projects/markdown/syntax "Write Better Markdown"
 [meteor-npm]: https://github.com/arunoda/meteor-npm "Add npm to meteor"
 [complete-npm-integration]: http://meteorhacks.com/complete-npm-integration-for-meteor.html "Complete Npm Integration"

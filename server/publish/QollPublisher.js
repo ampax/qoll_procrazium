@@ -25,10 +25,24 @@ Meteor.publish('RAW_QOLL_FOR_ID_PUBLISHER', function(findoptions) {
 		added : function(item, idx){
 			qlog.info('Added - ' + JSON.stringify(item), filename);
 			item.context = QollConstants.CONTEXT.READ;
+
+			var rawQoll = QollRaw.findOne({_id : item.qollRawId});
+
+			item.rawQoll = {qollText : rawQoll.qollText, tags : rawQoll.tags, 
+							qollFormat : rawQoll.qollFormat, imageIds : rawQoll.imageIds,
+							visibility : rawQoll.visibility};
+
 			self.added('raw-qoll-for-id', item._id, item);
 		},
 		changed : function(item, idx) {
 			item.context = QollConstants.CONTEXT.READ;
+
+			var rawQoll = QollRaw.findOne({_id : item.qollRawId});
+
+			item.rawQoll = {qollText : rawQoll.qollText, tags : rawQoll.tags, 
+							qollFormat : rawQoll.qollFormat, imageIds : rawQoll.imageIds,
+							visibility : rawQoll.visibility};
+							
 			self.changed('raw-qoll-for-id', item._id, item);
 
 		},

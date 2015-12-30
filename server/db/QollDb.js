@@ -28,7 +28,7 @@ Meteor.methods({
 	*						types, typesX, visibility, complexity, isMultiple ) 
 	**/
 	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
-	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation, texMode) {
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, topics, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation, texMode) {
 		var collection_forqoll = Qoll; 
 
 		var qoll_to_insert = {
@@ -58,6 +58,7 @@ Meteor.methods({
 			'qollRawId' : qollRawId,
 			'qollMasterId' : qollMasterId,
 			'tags' : tags,
+			'topics' : topics,
 			//'attributes' : attributes,
 			'qollFormat' : qollFormat,
 			'imageIds'	 : qollData[QollConstants.EDU.IMGS],
@@ -195,16 +196,19 @@ Meteor.methods({
 		});
 	},
 
-	addQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
+	addQollMaster : function(qollText, emailsandgroups, tags, topics, action, visibility, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
 		qlog.info('----------------- Inserting into qoll master -----------------> ' + selImgIds, filename);
 		//Store the tags
 		if(tags != undefined)
 			var err_msg = QollTagsDb.storeTags(tags);
 
-		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds, 'texMode' : texMode});
+		if(topics != undefined)
+			var err_msg = QollTopicsDb.storeTopics(topics);
+
+		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'topics' : topics, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds, 'texMode' : texMode});
 
 		// var qollIds = new Array();
-		var parsedQoll = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds, texMode);
+		var parsedQoll = QollParser.parseQollMaster(qollText, masterId, emailsandgroups, tags, topics, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds, texMode);
 		
 		qlog.info('Parsed the qoll =====>\n' + parsedQoll, filename);
 
@@ -234,12 +238,15 @@ Meteor.methods({
 		return {msg : 'Successfully created ' + qollids.length + ' qolls.' + questinfo, qollids : qollids, questId : questinfo.questId}; **/
 	},
 
-	updateQollMaster : function(qollText, emailsandgroups, tags, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
+	updateQollMaster : function(qollText, emailsandgroups, tags, topics, action, visibility, qollIdtoUpdate, accessGroups, selImgIds) {
 		qlog.info('Inserting into qoll master for qollid - ' + qollIdtoUpdate, filename);
 
 		//Store the tags
 		if(tags != undefined)
 			var err_msg = QollTagsDb.storeTags(tags);
+
+		if(topics != undefined)
+			var err_msg = QollTopicsDb.storeTopics(topics);
 
 		qlog.info('This is the editor content - ' + qollText, filename);
 
@@ -249,10 +256,10 @@ Meteor.methods({
 
 		Qolls.QollMasterDb.update(
 			{_id : existing_qoll.qollMasterId}, 
-			{'qollText' : qollText, 'tags' : tags, 'visibility' : visibility, 
+			{'qollText' : qollText, 'tags' : tags, 'topics' : topics, 'visibility' : visibility, 
 			'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds});
 
-		var parsedQoll = QollParser.parseQollMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
+		var parsedQoll = QollParser.parseQollMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, topics, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 
 		var qollIds = persistParsedQoll(parsedQoll);
 
@@ -383,7 +390,7 @@ var persistParsedQoll = function(parsedQoll) {
 		combo.qoll.qollRawId = qollRawId;
 		
 		var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
-		combo.qoll.parentid, combo.qoll.tags, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS],
+		combo.qoll.parentid, combo.qoll.tags, combo.qoll.topics, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS],
 		combo.qoll.explanation, combo.qoll.texMode)
 		qollIds.push(qid);
 

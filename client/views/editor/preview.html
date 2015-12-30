@@ -1,5 +1,5 @@
 <template name="preview">
-	<div class="col-md-6 col-xs-12" style="height: 450px; overflow: scroll;">
+	<div style="height: 450px; overflow: scroll;">
 		<!-- {{#each preview_content}}
 			{{> single_qoll q= this  btns= ../btns}}
 		{{/each}} -->
@@ -41,13 +41,13 @@
 
 	        {{#if is_blank_type this.cat}}
 	          <!--span id="{{q._id}}" class="badge pull-left register-blank glossy green_bg_1"-->
-	          <span id="{{this.qoll_idx_title}}" class="badge pull-left {{get_register_class QollConstants.CONTEXT.READ}} glossy {{get_register_bg_class QollConstants.CONTEXT.READ}}">
+	          <span id="{{this.qoll_idx_title}}" class="badge pull-left {{get_register_class QollConstants.CONTEXT.READ}} glossy-preview {{get_register_bg_class QollConstants.CONTEXT.READ}}">
 	            Submit
 	          </span>
 	        {{/if}}
 	        {{#each this.typesX}}
 				<div class='col-md-12 col-xs-12 list-group-item'>
-					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy'>{{qoll_type_abbr this.index}}</span>
+					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy-preview'>{{qoll_type_abbr this.index}}</span>
 					{{{transform_txt this.type ../cat QollConstants.CONTEXT.READ ../fib ../tex ../texMode ../idx}}}
 					{{#if is_correct_answer this this.index QollConstants.CONTEXT.READ}}
 		              <i class="glyphicon glyphicon-check green"></i>

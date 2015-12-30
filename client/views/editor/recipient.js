@@ -7,11 +7,13 @@ var MarkdownQollHooks = {
         
         var share_with = insertDoc.share_with;
         var tags = insertDoc.tags;
+        var topics = insertDoc.topics;
         var edtr = ace.edit("aceEditor");
 		var content = edtr.getValue();
 
 		console.log(share_with);
         console.log(tags);
+        console.log(topics);
         console.log(content);
 
         var access = 'private';
@@ -23,7 +25,7 @@ var MarkdownQollHooks = {
 
 		qlog.info('==========================> ' + tex_mode, filename);
 
-        Meteor.call("addQollMaster", content, emailsandgroups, tags, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, undefined, tex_mode, function(error, msg) {
+        Meteor.call("addQollMaster", content, emailsandgroups, tags, topics, QollConstants.QOLL_ACTION_STORE, access, qollIdToEdit, accessGroups, undefined, tex_mode, function(error, msg) {
 			if (error) {
 				qlog.error('Error occured while converting - ' + content + '/n to markdown - ' + error, filename);
 	          	QollError.message(QollConstants.MSG_TYPE.ERROR, 'ERROR: ' + error + '/' + msg.msg);

@@ -101,13 +101,19 @@ Schemas.custom_questionnaire = new SimpleSchema({
 Schemas.custom_markdown_menu_options = new SimpleSchema({
   share_with: {
     type: [String],
-    label: "Share With",
+    label: "Share With (share the content with person or group)",
     max: 500,
-    optional: false
+    optional: true
   },
   tags: {
     type: [String],
-    label: "Tags",
+    label: "Tags (used to quickly search)",
+    max: 500,
+    optional: true,
+  },
+  topics: {
+    type: [String],
+    label: "Topics (used to structurely store content)",
     max: 500,
     optional: true,
   },
