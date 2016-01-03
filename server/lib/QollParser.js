@@ -73,7 +73,7 @@ QollParser = {
         	// var qollRawId = Qolls.QollRawDb.insert({qollText: '# ' + q, qollMasterId: qollMasterId, tags: tags, visibility: visibility, qollFormat: qollFormat, imageIds: selImgIds});
             // q = ToMarkdown.convert(q);
 
-            qlog.info('Markdown converted qoll is - ' + q, filename);
+            //qlog.info('Markdown converted qoll is - ' + q, filename);
 
             var qs = q.split(QollRegEx.gen_opt);//q.split(/\n-/);
             var qoll = qs[0];
@@ -134,7 +134,7 @@ QollParser = {
                     qoll_data[QollConstants.EDU.TEXT] = qoll_data[QollConstants.EDU.TITLE];
                     qoll = qoll_data[QollConstants.EDU.TITLE];
                 } else if(part.match(QollRegEx.txt)) {
-                    qlog.info('This is text -> ' + part, filename);
+                    // qlog.info('This is text -> ' + part, filename);
                     part = part.replace(QollRegEx.txt, '');
 
                     //* Start: Find and replace Fill-In-The-Blanks *//
@@ -157,19 +157,19 @@ QollParser = {
 
                     qoll_data[QollConstants.EDU.TEXT] = part;
                 } else if(part.match(QollRegEx.answer)) {
-                    qlog.info('This is answer -> ' + part, filename);
+                    // qlog.info('This is answer -> ' + part, filename);
                     part = part.replace(/(\r\n|\n|\r)/gm,"");;
                     qoll_data[QollConstants.EDU.ANSWER] = part.replace(QollRegEx.answer, '');
-                    qlog.info('This is answer -> *' + qoll_data[QollConstants.EDU.ANSWER] +'*', filename);
+                    // qlog.info('This is answer -> *' + qoll_data[QollConstants.EDU.ANSWER] +'*', filename);
                 } else if(part.match(QollRegEx.hint)) {
-                    qlog.info('This is hint -> ' + part, filename);
+                    // qlog.info('This is hint -> ' + part, filename);
                     qoll_data[QollConstants.EDU.HINT] = part.replace(QollRegEx.hint, '');
                 } else if(part.match(QollRegEx.imgs)) {
-                    qlog.info('This is iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiimages -> ' + part, filename);
+                    // qlog.info('This is iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiimages -> ' + part, filename);
                     qoll_data[QollConstants.EDU.IMGS] = part.replace(QollRegEx.imgs, '').split(',');
                 } else if(part.match(QollRegEx.unit)) {
                     part = part.replace(QollRegEx.unit, '');
-                    qlog.info('This is unit -> ' + part, filename);
+                    // qlog.info('This is unit -> ' + part, filename);
 
                     if(part.indexOf(":") != -1) {
                         var tmp = part.split(":");
@@ -179,18 +179,18 @@ QollParser = {
                     qoll_data[QollConstants.EDU.UNITS] = new Array();
                     part.split(/(?:,| )+/).map(function(tmp1){
                         if(tmp1.length > 0) qoll_data[QollConstants.EDU.UNITS].push(tmp1);
-                        qlog.info('############## unit => ' + tmp1, filename);
+                        //qlog.info('############## unit => ' + tmp1, filename);
                     });
 
                     //qoll_star_attributes[QollConstants.EDU.UNITS] = part.replace(QollRegEx.unit, '');
                 } else if(part.match(QollRegEx.exp)) {
-                    qlog.info('This is explanation -> ' + part, filename);
+                    // qlog.info('This is explanation -> ' + part, filename);
                     qoll_data[QollConstants.EDU.EXPL] = part.replace(QollRegEx.exp, '');
                     // convert explanation into a JSON of elements. let us manage images and TEX here
                     //qoll_data[QollConstants.EDU.EXPL] = {'txt' : part.replace(QollRegEx.exp, '')};
                     //qoll_data[QollConstants.EDU.EXPL][QollConstants.EDU.TEX] = [];
                 } else {
-                    qlog.info('##############*^*^*^*^*^**^**=> ' + part, filename);
+                    //qlog.info('##############*^*^*^*^*^**^**=> ' + part, filename);
                 }
             });
 
@@ -271,7 +271,7 @@ QollParser = {
 				        	});
 				        }
 				        
-				        qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
+				        //qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
 
 				        /** if(index === ix) {
 				            x.isCorrect = 1;
@@ -320,7 +320,7 @@ QollParser = {
             if(qoll_data[QollConstants.EDU.CAT] === undefined)
             	qoll_data[QollConstants.EDU.CAT] = qollType;
 
-            qlog.info('########## qoll_data=>'+JSON.stringify(qoll_data), filename);
+            //qlog.info('########## qoll_data=>'+JSON.stringify(qoll_data), filename);
 
 			/**
 			* Qoll Data will have the following attributes in the end
@@ -393,7 +393,7 @@ Meteor.methods({
 		var parsedQoll = QollParser.parseQollMaster(qollMaster, undefined, undefined, undefined, undefined, undefined, 
 										 undefined, undefined, undefined, undefined, undefined, texMode);
 
-		qlog.info('TEX_PREF =>> ' + texMode, filename);
+		// qlog.info('TEX_PREF =>> ' + texMode, filename);
 
 		var qolls = new Array();
 

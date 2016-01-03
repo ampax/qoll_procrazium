@@ -60,3 +60,4 @@ mrt:require
 service-configuration
 http
 jparker:crypto-aes
+mrt:jqtree

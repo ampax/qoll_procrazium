@@ -40,3 +40,77 @@ QollTopicsDb.storeTopics = function(topics) {
 
 	return err_msgs;
 }
+
+QollTopicsFavsDb = {};
+
+QollTopicsFavsDb.storeFavorites = function(topics, count, activity) {
+	// store user specific favorites in hierarchical order here
+	// representations - 
+	// HierarchicalTree - Chemistry -> General -> Physical -> Reactions (10)
+	// FlatTree - Chemistry(1), General(2), Physical(5), Reactions(10)
+	var err_msgs = [];
+	var single_str_favs = topics.join(', ');
+	var subscriber = Meteor.userId();
+
+	var handle = QollTopicsFavs.findOne({'subscriber' : subscriber});
+
+	if(handle) {
+		err_msgs.push(single_str_favs);
+
+		if('update' === activity) {
+			// do nothing since the count hasnt changed
+		} else if('delete' === activity || 'archive' === activity) {
+			// let us reduce the count by 1 since a qoll is deleted in this category
+			// delete is happening but the topic hierarchy exists, decrease the count here
+			var cnt = handle.topic_count;
+			handle.topic_count = cnt - 1;
+
+			var topic_tree = handle.topic_tree;
+			var moving_favs_hash = topic_tree;
+			topics.forEach(function(element, index, array){
+				if(moving_favs_hash[element]) {
+					// element exists ... increase the count and reset the moving-pointer
+					moving_favs_hash[element]['count'] = moving_favs_hash[element]['count'] - 1;
+					moving_favs_hash = moving_favs_hash[element];
+				}
+			});
+		} else {
+			// insert is happening but the topic hierarchy exists, inclrease the count here
+			var cnt = handle.topic_count;
+			handle.topic_count = cnt + count;
+			// QollTopicsFavs.update({_id : handle._id}, handle);
+
+			var topic_tree = handle.topic_tree;
+			var moving_favs_hash = topic_tree;
+			topics.forEach(function(element, index, array){
+				if(moving_favs_hash[element]) {
+					// element exists ... increase the count and reset the moving-pointer
+					moving_favs_hash[element]['count'] = moving_favs_hash[element]['count'] + count;
+					moving_favs_hash = moving_favs_hash[element];
+				} else {
+					// element does not exist ... create and set the count
+					moving_favs_hash[element] = {};
+					moving_favs_hash[element]['count'] = count;
+					moving_favs_hash[element]['label'] = element;
+					moving_favs_hash = moving_favs_hash[element];
+				}
+			});
+		}
+
+		QollTopicsFavs.update({_id : handle._id}, handle);
+	} else { 
+		var topic_arr = topics;
+		var hier_favs = {};
+
+		var moving_favs_hash = hier_favs;
+		topics.forEach(function(element, index, array){
+			moving_favs_hash[element] = {};
+			moving_favs_hash[element]['count'] = count;
+			moving_favs_hash[element]['label'] = element;
+			moving_favs_hash = moving_favs_hash[element];
+			qlog.info('==============================>' + element + '/' + JSON.stringify(hier_favs));
+		});
+		// moving_favs_hash['count'] = count;
+		QollTopicsFavs.insert({'subscriber': subscriber, 'topic_tree' : hier_favs, 'topic_count' : count});
+	}
+}

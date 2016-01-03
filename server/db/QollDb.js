@@ -100,6 +100,8 @@ Meteor.methods({
 				if (qollFound.submittedBy === userId) {
 					canModify = true;
 
+					if(qollFound && qollFound.topics) QollTopicsFavsDb.storeFavorites(qollFound.topics, 1, newAction);
+
 					Qoll.update({
 						'_id' : qollId
 					}, {
@@ -202,9 +204,6 @@ Meteor.methods({
 		if(tags != undefined)
 			var err_msg = QollTagsDb.storeTags(tags);
 
-		if(topics != undefined)
-			var err_msg = QollTopicsDb.storeTopics(topics);
-
 		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'topics' : topics, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : selImgIds, 'texMode' : texMode});
 
 		// var qollIds = new Array();
@@ -213,6 +212,11 @@ Meteor.methods({
 		qlog.info('Parsed the qoll =====>\n' + parsedQoll, filename);
 
 		var qollIds = persistParsedQoll(parsedQoll);
+
+		if(topics != undefined) {
+			var err_msg = QollTopicsDb.storeTopics(topics);
+			var err_msg_1 = QollTopicsFavsDb.storeFavorites(topics, qollIds.length, 'create');
+		}
 
 		// create a questionnaire if need be
 		// (1) no email and groups attached
@@ -245,9 +249,6 @@ Meteor.methods({
 		if(tags != undefined)
 			var err_msg = QollTagsDb.storeTags(tags);
 
-		if(topics != undefined)
-			var err_msg = QollTopicsDb.storeTopics(topics);
-
 		qlog.info('This is the editor content - ' + qollText, filename);
 
 		var existing_qoll = Qolls.QollDb.get({_id:qollIdtoUpdate});
@@ -262,6 +263,11 @@ Meteor.methods({
 		var parsedQoll = QollParser.parseQollMaster(qollText, existing_qoll.qollMasterId, emailsandgroups, tags, topics, action, visibility, QollConstants.QOLL.FORMAT.TXT, qollIdtoUpdate, accessGroups, selImgIds);
 
 		var qollIds = persistParsedQoll(parsedQoll);
+
+		if(topics != undefined) {
+			var err_msg = QollTopicsDb.storeTopics(topics);
+			var err_msg_1 = QollTopicsFavsDb.storeFavorites(topics, qollIds.length, 'update');
+		}
 
 		// create a questionnaire if need be
 		// (1) no email and groups attached

@@ -150,7 +150,8 @@ QollstPerformanceController = RouteController.extend({
 QbankController = RouteController.extend({
 	waitOn: function(){
 		//Meteor.subscribe('QBANK_PUBLISHER');
-		return [ Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), 
+		return [ Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {'topics' : Session.get('selected-topics')}), 
+			Meteor.subscribe('QBANK_TOPICS_PUBLISHER', {}),
 			Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
 			Meteor.subscribe('QOLL_TAG_PUBLISHER'),
 			Meteor.subscribe('Settings'),
@@ -271,6 +272,12 @@ Router.map(function() {
     this.route('all_qolls', {
         template : 'all_qolls',
         path : '/all_qolls',
+        controller : QbankController,
+    });
+
+    this.route('all_qolls_folder', {
+        template : 'all_qolls_folder',
+        path : '/all_qolls_folder',
         controller : QbankController,
     });
 

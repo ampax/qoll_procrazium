@@ -1,4 +1,4 @@
-<template name="all_qolls">
+<template name="all_qolls_folder">
 	{{> header_awesome  page_label="ALL QOLLS"}}
 
 	<div id="wrapper">
@@ -28,7 +28,10 @@
 						</div>
 				</div>
 				<br>
-					{{#each qolls}}
+
+				<div id="tree1"></div>
+
+				{{#each qolls}}
 				<div class="row">
 				<!-- Start of Qoll Section -->
 				<div class="col-md-12 col-xs-12 list-group-item" id='qdiv_{{_id}}'>

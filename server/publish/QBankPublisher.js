@@ -26,7 +26,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			qlog.info('Query ===================> '+ JSON.stringify(qry));
 			var handle = Qoll.find( qry, {sort : {'submittedOn' : -1}, reactive : true} ).observe({
 				added : function(item, idx) {
-					qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
+					// qlog.info('Adding, qbid ' + JSON.stringify(item), filename);
 					var q = {
 						qollTitle 		: item.title,
  						qollText 		: item.qollText,
@@ -92,6 +92,55 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 
 	}
 	qlog.info('Done initializing the publisher: QBANK_SUMMARY_PUBLISHER, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle != undefined) handle.stop();
+	});
+});
+
+Meteor.publish('QBANK_TOPICS_PUBLISHER', function(findoptions) {
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var handle;
+	qlog.info('Fetching all the QBANK_TOPICS_PUBLISHER in desc order of creation; uuid -------> : ' + uuid + ', : ' + this.userId, filename);
+	qlog.info('optiiiioooons -> '+ JSON.stringify(findoptions) + findoptions.userId, filename);
+	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
+		var tuid = this.userId ? this.userId : findoptions.userId;
+		var ufound = Meteor.users.find({
+			"_id" : tuid
+		}).fetch();
+
+		if (ufound.length > 0) {
+			var user = ufound[0];
+
+			findoptions.userId = user._id;
+
+			qlog.info('Printing the user for this request ===========> ' + JSON.stringify(findoptions), filename);
+
+			//submitted by this user
+			var handle = QollTopicsFavs.find( {'subscriber' : user._id}, {sort : {'topic_count' : 1}, reactive : true} ).observe({
+				added : function(item, idx) {
+					qlog.info('Adding the topic ------------------------>' + JSON.stringify(item), filename);
+					self.added('qbank_topics', item._id, item);
+				},
+				changed : function(item, idx) {
+					qlog.info('Adding the topic ------------------------>' + JSON.stringify(item), filename);
+					self.changed('qbank_topics', item._id, item);
+				},
+				removed : function(item) {
+					self.removed('qbank_topics', item._id);
+					qlog.info('Removed item with id: ' + item._id);
+
+				}
+			});
+		}
+
+	}
+	qlog.info('Done initializing the publisher: QBANK_TOPICS_PUBLISHER, uuid: ' + uuid, filename);
 	initializing = false;
 	self.ready();
 	//self.flush();
@@ -1198,7 +1247,7 @@ var getUnitSelected = function(ansHash) {
 
 var getQuery = function(findoptions) {
 	//Return default query if nothing specified for the type in the paramenters. Else return appropriate query parameter.
-	qlog.info("===========> " + findoptions, filename);
+	qlog.info("===================================+++++=======> " + JSON.stringify(findoptions), filename);
 	var tuid = findoptions.userId; // this.userId ? this.userId : findoptions.userId;
 	var ufound = Meteor.users.find({ "_id" : tuid }).fetch();
 
@@ -1211,26 +1260,23 @@ var getQuery = function(findoptions) {
 	});
 
 	qlog.info('Pushed groups before making the query =============>>>> ' + grps + '/' + tuid, filename);
-	
-	var query = {$or: [ {'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+
+	var query = '';
+	if(findoptions && findoptions.topics && findoptions.topics != '') {
+		topic_query = ", topics: { $all: "+ findoptions.topics +" }";
+		var query = {$or: [ {'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}, 
+							topics : {$all : findoptions.topics}}, 
+						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
+							topics : {$all : findoptions.topics}},
+						{'visibility': QollConstants.QOLL.VISIBILITY.PVT,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
+							accessToGroups : {$in : grps}, topics : {$all : findoptions.topics}}
+					]};
+	} else {
+		var query = {$or: [ {'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
 						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}},
 						{'visibility': QollConstants.QOLL.VISIBILITY.PVT,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
 							accessToGroups : {$in : grps}}
 					]};
-
-	if(findoptions && findoptions.query_type){
-		//Process for the type of data being queried
-		if(findoptions.query_type === 'inbox') {
-			//Return the data for inbox. This will be the data that the user has recieved and needs to respond.
-			//These will be two kinds - (1) Single qoll questionaire & (2) Multiple qoll questionaire
-		} else if(findoptions.query_type === 'sent') {
-			//This will be everything from the questionaire table that you have sent to anyone
-		} else if(findoptions.query_type === 'draft') {
-			//This is all the questionaire that you navigated away from the page without saving/storing
-		} else { 
-			//This is all the qolls created by me or public qolls
-			return query;
-		}
 	}
 
 	//Else return the default query for data
