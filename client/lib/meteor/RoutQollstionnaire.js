@@ -20,8 +20,10 @@ SentController = RouteController.extend({
 	findOptions : function() {
 		return { sort : { submittedOn : -1 }, context : QollConstants.CONTEXT.READ };
 	},
-	waitOn : function() {[Meteor.subscribe('SENT_QUESTIONAIRE_PUBLISHER', this.findOptions()),
-							Meteor.subscribe('QBANK_TOPICS_PUBLISHER', {type : 'qollstionnaire'}),];
+	waitOn : function() {
+		return [ Meteor.subscribe('SENT_QUESTIONAIRE_PUBLISHER', this.findOptions()),
+				Meteor.subscribe('QBANK_TOPICS_PUBLISHER', {}),
+			];
 	},
 	data : function() {
 		// return {qolls: ISentQuestionaire.find()};
@@ -155,7 +157,7 @@ QbankController = RouteController.extend({
 	waitOn: function(){
 		//Meteor.subscribe('QBANK_PUBLISHER');
 		return [ Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), 
-			Meteor.subscribe('QBANK_TOPICS_PUBLISHER', {type : 'qoll'}),
+			Meteor.subscribe('QBANK_TOPICS_PUBLISHER', {}),
 			Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
 			Meteor.subscribe('QOLL_TAG_PUBLISHER'),
 			Meteor.subscribe('Settings'),
