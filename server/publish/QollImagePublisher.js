@@ -37,7 +37,7 @@ Meteor.publish("QOLL_IMAGES", function(){
 **/
 
 Meteor.publish('images', function() {
-  qlog.info('Received publish image from ionic (probably)', filename);
+  //qlog.info('Received publish image from ionic (probably)', filename);
 
   //console.log(QollImages.find().fetch());
 

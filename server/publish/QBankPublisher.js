@@ -46,9 +46,13 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
 						hint 			: item.hint,
+						tags 			: item.tags,
+						topics 			: item.topics && item.topics != null? item.topics : ["Unassigned"],
 					};
 
 					// q = QollKatexUtil.populateIfTex(q, item);
+
+					qlog.info('-------------------------------> ' + q.topics, filename);
 
 					self.added('qbank_summary', item._id, q);
 
@@ -74,9 +78,13 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
 						hint 			: item.hint,
+						tags 			: item.tags,
+						topics 			: item.topics && item.topics != null? item.topics : ["Unassigned"],
 					};
 
 					// q = QollKatexUtil.populateIfTex(q, item);
+
+					qlog.info('-------------------------------> ' + q.topics, filename);
 
 					self.changed('qbank_summary', item._id, q);
 

@@ -150,7 +150,7 @@ QollstPerformanceController = RouteController.extend({
 QbankController = RouteController.extend({
 	waitOn: function(){
 		//Meteor.subscribe('QBANK_PUBLISHER');
-		return [ Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {'topics' : Session.get('selected-topics')}), 
+		return [ Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), 
 			Meteor.subscribe('QBANK_TOPICS_PUBLISHER', {}),
 			Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
 			Meteor.subscribe('QOLL_TAG_PUBLISHER'),
@@ -163,7 +163,8 @@ QbankController = RouteController.extend({
 	},
 	data:function(){
 		qlog.info('Printing userid - ' + Meteor.userId(), filename);
-		return {qolls: QbSummary.find({})};
+		if(Session.get('selected-topics')) return {qolls: QbSummary.find({topics : {$all : Session.get('selected-topics')}})}; 
+		else return {qolls: QbSummary.find({})}; 
 	},
 });
 

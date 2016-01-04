@@ -72,6 +72,7 @@ var fun_jq_tree_construct = function(fav_topics_tree, data, node_topics, id){
 
 Template.all_qolls_folder.rendered = function() {
 	Session.set('disable_sendtoQbank', true);
+	Session.set('selected-topics', undefined);
 
 	//Set the background color of the selected box
 	$('li#qollshop').css('background-color', 'firebrick');
@@ -110,7 +111,7 @@ Template.all_qolls_folder.rendered = function() {
 
 	$('#tree1').tree({
         data: data,
-        saveState: true,
+        //saveState: true,
         // closedIcon: 'i class="fa fa-arrow-circle-right"',
     	// openedIcon: '&lt;i class="fa fa-arrow-circle-down"&gt;&lt;/i&gt;'
     });

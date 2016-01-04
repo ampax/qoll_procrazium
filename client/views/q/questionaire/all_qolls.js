@@ -2,6 +2,7 @@ var filename = "client/views/qoll/all_qolls.js";
 
 Template.all_qolls.rendered = function() {
 	Session.set('disable_sendtoQbank', true);
+	Session.set('selected-topics', undefined);
 	$('.hasDatepicker').datepicker();
 
 	//Set the background color of the selected box

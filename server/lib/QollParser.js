@@ -63,6 +63,9 @@ QollParser = {
         var parsedQoll = {};
         parsedQoll.qollCombo = new Array();
 
+        if(!topics || topics && topics.length == 0)
+        	topics = ["Unassigned"];
+
         var qollId = new Array();
         var qolls = qollMaster.split(/\#\s/); //qolls are seperated by \n#Qoll\s - changed to \n#\s
         qolls = qolls.slice(1);
