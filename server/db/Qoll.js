@@ -109,6 +109,7 @@ Qolls.QollstionnaireDb = {
 			qolls_to_email 				: qollstionnaire.qolls_to_email,
 			qolls_to_comments			: qollstionnaire.qolls_to_comments,
 			tags 						: qollstionnaire.tags,
+			topics						: qollstionnaire.topics,
 			submittedTo 				: qollstionnaire.submittedTo,
 			submittedToUUID				: qollstionnaire.submittedToUUID,
 			submittedToGroup 			: qollstionnaire.submittedToGroup,

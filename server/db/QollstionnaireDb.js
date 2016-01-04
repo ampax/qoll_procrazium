@@ -13,7 +13,7 @@ QollstionnaireFns = {
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollstionnaire : function(emailsandgroups, title, tags, status, qollids, user_id, end_time, qoll_attributes) {
+	addQollstionnaire : function(emailsandgroups, title, tags, topics, status, qollids, user_id, end_time, qoll_attributes) {
 		var qollstionnaire = {};
 
 
@@ -56,8 +56,11 @@ Meteor.methods({
 			}
 		}); **/
 
+		topics = topics == undefined? ['Unassigned'] : topics;
+
 		qollstionnaire.title = title;
 		qollstionnaire.tags = tags;
+		qollstionnaire.topics = topics;
 		qollstionnaire.status = status;
 		qollstionnaire.qollids = qollids;
 		qollstionnaire.end_time = end_time;
@@ -112,6 +115,12 @@ Meteor.methods({
 		if(qollstionnaire_id && qollstionnaire.tags) {
 			var err_msg = QollTagsDb.storeTags(qollstionnaire.tags);
 			qlog.info('Printing tags return results - ' + err_msg, filename);
+		}
+
+		if(topics != undefined) {
+			var err_msg = QollTopicsDb.storeTopics(topics);
+			qlog.info('Printing topics return results - ' + err_msg, filename);
+			var err_msg_1 = QollTopicsFavsDb.storeFavorites(topics, 1, 'create', 'qollstionnaire');
 		}
 
 		return qollstionnaire_id;

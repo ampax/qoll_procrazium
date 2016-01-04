@@ -130,7 +130,7 @@ Meteor.publish('QBANK_TOPICS_PUBLISHER', function(findoptions) {
 			qlog.info('Printing the user for this request ===========> ' + JSON.stringify(findoptions), filename);
 
 			//submitted by this user
-			var handle = QollTopicsFavs.find( {'subscriber' : user._id}, {sort : {'topic_count' : 1}, reactive : true} ).observe({
+			var handle = QollTopicsFavs.find( {'subscriber' : user._id}, {reactive : true} ).observe({
 				added : function(item, idx) {
 					qlog.info('Adding the topic ------------------------>' + JSON.stringify(item), filename);
 					self.added('qbank_topics', item._id, item);
@@ -242,7 +242,8 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 					qlog.info("Adding item to SENT_QUESTIONAIRE_PUBLISHER =======>" + JSON.stringify(item), filename);
 					self.added('sent-by-me-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
-							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
+							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn, 
+							tags : item.tags, topics  : item.topics && item.topics != null? item.topics : ["Unassigned"],
 							length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				changed : function(item, idx) {
@@ -250,7 +251,8 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 					var r = getQuestCompletionRate(item);
 					self.changed('sent-by-me-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
-							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn,
+							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn, 
+							tags : item.tags, topics  : item.topics && item.topics != null? item.topics : ["Unassigned"],
 							length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				removed : function(item){

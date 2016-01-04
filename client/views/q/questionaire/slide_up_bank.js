@@ -16,6 +16,7 @@ var QuestionnaireHooks = {
         
         var title = insertDoc.title;
         var tags = insertDoc.tags;
+        var topics = insertDoc.topics;
         var end_time = insertDoc.end_time;
         var send_to = insertDoc.send_to;
         var state = insertDoc.state;
@@ -48,7 +49,7 @@ var QuestionnaireHooks = {
           return false;
         }
 
-        var jsn = {title : title, tags : tags, end_time : end_time, recips : send_to, action : state, allqollids : allqollids, qoll_attributes : qoll_attributes};
+        var jsn = {title : title, tags : tags, topics : topics, end_time : end_time, recips : send_to, action : state, allqollids : allqollids, qoll_attributes : qoll_attributes};
 
         qlog.info(JSON.stringify(jsn), filename);
 
@@ -411,13 +412,14 @@ var createQuestionnaire = function(jsn) {
     qollstionnaire.emails = jsn.recips;
     qollstionnaire.title = jsn.title.trim();
     qollstionnaire.tags = jsn.tags;
+    qollstionnaire.topics = jsn.topics;
     qollstionnaire.status = jsn.action;
 
     qollstionnaire.qollids = allqollids;
 
     qollstionnaire.end_time = jsn.end_time;
 
-    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, jsn.action, allqollids, undefined, jsn.end_time, jsn.qoll_attributes, function(err, qollstionnaire_id) {
+    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, qollstionnaire.topics, jsn.action, allqollids, undefined, jsn.end_time, jsn.qoll_attributes, function(err, qollstionnaire_id) {
       var target = jQuery(".qbank-error-msg");
       if (err) {
         qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);

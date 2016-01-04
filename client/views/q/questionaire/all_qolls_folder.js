@@ -78,7 +78,9 @@ Template.all_qolls_folder.rendered = function() {
 	$('li#qollshop').css('background-color', 'firebrick');
 
 	var fav_topics = QbTopics.findOne({});
-	var fav_topics_tree = fav_topics.topic_tree;
+
+	if(!fav_topics || !fav_topics.qoll) return;
+	var fav_topics_tree = fav_topics.qoll.topic_tree;
 
 	console.log(fav_topics);
 	console.log(fav_topics_tree);
@@ -88,24 +90,11 @@ Template.all_qolls_folder.rendered = function() {
 	fun_jq_tree_construct(fav_topics_tree, data_1, node_topics, 1);
 
 	var data = [{
-		label : 'Contents (' + fav_topics.topic_count + ')',
+		label : 'Contents (' + fav_topics.qoll.topic_count + ')',
 		id 	  : 1,
 		children : data_1
 	}];
-	/**_.keys(fav_topics_tree).forEach(function(el, idx, array){
-		var jqtree_hash = {};
-		jqtree_hash['label'] = el;
 
-
-		var moving_favs_hash = fav_topics_tree[el];
-		console.log(el);
-		console.log(moving_favs_hash);
-		//while(moving_favs_hash) {
-			//
-		//}
-
-		data.push(jqtree_hash);
-	});**/
 
 	console.log(data);
 

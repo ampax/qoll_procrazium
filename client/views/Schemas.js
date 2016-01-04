@@ -72,8 +72,15 @@ Schemas.custom_questionnaire = new SimpleSchema({
   },
   tags: {
     type: [String],
-    label: "Tags",
-    max: 500
+    label: "Tags (used to quickly search)",
+    max: 500,
+    optional: true,
+  },
+  topics: {
+    type: [String],
+    label: "Topics (used to structurely store content)",
+    max: 500,
+    optional: true,
   },
   end_time: {
     type: Date,

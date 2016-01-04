@@ -36,13 +36,15 @@
 			          renderfunction="renderTags"}}
 			    </div>
 			    <div class="col-md-6 col-sm-6 col-xs-6">
-			        <!-- {{> afQuickField name="end_time"}} -->
-			        {{> afQuickField name="end_time" type="bootstrap-datetimepicker"}}
-			    </div>
+		  			{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+			          formid="recipientForm" name="topics"
+			          renderKey="name" fieldref="topic" call="fetch_topics" 
+			          renderfunction="renderTopics"}}
+		  		</div>
 			</div>
 
 			<div class="row">
-				<div class='col-md-12 col-sm-12 col-xs-12'>
+				<div class='col-md-6 col-sm-6 col-xs-6'>
 				<!-- span class="input-group-btn">
 			     	<button type="button" class="btn btn-primary qollQbankToggle qoll-width-1">Qoll To:<sup class="red">*</sup></button>
 			    </span>
@@ -53,6 +55,11 @@
 		          renderKey="name" fieldref="email" call="fetch_my_emails" 
 		          renderfunction="renderQollToEmails"}}
 		      </div>
+
+		      <div class="col-md-6 col-sm-6 col-xs-6">
+			        <!-- {{> afQuickField name="end_time"}} -->
+			        {{> afQuickField name="end_time" type="bootstrap-datetimepicker"}}
+			  </div>
 			</div>
 
 			<!--div class="input-group input-group-sm minor-margin">

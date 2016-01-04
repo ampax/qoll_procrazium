@@ -43,7 +43,7 @@ QollTopicsDb.storeTopics = function(topics) {
 
 QollTopicsFavsDb = {};
 
-QollTopicsFavsDb.storeFavorites = function(topics, count, activity) {
+QollTopicsFavsDb.storeFavorites = function(topics, count, activity, type) {
 	// store user specific favorites in hierarchical order here
 	// representations - 
 	// HierarchicalTree - Chemistry -> General -> Physical -> Reactions (10)
@@ -63,9 +63,9 @@ QollTopicsFavsDb.storeFavorites = function(topics, count, activity) {
 			// let us reduce the count by 1 since a qoll is deleted in this category
 			// delete is happening but the topic hierarchy exists, decrease the count here
 			var cnt = handle.topic_count;
-			handle.topic_count = cnt - 1;
+			handle[type].topic_count = cnt - 1;
 
-			var topic_tree = handle.topic_tree;
+			var topic_tree = handle[type].topic_tree;
 			var moving_favs_hash = topic_tree;
 			topics.forEach(function(element, index, array){
 				if(moving_favs_hash[element]) {
@@ -76,11 +76,12 @@ QollTopicsFavsDb.storeFavorites = function(topics, count, activity) {
 			});
 		} else {
 			// insert is happening but the topic hierarchy exists, inclrease the count here
-			var cnt = handle.topic_count;
-			handle.topic_count = cnt + count;
+			if(!handle[type]) handle[type] = {topic_tree : {}, topic_count : 0};
+			var cnt = handle[type].topic_count;
+			handle[type].topic_count = cnt + count;
 			// QollTopicsFavs.update({_id : handle._id}, handle);
 
-			var topic_tree = handle.topic_tree;
+			var topic_tree = handle[type].topic_tree;
 			var moving_favs_hash = topic_tree;
 			topics.forEach(function(element, index, array){
 				if(moving_favs_hash[element]) {
@@ -111,6 +112,9 @@ QollTopicsFavsDb.storeFavorites = function(topics, count, activity) {
 			qlog.info('==============================>' + element + '/' + JSON.stringify(hier_favs));
 		});
 		// moving_favs_hash['count'] = count;
-		QollTopicsFavs.insert({'subscriber': subscriber, 'topic_tree' : hier_favs, 'topic_count' : count});
+
+		var d = {};
+		d[type] = {'topic_tree' : hier_favs, 'topic_count' : count};
+		QollTopicsFavs.insert({'subscriber': subscriber, type : {'topic_tree' : hier_favs, 'topic_count' : count}});
 	}
 }

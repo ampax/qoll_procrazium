@@ -213,9 +213,11 @@ Meteor.methods({
 
 		var qollIds = persistParsedQoll(parsedQoll);
 
+		topics = topics == undefined? ['Unassigned'] : topics;
+
 		if(topics != undefined) {
 			var err_msg = QollTopicsDb.storeTopics(topics);
-			var err_msg_1 = QollTopicsFavsDb.storeFavorites(topics, qollIds.length, 'create');
+			var err_msg_1 = QollTopicsFavsDb.storeFavorites(topics, qollIds.length, 'create', 'qoll');
 		}
 
 		// create a questionnaire if need be
@@ -264,9 +266,11 @@ Meteor.methods({
 
 		var qollIds = persistParsedQoll(parsedQoll);
 
+		topics = topics == undefined? ['Unassigned'] : topics;
+
 		if(topics != undefined) {
 			var err_msg = QollTopicsDb.storeTopics(topics);
-			var err_msg_1 = QollTopicsFavsDb.storeFavorites(topics, qollIds.length, 'update');
+			var err_msg_1 = QollTopicsFavsDb.storeFavorites(topics, qollIds.length, 'update', 'qoll');
 		}
 
 		// create a questionnaire if need be
