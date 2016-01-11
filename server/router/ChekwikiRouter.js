@@ -15,7 +15,8 @@ var filename='server/router/ChemwikiRouter.js';
 	});
 }); **/
 
-var chem_wiki_url = 'http://localhost:5000';
+//var chem_wiki_url = 'http://localhost:5000';
+var chem_wiki_url = 'http://chemwiki.ucdavis.edu';
 
 Router.route( "auget_chemwiki_server", function() {
 	  	var user_f_name = this.params.query.user_f_name;
