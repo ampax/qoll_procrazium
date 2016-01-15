@@ -320,6 +320,51 @@ Meteor.publish('GROUP_FOR_ID_QUERY', function(options){
 }); 
 
 
+Meteor.publish('GROUP_COLLAB_ASSIGNMENTS', function(options){
+  var self = this;
+  var uuid = Meteor.uuid();
+  var initializing = true;
+  var handle;
+
+  qlog.info('Collab-Group for ID publish; uuid: ' + uuid + ', _id: ' + options._id, filename);
+  //db.QOLL.find({'submittedTo':'usr3322@qoll','action':'send'})
+  if(this.userId) {//first publish specialized qolls to this user
+    qlog.info('----------------------------------------------------------', filename);
+    var tuid = this.userId;
+    var ufound = Meteor.users.find({ "_id" : tuid }).fetch()[0];
+    var collab_ids = ufound.collab_grp_ids;
+
+    if(collab_ids) {
+      handle = QollGroups.find({_id : {$in : collab_ids}}, {reactive : true }).observe({
+        added : function(grp, idx){
+          grp = extractGroupInfo(grp);
+          qlog.info('Publishing assign-subs group for id to client (collab-groups) - ' + JSON.stringify(grp), filename);
+          self.added('collab-groups', grp._id, grp);
+        },
+        changed : function(grp, idx) {
+          grp = extractGroupInfo(grp);
+          qlog.info('Publishing changed group for id to client (collab-groups) - ' + JSON.stringify(grp), filename);
+          self.changed('collab-groups', grp._id, grp);
+        },
+        removed : function(grp){
+          self.removed('collab-groups', grp._id);
+        }
+      });
+    }
+
+  }
+    
+  qlog.info('Done initializing the publisher: GROUP_COLLAB_ASSIGNMENTS, uuid: ' + uuid, filename);
+  initializing = false;
+  self.ready();
+  
+  self.onStop(function() {
+    if(handle != undefined) handle.stop();
+  });
+
+}); 
+
+
 var extractGroupInfo = function(item) {
   return {
     _id           : item._id,
@@ -334,6 +379,70 @@ var extractGroupInfo = function(item) {
     openOrClosed  : item.openOrClosed,
     userEmails    : item.userEmails
   };
+};
+
+
+Meteor.methods({
+  fetch_group_for_ids : function(ids) {
+    var qg = QollGroups.find({_id : {$in : ids}}).fetch();
+    return qg;
+  },
+  fetch_my_groups: function(query){
+        
+        if(query.search(/,/) != -1) {
+          var query = split(query);
+          query = query[query.length-1];
+        }
+        
+        var results = new Array();
+
+        results.push({'tag' : query});
+
+        if(query != '') {
+          var grps = QollGroups.find({'submittedBy':this.userId, 'status' : {$ne : QollConstants.STATUS.ARCHIVE},
+                            'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}}).fetch();
+          // var tags = QollTags.find({'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}} ).fetch();
+          grps.forEach(function(t){
+            qlog.info('Group ---------->' + JSON.stringify(t));
+            results.push({'group_name' : t.groupName, 'group_desc' : t.groupDesc, 'group_id' : t._id, 'group_ref' : t.groupName + '(Author: '+Meteor.user().profile.email+')' });
+          });
+        }
+
+        /** 
+        results.push({'tag' : 'dummy1'});
+        results.push({'tag' : 'dummy2'});
+        results.push({'tag' : 'dummy3'}); 
+        **/
+
+        return results;
+    },
+    assignDefaultCollabGroup: function(group_names) {
+      var grps = QollGroups.find({'submittedBy':this.userId, 'groupDesc' : {$in : group_names}}).fetch();
+
+      var ufound = Meteor.users.find({"_id" : this.userId }).fetch();
+      var collab_grp_ids = new Array();
+
+      if(grps && grps.length > 0) {
+        grps.forEach(function(g){
+          g.collab_group = true;
+          QollGroups.update({_id : g._id}, g);
+
+          collab_grp_ids.push(g._id);
+        });
+
+        qlog.info('Updating user with collab-group-ds - ' + collab_grp_ids, filename);
+
+        //var profile = ufound.profile;
+        //profile.collab_grp_ids = collab_grp_ids
+
+        Meteor.users.update({_id : Meteor.userId()}, 
+          {$set : {'profile.collab_grp_ids' : collab_grp_ids, 'collab_grp_ids' : collab_grp_ids}});
+      }
+    }
+});
+
+var split = function(val){
+  return val.split( /,\s*/ );
 };
 
 

@@ -4,7 +4,25 @@ Template.header_awesome.helpers({
     my_profile : function() {
         return '/users/'+Meteor.user().profile.slug;
         //return '/users/'+Meteor.user().slug;
-    }
+    },
+    show_searchbox : function() {
+        var name = Router.current().route.getName();
+        return Meteor.userId() && (name === 'all_qolls_folder' || name === 'view_sent');
+    },
+    placeholder_txt : function() {
+        // all_qolls_folder
+        var name = Router.current().route.getName();
+        qlog.info('####################################################=> ' + name, filename);
+        
+        return      name === 'all_qolls_folder' ? 'Search from all Qolls ...' 
+                    : name === 'view_sent'? 'Search from all Questionnaires ...' 
+                    :  'Input text to start searching ... (' + name + ')';
+    },
+    searchbox_val : function() {
+        var name = Router.current().route.getName();
+        return name === 'all_qolls_folder' && Session.get('qoll-search-box-text') 
+                                    ? Session.get('qoll-search-box-text') : '';
+    },
 });
 
 Template.header_awesome.events({
@@ -22,11 +40,51 @@ Template.header_awesome.events({
     'click .btn-Google1' : function(event, tmpl) {
         Login.loginWithService('google');
     },
+    'keyup #search-box': function(e) {
+        delay(function(){
+        var text = $(e.target).val().trim();
+        qlog.info('Searching qolls for text - ' + text, filename);        
+
+        if(text && text != null && text != '') {
+            // setting the value in session to serch for the inserted text and this will take precedence
+            Session.set('qoll-search-box-text', text);
+            Session.set('selected-topics', undefined);
+        } else {
+            Session.set('qoll-search-box-text', undefined);
+        }
+
+        QollSearch.search(text);
+        }, 1000);
+
+      },
+    'keyup #search-box1': _.throttle(function(e) {
+        var text = $(e.target).val().trim();
+        qlog.info('Searching qolls for text - ' + text, filename);        
+
+        if(text && text != null && text != '') {
+            // setting the value in session to serch for the inserted text and this will take precedence
+            Session.set('qoll-search-box-text', text);
+            Session.set('selected-topics', undefined);
+        } else {
+            Session.set('qoll-search-box-text', undefined);
+        }
+
+        QollSearch.search(text);
+
+      }, 5000),
    /* 'click .dsb': function() {
     event.preventDefault();
     Router.go('dashboard');
     }*/
 });
+
+var delay = (function(){
+  var timer = 0;
+  return function(callback, ms){
+    clearTimeout (timer);
+    timer = setTimeout(callback, ms);
+  };
+})();
 
 Template._loginButtonsLoggedInDropdown.events({
     'click #login-buttons-edit-profile': function(event) {

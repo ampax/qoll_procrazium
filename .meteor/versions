@@ -92,6 +92,7 @@ meteorhacks:fast-render@2.8.1
 meteorhacks:inject-data@1.4.0
 meteorhacks:npm@1.4.0
 meteorhacks:picker@1.0.3
+meteorhacks:search-source@1.4.2
 meteorspark:util@0.2.0
 miguelalarcos:afwrap-xautocomplete@0.3.1
 miguelalarcos:xautocomplete@0.3.0

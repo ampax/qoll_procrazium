@@ -41,13 +41,17 @@
             {{#if currentUser.profile.admin}}
             <li class=""><a href="/admin"><i class="fa fa-cogs"></i>Admin</a></li>
             {{/if}}
-          </ul>        
+          </ul>
+          {{#if show_searchbox}}
+          <input type="text" id="search-box" placeholder="{{placeholder_txt}}" value="{{searchbox_val}}" />
+          {{/if}}        
           <ul class="nav navbar-nav navbar-right">
-              {{> loginButtons}}
+            {{> loginButtons}}
               <!-- {{#if currentUser}}
                 {{> avatar user=this shape="circle"}}
               {{/if}} -->
            </ul>
+
         </div>
       </div>
     <!--/div-->

@@ -153,6 +153,25 @@ QollstPerformanceController = RouteController.extend({
 	}
 });
 
+QbankController_NoData = RouteController.extend({
+	waitOn: function(){
+		//Meteor.subscribe('QBANK_PUBLISHER');
+		return [ Meteor.subscribe('QBANK_SUMMARY_PUBLISHER', {}), 
+			Meteor.subscribe('QBANK_TOPICS_PUBLISHER', {}),
+			Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
+			Meteor.subscribe('QOLL_TAG_PUBLISHER'),
+			Meteor.subscribe('Settings'),
+		];
+		//Meteor.subscribe('QBANK_SUMMARY_PUBLISHER');
+	},
+	onAfterAction: function(){
+		//TODO
+	},
+	data:function(){
+		qlog.info('Printing userid - ' + Meteor.userId(), filename);
+	},
+});
+
 QbankController = RouteController.extend({
 	waitOn: function(){
 		//Meteor.subscribe('QBANK_PUBLISHER');
@@ -285,7 +304,7 @@ Router.map(function() {
     this.route('all_qolls_folder', {
         template : 'all_qolls_folder',
         path : '/all_qolls_folder',
-        controller : QbankController,
+        controller : QbankController_NoData,
     });
 
     this.route('qollView', {

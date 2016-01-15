@@ -21,12 +21,15 @@ MyGroupsController = RouteController.extend({
 		return { sort : { submittedOn : -1 } };
 	},
 	waitOn : function() {
-		[Meteor.subscribe('QOLL_MY_GROUP_QUERY', this.findOptions()), Meteor.subscribe('USER_SUBSCRIPT_GROUPS', this.findOptions())];
+		[Meteor.subscribe('QOLL_MY_GROUP_QUERY', this.findOptions()), 
+		Meteor.subscribe('USER_SUBSCRIPT_GROUPS', this.findOptions()),
+		Meteor.subscribe('GROUP_COLLAB_ASSIGNMENTS', this.findOptions())];
 	},
 	data : function() {
 		return {
 			groups: MyGroups.find(),
 			subsc_groups : UserSubscGroups.find(),
+			collab_groups : CollabGroups.find(),
 		};
 	}
 });

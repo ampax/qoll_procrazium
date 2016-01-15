@@ -849,6 +849,9 @@ td.qoll-auto-complete:hover {
 
 div.xmultiple > span.label {
     color: black;
+    background-color: bisque;
+    border-radius: 1px;
+    box-shadow: 1px 1px 1px #888888;
 }
 
 img.qoll-thumbs {
@@ -1024,6 +1027,7 @@ div.img-container {
 .xpopover {
     overflow: visible !important;
     position: fixed !important;
+    z-index: 200;
 }
 
 .ace_gutter {
@@ -1047,5 +1051,19 @@ span.explanation {
     background-color: #f5f5f5;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+
+
+
+/** header-search **/
+#search-box {
+  padding: 10px;
+  width: 600px;
+  border: 1px solid #eee;
+  outline: 0;
+  font-size: 15px;
+  margin-left: 7em;
+  margin-top: 0.5em;
+  height: 2.4em;
 }
 

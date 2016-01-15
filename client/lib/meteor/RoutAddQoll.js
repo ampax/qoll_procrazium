@@ -89,8 +89,9 @@ Router.map(function(){
 		path: '/qolleditor',
 		waitOn: function(){
 			qlog.info('In the controller code for xxx template', filename);
-			Meteor.subscribe('Settings');
-			Meteor.subscribe('QOLL_IMAGES');
+			[Meteor.subscribe('Settings'),
+			Meteor.subscribe('QOLL_IMAGES'),
+			Meteor.subscribe('GROUP_COLLAB_ASSIGNMENTS', {})];
 		},
 		/**onBeforeAction: [function(){
 			qlog.info('Before for qoll-editor ...', filename);

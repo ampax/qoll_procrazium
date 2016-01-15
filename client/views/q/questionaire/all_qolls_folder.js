@@ -114,6 +114,7 @@ Template.all_qolls_folder.rendered = function() {
 	        //console.log(node);
 	        //console.log(node.topics);
 	        Session.set('selected-topics', node.topics);
+	        Session.set('qoll-search-box-text', undefined);
 
 	        var theURL = node.url;
 	        if (theURL) {
@@ -130,6 +131,26 @@ Template.all_qolls_folder.onCreated(function(){
 
 
 Template.all_qolls_folder.helpers({
+	qolls : function() {
+		var search_val = $('input#search-box').val();
+
+		// qlog.info('xyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxy==================================> ' + search_val, filename);
+		qlog.info('Printing userid - ' + Meteor.userId(), filename);
+		if(Session.get('selected-topics')) return QbSummary.find({topics : {$all : Session.get('selected-topics')}}); 
+		else if(Session.get('qoll-search-box-text')) {
+			qlog.info('xyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxyxy==================================> ' + Session.get('qoll-search-box-text'), filename);
+
+			return QollSearch.getData({
+		      transform: function(matchText, regExp) {
+		      	qlog.info('Match text -------> ' + matchText, filename);
+		      	qlog.info('Reg exp -------> ' + regExp, filename);
+		        return matchText.toString().replace(regExp, "<b>$&</b>")
+		      },
+		      sort: {isoScore: -1}
+		    });
+		}
+		else return QbSummary.find({}); 
+	},
   imgs: function(image_ids) {
     if(!image_ids) return [];
     var imgs1 = QollImages.find({'_id': {$in: image_ids}});

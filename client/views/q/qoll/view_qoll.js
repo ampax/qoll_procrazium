@@ -17,6 +17,6 @@ Template.view_qoll.events({
 	},
 	'click button#bkButton' : function(e,t){
 		e.preventDefault();
-		Router.go('all_qolls');
+		Router.go('all_qolls_folder');
 	},
 });

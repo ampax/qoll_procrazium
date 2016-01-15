@@ -52,7 +52,17 @@ Schemas.quick_qoll = new SimpleSchema({
 Schemas.custom_group_subscribe = new SimpleSchema({
   group_name: {
     type: [String],
-    label: "",
+    label: "Group Name (Subscribe to this group, search by typing author's email-id)",
+    // regEx: SimpleSchema.RegEx.Email,
+    max: 500,
+    optional: true
+  },
+});
+
+Schemas.custom_collab_group= new SimpleSchema({
+  collab_groups: {
+    type: [String],
+    label: "Group Name (Default collaboration group to quickly share all the qolls with, search by typing your group names)",
     // regEx: SimpleSchema.RegEx.Email,
     max: 500,
     optional: true
@@ -125,7 +135,6 @@ Schemas.custom_markdown_menu_options = new SimpleSchema({
     optional: true,
   },
 });
-
 
 
 

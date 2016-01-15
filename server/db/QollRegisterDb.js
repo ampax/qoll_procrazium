@@ -183,9 +183,9 @@ Meteor.methods({
 		});
 		var type;type = qoll.cat;
 
-		var weight = qsnr.qoll_attributes[qollId].weight;
+		var weight = qsnr.qoll_attributes? qsnr.qoll_attributes[qollId].weight : 10;
 
-		var hint_penalty = qsnr.qoll_attributes[qollId].hint_penalty;
+		var hint_penalty = qsnr.qoll_attributes ? qsnr.qoll_attributes[qollId].hint_penalty : undefined;
 		if(hint_penalty) hint_penalty = Math.abs(hint_penalty);
 		else hint_penalty = 0;
 

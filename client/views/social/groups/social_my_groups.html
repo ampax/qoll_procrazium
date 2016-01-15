@@ -13,7 +13,7 @@
 					
 					<!-- Nav tabs -->
 					<ul class="nav nav-tabs" role="tablist">
-					  <li class="active"><a href="#subscriber" role="tab" data-toggle="tab">Subscriber</a></li>
+					  <li class="active"><a href="#subscriber" role="tab" data-toggle="tab">Group Maintenance</a></li>
 					  <li><a href="#owner" role="tab" data-toggle="tab">Owner</a></li>
 					  <!-- li><a href="#open_requests" role="tab" data-toggle="tab">Open Requests</a></li -->
 					</ul>
@@ -21,7 +21,12 @@
 					<!-- Tab panes -->
 					<div class="tab-content">
 						<div class="tab-pane active" id="subscriber">
-					  	  {{> subsc_templ groups=subsc_groups }}
+							<div class="">
+						  	  {{> subsc_templ groups=subsc_groups }}
+						  	</div>
+					  	  	<div class="">
+						  	  {{> default_collab_templ groups=subsc_groups }}
+						  	</div>
 						</div>
 					  <div class="tab-pane" id="owner">
 					  	{{> owned_templ groups=groups }}
@@ -60,8 +65,15 @@
 </template>
 
 <template name='subsc_templ'>
-	{{#autoForm schema=customGroupSubscribeSchema resetOnSuccess="true" id="groupSubscribeForm" type="normal"}}
+
+	{{#autoForm schema=customGroupSubscribeSchema resetOnSuccess="true" id="groupSubscribeForm" type="normal" doc=mydoc}}
 	<fieldset>
+
+	<div class="row">
+  		<div class="col-md-12 col-sm-12 col-xs-12" style="margin-left: -8em;">
+  			<h4 style="margin-top: 1em;">You have scubscribed to the following groups. This enables you to recieve any Qolls published/sent to these groups.</h4>
+  		</div>
+  	</div>
 
 	<div class="row">
 		<div class='list-group-item list-group-item-success'>
@@ -87,7 +99,7 @@
 				</div> <!-- col-sm-10 -->
 			</div>
 			<div class="row">
-				<div class="col-md-2 col-sm-2 col-xs-7" style="margin-left: -69px;">
+				<div class="col-md-2 col-sm-2 col-xs-7" style="margin-left: -5.6em;">
 					<button class="ui button btn-primary bs_input_btn" type="submit">Subscribe</button>
 				</div>
 				<div class="col-md-10 col-sm-10 col-xs-5">&nbsp;</div>
@@ -102,12 +114,11 @@
 	  </div>
   </div>
 
-  <hr class="divider">
 
 	<div class='row'>
 		{{#each groups}}
 		<div class='list-group-item list-group-item-success list-group-social'>
-	  		<div class="col-md-7 col-sm-7 col-xs-6 make-clickable">
+	  		<div class="col-md-8 col-sm-8 col-xs-8 make-clickable">
 	  			<a href="{{ pathFor 'subscGroupView' }}" class='black-link'>
 			  		<span class='title-qoll'>{{groupName}}</span> - {{groupDesc}}
 			  	</a>
@@ -116,9 +127,75 @@
 		  	<div class="col-md-4 col-sm-4 col-xs-4">
 		  		Size : {{groupSize}}<br> Access : {{pubOrPvt}}<br>  Author : {{author_email}}
 		  	</div>
+		  </div>
+	  	{{/each}}
+	</div>
 
-		  	<div class="col-md-1 col-sm-1 col-xs-2">
-		  		<span class="pull-left archive-grp round-button-clear-sm"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+	</fieldset>
+	{{/autoForm}}
+</template>
+
+<template name='default_collab_templ'>
+	{{#autoForm schema=customCollabGroupSchema resetOnSuccess="true" id="groupCollabForm" type="normal" doc=mydoc}}
+	<fieldset>
+
+	<div class="row">
+  		<div class="col-md-12 col-sm-12 col-xs-12" style="margin-left: -18.9em;">
+  			<h4 style="margin-top: 2em;">You can add people with permissions to these groups to grant access to your Qolls</h4>
+  		</div>
+  	</div>
+
+	<div class="row">
+		<div class='list-group-item list-group-item-success'>
+	      <div class="col-md-12 col-sm-12 col-xs-12">
+	      	<div class="row">
+		      	<!-- div class="col-md-1 col-sm-1 col-xs-1"><span class="title-qoll">Search</span></div -->
+				<div class="col-md-12 col-sm-12 col-xs-12">
+					
+							<div>
+							{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+						          formid="groupCollabForm" name="collab_groups"
+						          renderKey="group_id" fieldref="group_desc" call="fetch_my_groups" 
+						          renderfunction="renderCollabGroups"}}
+
+						    </div>
+						
+
+						<!-- input type="text" class="form-control green_bg_5" placeholder="Start typing author's email to search and click from the search results to add the group" default="" id="group_search" data-step="1">
+						<span class="input-group-btn bs_input_btn">
+					        <button class="btn btn-primary bs_input_btn" type="button" id="subscribe">Subscribe</button>
+					    </span -->
+					<!-- /input-group -->
+				</div> <!-- col-sm-10 -->
+			</div>
+			<div class="row">
+				<div class="col-md-2 col-sm-2 col-xs-7" style="margin-left: -7.5em;">
+					<button class="ui button btn-primary bs_input_btn" type="submit">Assign</button>
+				</div>
+				<div class="col-md-10 col-sm-10 col-xs-5">&nbsp;</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12 col-sm-12 col-xs-12" style="font-size: xx-small;font-style: oblique; color: rgb(56, 50, 50);">
+					Search for groups by typing your group names and select by clicking on one, hit Assign it save it
+				</div>
+			</div>
+
+	      </div>
+	  </div>
+  </div>
+
+
+	<div class='row'>
+		{{#each groups}}
+		<div class='list-group-item list-group-item-success list-group-social'>
+	  		<div class="col-md-8 col-sm-8 col-xs-8 make-clickable">
+	  			<a href="{{ pathFor 'subscGroupView' }}" class='black-link'>
+			  		<span class='title-qoll'>{{groupName}}</span> - {{groupDesc}}
+			  	</a>
+		  	</div>
+
+		  	<div class="col-md-4 col-sm-4 col-xs-4">
+		  		Size : {{groupSize}}<br> Access : {{pubOrPvt}}<br>  Author : {{author_email}}
 		  	</div>
 		  </div>
 	  	{{/each}}
@@ -133,6 +210,13 @@
     <td class="qoll-auto-complete qoll-comment-only-hover">
     	<span class="qoll-comment-display-2">{{this.name}}</span>
     	<span class="qoll-comment-display-3">{{this.email}}</span>
+    	<span class="qoll-comment-display-8"><u>{{this.group_name}}</u></span>
+    </td>
+</template>
+
+<template name="custom_group_collab_assign">
+    <td class="qoll-auto-complete qoll-comment-only-hover">
+    	<span class="qoll-comment-display-2 red_1">{{this.group_desc}}</span>
     	<span class="qoll-comment-display-8"><u>{{this.group_name}}</u></span>
     </td>
 </template>

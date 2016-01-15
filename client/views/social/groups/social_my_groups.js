@@ -1,6 +1,5 @@
 var filename='client/views/social/social_my_groups.js';
 
-
 var GroupSubscribeHooks = {
     onSubmit: function(insertDoc, updateDoc, currentDoc) {
         this.event.preventDefault();
@@ -61,7 +60,50 @@ var GroupSubscribeHooks = {
     },
 };
 
+
+var GroupCollabAssignHooks = {
+    onSubmit: function(insertDoc, updateDoc, currentDoc) {
+        this.event.preventDefault();
+        var group_names = insertDoc.collab_groups;
+        //var group_ref_str = insertDoc.group_ref;
+        //var group_id_str = insertDoc.group_id;
+        
+        console.log(group_names);
+        //console.log(group_ref_str);
+        //console.log(group_id_str);
+        //return;
+
+        Meteor.call('assignDefaultCollabGroup', group_names, function(err, message) {
+    		console.log(err);
+    		console.log(message);
+			var cls = '.scs-msg';
+			var msg;
+			if (err) {
+				cls = '.err-msg';
+				msg = 'Failed assigning default collab groups: ' + group_names;
+				qlog.error(msg + err, filename);
+			} else {
+				qlog.info('Subscribed to the group - ' + group_names, filename);
+			}
+			var saved_target = $(cls);
+		    saved_target.html(msg);
+		    saved_target.fadeOut( 8400, 'swing', function(){
+		    	saved_target.html('');
+		    	saved_target.removeAttr("style");
+		    });
+		});
+
+
+        this.done();
+
+        // AutoForm.resetForm('groupCollabForm')
+
+        return true;
+    },
+};
+
 AutoForm.addHooks('groupSubscribeForm', GroupSubscribeHooks);
+AutoForm.addHooks('groupCollabForm', GroupCollabAssignHooks);
 
 
 Template.social_my_groups.rendered = function(){
@@ -72,6 +114,12 @@ Template.social_my_groups.rendered = function(){
 Template.subsc_templ.helpers({
   customGroupSubscribeSchema: function() {
     return Schemas.custom_group_subscribe;
+  },
+});
+
+Template.default_collab_templ.helpers({
+  customCollabGroupSchema: function() {
+    return Schemas.custom_collab_group;
   },
 });
 
@@ -111,9 +159,59 @@ Template.social_my_groups.events({
 	}
 });
 
+Template.subsc_templ.helpers({
+	mydoc: function() {
+	    var doc = {};
+	    doc.group_name = new Array();
+
+	    var subsc_grps = UserSubscGroups.find().fetch();
+	    qlog.info('-------------> ' + JSON.stringify(subsc_grps), filename);
+
+	    if(subsc_grps && subsc_grps.length > 0){
+	    	subsc_grps.forEach(function(qg){
+	    		qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
+	    		// doc.group_name.push(qg.groupDesc);
+	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+')');
+	    	});
+	    }
+
+	    qlog.info('----------> '+JSON.stringify(doc), filename);
+	    return doc;
+	},
+});
+
+Template.default_collab_templ.helpers({
+	mydoc: function() {
+	    var doc = {};
+	    doc.collab_groups = new Array();
+
+	    var coll_grps = CollabGroups.find().fetch();
+	    qlog.info('-------------> ' + JSON.stringify(coll_grps), filename);
+
+	    if(coll_grps && coll_grps.length > 0){
+	    	coll_grps.forEach(function(qg){
+	    		qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
+
+	    		doc.collab_groups.push(qg.groupDesc);
+	    	});
+	    }
+
+	    qlog.info('----------> '+JSON.stringify(doc), filename);
+	    return doc;
+	},
+});
+
 renderGroupsNdOwners = function(x) {
     // qlog.info('called render qoll to emails method', filename);
     // console.log(x);
     return Blaze.toHTMLWithData(Template.custom_group_subscribe_to, x);
+    // return x.email + x.name;
+};
+
+
+renderCollabGroups = function(x) {
+    // qlog.info('called render qoll to emails method', filename);
+    // console.log(x);
+    return Blaze.toHTMLWithData(Template.custom_group_collab_assign, x);
     // return x.email + x.name;
 };

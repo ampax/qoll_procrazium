@@ -67,6 +67,24 @@ Template.recipient.helpers({
 	customMarkMenuOptSchema: function() {
 	    return Schemas.custom_markdown_menu_options;
 	},
+	mydoc: function() {
+	      var doc = {};
+	      doc.share_with = new Array();
+
+	      var coll_grps = CollabGroups.find().fetch();
+	      qlog.info('-------------> ' + JSON.stringify(coll_grps), filename);
+
+	      if(coll_grps && coll_grps.length > 0){
+	        coll_grps.forEach(function(qg){
+	          qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
+
+	          doc.share_with.push(qg.groupName);
+	        });
+	      }
+
+	      qlog.info('----------> '+JSON.stringify(doc), filename);
+	      return doc;
+	},
 });
 
 //This will be used to convert the html to markdown in case it is ckEditor that user has selected

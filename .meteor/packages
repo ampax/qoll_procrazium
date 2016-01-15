@@ -61,3 +61,4 @@ service-configuration
 http
 jparker:crypto-aes
 mrt:jqtree
+meteorhacks:search-source

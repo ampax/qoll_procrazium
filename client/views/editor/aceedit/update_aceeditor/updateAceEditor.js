@@ -51,7 +51,7 @@ var MarkdownQollHooks = {
 
         $('div.xmultiple').html('');
 
-        Router.go('all_qolls');
+        Router.go('all_qolls_folder');
 
         return false;
     },
