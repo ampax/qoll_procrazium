@@ -20,8 +20,8 @@ Template.header_awesome.helpers({
     },
     searchbox_val : function() {
         var name = Router.current().route.getName();
-        return name === 'all_qolls_folder' && Session.get('qoll-search-box-text') 
-                                    ? Session.get('qoll-search-box-text') : '';
+        return name === 'all_qolls_folder' && Session.get('qoll-search-box-text') ?Session.get('qoll-search-box-text')
+                                : name === 'view_sent' && Session.get('questionnaire-search-box-text') ? Session.get('questionnaire-search-box-text') : '';
     },
 });
 
@@ -43,17 +43,22 @@ Template.header_awesome.events({
     'keyup #search-box': function(e) {
         delay(function(){
         var text = $(e.target).val().trim();
-        qlog.info('Searching qolls for text - ' + text, filename);        
+        qlog.info('Searching qolls for text - ' + text, filename);
+
+        var name = Router.current().route.getName();        
 
         if(text && text != null && text != '') {
             // setting the value in session to serch for the inserted text and this will take precedence
-            Session.set('qoll-search-box-text', text);
+            if(name === 'all_qolls_folder') Session.set('qoll-search-box-text', text);
+            else Session.set('questionnaire-search-box-text', text);
             Session.set('selected-topics', undefined);
         } else {
-            Session.set('qoll-search-box-text', undefined);
+            if(name === 'all_qolls_folder') Session.set('qoll-search-box-text', undefined);
+            else Session.set('questionnaire-search-box-text', undefined);
         }
 
-        QollSearch.search(text);
+        if(name === 'all_qolls_folder') QollSearch.search(text);
+        else QuestionnaireSearch.search(text);
         }, 1000);
 
       },

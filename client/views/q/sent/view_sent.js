@@ -10,6 +10,22 @@ Template.view_sent.helpers({
 	page_label : function() {
 		qlog.info( 'mcmcmcmcmcmcmcmcmcmcmcmcmc', filename );
 		return "SENT";
+	},
+	qolls : function() {
+		if(Session.get('selected-questionnaire-topics')) return ISentQuestionaire.find({topics : {$all : Session.get('selected-questionnaire-topics')}}); 
+		else if(Session.get('questionnaire-search-box-text')) {
+			qlog.info('xzzzzxzzzzzxzzzzzzxzzzzzx==================================> ' + Session.get('questionnaire-search-box-text'), filename);
+
+			return QuestionnaireSearch.getData({
+		      transform: function(matchText, regExp) {
+		      	qlog.info('Match text -------> ' + matchText, filename);
+		      	qlog.info('Reg exp -------> ' + regExp, filename);
+		        return matchText.toString().replace(regExp, "<b>$&</b>")
+		      },
+		      sort: {isoScore: -1}
+		    });
+		}
+		else return ISentQuestionaire.find({}); 
 	}
 });
 
@@ -138,6 +154,7 @@ Template.view_sent.rendered = function(){
 	        //console.log(node);
 	        //console.log(node.topics);
 	        Session.set('selected-questionnaire-topics', node.topics);
+	        Session.set('questionnaire-search-box-text', undefined);
 
 	        var theURL = node.url;
 	        if (theURL) {

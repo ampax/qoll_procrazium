@@ -27,9 +27,6 @@ SentController = RouteController.extend({
 	},
 	data : function() {
 		// return {qolls: ISentQuestionaire.find()};
-
-		if(Session.get('selected-questionnaire-topics')) return {qolls: ISentQuestionaire.find({topics : {$all : Session.get('selected-questionnaire-topics')}})}; 
-		else return {qolls: ISentQuestionaire.find({})}; 
 	}
 });
 
