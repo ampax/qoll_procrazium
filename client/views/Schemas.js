@@ -67,6 +67,12 @@ Schemas.custom_collab_group= new SimpleSchema({
     max: 500,
     optional: true
   },
+  add_subscriber: {
+    type: [String],
+    label: "Add Subscriber",
+    max: 500,
+    optional: true
+  },
 });
 
 Schemas.custom_questionnaire = new SimpleSchema({
@@ -74,6 +80,12 @@ Schemas.custom_questionnaire = new SimpleSchema({
     type: String,
     label: "Title",
     max: 300
+  },
+  share_with: {
+    type: [String],
+    label: "Share With (share the questionnaire)",
+    max: 500,
+    optional: true
   },
   send_to: {
     type: [String],

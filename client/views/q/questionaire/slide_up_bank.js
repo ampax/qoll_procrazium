@@ -13,6 +13,10 @@ Template.registerHelper("sendOrStore", function() {
 var QuestionnaireHooks = {
     onSubmit: function(insertDoc, updateDoc, currentDoc) {
         this.event.preventDefault();
+
+        var share_with = insertDoc.share_with;
+
+        qlog.info('-----------------------> ' + share_with, filename);
         
         var title = insertDoc.title;
         var tags = insertDoc.tags;
@@ -49,7 +53,7 @@ var QuestionnaireHooks = {
           return false;
         }
 
-        var jsn = {title : title, tags : tags, topics : topics, end_time : end_time, recips : send_to, action : state, allqollids : allqollids, qoll_attributes : qoll_attributes};
+        var jsn = {title : title, tags : tags, topics : topics, end_time : end_time, recips : send_to, action : state, allqollids : allqollids, qoll_attributes : qoll_attributes, share_with : share_with};
 
         qlog.info(JSON.stringify(jsn), filename);
 
@@ -86,6 +90,24 @@ Template.slide_up_bank.helpers({
       // txt_2 = txt_2 + "\\({a1x^3+z=0}\\)";
 
       return txt_2;
+  },
+  mydoc: function() {
+        var doc = {};
+        doc.share_with = new Array();
+
+        var coll_grps = CollabGroups.find().fetch();
+        qlog.info('-------------> ' + JSON.stringify(coll_grps), filename);
+
+        if(coll_grps && coll_grps.length > 0){
+          coll_grps.forEach(function(qg){
+            qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
+
+            doc.share_with.push(qg.groupDesc);
+          });
+        }
+
+        qlog.info('----------> '+JSON.stringify(doc), filename);
+        return doc;
   },
 });
 
@@ -419,7 +441,9 @@ var createQuestionnaire = function(jsn) {
 
     qollstionnaire.end_time = jsn.end_time;
 
-    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, qollstionnaire.topics, jsn.action, allqollids, undefined, jsn.end_time, jsn.qoll_attributes, function(err, qollstionnaire_id) {
+    qollstionnaire.share_with - jsn.share_with;
+
+    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, qollstionnaire.topics, jsn.action, allqollids, undefined, jsn.end_time, jsn.qoll_attributes, jsn.share_with, function(err, qollstionnaire_id) {
       var target = jQuery(".qbank-error-msg");
       if (err) {
         qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);

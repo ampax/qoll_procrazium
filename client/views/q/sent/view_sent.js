@@ -1,10 +1,17 @@
 var filename='client/views/q/sent/view_sent.js';
 
 Template.view_sent.helpers({
-  closed_on : function(closed_on) {
-  		if(closed_on && closed_on.closed_on) {
+	submitted_on : function(qollstionnaireSubmittedOn) {
+		if(!qollstionnaireSubmittedOn) return '';
+		else {
 			// return qollstionnaireSubmittedOn;
-			return "<span class='red_1'>"+moment(closed_on.closed_on).format('MMM Do YYYY, h:mm a')+"</span>";
+			return moment(qollstionnaireSubmittedOn).format('MMM Do YYYY, h:mm a');
+		}
+	},
+  	closed_on : function(closed_on) {
+  		if(closed_on) {
+			// return qollstionnaireSubmittedOn;
+			return "<span class='qoll-comment-display-12'>Closed On:"+moment(closed_on).format('MMM Do YYYY, h:mm a')+"</span>";
 		}
 	},
 	page_label : function() {

@@ -18,6 +18,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 			var user = ufound[0];
 
 			findoptions.userId = user._id;
+			findoptions.share_circle = user.share_circle;
 
 			qlog.info('Printing the user for this request ===========> ' + JSON.stringify(findoptions), filename);
 
@@ -45,10 +46,14 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						complexity 		: item.complexity,
 						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
+						submittedBy		: item.submittedBy,
+						share_circle 	: item.share_circle,
 						hint 			: item.hint,
 						tags 			: item.tags,
 						topics 			: item.topics && item.topics != null? item.topics : ["Unassigned"],
 					};
+
+					q = populateAuthorMetaData(q, tuid);
 
 					// q = QollKatexUtil.populateIfTex(q, item);
 
@@ -77,10 +82,14 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
 						complexity 		: item.complexity,
 						imageIds		: item.imageIds,
 						isOwner			: item.submittedBy == user._id,
+						submittedBy		: item.submittedBy,
+						share_circle 	: item.share_circle,
 						hint 			: item.hint,
 						tags 			: item.tags,
 						topics 			: item.topics && item.topics != null? item.topics : ["Unassigned"],
 					};
+
+					q = populateAuthorMetaData(q, tuid);
 
 					// q = QollKatexUtil.populateIfTex(q, item);
 
@@ -233,26 +242,45 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 		var ufound = Meteor.users.find({"_id" : tuid}).fetch();
 		if (ufound.length > 0) {
 			var user = ufound[0];
+
+			var query_array = [];
+			query_array.push({'submittedBy' : user._id,'status' : QollConstants.STATUS.SENT}); // questionnaires of me
+
+			var share_circle = user.share_circle;
+			if(share_circle && share_circle.length > 0) {
+				// add the query to compare the two arrays here
+				// query_array.push({'share_circle' : share_circle});
+				query_array.push({ share_circle: { $all: share_circle } }); // questionnaire created by those in my circle
+			}
+
+			qlog.info('SENT_QUESTIONAIRE_PUBLISHER query ==========> ' + JSON.stringify(query_array), filename);
 			
-			handle_questionaires = Qollstionnaire.find({'submittedBy' : user._id,'status' : QollConstants.STATUS.SENT}, 
-				{sort : {'submittedOn' : -1}, reactive : true}).observe({
+			handle_questionaires = Qollstionnaire.find({$or : query_array}, {sort : {'submittedOn' : -1}, reactive : true}).observe({
 				added : function(item, idx){
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					var r = getQuestCompletionRate(item);
+
+					item = populateAuthorMetaData(item, tuid);
+
 					qlog.info("Adding item to SENT_QUESTIONAIRE_PUBLISHER =======>" + JSON.stringify(item), filename);
 					self.added('sent-by-me-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
 							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn, 
 							tags : item.tags, topics  : item.topics && item.topics != null? item.topics : ["Unassigned"],
+							byUser : item.byUser, fromSource : item.fromSource, onDate : item.onDate, closedOn : item.qollstionnaireClosedOn,
 							length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				changed : function(item, idx) {
 					var length_class = item.qollids.length == 1? 'single' : 'multiple';
 					var r = getQuestCompletionRate(item);
+
+					item = populateAuthorMetaData(item, tuid);
+
 					self.changed('sent-by-me-questionaire', item._id, 
 						{_id : item._id, title : item.title, tags : item.tags, qoll_count : item.qollids.length, recips_count : item.submittedTo.length, 
 							submitted_on : item.submittedOn, closed_on : item.qollstionnaireClosedOn, 
 							tags : item.tags, topics  : item.topics && item.topics != null? item.topics : ["Unassigned"],
+							byUser : item.byUser, fromSource : item.fromSource, onDate : item.onDate, closedOn : item.qollstionnaireClosedOn,
 							length_class : length_class, respo_length : r.respo_length, recip_length : r.recip_length});
 				},
 				removed : function(item){
@@ -1269,24 +1297,36 @@ var getQuery = function(findoptions) {
 		grps.push(gr.groupName);
 	});
 
-	qlog.info('Pushed groups before making the query =============>>>> ' + grps + '/' + tuid, filename);
+	qlog.info('Pushed groups before making the query =============>>>> ' + grps + '/' + tuid + '/' + findoptions.share_circle, filename);
+
+	var query_array = [];
+
+	var share_circle = findoptions.share_circle;
+	var share_circle_query = '';
+	if(share_circle && share_circle.length > 0) {
+		// add the query to compare the two arrays here
+		// query_array.push({'share_circle' : share_circle});
+		query_array.push({ share_circle: { $all: share_circle } });
+	}
 
 	var query = '';
 	if(findoptions && findoptions.topics && findoptions.topics != '') {
 		topic_query = ", topics: { $all: "+ findoptions.topics +" }";
-		var query = {$or: [ {'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}, 
+
+		query_array.push({'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}, 
 							topics : {$all : findoptions.topics}}, 
 						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
 							topics : {$all : findoptions.topics}},
 						{'visibility': QollConstants.QOLL.VISIBILITY.PVT,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
-							accessToGroups : {$in : grps}, topics : {$all : findoptions.topics}}
-					]};
+							accessToGroups : {$in : grps}, topics : {$all : findoptions.topics}});
+
+		query = {$or: query_array};
 	} else {
-		var query = {$or: [ {'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+		query_array.push({'submittedBy' : user._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
 						{'visibility': QollConstants.QOLL.VISIBILITY.PUB,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}},
 						{'visibility': QollConstants.QOLL.VISIBILITY.PVT,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE},
-							accessToGroups : {$in : grps}}
-					]};
+							accessToGroups : {$in : grps}});
+		query = {$or: query_array };
 	}
 
 	//Else return the default query for data
@@ -1531,4 +1571,24 @@ var fetchUsersFacebookQuestionnaires = function(userid) {
 
 	return facebookQuestId;
 };
+
+var populateAuthorMetaData = function(item, tuid) {
+	if(item.submittedBy != tuid) {
+		var sharecircle_u = Meteor.users.find({"_id" : item.submittedBy}).fetch();
+		if (sharecircle_u.length > 0) {
+			item.byUser = sharecircle_u[0].profile.name;
+			item.fromSource = item.share_circle ? item.share_circle[0] : '---';
+		} else {
+			item.byUser = 'Anonymous';
+			item.fromSource = '---';
+		}
+	} else {
+		item.byUser = 'Self';
+		item.fromSource = 'Self';
+	}
+
+	item.onDate = item.submittedOn;
+
+	return item;
+}
 

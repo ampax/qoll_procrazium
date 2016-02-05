@@ -28,7 +28,7 @@ Meteor.methods({
 	*						types, typesX, visibility, complexity, isMultiple ) 
 	**/
 	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
-	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, topics, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation, texMode) {
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, topics, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation, texMode, share_circle) {
 		var collection_forqoll = Qoll; 
 
 		var qoll_to_insert = {
@@ -63,6 +63,7 @@ Meteor.methods({
 			'qollFormat' : qollFormat,
 			'imageIds'	 : qollData[QollConstants.EDU.IMGS],
 			'explanation' : qollData.explanation,
+			'share_circle' : share_circle,
 		};
 
 		var qollId;
@@ -395,13 +396,25 @@ var addQuestionaire = function(emailsandgroups, qollids, visibility, tags, actio
 var persistParsedQoll = function(parsedQoll) {
 	var qollIds = new Array();
 
+	var user = undefined;
+	var ufound = Meteor.users.find({ "_id" : this.userId }).fetch();
+	if (ufound.length > 0) {
+		user = ufound[0];
+	}
+
+	var share_circle = user ? user.share_circle : new Array();
+
+	qlog.info('=================================> SHARE CIRCLE - ' + share_circle, filename);
+
 	parsedQoll.qollCombo.forEach(function(combo){
+		combo.master.share_circle = share_circle; //Qoll will be shared with everyone in this circle
+
 		var qollRawId = Qolls.QollRawDb.insert(combo.master);
 		combo.qoll.qollRawId = qollRawId;
 		
 		var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
 		combo.qoll.parentid, combo.qoll.tags, combo.qoll.topics, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS],
-		combo.qoll.explanation, combo.qoll.texMode)
+		combo.qoll.explanation, combo.qoll.texMode, share_circle);
 		qollIds.push(qid);
 
 		if(combo.qoll.qollData[QollConstants.EDU.IMGS] && combo.qoll.qollData[QollConstants.EDU.IMGS].length > 0) {

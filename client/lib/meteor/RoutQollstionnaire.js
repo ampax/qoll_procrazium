@@ -158,6 +158,7 @@ QbankController_NoData = RouteController.extend({
 			Meteor.subscribe('RECIPIENTS_PUBLISHER'), 
 			Meteor.subscribe('QOLL_TAG_PUBLISHER'),
 			Meteor.subscribe('Settings'),
+			Meteor.subscribe('GROUP_COLLAB_ASSIGNMENTS', {}),
 		];
 		//Meteor.subscribe('QBANK_SUMMARY_PUBLISHER');
 	},

@@ -13,7 +13,7 @@ QollstionnaireFns = {
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollstionnaire : function(emailsandgroups, title, tags, topics, status, qollids, user_id, end_time, qoll_attributes) {
+	addQollstionnaire : function(emailsandgroups, title, tags, topics, status, qollids, user_id, end_time, qoll_attributes, share_with) {
 		var qollstionnaire = {};
 
 
@@ -43,7 +43,17 @@ Meteor.methods({
 				});
 		});
 
-		qlog.info('==================+++++> ' + qollstionnaire.submittedTo, filename);
+		var user = undefined;
+		var ufound = Meteor.users.find({ "_id" : this.userId }).fetch();
+		if (ufound.length > 0) {
+			user = ufound[0];
+		}
+
+		var share_circle = user ? user.share_circle : new Array();
+
+		if(share_with == null || share_with == undefined) share_with = [];
+
+		qlog.info('==================+++++> ' + qollstionnaire.submittedTo + '/' + share_with, filename);
 
 
 		/** qollstionnaire.submittedToGroup.map(function(grp){
@@ -65,6 +75,23 @@ Meteor.methods({
 		qollstionnaire.qollids = qollids;
 		qollstionnaire.end_time = end_time;
 		qollstionnaire.qoll_attributes = qoll_attributes;
+		qollstionnaire.share_circle = share_circle;
+
+		// store the shared with group information here
+		var qry = {createdBy : Meteor.userId(), 
+								status: QollConstants.STATUS.ACTIVE, 
+								groupDesc: {$in : share_with} };
+		var share_with_groups = Groups.fetchForQuery(qry);
+
+		qlog.info('----------------------------------------------------------------', filename);
+		// qlog.info(JSON.stringify(share_with_groups) + '////' + share_with + '////' + Meteor.userId() +'////' +JSON.stringify(qry), filename);
+		qlog.info('----------------------------------------------------------------', filename);
+
+		var swg = [];
+		share_with_groups.forEach(function(s){
+			swg.push({groupId : s._id, ownerId : s.createdBy, groupDesc : s.groupDesc});
+		});
+		qollstionnaire.share_with = swg;
 
 		var total_weight = 0;
 		_.values(qoll_attributes).forEach(function(e){

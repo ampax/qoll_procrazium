@@ -973,6 +973,33 @@ div.img-container {
     color: rgb(105, 5, 5);
 }
 
+.qoll-comment-display-10 {
+    font-size: xx-small;
+    font-style: oblique;
+    font-weight: 800; 
+    color: rgb(169, 113, 113);
+}
+
+.qoll-comment-display-11 {
+    font-size: xx-small;
+    font-style: oblique; 
+    font-weight: 800; 
+    color: rgb(84, 85, 197);
+}
+
+.qoll-comment-display-12 {
+    font-size: xx-small;
+    font-style: oblique; 
+    font-weight: 800; 
+    color: #CC0000;
+}
+
+.qoll-comment-display-13 {
+    font-size: xx-small;
+    font-style: oblique;
+    color: rgb(30, 78, 24);
+}
+
 .qoll-comment-display-8:hover {
     color: white;
 }
