@@ -6,8 +6,8 @@ Template.header_awesome.helpers({
         //return '/users/'+Meteor.user().slug;
     },
     show_searchbox : function() {
-        var name = Router.current().route.getName();
-        return Meteor.userId() && (name === 'all_qolls_folder' || name === 'view_sent');
+        var name = Router.current().route? Router.current().route.getName() : undefined;
+        return name && Meteor.userId() && (name === 'all_qolls_folder' || name === 'view_sent');
     },
     placeholder_txt : function() {
         // all_qolls_folder
@@ -19,9 +19,27 @@ Template.header_awesome.helpers({
                     :  'Input text to start searching ... (' + name + ')';
     },
     searchbox_val : function() {
-        var name = Router.current().route.getName();
-        return name === 'all_qolls_folder' && Session.get('qoll-search-box-text') ?Session.get('qoll-search-box-text')
-                                : name === 'view_sent' && Session.get('questionnaire-search-box-text') ? Session.get('questionnaire-search-box-text') : '';
+        var name = Router.current().route? Router.current().route.getName(): undefined;
+        return name && name === 'all_qolls_folder' && Session.get('qoll-search-box-text') ?Session.get('qoll-search-box-text')
+                                : name && name === 'view_sent' && Session.get('questionnaire-search-box-text') ? Session.get('questionnaire-search-box-text') : '';
+    },
+    isAdmin : function() {
+        /**Meteor.call("isAdmin", function(err, val) {
+          if (err) {
+            qlog.info('Error on isAdmin...' + err, filename);
+            return false;
+          } else {
+            qlog.info('isAdmin ...' + val,filename);
+            return val;
+          }
+        });
+        return false; **/
+
+        if(!Meteor.user()) return false;
+
+        var email = Meteor.user().profile.email;
+
+        return _.indexOf(['procrazium@gmail.com', 'cozenlabs@gmail.com'], email) != -1;
     },
 });
 

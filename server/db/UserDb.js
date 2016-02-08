@@ -47,6 +47,15 @@ Usr.ensureUpdate = function(userId, col_name, col_val) {
 /** END: New standard code **/
 
 Meteor.methods({
+    isAdmin: function() {
+        if(!Meteor.userId()) return false;
+
+        var usr = Meteor.users.findOne({_id : Meteor.userId()});
+        var email = usr.profile.email;
+
+        return _.indexOf(['procrazium@gmail.com', 'cozenlabs@gmail.com'], email) != -1;
+    },
+
 	currentUserName: function(){
         qlog.info("Getting avatar for: " + Meteor.userId(), filename);
         return Meteor.users.find({_id : Meteor.userId()}).profile.name;

@@ -38,8 +38,8 @@
             {{/if}}
             <li><a href="/contact_us">Contact Us</a></li>
              {{> contextbtns}}
-            {{#if currentUser.profile.admin}}
-            <li class=""><a href="/admin"><i class="fa fa-cogs"></i>Admin</a></li>
+            {{#if isAdmin}}
+            <li class=""><a href="/admin_qoll"><i class="fa fa-cogs"></i>Admin</a></li>
             {{/if}}
           </ul>
           {{#if show_searchbox}}

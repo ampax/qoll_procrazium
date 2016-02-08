@@ -1,9 +1,20 @@
 var filename = 'client/lib/meteor/RoutAdmin.js';
 
-Router.map(function(){
-	this.route('admin', {
-		template: 'admin',
-		path: '/admin',
+
+AdminController = RouteController.extend({
+	waitOn : function() {
+		[Meteor.subscribe('ALL_SHARE_CIRCLES_ASSIGN'), 
+		Meteor.subscribe('ALL_SHARE_CIRCLES')];
+	},
+	data : function() {
+		return {qs: AllShareCircle.find(), qsca : AllShareCircleAssign.find()};
+	}
+});
+
+/**Router.map(function(){
+	this.route('admin_qoll', {
+		template: 'admin_qoll',
+		path: '/admin_qoll',
 		waitOn: function(){
 			
 		},
@@ -16,5 +27,14 @@ Router.map(function(){
 		onAfterAction: function(){
 			//TODO
 		}
+	});
+});
+**/
+
+Router.map(function() {
+	this.route('admin_qoll', {
+		template : 'admin_qoll',
+		path : '/admin_qoll',
+		controller : AdminController,
 	});
 });

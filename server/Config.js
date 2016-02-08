@@ -98,3 +98,17 @@ Meteor.startup(function() {
 	  buttonText: 'Activate Qoll Account'
 	};
 });
+
+
+
+// populate share-circle on startup, if it is not there - two right now
+Meteor.startup(function(){
+	var share_circle = QollShareCircle.find({}).fetch();
+	if(!share_circle || share_circle.length == 0) {
+		QollShareCircle.insert({'description' : 'ChemWiki share circle to give access to all the qolls created by people in this circle',
+								'share_circle' : 'ChemWiki', 'access' : 'private'});
+
+		QollShareCircle.insert({'description' : 'Qoll super-share-circle',
+								'share_circle' : 'QollSuperShare', 'access' : 'private'});
+	}
+});

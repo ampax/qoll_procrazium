@@ -88,6 +88,14 @@ Meteor.publish('allUsers', function(filterBy, sortBy, limit) {
   return [];
 });
 
+Meteor.publish('isAdmin', function() {
+  if(!Meteor.userId()) return false;
+
+  var usr = Meteor.users.findOne({_id : Meteor.userId()});
+  var email = usr.profile.email;
+
+  return _.indexOf(['procrazium@gmail.com', 'cozenlabs@gmail.com'], email) != -1;
+});
 
 
 
@@ -432,7 +440,7 @@ Meteor.publish('MEMBERS_FOR_GROUP_ID_1', function(options) {
         }
 
         userIds.push(user._id);
-      })
+      });
 
       Meteor.users.find({_id : {$in : userIds}}).observe({
         //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
@@ -705,6 +713,37 @@ Meteor.methods({
                   'group_name' : g.groupName, 'group_id' : g.groupId, 'group_ref' : g.groupName + '(Author: '+ue.profile.email+')'});
               });
             }
+          });
+        }
+
+        /**results.push({'name' : 'dummy1', 'email' : 'dummy1@gmail.com', 'group_name' : 'Dummy Group 1', 'group_id' : 'Dummy Id 1'});
+        results.push({'name' : 'dummy2', 'email' : 'dummy2@gmail.com', 'group_name' : 'Dummy Group 2', 'group_id' : 'Dummy Id 2'});
+        results.push({'name' : 'dummy3', 'email' : 'dummy3@gmail.com', 'group_name' : 'Dummy Group 3', 'group_id' : 'Dummy Id 3'});**/
+
+        return results;
+    },
+    fetch_all_emails: function(query){
+        qlog.info("Getting All Users: " + query, filename);
+        if(query.search(/,/) != -1) {
+          var query = split(query);
+          query = query[query.length-1];
+        }
+        qlog.info('Extracted all-user-email query string - ' + query, filename);
+
+        var results = new Array();
+        var user_id = Meteor.userId();
+
+        var friend_ids = new Array();
+
+        if(query != '') {
+          var users = Meteor.users.find({ $or: [{'registered_emails.address': {$regex: '^.*'+query+'.*$', $options: 'i'}}, 
+                      {'profile.email': {$regex: '^.*'+query+'.*$', $options: 'i'}},
+                      {'profile.name': {$regex: '^.*'+query+'.*$', $options: 'i'}} ] }).fetch();
+
+          users.forEach(function(ue){
+              
+              results.push({ 'name' : ue.profile.name, 'email' : ue.profile.email });
+
           });
         }
 

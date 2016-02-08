@@ -49,6 +49,22 @@ Schemas.quick_qoll = new SimpleSchema({
   },
 });
 
+
+Schemas.share_circle_assign = new SimpleSchema({
+  email: {
+    type: [String],
+    label: "Email of the person (Select by typing email-id)",
+    max: 500,
+    optional: false
+  },
+  share_circle: {
+    type: [String],
+    label: "Share Circle (Select by typing share-circle)",
+    max: 500,
+    optional: false
+  },
+});
+
 Schemas.custom_group_subscribe = new SimpleSchema({
   group_name: {
     type: [String],
