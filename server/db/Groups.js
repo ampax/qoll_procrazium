@@ -10,6 +10,10 @@ Groups.fetch = function(userId) {
 	return GroupsTbl.find({created_by : userId, status: QollConstants.STATUS.ACTIVE})
 };
 
+Groups.fetchForQuery = function(qry) {
+	return QollGroups.find(qry);
+};
+
 //g is the hash carrying all to create/update the group
 Groups.insertUpdate = function(g, userId){
 
