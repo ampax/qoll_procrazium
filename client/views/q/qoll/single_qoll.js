@@ -75,8 +75,11 @@ Template.single_qoll.helpers({
 		return qollText;
 	},
 	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
+		// txt_0 = txt.replace(/(?:\r\n|\r|\n)/g, '<br />');
+		txt_0 = txt.replace(/\\n/g, '<br />');
+		qlog.info('----------------> ' + txt_0, filename);
 		//method defined in preview.js
-		var txt_1 = transform_fib(txt, cat, context, fib);
+		var txt_1 = transform_fib(txt_0, cat, context, fib);
 
 		//method defined in preview.js
 	    var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
