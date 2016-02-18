@@ -111,16 +111,92 @@ Template.social_my_groups.rendered = function(){
 	$('li#groups').css('background-color', 'firebrick');
 };
 
+Template.social_my_groups.helpers({
+  customCollabNdSubscribeGroup: function() {
+  	return Schemas.custom_collab_nd_subscribe_group;
+  },
+  customGroupSubscribeSchema: function() {
+    return Schemas.custom_group_subscribe;
+  },
+  customCollabGroupSchema: function() {
+    return Schemas.custom_collab_group;
+  },
+  mydoc: function() {
+	    var doc = {};
+	    doc.group_name = new Array();
+
+	    var subsc_grps = UserSubscGroups.find().fetch();
+	    qlog.info('-------------> ' + JSON.stringify(subsc_grps), filename);
+
+	    if(subsc_grps && subsc_grps.length > 0){
+	    	subsc_grps.forEach(function(qg){
+	    		qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
+	    		// doc.group_name.push(qg.groupDesc);
+	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+')');
+	    	});
+	    }
+
+	    qlog.info('----------> '+JSON.stringify(doc), filename);
+	    return doc;
+	},
+});
+
 Template.subsc_templ.helpers({
   customGroupSubscribeSchema: function() {
     return Schemas.custom_group_subscribe;
   },
+  mydoc: function() {
+	    var doc = {};
+	    doc.group_name = new Array();
+
+	    var subsc_grps = UserSubscGroups.find().fetch();
+	    qlog.info('-------------> ' + JSON.stringify(subsc_grps), filename);
+
+	    if(subsc_grps && subsc_grps.length > 0){
+	    	subsc_grps.forEach(function(qg){
+	    		qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
+	    		// doc.group_name.push(qg.groupDesc);
+	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+')');
+	    	});
+	    }
+
+	    qlog.info('----------> '+JSON.stringify(doc), filename);
+	    return doc;
+	},
+	highlightAccessApproved: function(accessApproved) {
+		if(accessApproved === 'pending') return 'red'; else return 'green';
+	}
+});
+
+Template.subsc_templ.events({
+	'click button#leave': function(event) {
+		event.preventDefault();
+		qlog.info('Clicked to leave the group ' + this._id, filename);
+
+		Meteor.call('unSubscribeFromGroup', this._id, function(err, message) {
+    		console.log(err);
+    		console.log(message);
+			var msg;
+			if (err) {
+				qlog.info('Failed to unsubscribe from the group - ' + this._id, filename);
+			} else {
+				qlog.info('UnSubscribed from this group - ' + this._id, filename);
+			}
+		});
+	},
 });
 
 Template.default_collab_templ.helpers({
   customCollabGroupSchema: function() {
     return Schemas.custom_collab_group;
   },
+});
+
+Template.default_collab_templ.events({
+	'click button#unassign': function(event) {
+		event.preventDefault();
+		qlog.info('Clicked to unassign the group', filename);
+	},
 });
 
 Template.social_my_groups.events({
@@ -201,6 +277,52 @@ Template.default_collab_templ.helpers({
 	},
 });
 
+Template.owned_templ.events({
+	'click button#remove-group': function(event) {
+		event.preventDefault();
+		qlog.info('Clicked to remove the group ' + this._id, filename);
+		
+		Meteor.call("removeGroup", this._id, function(error){
+		        if(!error){ 
+		            qlog.info("Removed group with group-id: ", filename);
+		        } else {
+		            qlog.info("Failed to remove group with id: " + error, filename);
+		        }
+		        
+		    });
+	},
+	'click button#approve': function(event) {
+		event.preventDefault();
+		var group_id = this.group_id;
+		var user_id = this.user_id;
+		qlog.info('Clicked to approve the group', filename);
+
+		Meteor.call("approveUserGroupSubscriptionReq", group_id, user_id, function(error){
+		        if(!error){ 
+		            qlog.info("Approved group with group-id: ", filename);
+		        } else {
+		            qlog.info("Failed to approve group with id: " + error, filename);
+		        }
+		        
+		    });
+	},
+	'click button#deny': function(event) {
+		event.preventDefault();
+		var group_id = this.group_id;
+		var user_id = this.user_id;
+		qlog.info('Clicked to deny the group', filename);
+		
+		Meteor.call("unSubscribeUserFromGroup", group_id, user_id, function(error){
+		        if(!error){ 
+		            qlog.info("Approved group with group-id: ", filename);
+		        } else {
+		            qlog.info("Failed to approve group with id: " + error, filename);
+		        }
+		        
+		    });
+	}
+});
+
 renderGroupsNdOwners = function(x) {
     // qlog.info('called render qoll to emails method', filename);
     // console.log(x);
@@ -210,7 +332,7 @@ renderGroupsNdOwners = function(x) {
 
 
 renderCollabGroups = function(x) {
-    // qlog.info('called render qoll to emails method', filename);
+    qlog.info('called renderCollabGroups' + JSON.stringify(x), filename);
     // console.log(x);
     return Blaze.toHTMLWithData(Template.custom_group_collab_assign, x);
     // return x.email + x.name;

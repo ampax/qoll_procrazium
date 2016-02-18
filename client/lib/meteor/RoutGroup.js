@@ -23,13 +23,19 @@ MyGroupsController = RouteController.extend({
 	waitOn : function() {
 		[Meteor.subscribe('QOLL_MY_GROUP_QUERY', this.findOptions()), 
 		Meteor.subscribe('USER_SUBSCRIPT_GROUPS', this.findOptions()),
-		Meteor.subscribe('GROUP_COLLAB_ASSIGNMENTS', this.findOptions())];
+		Meteor.subscribe('GROUP_COLLAB_ASSIGNMENTS', this.findOptions()),
+		Meteor.subscribe('MY_PENDING_SUBSCRIPTIONS', this.findOptions()),
+		Meteor.subscribe('MY_PENDING_APPROVALS_REQ_GRP'),
+		Meteor.subscribe('MY_SHARE_CIRCLES_ASSIGN')];
 	},
 	data : function() {
 		return {
 			groups: MyGroups.find(),
 			subsc_groups : UserSubscGroups.find(),
 			collab_groups : CollabGroups.find(),
+			my_pending_subscriptions : MyPendingSubscriptions.find(),
+			my_pending_approval_req_group: MyPendingApprovalsReqGroup.find(),
+			my_share_circle_assign: MyShareCircleAssign.find()
 		};
 	}
 });

@@ -134,6 +134,203 @@ Meteor.publish('PUBLISH_GROUPS_OF_USER_1', function(){
     });
 });
 
+
+/** Publish all the groups that the user has subscribed to **/
+Meteor.publish('MY_PENDING_APPROVALS_REQ_GRP', function() {
+  var self= this;
+  var gp_memberships=[];
+
+  if (this.userId) {
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var groups = user.groupsCreated;
+      if(!groups) groups = [];
+
+      var usr = Meteor.users.find({_id : this.userId}, {reactive : true}).observe({
+        added : function(item, idx) {
+          //qlog.info('Added user for this session - ' + JSON.stringify(item), filename);
+          var groups = item.groupsCreated;
+          if(!groups) groups = [];
+
+          var group_ids = [];
+          groups.map(function(group){
+            group_ids.push(group.groupId);
+          });
+
+          var handle_usr_grps = Meteor.users.find({'groups.groupId' : {$in : group_ids},'groups.accessApproved' : 'pending', 'groups.groupOwner' : user._id}, {reactive : true}).observe({
+            added : function(usr, idx){
+              //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              var grps = usr.groups;
+              grps.map(function(g){
+                if(g.accessApproved === 'pending') {
+                  // add it to the publish pipe
+                  var tg = QollGroups.findOne({_id : g.groupId});
+                  var dt = {'user_name' : usr.profile.name, 'user_email' : usr.profile.email, 'user_id' : usr._id, 'access_approved' : g.accessApproved,
+                              'group_name' : tg.groupName, 'group_id' : tg._id, 'group_access' : tg.groupAccess};
+                  self.added('my-pending-approvals-req-group', tg._id+usr._id, dt);
+                }
+              });
+            },
+            changed : function(usr, idx){
+              //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              var grps = usr.groups;
+              grps.map(function(g){
+                if(g.accessApproved === 'pending') {
+                  // add it to the publish pipe
+                  var tg = QollGroups.findOne({_id : g.groupId});
+                  var dt = {'user_name' : usr.profile.name, 'user_email' : usr.profile.email, 'user_id' : usr._id, 'access_approved' : g.accessApproved,
+                              'group_name' : tg.groupName, 'group_id' : tg._id, 'group_access' : tg.groupAccess};
+                  self.added('my-pending-approvals-req-group', tg._id+usr._id, dt);
+                }
+              });
+            },
+            removed : function(usr){
+              var grps = usr.groups;
+              grps.map(function(g){
+                if(g.accessApproved === 'pending') {
+                  // add it to the publish pipe
+                  var tg = QollGroups.findOne({_id : g.groupId});
+                  var dt = {'user_name' : usr.profile.name, 'user_email' : usr.profile.email, 'user_id' : usr._id, 'access_approved' : g.accessApproved,
+                              'group_name' : tg.groupName, 'group_id' : tg._id, 'group_access' : tg.groupAccess};
+                  self.removed('my-pending-approvals-req-group', tg._id+usr._id);
+                }
+              });
+            }
+          });
+        },
+        changed : function(item, idx){
+          //qlog.info('Changed user for this session - ' + JSON.stringify(item), filename);
+
+          var groups = item.groupsCreated;
+          if(!groups) groups = [];
+
+          var group_ids = [];
+          groups.map(function(group){
+            group_ids.push(group.groupId);
+          });
+
+          //console.log('changed ' + group_ids);
+
+          var handle_grp = Meteor.users.find({'groups.groupId' : {$in : group_ids},'groups.accessApproved' : 'pending', 'groups.groupOwner' : user._id}, {reactive : true}).observe({
+            added : function(usr, idx){
+              //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              var grps = usr.groups;
+              grps.map(function(g){
+                if(g.accessApproved === 'pending') {
+                  // add it to the publish pipe
+                  var tg = QollGroups.findOne({_id : g.groupId});
+                  var dt = {'user_name' : usr.profile.name, 'user_email' : usr.profile.email, 'user_id' : usr._id, 'access_approved' : g.accessApproved,
+                              'group_name' : tg.groupName, 'group_id' : tg._id, 'group_access' : tg.groupAccess};
+                  self.added('my-pending-approvals-req-group', tg._id+usr._id, dt);
+                }
+              });
+            },
+            changed : function(usr, idx){
+              //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              var grps = usr.groups;
+              grps.map(function(g){
+                if(g.accessApproved === 'pending') {
+                  // add it to the publish pipe
+                  var tg = QollGroups.findOne({_id : g.groupId});
+                  var dt = {'user_name' : usr.profile.name, 'user_email' : usr.profile.email, 'user_id' : usr._id, 'access_approved' : g.accessApproved,
+                              'group_name' : tg.groupName, 'group_id' : tg._id, 'group_access' : tg.groupAccess};
+                  self.added('my-pending-approvals-req-group', tg._id+usr._id, dt);
+                }
+              });
+            },
+            removed : function(usr){
+              var grps = usr.groups;
+              grps.map(function(g){
+                if(g.accessApproved === 'pending') {
+                  // add it to the publish pipe
+                  var tg = QollGroups.findOne({_id : g.groupId});
+                  var dt = {'user_name' : usr.profile.name, 'user_email' : usr.profile.email, 'user_id' : usr._id, 'access_approved' : g.accessApproved,
+                              'group_name' : tg.groupName, 'group_id' : tg._id, 'group_access' : tg.groupAccess};
+                  self.removed('my-pending-approvals-req-group', tg._id+usr._id);
+                }
+              });
+            }
+          });
+        },
+      });
+      
+    }
+  }
+});
+
+/** Publish all the groups that the user has subscribed to **/
+Meteor.publish('MY_PENDING_SUBSCRIPTIONS', function() {
+  var self= this;
+  var gp_memberships=[];
+
+  if (this.userId) {
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      var user = ufound[0];
+      var groups = user.groups;
+      if(!groups) groups = [];
+
+      var usr = Meteor.users.find({_id : this.userId}, {reactive : true}).observe({
+        added : function(item, idx) {
+          //qlog.info('Added user for this session - ' + JSON.stringify(item), filename);
+          var groups = item.groups;
+          if(!groups) groups = [];
+
+          var group_ids = [];
+          groups.map(function(group){
+            if(group.accessApproved === 'pending') group_ids.push(group.groupId);
+          });
+
+          //console.log('added ' + group_ids);
+
+          var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
+            added : function(grp, idx){
+              //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              self.added('my-pending-subscriptions', grp._id, grp);
+            },
+            changed : function(grp, idx){
+              //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              self.changed('my-pending-subscriptions', grp._id, grp);
+            },
+            removed : function(grp){
+              self.removed('my-pending-subscriptions', grp._id);
+            }
+          });
+        },
+        changed : function(item, idx){
+          //qlog.info('Changed user for this session - ' + JSON.stringify(item), filename);
+
+          var groups = item.groups;
+          if(!groups) groups = [];
+
+          var group_ids = [];
+          groups.map(function(group){
+            if(group.accessApproved === 'pending') group_ids.push(group.groupId);
+          });
+
+          //console.log('changed ' + group_ids);
+
+          var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
+            added : function(grp, idx){
+              //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              self.added('my-pending-subscriptions', grp._id, grp);
+            },
+            changed : function(grp, idx){
+              //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              self.changed('my-pending-subscriptions', grp._id, grp);
+            },
+            removed : function(grp){
+              self.removed('my-pending-subscriptions', grp._id);
+            }
+          });
+        },
+      });
+      
+    }
+  }
+});
+
 /** Publish all the groups that the user has subscribed to **/
 Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
   var self= this;
@@ -153,8 +350,10 @@ Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
           if(!groups) groups = [];
 
           var group_ids = [];
+          var group_id_to_status = {};
           groups.map(function(group){
             group_ids.push(group.groupId);
+            group_id_to_status[group.groupId] = group.accessApproved;
           });
 
           //console.log('added ' + group_ids);
@@ -162,11 +361,16 @@ Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
           var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
             added : function(grp, idx){
               //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              grp.accessApproved = group_id_to_status[grp._id];
               self.added('user-subscription-groups', grp._id, grp);
             },
             changed : function(grp, idx){
               //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              grp.accessApproved = group_id_to_status[grp._id];
               self.changed('user-subscription-groups', grp._id, grp);
+            },
+            removed : function(grp){
+              self.removed('user-subscription-groups', grp._id);
             }
           });
         },
@@ -177,8 +381,10 @@ Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
           if(!groups) groups = [];
 
           var group_ids = [];
+          var group_id_to_status = {};
           groups.map(function(group){
             group_ids.push(group.groupId);
+            group_id_to_status[group.groupId] = group.accessApproved;
           });
 
           //console.log('changed ' + group_ids);
@@ -186,11 +392,16 @@ Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
           var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
             added : function(grp, idx){
               //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              grp.accessApproved = group_id_to_status[grp._id];
               self.added('user-subscription-groups', grp._id, grp);
             },
             changed : function(grp, idx){
               //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              grp.accessApproved = group_id_to_status[grp._id];
               self.changed('user-subscription-groups', grp._id, grp);
+            },
+            removed : function(grp){
+              self.removed('user-subscription-groups', grp._id);
             }
           });
         },
@@ -388,6 +599,8 @@ Meteor.methods({
     return qg;
   },
   fetch_my_groups: function(query){
+
+        qlog.info("Getting groups for my-groups in Query====: " + query, filename);
         
         if(query.search(/,/) != -1) {
           var query = split(query);
@@ -396,7 +609,7 @@ Meteor.methods({
         
         var results = new Array();
 
-        results.push({'tag' : query});
+        // results.push({'tag' : query});
 
         if(query != '') {
           var grps = QollGroups.find({'submittedBy':this.userId, 'status' : {$ne : QollConstants.STATUS.ARCHIVE},
@@ -404,9 +617,11 @@ Meteor.methods({
           // var tags = QollTags.find({'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}} ).fetch();
           grps.forEach(function(t){
             qlog.info('Group ---------->' + JSON.stringify(t));
-            results.push({'group_name' : t.groupName, 'group_desc' : t.groupDesc, 'group_id' : t._id, 'group_ref' : t.groupName + '(Author: '+Meteor.user().profile.email+')' });
+            results.push({'group_name' : t.groupName, 'group_desc' : t.groupDesc, 'group_id' : t._id, 'group_ref' : t.groupName + '('+t.groupDesc+')' });
           });
         }
+
+        qlog.info('Group ==========--==>' + JSON.stringify(results), filename);
 
         /** 
         results.push({'tag' : 'dummy1'});

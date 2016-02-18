@@ -91,6 +91,31 @@ Schemas.custom_collab_group= new SimpleSchema({
   },
 });
 
+
+Schemas.custom_collab_nd_subscribe_group= new SimpleSchema({
+  group_name: {
+    type: [String],
+    label: "Group Name (Subscribe to this group, search by typing author's email-id)",
+    // regEx: SimpleSchema.RegEx.Email,
+    max: 500,
+    optional: true
+  },
+  collab_groups: {
+    type: [String],
+    label: "Group Name (Default collaboration group to quickly share all the qolls with, search by typing your group names)",
+    // regEx: SimpleSchema.RegEx.Email,
+    max: 500,
+    optional: true
+  },
+  add_subscriber: {
+    type: [String],
+    label: "Add Subscriber",
+    max: 500,
+    optional: true
+  },
+});
+
+
 Schemas.custom_questionnaire = new SimpleSchema({
   title: {
     type: String,

@@ -26,6 +26,36 @@ Meteor.publish('ALL_SHARE_CIRCLES_ASSIGN', function() {
   qlog.info('Done initializing the new-share-circle: ALL_SHARE_CIRCLES_ASSIGN, uuid: ' + uuid, filename);
 });
 
+Meteor.publish('MY_SHARE_CIRCLES_ASSIGN', function() {
+  var self= this;
+  var uuid = Meteor.uuid();
+
+  if (this.userId) {
+    var ufound = Meteor.users.find({"_id" : this.userId}).fetch();
+    if (ufound.length > 0) {
+      QollShareCircleAssign.find({user_id : this.userId}, { reactive : true }).observe({
+        //Publish all the groups in the order in which they change and all, deleted should be removed from the users and
+        //every addition, update should be added to the list
+        added : function(qsca, idx){
+          var share_circle = QollShareCircle.findOne({_id : qsca.share_circle_id});
+          qsca.description = share_circle.description;
+          self.added('my-share-circle-assign', qsca._id, qsca);
+        },
+        changed : function(qsca, idx){
+          var share_circle = QollShareCircle.findOne({_id : qsca.share_circle_id});
+          qsca.description = share_circle.description;
+          self.changed('my-share-circle-assign', qsca._id, qsca);
+        },
+        removed : function(qsca){
+          self.removed('my-share-circle-assign', qsca._id);
+        }
+      });
+    }
+  }
+
+  qlog.info('Done initializing the new-share-circle: MY_SHARE_CIRCLES_ASSIGN, uuid: ' + uuid, filename);
+});
+
 Meteor.publish('ALL_SHARE_CIRCLES', function() {
   var self= this;
   var uuid = Meteor.uuid();

@@ -74,6 +74,13 @@ Meteor.methods({
 		var my_id = Meteor.userId();
 		var handle_me = Meteor.users.findOne(my_id);
 
+		var handle_gp = QollGroups.findOne({'submittedBy': author_id, 'groupName' : group_name});
+
+		var is_private = handle_gp.groupAccess === 'private';
+		var access_approved = is_private? 'pending' : 'approved';
+
+		var new_group = {"groupOwner" : author_id, "groupName" : group_name, 'accessApproved' : access_approved};
+
 		if(!handle_me.groups) handle_me.groups = [];
 		var groups_me = handle_me.groups;
 
@@ -88,11 +95,9 @@ Meteor.methods({
 		}
 
 
-		var new_group = {"groupOwner" : author_id, "groupName" : group_name};
 		if(!_.contains(just_groups, group_name)) {
 			//Update the user and the groups table now
 			qlog.warn('***'+author_id + '/' + group_name+'***', filename);
-			var handle_gp = QollGroups.findOne({'submittedBy': author_id, 'groupName' : group_name});
 			new_group.groupId = handle_gp._id;
 			//QollGroups.find({'submittedBy': author_id, 'groupName' : group_name});
 			//qlog.info('Printing the group ---------->' + JSON.stringify(handle_gp) + '/' + author_id + '/' + handle_me.profile.email, filename);
@@ -110,6 +115,127 @@ Meteor.methods({
 			Meteor.users.update({_id : my_id}, {$set: {groups : groups_me}});
 		}
 		return {scs_msg : 'Successfully Subscribed to - ' + group_name + ", " + author_email};
+	},
+	unSubscribeFromGroup : function(group_id) {
+		// find the group to unsubscribe from
+		var handle_gp = QollGroups.findOne({'_id': group_id});
+		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
+		/** Fix adding the group of legacy users **/
+		var handle_usr = Meteor.users.findOne(handle_gp.submittedBy);
+		if(!handle_usr || !handle_usr._id) {
+			return {err_msg : 'There are issues with - '+group_name+'\'s author - '+author_email+'. Contact the group-owner to fix it please.'};
+		}
+
+		var group_name = handle_gp.groupName;
+		
+		var author_id = handle_usr._id;
+		var my_id = Meteor.userId();
+		var handle_me = Meteor.users.findOne(my_id);
+
+		var new_group = {"groupId": handle_gp._id, "groupOwner" : author_id, "groupName" : group_name};
+		qlog.info('This will be unsubscribed - ' + JSON.stringify(new_group), filename);
+
+		var groups_me = handle_me.groups;
+
+		var just_groups_modified = [];
+
+		var contains = false;
+
+		groups_me.forEach(function(gm){
+				qlog.info(JSON.stringify(gm), filename);
+				if(gm.groupId === new_group.groupId && gm.groupOwner === new_group.groupOwner && gm.groupName === new_group.groupName) {
+					contains = true;
+				}
+			});
+
+		qlog.info('Groups me - ' + JSON.stringify(groups_me), filename);
+
+		qlog.info('Printing whether or not contains this group in my list ... ' + contains, filename);
+
+		if(contains) {
+			groups_me.forEach(function(gm){
+				if(!(gm.groupId === new_group.groupId && gm.groupOwner === new_group.groupOwner && gm.groupName === new_group.groupName)) {
+					just_groups_modified.push(gm);
+				}
+			});
+
+			qlog.info('Just modified groups - ' + JSON.stringify(just_groups_modified), filename);
+
+			//Update the user and the groups table now
+			var userEmails = handle_gp.userEmails;
+			var userEmailsModified = [];
+			
+			userEmails.forEach(function(ue){
+				if(ue != handle_me.profile.email) {
+					userEmailsModified.push(ue);
+				}
+			});
+
+			QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmailsModified}});
+
+			Meteor.users.update({_id : my_id}, {$set: {groups : just_groups_modified}});
+		}
+		return {scs_msg : 'Successfully UnSubscribed to - ' + group_name + ", " + handle_usr.profile.email};
+	},
+	unSubscribeUserFromGroup : function(group_id, user_id) {
+		// find the group to unsubscribe from
+		var handle_gp = QollGroups.findOne({'_id': group_id});
+		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
+		/** Fix adding the group of legacy users **/
+		var handle_usr = Meteor.users.findOne(handle_gp.submittedBy);
+		if(!handle_usr || !handle_usr._id) {
+			return {err_msg : 'There are issues with - '+group_name+'\'s author - '+author_email+'. Contact the group-owner to fix it please.'};
+		}
+
+		var group_name = handle_gp.groupName;
+		
+		var author_id = handle_usr._id;
+		var handle_me = Meteor.users.findOne(user_id);
+
+		var new_group = {"groupId": handle_gp._id, "groupOwner" : author_id, "groupName" : group_name};
+		qlog.info('This will be unsubscribed - ' + JSON.stringify(new_group), filename);
+
+		var groups_me = handle_me.groups;
+
+		var just_groups_modified = [];
+
+		var contains = false;
+
+		groups_me.forEach(function(gm){
+				qlog.info(JSON.stringify(gm), filename);
+				if(gm.groupId === new_group.groupId && gm.groupOwner === new_group.groupOwner && gm.groupName === new_group.groupName) {
+					contains = true;
+				}
+			});
+
+		qlog.info('Groups me - ' + JSON.stringify(groups_me), filename);
+
+		qlog.info('Printing whether or not contains this group in my list ... ' + contains, filename);
+
+		if(contains) {
+			groups_me.forEach(function(gm){
+				if(!(gm.groupId === new_group.groupId && gm.groupOwner === new_group.groupOwner && gm.groupName === new_group.groupName)) {
+					just_groups_modified.push(gm);
+				}
+			});
+
+			qlog.info('Just modified groups - ' + JSON.stringify(just_groups_modified), filename);
+
+			//Update the user and the groups table now
+			var userEmails = handle_gp.userEmails;
+			var userEmailsModified = [];
+			
+			userEmails.forEach(function(ue){
+				if(ue != handle_me.profile.email) {
+					userEmailsModified.push(ue);
+				}
+			});
+
+			QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmailsModified}});
+
+			Meteor.users.update({_id : user_id}, {$set: {groups : just_groups_modified}});
+		}
+		return {scs_msg : 'Successfully UnSubscribed to - ' + group_name + ", " + handle_usr.profile.email};
 	},
 	addUserToGroup : function(group_id, user_email) {
 		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
@@ -218,4 +344,22 @@ Meteor.methods({
 
 		return {scs_msg : 'Successfully un-subscribed from - ' + handle_gp.groupName + ", user - " + handle_usr.profile.name};
 	},
+	removeGroup: function(groupId) {
+		qlog.info('Removing group with id - ' + groupId, filename);
+        QollGroups.update({ '_id' : groupId }, { $set : { updatedBy : Meteor.userId(), updatedOn : new Date(), status : QollConstants.STATUS.ARCHIVE } });
+	},
+	approveUserGroupSubscriptionReq: function(group_id, user_id) {
+		// update users groups record and set the accessApproved status to approved
+		var handle_usr = Meteor.users.findOne({_id : user_id});
+		var groups = handle_usr.groups;
+		var groups_modified = [];
+		groups.forEach(function(g){
+			if(g.groupId === group_id) {
+				g.accessApproved = 'approved';
+			}
+			groups_modified.push(g);
+		});
+
+		Meteor.users.update({_id : user_id}, {$set: {groups : groups_modified}});
+	}
 });
