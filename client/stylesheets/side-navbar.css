@@ -33,7 +33,7 @@
 
 #page-content-wrapper {
     /** width: 100%; **/
-    position: absolute;
+    /** position: absolute; **/
     padding: 6px;
 }
 
