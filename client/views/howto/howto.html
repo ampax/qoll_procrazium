@@ -1,155 +1,208 @@
 <template name="howto">
 	{{> header_awesome}}
 
-<div id="aceEditorContainer"> 
+	<br />
+	{{> how_to_content_joinqoll}}
 
-<div class="row">
-	<div class="col-md-12 col-xs-12">
-		<h3><span class="green">HowTo?</span> Videos</h3>
-	</div>
-</div>
-<hr class="divider divider-bottom-0">
-
-<div class="row">
-	<div class="col-md-12 col-xs-12">
-		<h4>(1) Create one or more Qolls using simple or advanced text editor</h4>
-	</div>
-</div>
-<hr class="divider divider-bottom-0">
-
-<div class="row">
-	<div class="col-md-5 col-xs-5">
-
-		<iframe width="420" height="315" src="http://www.youtube.com/embed/mlGnZUJPUZw?autoplay=0&fs=1&modestbranding=1"> </iframe>
-
-	</div>
-	
-	<div class="col-md-7 col-xs-7">
-
-		<div class="row">
-
-			<div class="col-md-12 col-xs-12">
-				- Navigate to the Create Qoll page and select from two of the advanced editor options (Text or HTML) or Quick for simple editor
-				- In the simple editor you can add a recipient to send single Qoll as you create it or you can skip the recipient
-				<br>- Add Qoll Title, Qoll Text, and some Qoll Options to create the Qoll
-				- In the advanced editor (Text), every Qoll must start with a # followed by a blank-space
-				<br>     <u class="red"><b># T</b></u>his is Qoll Title
-				<br>- Qoll text must start in a new line with <b>*txt </b> or <b>*text </b> followed by a space
-				<br>     <u class="red"><b>*txt T</b></u>his is Qoll Text
-				<br>     <u class="red"><b>*text T</b></u>his is Qoll Text
-				<br>- Every option must start with one of the followings -> <b>- or (Alphabets) or Alphabets or numbers</b> followed by <b>.</b> or not
-				<br> <u class="red"><b>- T</b></u>his is an option
-				<br> <u class="red"><b>(1) T</b></u>his is an option
-				<br> <u class="red"><b>(A) T</b></u>his is an option
-				<br> <u class="red"><b>(a) T</b></u>his is an option
-				<br> <u class="red"><b>A. T</b></u>his is an option
-				<br> <u class="red"><b>a. T</b></u>his is an option
-			</div>
-
-		</div>
-
-	</div>
-</div>
-
-<br>
-
-<hr class="divider divider-bottom-0">
-<div class="row">
-	<div class="col-md-12 col-xs-12">
-		<h4>(2) Create new questionnaire, send it, and review the results</h4>
-	</div>
-</div>
-<hr class="divider divider-bottom-0">
-
-<div class="row">
-	<div class="col-md-5 col-xs-5">
-
-		<iframe width="420" height="315" src="http://www.youtube.com/embed/liUQ4QP22ho?autoplay=0&fs=1&modestbranding=1"> </iframe>
-
-	</div>
-	
-	<div class="col-md-7 col-xs-7">
-		- Navigate to the <b>QBank -> Qolls</b> page
-		<br>- Start by selecting from your collection of Qolls
-		<br>- Once you have selected enough Qolls for your questionnaire, click on the horizontal bar of the Questionnaire editor
-		<br>- Enter a Questionnaire title
-		<br>- Enter from your group names or comma seperated list of emails
-		<br>- Add a tag so that you can search for your Questionnaire in future
-		<br>- Click <u class="red"><b>Store</b></u> to store now and send later or <u class="red"><b>Send</b></u> to send now
-		<br>- Recepient will get the Qolls in their <b>QBank -> Inbox</b> and also in the registered email-box
-		<br>- You can navigate to <b>QBank -> Sent</b> page to review the results of sent Questionnaires
-		<br>- Draft is for storing the Questionnaires nor and sending it later
-	</div>
-</div>
-
-<br>
-
-<hr class="divider divider-bottom-0">
-<div class="row">
-	<div class="col-md-12 col-xs-12">
-		<h4>(3) Create new groups and group management</h4>
-	</div>
-</div>
-<hr class="divider divider-bottom-0">
-
-<div class="row">
-	<div class="col-md-5 col-xs-5">
-
-		<iframe width="420" height="315" src="http://www.youtube.com/embed/liUQ4QP22ho?autoplay=0&fs=1&modestbranding=1"> </iframe>
-
-	</div>
-	
-	<div class="col-md-7 col-xs-7">
-		- Group Management
-	</div>
-</div>
-
-<br>
-
-<hr class="divider divider-bottom-0">
-<div class="row">
-	<div class="col-md-12 col-xs-12">
-		<h4>(4) Account Management</h4>
-	</div>
-</div>
-<hr class="divider divider-bottom-0">
-
-<div class="row">
-	<div class="col-md-5 col-xs-5">
-
-		<iframe width="420" height="315" src="http://www.youtube.com/embed/liUQ4QP22ho?autoplay=0&fs=1&modestbranding=1"> </iframe>
-
-	</div>
-	
-	<div class="col-md-7 col-xs-7">
-		- Account Management
-	</div>
-</div>
-
-
-<br>
-
-<hr class="divider divider-bottom-0">
-<div class="row">
-	<div class="col-md-12 col-xs-12">
-		<h4>(5) Using Qoll</h4>
-	</div>
-</div>
-<hr class="divider divider-bottom-0">
-
-<div class="row">
-	<div class="col-md-5 col-xs-5">
-
-		<iframe width="420" height="315" src="http://www.youtube.com/embed/liUQ4QP22ho?autoplay=0&fs=1&modestbranding=1"> </iframe>
-
-	</div>
-	
-	<div class="col-md-7 col-xs-7">
-		- Qoll (Discovery in motion)
-	</div>
-</div>
-
-
-</div>
+	{{> how_to_content_createqoll}}
 
 </template>
+
+
+<template name='how_to_content_joinqoll'>
+	<div class="container-fluid">
+		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
+
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
+				<div >Join Qoll</div>
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+		<!--/start contents here -->
+
+		<br />
+
+		<h5>Signing up</h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<dl class="dl-horizontal">
+				  <dt>(1) Register</dt>
+				  <dd>Click on <b>SignIn</b> button at the top right corner, and then click on <b>Create Account</b>. Input all the details, accept conditions and click on <b>Create</b>. Go to step (2) before you can sign-in</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(2) Verify Email</dt>
+				  <dd>You must have received an email from Qoll Admin. Check your registered email-id for it, and click on <b>Activate Qoll Account</b>. Once you have verified your email, you can use that to sign-into Qoll. You can also reset your password in case you forgot it.</dd>
+				</dl>
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+
+		<h5>Reset Password</h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<dl class="dl-horizontal">
+				  <dt>(1) Already Signed-In</dt>
+				  <dd>If you are already signed-in and want to change the password, click on your <b>profile-name</b> at the top right hand corner, and click on <b>Change Password</b>. Follow the instructions.</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(2) Not Signed-In</dt>
+				  <dd>Click on the <b>SignIn</b> button at the top right hand corner, and then click on the <b>Forgot password?</b>. This sends an email to your registered email. Check the email and click on <b>Reset password</b> and follow the instructions.</dd>
+				</dl>
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+		<h5>Profile Management</h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<dl class="dl-horizontal">
+				  <dt>View & Change Profile</dt>
+				  <dd>Click on your profile name at the top right hand corner, and then click on <b>View Profile</b> or <b>Edit Profile</b>.</dd>
+				</dl>
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+		<!--/end contents here -->
+		</div>
+	</div>
+</template>
+
+
+<template name='how_to_content_createqoll'>
+	<div class="container-fluid">
+		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
+
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
+				<div >Create Qoll</div>
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+		<!--/start contents here -->
+
+		<br />
+
+		<h5>Knowing Qoll Editor</h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<dl class="dl-horizontal">
+				  <dt>(1) Find the Editor</dt>
+				  <dd>After you have logged-in, Click on the <b>Box</b> and then locate <b>Q+</b> at the top. Click on it, and you shall be on the editor page.</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(2) Modes</dt>
+				  <dd>There are two sets of settings to choose from for editor <img style="max-width:100px; zoom: 400%;" src="/img/editor_modes.png"/></dd>
+				  <dd><b>Editor &rarrtl; Text</b> mode is the free form markdown editor. This is recommended editor for creating new Qolls.</dd>
+				  <dd><b>TeX Mode &rarrtl; MathJax</b> is the recommended mode for TeX rendering if you indend to write some.</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(3) Editor Options</dt>
+				  <dd>There are three input options <img style="max-width:100px; zoom: 600%;" src="/img/editor_options.png"/></dd>
+				  <dd><b>Share With &rarrtl;</b> You can add emails of the people you want to share the Qolls with.</dd>
+				  <dd><b>Topics &rarrtl;</b> If you want to arrange qolls with proper table of contents like a book, add topics.</dd>
+				  <dd><b>Tags &rarrtl;</b> Tags will be good for searching from qolls later, when you have too many to scroll through.</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(4) Editor Toolbar</dt>
+				  <dd>Knowing the toolbar options can be helpful for creating the qolls in the text editor<br/> <img style="max-width:100px; zoom: 600%;" src="/img/editor_toolbar.png"/><br/> You will be mostly using the first two options in the toolbar since it gives you a shell question right away.</dd>
+
+				  <dd><b>Q(fib)+ - </b> This quickly creates a fill in the blanks question. We will explain more about fill in the blanks later.</dd>
+
+				  <dd><b>Q(multi)+ - </b> This quickly creates a multiple choice question. We will explain more about multiple choice questions later.</dd>
+
+				  <dd><b>AddChoice - </b> this adds a new choice to a multiple choice question. You may also want to just go to a newline and type <b>-</b> followed by a space to add a new choice.</dd>
+
+				  <dd><b>LabelCorrect - </b> this quickly makes a choice correct in multiple choice questions. However, there is a quicker short cut for this. We will explain more in details later.</dd>
+
+				  <dd><b>Attach - </b> gives you option to load new pictures and then attach that to your question. You should go to a newline before choices to attach a new image. You will see some kind of id when you finish attaching; do not modify it.</dd>
+
+				  <dd><b>TeX - </b> press this to quickly add tags for TeX expressions at the place of cursor.</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(5) Editor </dt>
+				  <dd>The editor is devided equally in two parts. One for typing and the other to quickly show you preview of how the qoll will look like when used later.</dd>
+				</dl>
+
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+		<h5><b>Qoll (basics)</b></h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<dl class="dl-horizontal">
+				  <dt>#</dt>
+				  <dd>Every qoll, whether multiple choice or fill in the blanks, will always start with a <b>#</b> followed by a blank space</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>_blanks_</dt>
+				  <dd>In a fill in the blank question, the value that the student has to fill will be contained between two underscores. When we parse the text on server, we store this as answe and do not show it to the student.</dd>
+
+				  <dd>Here is a simple fill in the blanks question and how it will look - <img style="max-width:200px; zoom: 400%;" src="/img/fib_preview.png"/></dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>Multiple choice question</dt>
+				  <dd>A multiple choice question has three basic parts -</dd>
+				  <dd><b>#</b> - as explained in blanks, put the starting some portion of question starting with #</dd>
+				  <dd><b>*text</b> - This will be rest of the text of the question</dd>
+				  <dd><b>- </b> The options for multiple choice will start with a dash.</dd>
+
+				  <dd>Here is a simple multiple-choice question and how it will look - <img style="max-width:200px; zoom: 400%;" src="/img/mcq_preview.png"/></dd>
+				</dl>
+
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+
+		<h5><b>Qoll (Advanced)</b></h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<dl class="dl-horizontal">
+				  <dt>*hint </dt>
+				  <dd>You can add hints to a question, for which student will be penalized if used.</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>*answer </dt>
+				  <dd>You can add answers for a multiple choice question</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>*explanation </dt>
+				  <dd>You can add explanation/solution for a question, which is shown to the student after submission.</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>Sample </dt>
+				  <dd><img style="max-width:200px; zoom: 400%;" src="/img/mcq_adv_preview.png"/></dd>
+				</dl>
+
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+		<!--/end contents here -->
+		</div>
+	</div>
+</template>
+
