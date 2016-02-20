@@ -2,15 +2,83 @@
 	{{> header_awesome}}
 
 	<br />
+	{{> how_to_toc}}
+
 	{{> how_to_content_joinqoll}}
 
 	{{> how_to_content_createqoll}}
 
+	{{> how_to_content_create_questionnaire}}
+
+	{{> how_to_content_groups}}
+
+</template>
+
+<template name='how_to_toc'>
+	<div class="container-fluid" id="toc">
+		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
+
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
+				<div >How to use Qoll</div>
+			</div>
+			<div class="col-md-1"></div>
+		</div>
+		<!--/start contents here -->
+
+		<br />
+
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<ul style="list-style: none; padding: 0; margin: 0;">
+					<li><h5><a target="_self" href="#content_joinqoll">Join Qoll</a></h5></li>
+					<ul>
+						<li>Signing Up - Register & Verify Email</li>
+						<li>Reset Password</li>
+						<li>Profile Management</li>
+					</ul>
+				</ul>
+				<ul style="list-style: none; padding: 0; margin: 0;">
+					<li><h5><a target="_self" href="#content_createqoll">Create Qoll</a></h5></li>
+					<ul>
+						<li>Knowing Qoll Editor</li>
+						<li>Qoll Basics</li>
+						<li>Qoll Advanced</li>
+					</ul>
+				</ul>
+				<ul style="list-style: none; padding: 0; margin: 0;">
+					<li><h5><a target="_self" href="#create_questionnaire">Create & Take Questionnaire</a></h5></li>
+					<ul>
+						<li>Box</li>
+						<li>All my qolls - Qolls</li>
+						<li>Draft Questionnaires</li>
+						<li>Sent Questionnaires</li>
+						<li>Inbox</li>
+						<li>Quicker page</li>
+					</ul>
+				</ul>
+				<ul style="list-style: none; padding: 0; margin: 0;">
+					<li><h5><a target="_self" href="#content_groups">Manage Groups</a></h5></li>
+					<ul>
+						<li>Groups</li>
+						<li>Share Circle</li>
+						<li>Subscriptions</li>
+					</ul>
+				</ul>
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+		<!--/end contents here -->
+		</div>
+	</div>
 </template>
 
 
 <template name='how_to_content_joinqoll'>
-	<div class="container-fluid">
+	<div class="container-fluid" id="content_joinqoll">
 		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
 
 		<div class="row">
@@ -18,7 +86,9 @@
 			<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
 				<div >Join Qoll</div>
 			</div>
-			<div class="col-md-1"></div>
+			<div class="col-md-1" style="float: right;">
+				<a target="_self" href="#toc">Top<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+			</div>
 		</div>
 		<!--/start contents here -->
 
@@ -78,7 +148,7 @@
 
 
 <template name='how_to_content_createqoll'>
-	<div class="container-fluid">
+	<div class="container-fluid" id="content_createqoll">
 		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
 
 		<div class="row">
@@ -86,7 +156,9 @@
 			<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
 				<div >Create Qoll</div>
 			</div>
-			<div class="col-md-1"></div>
+			<div class="col-md-1" style="float: right;">
+				<a target="_self" href="#toc">Top<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+			</div>
 		</div>
 		<!--/start contents here -->
 
@@ -193,8 +265,18 @@
 				</dl>
 
 				<dl class="dl-horizontal">
-				  <dt>Sample </dt>
-				  <dd><img style="max-width:200px; zoom: 400%;" src="/img/mcq_adv_preview.png"/></dd>
+				  <dt>TeX </dt>
+				  <dd>We have two modes of TeX rendering - 1) MathJax - open source and more general and 2) KTeX - Khan academy's light-weight TeX rendering script, limited to the fonts supplied by Khan Academy.<br/><br/> We recommend using MathJax mode.<br/><br/>You can embed TeX in the qolls by typing the TeX expression between <b>begin</b> and <b>end</b>. See how it is rendered in the attachment.<br/><br/><b>Note: </b> We support chemistry-TeX expressions also and you can simply type those also in the middle of begin and end anywhere in the Qoll.<br/><br/><b>Note:</b>Put one or more TeX expressions as per your need, but each has to be within begin and end to be rendered as TeX.<br/></dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>Sample with MathJax </dt>
+				  <dd><img style="max-width:200px; zoom: 400%;" src="/img/qolls_maths_preview.png"/></dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>Sample with ChemJax </dt>
+				  <dd><img style="max-width:200px; zoom: 400%;" src="/img/qolls_chemistry_preview.png"/></dd>
 				</dl>
 
 		    </div>
@@ -206,3 +288,136 @@
 	</div>
 </template>
 
+
+
+<template name='how_to_content_create_questionnaire'>
+	<div class="container-fluid" id="create_questionnaire">
+		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
+
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
+				<div >Create & Take Questionnaire</div>
+			</div>
+			<div class="col-md-1" style="float: right;">
+				<a target="_self" href="#toc">Top<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+			</div>
+		</div>
+		<!--/start contents here -->
+
+		<br />
+
+		<h5><b>Box</b></h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+				<dl class="dl-horizontal">
+				  <dt>Box</dt>
+				  <dd>Once you have signed in, click on the <b>Box</b> in the header. Box has few pages that lets you manage your Qolls and Questionnaires. Lets talk in detail about each of the tabs on the vertical menu bar</dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(1) Qolls</dt>
+				  <dd>Qolls is the last menu option on the vertical left hand bar under <b>Qoll Mgmt</b>. This is where you will see all the Qolls you created or have access to. Click on it and follow the next set of instructions.</dd><br/>
+				  <dd><b>Search: </b>Search box is located at the top of the page. You can start typing in the box, simple text or probable tags of your query and narrow down the search results.</dd><br/>
+				  <dd><b>Flat or Folder: </b>Flat presentation shows all the Qolls withou any content information. Folder will arange the Qolls as per the table of contents. You can navigate through the tree of table of contents and narrow down the results.</dd><br/>
+				  <dd><b>View Qoll: </b>You can click on the Qolls and see it in details.</dd>
+				  <dd><b>Delete & Edit: </b>If you are the owner or have full access to the Qoll, you will see the delete or edit buttons on the right side.</dd><br/>
+				  <dd><b>Create Questionnaire: </b>Select the Qolls by clicking the checkboxes. Once you are done selecting, you will see a green box at the bottom right corner. Click on that and a pop-up will showup with all the Qolls you selected.</dd>
+				  <dd>Select the Qolls by clicking the checkboxes. Once you are done selecting, you will see a green box at the bottom right corner. Click on that and a pop-up will showup with all the Qolls you selected.<img style="max-width:200px; zoom: 400%;" src="/img/select_qolls.png"/></dd><br>
+				  <dd>Clicking green box will slide up the questionnaire. Populate it with appropriate title, tag, topics, recipient, and deadline if any. At the bottom, you will see two options - (1) Store and (2) Send. (1) Store will not send the questionnaire to the recipient right away but store it in the <b>Draft</b>. (2) Send will send the questionnaire directly to the recipient.<br/><img style="max-width:200px; zoom: 150%;" src="/img/create_questionnaire.png"/></dd><br>
+
+				  <dd><b>Pts: </b>By default, 10 points are assigned to each questionnaire, but you can change it based on the difficulty level of the qoll.</dd><br/>
+
+				  <dd><b>Hints: </b>By default, 30% points are deducted when a student uses hints to answer the question. You can set it to anything from 0% to 100%, and the deduction will happen accordingly.</dd><br/>
+				</dl>
+
+
+				<dl class="dl-horizontal">
+				  <dt>(2) Drafts</dt>
+				  <dd>Drafts is the menu option before Qolls. If you had stored any of the questionnaire, it will appear here. The questionnaire hasn't been sent to the recipient yet. You can click on the triangular icon and send it. An email with direct link to the questionnaire is also sent to the recipients.</dd><br/>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(3) Sent</dt>
+				  <dd>Sent is your sent-box. You will see all the questionnaires that you have selected and sent to some people. <br />Click on a questionnaire and it will take you to the statistics page. <br/> <br/> Graphical representation quickly tells you how many questions in the questionnaire were answered correctly/incorrectly. The graph is interactive and you can click on various parts of it to change the presentation, e.g. - click on the three bread-crums at the bottom where it says NA, Correct, and InCorrect.<br/><img style="max-width:200px; zoom: 250%;" src="/img/graphical_representation.png"/></dd><br/>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt>(4) Inbox</dt>
+				  <dd>All the questionnaires sent to you will always be in your <b>Inbox</b>. You can click on any and go to the page to view or complete it.<br/><img style="max-width:250px; zoom: 250%;" src="/img/inbox.png"/></dd><br/><br/>
+
+				  <dd>As a recipient, there are few things you need to know about this page. 1) If there is a hit button, click that with caution since it may have penalty. 2) Click on any of the alphabets to record your answer or fill in the blank space to answer for the fill in the blanks question. 3) Once you are done answering, scroll to the bottom of the page and submit the questionnaire. You will not be able to make changes after you have submitted the questionnaire. 4) You can put comments in the input box after every question. Other recipients or the author of questionnaire can respond to your comments.<br/><img style="max-width:250px; zoom: 250%;" src="/img/taking_questionnaire.png"/></dd><br/><br/>
+				</dl>
+
+
+				<dl class="dl-horizontal">
+				  <dt>(5) Quicker</dt>
+				  <dd>Quicker is meant to quickly test your understanding of the topic. If the author sent you a single question, it will appear in your Inbox as well as in Quicker.</dd>
+				</dl>
+		    </div>
+		    <div class="col-md-1"></div>
+		</div>
+
+		<!--/end contents here -->
+		</div>
+	</div>
+</template>
+
+
+<template name='how_to_content_groups'>
+	<div class="container-fluid" id="content_groups">
+		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
+
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
+				<div>Manage Groups</div>
+			</div>
+			<div class="col-md-1" style="float: right;">
+				<a target="_self" href="#toc">Top<span class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span></a>
+			</div>
+		</div>
+		<!--/start contents here -->
+
+		<br />
+
+		<h5><b>Groups</b></h5>
+		<div class="row">
+			<div class="col-md-1"></div>
+			<div class="col-md-10">
+
+				<dl class="dl-horizontal">
+				  <dt>&nbsp;</dt>
+				  <dd>This is a single page to help you manage groups. You can use the functionality on this page to very easily maintain and share the contents.<br/><br/></dd>
+				</dl>
+
+
+				<dl class="dl-horizontal">
+				  <dt><img style="max-width:20px; zoom: 250%;" src="/img/group_plus.png"/></dt>
+				  <dd>Click on G+ and input the details to create a new group. Subscribers can subscribe to your group later.<br/><br/></dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt><b>Share Circles</b></dt>
+				  <dd>If you plan to create lot of Qolls and use that with a big group of people, get in touch with us at Qoll, and we will help you setup a share-circle and add the users to the circle to have direct access to everything that you or your organization creates.<br/><br/>If you want to access our collection of Qolls, get in touch with us and we can work on that too.<br/><img style="max-width:250px; zoom: 250%;" src="/img/share_circle.png"/><br/></dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt><b>Group Subscriptions</b></dt>
+				  <dd>Start the search by typing email-id of the group owner. Select the group by clicking on it from the drop down. You can select multiple groups. Click on <b>Subscribe</b> to subscribe to the groups. Note: if it is a private grop, you will have to wait for the owner to approve.<br/><br/> Once you have subscribed to the group, you can start receive Qolls from the owners of the group.<br/><br/> To unsubscribe, click on <b>Leave</b> against the group.<br/><img style="max-width:250px; zoom: 250%;" src="/img/group_subscriptions.png"/></dd>
+				</dl>
+
+				<dl class="dl-horizontal">
+				  <dt><b>My Groups</b></dt>
+				  <dd>Manage your groups in this section. <br/><br/><b>Deleting</b> a group will take away all the Qolls that you ever published to the subscribers of that group.<br/><br/><b>Open Subscription Requests</b> section has all the approval request for your private groups. Approve or Deny user's request from this section.<br/><img style="max-width:250px; zoom: 250%;" src="/img/my_groups.png"/></dd>
+				</dl>
+
+		</div>
+		<div class="col-md-1"></div>
+	</div>
+
+	<!--/end contents here -->
+	</div>
+</div>
+</template>
