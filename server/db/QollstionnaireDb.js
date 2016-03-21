@@ -13,7 +13,7 @@ QollstionnaireFns = {
 
 /** New Set of methods tomanage qolls from new qoll-editor **/
 Meteor.methods({
-	addQollstionnaire : function(emailsandgroups, title, tags, topics, status, qollids, user_id, end_time, qoll_attributes, share_with) {
+	addQollstionnaire : function(emailsandgroups, title, tags, topics, status, qollids, user_id, end_time, qoll_attributes, share_with, coeditors) {
 		var qollstionnaire = {};
 
 
@@ -29,19 +29,24 @@ Meteor.methods({
 		qollstionnaire.submittedTo = eandg.submittedTo;
 		qollstionnaire.submittedToGroup = eandg.submittedToGroup;
 
+		var submittedToGroupIds = new Array();
+
 		qlog.info('==================+++++> ' + qollstionnaire.submittedTo, filename);
 
-		eandg.submittedToGroup.forEach(function(grp){
+		eandg.submittedToGroup.forEach(function(grp_id){
 			// Find all emailids in this group and push it in the submitted to
-			var grpemails = QollGroups.find({'submittedBy': Meteor.userId(), 'groupName' : grp},
-											{"_id": 1,'groupName':1, 'userEmails':1, 'submittedBy':2}).fetch();
+			var grpemails = QollGroups.findOne({_id : grp_id});
 
+
+			submittedToGroupIds.push(grpemails._id);
 
 			if(grpemails && grpemails.length > 0 && grpemails[0].userEmails)
 				grpemails[0].userEmails.forEach(function(emls){
 					qollstionnaire.submittedTo.push(emls);
 				});
 		});
+
+		qollstionnaire.submittedToGroup = submittedToGroupIds;
 
 		var user = undefined;
 		var ufound = Meteor.users.find({ "_id" : this.userId }).fetch();
@@ -76,7 +81,19 @@ Meteor.methods({
 		qollstionnaire.end_time = end_time;
 		qollstionnaire.qoll_attributes = qoll_attributes;
 		qollstionnaire.share_circle = share_circle;
+		qollstionnaire.coeditor_ids = new Array();
 
+		coeditors.forEach(function(coeditor){
+			var coe_user=Meteor.users.findOne({ "profile.email" : coeditor });
+	        if(!coe_user) {
+	            coe_user=Meteor.users.findOne({ "emails.address" : coeditor });
+	        }
+
+	        if(coe_user) qollstionnaire.coeditor_ids.push(coe_user._id);
+		});
+
+		qollstionnaire.coeditors = coeditors;
+		
 		// store the shared with group information here
 		var qry = {createdBy : Meteor.userId(), 
 								status: QollConstants.STATUS.ACTIVE, 
@@ -273,5 +290,36 @@ Meteor.methods({
 		} else if(email_id) {
 			// ensure that the email-id is of the right person and then update the comment for email-id
 		}
+	},
+	addGroupToQuestionnaire : function(groups, questionnaire_id) {
+		//TODO: Update the questionnaire and set the groups in it
+		var qry = {_id : {$in : groups}, status: QollConstants.STATUS.ACTIVE};
+		var groups_1 = Groups.fetchForQuery(qry).fetch();
+		qlog.info('Found groups to add to questionnaire ------> ' + questionnaire_id + '/' + this.userId + '/' +JSON.stringify(groups_1), filename);
+
+		var questionnaire = Qollstionnaire.findOne({'_id' : questionnaire_id});
+
+		var submittedToGroup = questionnaire.submittedToGroup;
+
+		groups_1.forEach(function(grp){
+			if(_.indexOf(submittedToGroup, grp._id)  === -1)
+				submittedToGroup.push(grp._id);
+		});
+
+		Qolls.QollstionnaireDb.update({'_id' : questionnaire_id}, {'submittedToGroup' : submittedToGroup});
+
+	},
+	removeGroupFromQuestionnaire : function(group_id, questionnaire_id) {
+		var questionnaire = Qollstionnaire.findOne({'_id' : questionnaire_id});
+		var submittedToGroup = questionnaire.submittedToGroup;
+
+		var groups = new Array();
+
+		submittedToGroup.forEach(function(grp_id){
+			if(grp_id != group_id)
+				groups.push(grp_id);
+		});
+
+		Qolls.QollstionnaireDb.update({'_id' : questionnaire_id}, {'submittedToGroup' : groups});
 	}
 });

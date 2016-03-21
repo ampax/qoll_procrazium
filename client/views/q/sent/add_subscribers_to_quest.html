@@ -1,0 +1,111 @@
+<template name="add_subscribers_to_quest">
+	{{> header_awesome page_label="SENT BOARD"}}
+
+	<div id="wrapper">
+		<!-- Sidebar -->
+		<!-- {{> qoll_side_nav}} -->
+
+		{{> all_side_nav}}
+
+		<!-- Page content -->
+		<div id="page-content-wrapper">
+			<div class="page-header">
+			  <h1><u>Q:</u> {{questionaire.title}}</h1>
+			</div>
+		
+			{{> add_subscriber }}
+
+			{{> questionnaire_preview}}
+		</div>
+	</div>
+</template>
+
+
+<template name="add_subscriber">
+	<div class="container-fluid">
+		<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 45px 15px 15px; margin: 0 4px 15px; border-style: solid;">
+			
+			{{#autoForm schema=customGroupSubscribeSchema resetOnSuccess="true" id="AddGroupToQuestionnaireForm" type="normal" doc=mydoc}}
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10" style="    margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
+					<div>Add Groups To Questionnaire</div>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+						          formid="AddGroupToQuestionnaireForm" name="group_name"
+						          renderKey="name" fieldref="group_ref" call="fetch_my_groups" 
+						          renderfunction="renderAddGroupsToQuestionnaire"}}
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+
+			<div class="row">
+				<div class="col-md-10"></div>
+				<div class="col-md-1">
+					<button type="submit" class="btn btn-primary">
+						<span class="glyphicon glyphicon-link" aria-hidden="true"></span>Add Group
+					</button>
+				</div>
+				<div class="col-md-1"></div>
+			</div>
+			{{/autoForm}}
+
+			{{> current_group_subscriptions }}
+
+		</div>
+	</div>
+</template>
+
+<template name="current_group_subscriptions">
+	<div class="row">
+		<div class="col-md-1"></div>
+		<div class="col-md-10">
+			<table class="table table-striped table-condensed table-hover">
+	        <thead>
+	          <tr>
+	            <th>Group</th>
+	            <th>Description</th>
+	            <th>Attributes</th>
+	            <th>&nbsp;</th>
+	          </tr>
+	        </thead>
+	        <tbody>
+			{{#each my_groups}}
+	            <tr>
+
+	            	<td>{{groupName}}</td>
+		            <td>{{groupDesc}}</td>
+	              	<td>Size : {{groupSize}}<br /> Access : {{pubOrPvt}}<br />  Author : {{author_email}}</td>
+	              	<td>
+	              		<button type="button" id="leave" class="btn btn-danger">
+	              			<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>Remove
+	              		</button>
+	              	</td>
+	            </tr>
+	        {{/each}}
+	        </tbody>
+	      	</table>
+	    </div>
+	    <div class="col-md-1"></div>
+	</div>
+</template>
+
+<template name="questionnaire_preview">
+	<div class="container-fluid container">
+
+		{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
+		
+	</div>
+</template>
+
+<template name="add_groups_to_questionnaire">
+    <td class="qoll-auto-complete qoll-comment-only-hover">
+    	<span class="qoll-comment-display-8"><u>{{this.group_ref}}</u></span>
+    </td>
+</template>

@@ -67,6 +67,36 @@ QollstionnaireController = RouteController.extend({
 	}
 });
 
+
+IdSubscribeToQuestionnaireController = RouteController.extend({
+	findOptions : function() {
+		console.log("looking for  id "+this.params._id );
+		return { sort : { submittedOn : -1 }, _id : this.params._id, stats : "yes",
+					context : QollConstants.CONTEXT.READ };
+	},
+	waitOn : function() {
+		Session.set('questionnaire_id', this.params._id);
+
+		return [Meteor.subscribe('QUESTIONNAIRE_PUBLISHER_TO_ADD_SUBSCRIBERS', this.findOptions()),
+				Meteor.subscribe('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', this.findOptions()),
+				Meteor.subscribe('QUESTIONAIRE_FOR_ID_PUBLISHER', this.findOptions()),
+				Meteor.subscribe('GROUPS_FOR_QUESTIONNAIRE_ID_PUBLISHER', this.findOptions())];
+				//QUESTIONNAIRE_PUBLISHER_TO_ADD_SUBSCRIBERS
+	},
+	data : function() {
+		//var t = QollForQuestionaireId.find().fetch();
+		//var g = t[0];
+		return { qollList : QollForQuestionaireId, 
+			qollResultList : QollForQuestionaireId.find().fetch(),
+			//mgroups : g.groups,
+			groups_for_quest : GroupsForQuestionnaireId.find({}).fetch()[0]
+		};
+	}
+});
+
+
+
+
 IdLookUpInboxController = RouteController.extend({
 	findOptions : function() {
 		console.log("looking for  id "+this.params._id );
@@ -265,6 +295,16 @@ Router.map(function() {
 		path : '/sent',
 		controller : SentController,
 	});
+
+
+	this.route('subscribeMoreToQuestionnaire', {
+		template : 'add_subscribers_to_quest',
+		path : '/subscribe_more/:_id',
+		controller: IdSubscribeToQuestionnaireController,
+	});
+
+
+	//IdSubscribeToQuestionnaireController
 
 	/******* Chemwiki route *****************/
 	this.route('sentView_chemwiki', {

@@ -75,15 +75,35 @@ Meteor.methods({
         qlog.info('groupName: ' +groupName+', groupDesc: '+ groupDesc+', userEmails: '+ userEmails+', domainSpec: '+ domainSpec+
             ', groupAccess: '+ groupAccess+', inviteOnly: '+ inviteOnly+', groupSize: '+ groupSize+', closedOrOpen: '+ closedOrOpen, filename);
         
+        var userIds = {};
+        var groupActualSize = 0;
+
+        userEmails.map(function(userEmail){
+            var user=Meteor.users.findOne({ "profile.email" : userEmail });
+            if(!user) {
+                user=Meteor.users.findOne({ "emails.address" : userEmail });
+            }
+
+            if(user) { // user is found in Qoll, populate the user-id in the group
+                userIds[user._id] = 'approved';
+            } else { // user does not exist in our system, we will send an email instead
+                userIds[userEmail] = 'approved';
+            }
+
+            groupActualSize = groupActualSize +1;
+        });
+
         var gpId = QollGroups.insert({
             'groupName' : groupName,
             'groupDesc' : groupDesc,
             'userEmails' : userEmails,
+            'userIds'   : userIds,
             'domainSpec' : domainSpec,
             'groupAccess'  : groupAccess,
             'pubOrPvt'  : groupAccess,
             'inviteOnly' : inviteOnly,
             'groupSize' : groupSize,
+            'groupActualSize' : groupActualSize,
             'closedOrOpen' : closedOrOpen,
             
             'createdOn' : new Date(),
@@ -263,8 +283,9 @@ updateUserGroupWithEmail = function(groupId, groupName, userEmail){
 
         var groupInfo = {};
         groupInfo['groupOwner'] = Meteor.userId();
-        groupInfo['groupId'] = groupId;
         groupInfo['groupName'] = groupName;
+        groupInfo['accessApproved'] = "approved";
+        groupInfo['groupId'] = groupId;
 
         if(user._id) {
             Meteor.users.update({ "emails.address" : userEmail }, {$push: {groups : groupInfo}}, function(error){

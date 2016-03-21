@@ -358,6 +358,15 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 		if (ufound.length > 0) {
 			var user = ufound[0];
 
+			var groups = user.groups;
+			if(!groups) groups = [];
+
+			var group_ids = [];
+			groups.map(function(group){
+				if(group.accessApproved === 'approved')
+					group_ids.push(group.groupId);
+			});
+
 			qlog.info('Found user - ' + JSON.stringify(user), filename);
 
 			var facebookQuestId = fetchUsersFacebookQuestionnaires(user._id);
@@ -366,7 +375,12 @@ Meteor.publish('RECVD_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 			//handle_questionaires = Qollstionnaire.find({'submittedBy' : this.userId,'status' : QollConstants.STATUS.SENT})
 
 			handle_questionaires = Qollstionnaire.find(
-				{$or: [{ 'submittedTo' : UserUtil.getEmail(user), 'status' : QollConstants.STATUS.SENT }, {_id : {$in : facebookQuestId}}]}, 
+				{$or: [
+						{ 'submittedTo' : UserUtil.getEmail(user), 'status' : QollConstants.STATUS.SENT }, 
+						{ _id : {$in : facebookQuestId}},
+						{ submittedToGroup : {$in : group_ids}}
+					]
+				},
 				{ sort : { 'submittedOn' : -1}, reactive : true }
 			).observe({
 				added : function(item, idx){
@@ -574,6 +588,294 @@ Meteor.publish('QUESTIONAIRE_FOR_ID_PUBLISHER', function(findoptions) {
 
 	self.onStop(function() {
 		if(handle_questionaires != undefined) handle_questionaires.stop();
+	});
+});
+
+	Meteor.publish('GROUPS_FOR_QUESTIONNAIRE_ID_PUBLISHER', function(findoptions) {
+		var user_id = this.userId;
+		var self = this;
+		var uuid = Meteor.uuid();
+		var initializing = true;
+		var handle_questionaires;
+
+		qlog.info('====================> ' + findoptions, filename);
+
+		if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
+			var tuid = this.userId ? this.userId : findoptions.userId;
+			var ufound = Meteor.users.find({
+				"_id" : tuid
+			}).fetch();
+
+			if (ufound.length > 0) {
+				var user = ufound[0];
+
+				qlog.info('Found user-id - ' + JSON.stringify(user), filename);
+
+				var resp = QollstionnaireResponses.findOne({
+					qollstionnaireid : findoptions._id,
+					usrid : user._id
+				});
+				qlog.info('=== === === ===> {'+findoptions._id+'}' + JSON.stringify(resp), filename);
+				handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
+					added : function(item, idx){
+						// collect groups for this questionnaire
+						var groups = new Array();
+						var group_ids = item.submittedToGroup;
+						qlog.info(group_ids, filename);
+						if(group_ids.length > 0) {
+							var groups_1 = Groups.fetchForQuery({_id : {$in : item.submittedToGroup}}).fetch();
+							
+							self.added('groups-for-questionaire-id', item._id+'_quest_id_groups', groups_1);
+						}
+					},
+					changed : function(item, idx) {
+						var groups = new Array();
+						var group_ids = item.submittedToGroup;
+						if(group_ids.length > 0) {
+							var groups_1 = Groups.fetchForQuery({_id : {$in : item.submittedToGroup}}).fetch();
+							
+							self.changed('groups-for-questionaire-id', item._id+'_quest_id_groups', groups_1);
+						}
+					},
+					removed : function(item){
+						self.removed('groups-for-questionaire-id', item._id+'_quest_id_groups');
+					}
+				});
+			}
+		}
+
+		qlog.info('Done initializing the qoll-for-questionaire-id: GROUPS_FOR_QUESTIONNAIRE_ID_PUBLISHER, uuid: ' + uuid, filename);
+		initializing = false;
+		self.ready();
+		//self.flush();
+
+		self.onStop(function() {
+			if(handle_questionaires != undefined) {
+				handle_questionaires.stop();
+			}
+		});
+	});
+
+	Meteor.publish('QUESTIONNAIRE_PUBLISHER_TO_ADD_SUBSCRIBERS', function(findoptions) {
+	var user_id = this.userId;
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var handle_questionaires;
+
+	qlog.info('====================> ' + findoptions, filename);
+
+	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
+		var tuid = this.userId ? this.userId : findoptions.userId;
+		var ufound = Meteor.users.find({
+			"_id" : tuid
+		}).fetch();
+
+		if (ufound.length > 0) {
+			var user = ufound[0];
+
+			qlog.info('Found user-id - ' + JSON.stringify(user), filename);
+
+			var resp = QollstionnaireResponses.findOne({
+				qollstionnaireid : findoptions._id,
+				usrid : user._id
+			});
+			qlog.info('=== === === ===> {'+findoptions._id+'}' + JSON.stringify(resp), filename);
+			handle_questionaires = Qollstionnaire.find({'_id' : findoptions._id}).observe({
+				added : function(item, idx){
+					var qolls = [];
+					var counter = 1;
+					item.qollids.map(function(qid){
+						
+						var q = Qoll.find({_id : qid}).map(function(t){
+							var thisresponse; 
+							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
+							var used_hint = resp && resp.responses[qid] ? resp.responses[qid].usedHint : undefined;
+							
+							var q2 = extractQollDetails(t);
+							q2.myresponses = thisresponse;
+							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
+							q2.qoll_idx_title = '(Q'+counter+++')';
+							q2.context = findoptions.context;
+
+							q2.show_result = user._id === item.submittedBy || resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed';
+
+							if(q2.show_result && response) q2.qoll_response = response;
+
+							if(item.qoll_attributes)
+								q2.qoll_attributes = item.qoll_attributes[t._id];
+
+							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
+								if(response != undefined)
+									q2.fib = response.response;
+								else q2.fib = [];
+							}
+
+							q2 = QollRandomizer.randomize(q2);
+
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
+
+							//if submitted, do not let register any more answers
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
+								q2.context = QollConstants.CONTEXT.READ;
+							} else {
+								q2.explanation = undefined;
+							}
+
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed' || findoptions.context === QollConstants.CONTEXT.READ) {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+							} else {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								/** q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email); **/
+							}
+
+							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
+
+							qolls.push(q2);
+						});
+					});
+
+					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id,
+								 status : item.status, qollstionnaireClosed : item.qollstionnaireClosed, 
+								 qollstionnaireClosedOn : item.qollstionnaireClosedOn, qollAttributes : item.qoll_attributes};
+
+					if(resp && resp.qollstionnaireSubmitted == true) {
+						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						quest.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
+
+					if(user._id === item.submittedBy) {
+						// send more information at the questionnaire level so that owner gets to see how people have responded
+						quest.questSubmittedTo  = item.submittedTo;
+						quest.questResponse = getQuestionnaireResponses(item);
+					}
+
+					// collect groups for this questionnaire
+					var groups = new Array();
+					var group_ids = item.submittedToGroup;
+					qlog.info(group_ids, filename);
+					if(group_ids.length > 0) {
+						var groups_1 = Groups.fetchForQuery({_id : {$in : item.submittedToGroup}}).fetch();
+						groups_1.forEach(function(grp){
+							groups.push(grp);
+						});
+					}
+
+					qlog.info('Pushing qolls to client ++++++++++++++++++> ' + JSON.stringify(quest), filename);
+
+					var pub = {qolls : qolls, questionaire : quest, groups : groups};
+
+					if(quest.questResponse || resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
+						pub.stats = quest.questResponse.stats;
+					}
+
+					self.added('qoll-for-questionaire-id', item._id, pub);
+				},
+				changed : function(item, idx) {
+					var qolls = [];
+					var counter = 1;
+					item.qollids.map(function(qid){
+						
+						var q = Qoll.find({_id : qid}).map(function(t){
+							var thisresponse; 
+							thisresponse = resp && resp.responses[qid]? resp.responses[qid].response:new Array(t.qollTypes?t.qollTypes.length:0) ;
+							var response = resp && resp.responses[qid] ? resp.responses[qid] : undefined;
+							
+							var q2 = extractQollDetails(t);
+							q2.myresponses = thisresponse;
+							q2._qollstionnaireid = findoptions._id;
+							q2.idx = counter;
+							q2.qoll_idx_title = '(Q'+counter+++')';
+							q2.context = findoptions.context;
+							
+							q2.show_result = user._id === item.submittedBy || resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed';
+
+							if(q2.show_result && response) q2.qoll_response = response;
+
+							if(item.qoll_attributes)
+								q2.qoll_attributes = item.qoll_attributes[t._id];
+
+							if(findoptions.context === QollConstants.CONTEXT.WRITE) {
+								if(response != undefined)
+									q2.fib = response.response;
+								else q2.fib = [];
+							}
+
+							q2 = QollRandomizer.randomize(q2);
+
+							// q2 = QollKatexUtil.populateIfTex(q2, t);
+
+							//if submitted, do not let register any more answers
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
+								q2.context = QollConstants.CONTEXT.READ;
+							} else {
+								q2.explanation = undefined;
+							}
+
+							if(resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed' || findoptions.context === QollConstants.CONTEXT.READ) {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+							} else {
+								q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								/** q2.comments = item.qolls_to_comments? item.qolls_to_comments[qid] : [];
+								q2.comments = filterCommentForWriteCtx(q2.comments, user.profile.email); **/
+							}
+
+							qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(q2.fib), filename);
+
+							qolls.push(q2);
+						});
+					});
+
+					var quest = {questTitle : item.title, questSize	: item.qollids.length, questId : item._id,
+								 status : item.status, qollstionnaireClosed : item.qollstionnaireClosed, 
+								 qollstionnaireClosedOn : item.qollstionnaireClosedOn, qollAttributes : item.qoll_attributes};
+
+					if(resp && resp.qollstionnaireSubmitted == true) {
+						quest.qollstionnaireSubmitted 	= resp.qollstionnaireSubmitted;
+						quest.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
+					}
+
+					if(user._id === item.submittedBy) {
+						// send more information at the questionnaire level so that owner gets to see how people have responded
+						quest.questSubmittedTo  = item.submittedTo;
+						quest.questResponse = getQuestionnaireResponses(item);
+					}
+
+					var groups = new Array();
+					var group_ids = item.submittedToGroup;
+					if(group_ids.length > 0) {
+						groups.concat(Groups.fetchForQuery({_id : {$in : item.submittedToGroup}}).fetch());
+					}
+
+					var pub = {qolls : qolls, questionaire : quest, groups : groups};
+
+					if(quest.questResponse || resp && resp.qollstionnaireSubmitted == true || item.qollstionnaireClosed === 'closed') {
+						pub.stats = quest.questResponse.stats;
+					}
+
+					//qlog.info('Pushing qolls to client ---------------> ' + JSON.stringify(qolls), filename);
+
+					self.changed('qoll-for-questionaire-id', item._id, pub);
+				},
+				removed : function(item){
+					self.removed('qoll-for-questionaire-id', item._id);
+				}
+			});
+		}
+	}
+
+	qlog.info('Done initializing the qoll-for-questionaire-id: QUESTIONNAIRE_PUBLISHER_TO_ADD_SUBSCRIBERS, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(handle_questionaires != undefined) {
+			handle_questionaires.stop();
+		}
 	});
 });
 

@@ -123,6 +123,8 @@ Qolls.QollstionnaireDb = {
 			qoll_attributes				: qollstionnaire.qoll_attributes,
 			total_weight				: qollstionnaire.total_weight,
 			share_with					: qollstionnaire.share_with,
+			coeditor					: qollstionnaire.coeditor,
+			coeditor_ids				: qollstionnaire.coeditor_ids,
 			share_circle				: qollstionnaire.share_circle,
 		});
 

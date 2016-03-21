@@ -361,11 +361,15 @@ Meteor.publish('USER_SUBSCRIPT_GROUPS', function() {
           var handle_grp = QollGroups.find({_id : {$in : group_ids}, status : {$ne : QollConstants.STATUS.ARCHIVE}}, {reactive : true}).observe({
             added : function(grp, idx){
               //qlog.info('Adding - ' + JSON.stringify(grp), filename);
+              var gru = Meteor.users.find({_id : grp.submittedBy}).fetch();
+              grp.author_email = gru[0].profile.name;
               grp.accessApproved = group_id_to_status[grp._id];
               self.added('user-subscription-groups', grp._id, grp);
             },
             changed : function(grp, idx){
               //qlog.info('Changing - ' + JSON.stringify(grp), filename);
+              var gru = Meteor.users.find({_id : grp.submittedBy}).fetch();
+              grp.author_email = gru[0].profile.name;
               grp.accessApproved = group_id_to_status[grp._id];
               self.changed('user-subscription-groups', grp._id, grp);
             },
@@ -600,7 +604,7 @@ Meteor.methods({
   },
   fetch_my_groups: function(query){
 
-        qlog.info("Getting groups for my-groups in Query====: " + query, filename);
+        qlog.info("Getting groups for my-groups in QueryXYXYXYXYXYXYXXYXYXYXYXYX====: " + query, filename);
         
         if(query.search(/,/) != -1) {
           var query = split(query);
@@ -616,8 +620,9 @@ Meteor.methods({
                             'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}}).fetch();
           // var tags = QollTags.find({'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}} ).fetch();
           grps.forEach(function(t){
-            qlog.info('Group ---------->' + JSON.stringify(t));
-            results.push({'group_name' : t.groupName, 'group_desc' : t.groupDesc, 'group_id' : t._id, 'group_ref' : t.groupName + '('+t.groupDesc+')' });
+            qlog.info('GroupXXXXXXYYYYYYYYVVVVVVBBBBBB ---------->' + JSON.stringify(t));
+            //results.push({'group_name' : t.groupName, 'group_desc' : t.groupDesc, 'group_id' : t._id, 'group_ref' : t.groupName + '('+t.groupDesc+')' });
+            results.push({'name': t.groupName, 'group_name' : t.groupName, 'group_desc' : t.groupDesc, 'group_id' : t._id, 'group_ref' : t.groupName + '('+t.groupDesc+', ID: '+ t._id +')' });
           });
         }
 

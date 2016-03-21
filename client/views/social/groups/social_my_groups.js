@@ -12,17 +12,18 @@ var GroupSubscribeHooks = {
         group_name_str.forEach(function(gn){
         	var matches = QollRegEx.groupForAuthor.exec(gn);
         	//groups.push({'group_name' : matches[1], 'author' : matches[2]});
-        	var group_name = matches[1], author_email = matches[2];
-        	qlog.info('**'+group_name+'**'+author_email+'**', filename);
+        	var group_name = matches[1], author_email = matches[2], group_id = matches[3];
+        	qlog.info('**'+group_name+'**'+author_email+'**'+group_id+'**', filename);
+        	
 
-        	Meteor.call('subscribeToGroup', group_name, author_email, function(err, message) {
+        	Meteor.call('subscribeToGroup', group_name, author_email, group_id, function(err, message) {
         		console.log(err);
         		console.log(message);
 				var cls = '.scs-msg';
 				var msg;
 				if (err) {
 					cls = '.err-msg';
-					msg = 'Failed subscribing to the group: ' + group_name + '('+ author_email +') ...';
+					msg = 'Failed subscribing to the group: ' + group_name + '('+ author_email + '/' + group_id + ') ...';
 					qlog.error('Failed subscribing to the group: ' + group_name + '('+ author_email +')' + err, filename);
 				} else {
 					if(HashUtil.checkHash(message, 'err_msg')) {
@@ -132,7 +133,7 @@ Template.social_my_groups.helpers({
 	    	subsc_grps.forEach(function(qg){
 	    		qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
 	    		// doc.group_name.push(qg.groupDesc);
-	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+')');
+	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+', ID: '+ qg._id +')');
 	    	});
 	    }
 
@@ -156,7 +157,7 @@ Template.subsc_templ.helpers({
 	    	subsc_grps.forEach(function(qg){
 	    		qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
 	    		// doc.group_name.push(qg.groupDesc);
-	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+')');
+	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+', ID: '+ qg._id +')');
 	    	});
 	    }
 
@@ -240,18 +241,18 @@ Template.subsc_templ.helpers({
 	    var doc = {};
 	    doc.group_name = new Array();
 
-	    var subsc_grps = UserSubscGroups.find().fetch();
+	    /** var subsc_grps = UserSubscGroups.find().fetch();
 	    qlog.info('-------------> ' + JSON.stringify(subsc_grps), filename);
 
 	    if(subsc_grps && subsc_grps.length > 0){
 	    	subsc_grps.forEach(function(qg){
 	    		qlog.info('.............................>>>>>>'+JSON.stringify(qg), filename);
 	    		// doc.group_name.push(qg.groupDesc);
-	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+')');
+	    		doc.group_name.push(qg.groupName + '(Author: '+Meteor.user().profile.email+', ID: '+ qg._id +')');
 	    	});
 	    }
 
-	    qlog.info('----------> '+JSON.stringify(doc), filename);
+	    qlog.info('----------> '+JSON.stringify(doc), filename); **/
 	    return doc;
 	},
 });

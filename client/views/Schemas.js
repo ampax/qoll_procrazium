@@ -75,6 +75,16 @@ Schemas.custom_group_subscribe = new SimpleSchema({
   },
 });
 
+Schemas.custom_group_subscribe_1 = new SimpleSchema({
+  group_name: {
+    type: [String],
+    label: "Group Name (Search by typing your group names)",
+    // regEx: SimpleSchema.RegEx.Email,
+    max: 500,
+    optional: true
+  },
+});
+
 Schemas.custom_collab_group= new SimpleSchema({
   collab_groups: {
     type: [String],
@@ -131,6 +141,12 @@ Schemas.custom_questionnaire = new SimpleSchema({
   send_to: {
     type: [String],
     label: "Send To",
+    max: 500
+  },
+  coeditor: {
+    type: [String],
+    label: "Co-Editor",
+    optional: true,
     max: 500
   },
   tags: {

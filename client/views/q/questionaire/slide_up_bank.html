@@ -53,7 +53,7 @@
 			    {{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
 		          formid="questionnaireForm" name="send_to"
 		          renderKey="name" fieldref="email" call="fetch_my_emails" 
-		          renderfunction="renderQollToEmails"}}
+		          renderfunction="renderQuestionnaireToEmails"}}
 		      </div>
 
 		      <div class="col-md-6 col-sm-6 col-xs-6">
@@ -62,13 +62,15 @@
 			  </div>
 			</div>
 
-			<!--div class="input-group input-group-sm minor-margin">
-				<span class="input-group-btn">
-			     	<button type="button" class="btn btn-primary qoll-width-1"  >Add Tags:<sup class="red">*</sup></button>
-			    </span>
-		    
-				 <input type="text" class="form-control" placeholder="Add Tags: Space separated tags ..." default="" id="add-tags" data-intro="Start by creating space separated tags fo searching later ..." data-step="1">
-			</div-->
+			<div class="row">
+				<div class='col-md-12 col-sm-12 col-xs-12'>
+
+			    {{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+		          formid="questionnaireForm" name="coeditor"
+		          renderKey="email" fieldref="email" call="fetch_all_emails" 
+		          renderfunction="renderEmails"}}
+		      </div>
+			</div>
 
 		<br>
 		</div>
@@ -116,4 +118,9 @@
 
 <template name="topics_autocomplete">
     <td class="qoll-auto-complete">{{this.topic}}</td>
+</template>
+
+
+<template name="questionnaire_send_to">
+    <td class="qoll-auto-complete">{{this.name}} <b>ID: {{this.email}}</b></td>
 </template>

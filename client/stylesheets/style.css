@@ -290,6 +290,14 @@ a:hover, a:active {
     background-color: orange;
 }
 
+.bg-brown {
+    background-color: brown;
+}
+
+.brown {
+    color: brown;
+}
+
 .orange {
     color: orange;
 }

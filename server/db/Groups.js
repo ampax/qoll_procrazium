@@ -7,7 +7,7 @@ GroupsTbl = new Meteor.Collection("GROUPS");
 Groups = {};
 
 Groups.fetch = function(userId) {
-	return GroupsTbl.find({created_by : userId, status: QollConstants.STATUS.ACTIVE})
+	return GroupsTbl.find({created_by : userId, status: QollConstants.STATUS.ACTIVE});
 };
 
 Groups.fetchForQuery = function(qry) {
@@ -62,7 +62,7 @@ Meteor.methods({
 	fetchGroups : function(userId){
 		return Groups.fetch(userId);
 	},
-	subscribeToGroup : function(group_name, author_email) {
+	subscribeToGroup : function(group_name, author_email, group_id) {
 		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
 		/** Fix adding the group of legacy users **/
 		var handle_usr = Meteor.users.findOne({'profile.email' : author_email});
@@ -74,7 +74,11 @@ Meteor.methods({
 		var my_id = Meteor.userId();
 		var handle_me = Meteor.users.findOne(my_id);
 
-		var handle_gp = QollGroups.findOne({'submittedBy': author_id, 'groupName' : group_name});
+		var handle_gp = QollGroups.findOne({_id : group_id, 'submittedBy': author_id, 'groupName' : group_name});
+		var groupActualSize = handle_gp.groupActualSize;
+		if(!groupActualSize) groupActualSize = 0;
+		var userIds = handle_gp.userIds;
+		if(!userIds) userIds = {};
 
 		var is_private = handle_gp.groupAccess === 'private';
 		var access_approved = is_private? 'pending' : 'approved';
@@ -106,7 +110,9 @@ Meteor.methods({
 			if(!_.contains(userEmails, handle_me.profile.email)) {
 				qlog.info('Pushing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
 				userEmails.push(handle_me.profile.email);
-				QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmails}});
+				userIds[my_id] = access_approved;
+				groupActualSize = groupActualSize+1;
+				QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmails, userIds : userIds, groupActualSize : groupActualSize}});
 			} else {
 				qlog.info('Not Pusing to the usermeials - ' + userEmails + '/' + handle_me.profile.email);
 			}
@@ -180,6 +186,8 @@ Meteor.methods({
 	unSubscribeUserFromGroup : function(group_id, user_id) {
 		// find the group to unsubscribe from
 		var handle_gp = QollGroups.findOne({'_id': group_id});
+		var userIds = handle_gp.userIds;
+		delete userIds[user_id];
 		//var handle_usr = Meteor.users.findOne({ $or: [{'profile.email' : author_email}, {'user.emails.address' : author_email}] });
 		/** Fix adding the group of legacy users **/
 		var handle_usr = Meteor.users.findOne(handle_gp.submittedBy);
@@ -231,7 +239,7 @@ Meteor.methods({
 				}
 			});
 
-			QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmailsModified}});
+			QollGroups.update({_id : handle_gp._id}, {$set: {userEmails : userEmailsModified, userIds : userIds}});
 
 			Meteor.users.update({_id : user_id}, {$set: {groups : just_groups_modified}});
 		}
@@ -360,6 +368,13 @@ Meteor.methods({
 			groups_modified.push(g);
 		});
 
+		// update the user and set access as approved for the group
 		Meteor.users.update({_id : user_id}, {$set: {groups : groups_modified}});
+
+		// update the group and set the access for this user approved
+		var handle_gp = QollGroups.findOne({_id : group_id});
+		var userIds = handle_gp.userIds;
+		userIds[user_id] = 'approved';
+		QollGroups.update({_id : handle_gp._id}, {$set: {userIds : userIds}});
 	}
 });

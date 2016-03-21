@@ -15,15 +15,15 @@ var QuestionnaireHooks = {
         this.event.preventDefault();
 
         var share_with = insertDoc.share_with;
-
-        qlog.info('-----------------------> ' + share_with, filename);
-        
         var title = insertDoc.title;
         var tags = insertDoc.tags;
         var topics = insertDoc.topics;
         var end_time = insertDoc.end_time;
         var send_to = insertDoc.send_to;
+        var coeditor = insertDoc.coeditor;
         var state = insertDoc.state;
+
+        qlog.info('-----------------------> ' + coeditor, filename);
 
         var qoll_attributes = {};
 
@@ -53,7 +53,7 @@ var QuestionnaireHooks = {
           return false;
         }
 
-        var jsn = {title : title, tags : tags, topics : topics, end_time : end_time, recips : send_to, action : state, allqollids : allqollids, qoll_attributes : qoll_attributes, share_with : share_with};
+        var jsn = {title : title, tags : tags, topics : topics, end_time : end_time, recips : send_to, action : state, allqollids : allqollids, qoll_attributes : qoll_attributes, share_with : share_with, coeditor : coeditor};
 
         qlog.info(JSON.stringify(jsn), filename);
 
@@ -441,9 +441,9 @@ var createQuestionnaire = function(jsn) {
 
     qollstionnaire.end_time = jsn.end_time;
 
-    qollstionnaire.share_with - jsn.share_with;
+    qollstionnaire.share_with = jsn.share_with;
 
-    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, qollstionnaire.topics, jsn.action, allqollids, undefined, jsn.end_time, jsn.qoll_attributes, jsn.share_with, function(err, qollstionnaire_id) {
+    Meteor.call("addQollstionnaire", emailsandgroups, title.trim(), tagArr, qollstionnaire.topics, jsn.action, allqollids, undefined, jsn.end_time, jsn.qoll_attributes, jsn.share_with, jsn.coeditor, function(err, qollstionnaire_id) {
       var target = jQuery(".qbank-error-msg");
       if (err) {
         qlog.info('Error occured storing the master qoll. Please try again.' + err, filename);
@@ -506,6 +506,13 @@ renderTopics = function(x) {
     // qlog.info('called render qoll to emails method', filename);
     //console.log(x);
     return Blaze.toHTMLWithData(Template.topics_autocomplete, x);
+    // return x.email + x.name;
+};
+
+renderQuestionnaireToEmails = function(x) {
+    // qlog.info('called render qoll to emails method', filename);
+    // console.log(x);
+    return Blaze.toHTMLWithData(Template.questionnaire_send_to, x);
     // return x.email + x.name;
 };
 

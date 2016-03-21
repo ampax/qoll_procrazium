@@ -666,14 +666,14 @@ Meteor.methods({
         // push user groups here
         // QollGroups.find({'submittedBy':this.userId},{fields:{"_id": 1,'groupName':1,'submittedBy':2}});
         if(query != '') {
-          var user_groups = QollGroups.find({'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}, 'submittedBy':this.userId}, 
+          var user_groups = QollGroups.find({'groupName': {$regex: '^.*'+query+'.*$', $options: 'i'}, 'submittedBy':this.userId, status : {$ne : QollConstants.STATUS.ARCHIVE}}, 
             {"_id": 1,'groupName':1,'submittedBy':2}).fetch();
 
           //qlog.info('Social user data: ' + user_emails, filename);
 
           user_groups.forEach(function(gp){
             // qlog.info('Email for social connect is =======> ' + JSON.stringify(ue), filename);
-            results.push({'name' : gp.groupName, 'email' : gp.groupName});
+            results.push({'name' : gp.groupName, 'email' : gp._id});
           });
         }
 
@@ -709,8 +709,9 @@ Meteor.methods({
             if(ue.groupsCreated && ue.groupsCreated.length > 0) {
               // add all the user created groups to the array
               ue.groupsCreated.forEach(function(g){
-                results.push({'name' : ue.profile.name, 'email' : ue.profile.email, 
-                  'group_name' : g.groupName, 'group_id' : g.groupId, 'group_ref' : g.groupName + '(Author: '+ue.profile.email+')'});
+                var gr = Groups.fetchForQuery({_id : g.groupId, status : {$ne : QollConstants.STATUS.ARCHIVE}}).fetch();
+                if(gr.length > 0)
+                  results.push({'name' : ue.profile.name, 'email' : ue.profile.email, 'group_name' : gr[0].groupName, 'group_id' : gr[0]._id, 'group_ref' : gr[0].groupName + '(Author: '+ue.profile.email+', ID: '+ gr[0]._id +')'});
               });
             }
           });
