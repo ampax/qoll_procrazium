@@ -245,11 +245,11 @@ Meteor.publish('SENT_QUESTIONAIRE_PUBLISHER', function(findoptions) {
 
 			var query_array = [];
 			query_array.push({'submittedBy' : user._id,'status' : QollConstants.STATUS.SENT}); // questionnaires of me
+			query_array.push({coeditor_ids : {$in : [user._id]}});
 
 			var share_circle = user.share_circle;
 			if(share_circle && share_circle.length > 0) {
 				// add the query to compare the two arrays here
-				// query_array.push({'share_circle' : share_circle});
 				query_array.push({ share_circle: { $all: share_circle } }); // questionnaire created by those in my circle
 			}
 
@@ -1705,9 +1705,24 @@ var getQuestionnaireResponses = function(item) {
 		qoll_text_hash[qid] = {qollText : t.qollText, title : t.title, qollCat : t.cat, fib: t.fib, tex: t.tex};
 	});
 
-	item.submittedTo.map(function(subTo){
+	// submittedTo will always not have the group subscription, create a union of the two here
+	var submittedTo = item.submittedTo? item.submittedTo : new Array();
+	var submittedToGroup= item.submittedToGroup;
+	submittedToGroup.map(function(stg_id){
+		var handle_gp = QollGroups.findOne({_id : stg_id});
+
+		var userIds = handle_gp.userIds;
+
+		qlog.info('======>>>>>>>'+JSON.stringify(userIds) + '/' + stg_id, filename)
+
+		if(userIds) 
+			submittedTo = _.union(submittedTo, _.keys(userIds));
+
+	});
+
+	submittedTo.map(function(subTo){
 		//var u1 = Meteor.users.find({'emails.address' : subTo}).fetch();
-		var u1 = Meteor.users.find({'profile.email' : subTo}).fetch();
+		var u1 = Meteor.users.find({_id : subTo}).fetch();
 		var stat = {}; //{name : 'Anoop Kaushik', responses : [{response : 'A'}, {response : 'B,C'}]}
 		var responses = [];
 		var name = undefined;
@@ -1715,9 +1730,11 @@ var getQuestionnaireResponses = function(item) {
 		var resp_flag = false;
 
 		if(u1.length > 0) { 
+			stat.email = u1[0].profile.email;
 			name = u1[0].profile.name;
 			resp = QollstionnaireResponses.findOne({ qollstionnaireid : item._id, usrid : u1[0]._id });
 		} else {
+			stat.email = subTo;
 			name = subTo;
 			resp = QollstionnaireResponses.findOne({ qollstionnaireid : item._id, email : subTo });
 		}
@@ -1786,7 +1803,6 @@ var getQuestionnaireResponses = function(item) {
 		}**/
 
 		stat.name = name;
-		stat.email = subTo;
 		stat.questionaire_id = item._id;
 		stat.responses = responses;
 
