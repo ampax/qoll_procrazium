@@ -887,7 +887,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 	var initializing = true;
 	var handle_questionaires;
 
-	qlog.info('====================> ' + findoptions, filename);
+	qlog.info('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER ====================> ' + findoptions, filename);
 
 	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
 		var tuid = this.userId ? this.userId : findoptions.userId;
@@ -971,7 +971,8 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						quest.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
 					}
 
-					if(user._id === item.submittedBy) {
+					// show stats if the user is the owner or user is co-editor
+					if(user._id === item.submittedBy || item.coeditor_ids && _.indexOf(item.coeditor_ids, user._id)!=-1 ) {
 						// send more information at the questionnaire level so that owner gets to see how people have responded
 						quest.questSubmittedTo  = item.submittedTo;
 						quest.questResponse = getQuestionnaireResponses(item);
@@ -1051,7 +1052,7 @@ Meteor.publish('QOLL_FOR_QUESTIONAIRE_ID_PUBLISHER', function(findoptions) {
 						quest.qollstionnaireSubmittedOn 	= resp.qollstionnaireSubmittedOn;
 					}
 
-					if(user._id === item.submittedBy) {
+					if(user._id === item.submittedBy || item.coeditor_ids && _.indexOf(item.coeditor_ids, user._id)!=-1 ) {
 						// send more information at the questionnaire level so that owner gets to see how people have responded
 						quest.questSubmittedTo  = item.submittedTo;
 						quest.questResponse = getQuestionnaireResponses(item);

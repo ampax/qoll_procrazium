@@ -143,9 +143,9 @@ Template.view_inbox_board.rendered = function(){
 	var dt_now = new Date();
 	var dt_str = $('#countdown').html();
 
-	if (dt_str === ' ' || dt_str === '') return;
-
 	var dt = new Date(dt_str);
+	if (dt_str === ' ' || dt_str === '' || dt_str === ' ' || isNaN( dt.getTime() )) return;
+
 	var dt1 = moment(dt).format('YYYY/MM/DD hh:mm:ss A');
 
 	console.log(dt+'bbbbbbbb'+dt_str+'<-xxxxxxxxxxxxxxxxxxxxxxxxxxx-> '+dt1);

@@ -7,30 +7,57 @@
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
-			<div class="container-fluid container">
+			<!-- Questionnaire summary -->
+			<div class="container-fluid">
+				<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 20px 30px 10px; margin: 0 4px 15px; border-style: solid;">
+
 				<div class="row">
-					<div class="col-md-1 col-sm-1 col-xs-12">
+					<div class="col-md-1">
 						<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
 						  <span class="glyphicon glyphicon-chevron-left">Back</span>
 						</button>
 					</div>
-					<div class="col-md-6 col-sm-6 col-xs-9" style="font-size: small; font-weight: bold;">
+					<div class="col-md-5" style="font-size: small; font-weight: bold;">
 						<span class="qoll-comment-display-5">Title: {{questionaire.title}} ({{questionaire.qoll_count}} qolls) </span>
-						<span class="qoll-comment-display-6">{{{questionaire.createdByName}}} </span> 
-						<span class="qoll-comment-display-7">{{{created_on questionaire.createdOn}}} </span>
-					</div>
-
-					<div class="col-md-2 col-sm-2 col-xs-1 qoll-comment-display-7" style="font-size: small; font-weight: bold;">
-						{{#if questionaire.total_weight_earned}}
-							{{questionaire.total_weight_earned}} /
-						{{/if}}
-						{{questionaire.total_weight}} Points
-					</div>
-
-					<div class="col-md-3 col-sm-3 col-xs-3" style="font-size: small; font-weight: bold;">
-						<div id="countdown">{{{deadline questionaire.end_time}}} </div>
 					</div>
 				</div>
+				<div class="row">
+					<div class="col-md-1" style="font-size: small; font-weight: bold;">
+						&nbsp;
+					</div>
+					<div class="col-md-3" style="font-size: small; font-weight: bold;">
+						<span class="qoll-comment-display-6">Author: {{{questionaire.createdByName}}} </span> 
+					</div>
+
+					<div class="col-md-3 qoll-comment-display-7" style="font-size: small; font-weight: bold;">
+						<span class="qoll-comment-display-7">Created: {{{created_on questionaire.createdOn}}} </span>
+					</div>
+
+					<div class="col-md-1 qoll-comment-display-7" style="font-size: small; font-weight: bold;">
+						Scored: {{#if questionaire.total_weight_earned}}
+							{{questionaire.total_weight_earned}}
+						{{else}}
+							0
+						{{/if}}
+					</div>
+
+					<div class="col-md-1 qoll-comment-display-7" style="font-size: small; font-weight: bold;">
+						Max: {{questionaire.total_weight}}
+					</div>
+
+					<div class="col-md-3" style="font-size: small; font-weight: bold;">
+						<div id="countdown">Deadline: {{{deadline questionaire.end_time}}} </div>
+					</div>
+				</div>
+				<!--/start contents here -->
+
+				<!--/end contents here -->
+				</div>
+			</div>
+
+
+			<div class="container-fluid container">
+				
 
 				{{> qolls_inner qollList = this.qollList  btns= inbox_board_btns }}
 				<br>

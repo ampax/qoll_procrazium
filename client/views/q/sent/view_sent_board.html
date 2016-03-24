@@ -8,23 +8,33 @@
 
 		<!-- Page content -->
 		<div id="page-content-wrapper">
+
+
+			<!-- Questionnaire summary -->
+			<div class="container-fluid">
+				<div style="border-color: #ddd; border-width: 1px; border-radius: 4px 4px 0 0; padding: 50px 100px 10px; margin: 0 4px 15px; border-style: solid;">
+
+				<div class="row" style="margin-top: -35px; margin-left: -99px; font-size: medium; color: #585765; font-weight: bold;">
+					<div class="col-md-1">
+						<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
+						  <span class="glyphicon glyphicon-chevron-left">Back</span>
+						</button>
+					</div>
+					<div class="col-md-3">Number of Qolls: {{questionaire.qoll_count}}</div>
+					<div class="col-md-3">Completion Rate: {{questionaire.respo_length}}</div>
+					<div class="col-md-2">Recipients: {{questionaire.recip_length}}</div>
+					<div class="col-md-3">&nbsp;</div>
+					
+				</div>
+				<!--/start contents here -->
+
+				<!--/end contents here -->
+				</div>
+			</div>
+
+			<!-- We will this part with the rest of the questionnaire ant not touch anything here -->
 			<div class="container-fluid container">
 
-				<div class="row">
-						
-						<div class="col-md-1 col-sm-1 col-xs-12">
-							<button type="button" id="bkButton" data-loading-text="Loading..." class="btn btn-primary">
-							  <span class="glyphicon glyphicon-chevron-left">Back</span>
-							</button>
-						</div>
-						<div class="col-md-11 col-sm-11 col-xs-12 list-group-item-align" style="font-size: medium; font-weight: bold;">
-							Title: {{questionaire.title}} ({{questionaire.qoll_count}})
-							Completion Rate &rarr; {{questionaire.respo_length}}/{{questionaire.recip_length}}
-						</div>
-				</div><!-- /row-->
-			<!--	<h4>Stats:- </h4>
-				{{> stats_table}}
-			-->
 			<div class="row">
 				<div class="col-md-12 col-xs-12" >
 
@@ -40,9 +50,6 @@
 
 			</div>
 
-				{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
-				
-				<br>
 				<!--{{#if can_close questionaire}} -->
 			    <button class="btn btn-danger btn-lg btn-block {{can_close questionaire}}" 
 			    	id="close_questionnaire"
@@ -59,6 +66,8 @@
 				<br><br>
 
 				{{> view_sent_board_results stats = qoll_list.stats questionaire=qoll_list.questionaire }}
+
+				{{> qolls_inner qollList = this.qollList  btns= sent_board_btns }}
 			</div>
 		</div>
 	</div>
