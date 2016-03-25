@@ -31,13 +31,20 @@
         {{/if}}
 
         {{#if q.show_result}}
-          <span class="blue_1" style="font-size: large">{{q.qoll_response.weight_earned}} /</span>
+          <span class="blue_1" style="font-size: large">
+            Scored: 
+            {{#if q.qoll_response.weight_earned}}
+              {{q.qoll_response.weight_earned}} 
+            {{else}}
+              0
+            {{/if}}
+          </span>
         {{/if}}
 
         {{#if q.qoll_attributes}}
-          <span class="blue_1" style="font-size: large">{{q.qoll_attributes.weight}} Points</span>
+          <span class="blue_1" style="font-size: large">Max: {{q.qoll_attributes.weight}} Points</span>
           {{#if q.qoll_attributes.hint_penalty}}
-            <span class="blue_1" style="font-size: large"> ({{q.qoll_attributes.hint_penalty}}% for hint)</span>
+            <span class="blue_1" style="font-size: large"> (Penalty: {{q.qoll_attributes.hint_penalty}}% for hint)</span>
           {{/if}}
         {{/if}}
 
