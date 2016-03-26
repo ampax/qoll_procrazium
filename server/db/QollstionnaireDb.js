@@ -83,6 +83,7 @@ Meteor.methods({
 		qollstionnaire.share_circle = share_circle;
 		qollstionnaire.coeditor_ids = new Array();
 
+		if(coeditors)
 		coeditors.forEach(function(coeditor){
 			var coe_user=Meteor.users.findOne({ "profile.email" : coeditor });
 	        if(!coe_user) {

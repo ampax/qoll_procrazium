@@ -328,17 +328,34 @@ Template.qolls_inner.events({
 		var blank_resp = clk.parent().find('input#number').val();
 		var power = clk.parent().find('input#power').val();
 		var unit_selected = $('div#' + qollId).find('input[name="unit"]:checked').val();
-		qlog.info('Will register the blank response here - ' + qollId + '/**' + qollstionnaireId + '/**' 
-			+ blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
 
-		//return;
+		// the blanks are going to be in two places. lets find them 
 		var fib = [];
-		clk.parent().find('input.textbox').each(function(indx){
+		// (1) Part of the main qoll text/title
+		var fibs_1 = $("div#"+qollId).find("input.fib");
+		fibs_1.each(function(fbs){
+			qlog.info('fibs_1: ' + $(this).val(), filename);
+			fib.push($(this).val());
+		});
+		
+		// (2) Part of the individual options
+		var fibs_2 = $("div[id^='"+qollId+"_']").find("input.fib");
+		fibs_2.each(function(fbs){
+			qlog.info('fibs_2: ' + $(this).val(), filename);
 			fib.push($(this).val());
 		});
 
+		qlog.info('Will register the blank response here - ' + qollId + '/**' + qollstionnaireId + '/**' 
+			+ blank_resp + '**/**' + clk.attr('class') + '**/**' + unit_selected, filename);
+
+		/** var fib = [];
+		clk.parent().find('input.textbox').each(function(indx){
+			fib.push($(this).val());
+		}); **/
+
 		qlog.info('All the fibs are - ' + fib.join(' $ ') + ', qollId - ' + qollId + ', qollstionnaireId - ' + qollstionnaireId);
 
+		//return;
 		//return;
 
 		/**

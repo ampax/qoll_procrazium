@@ -89,6 +89,7 @@ Template.single_qoll_options.helpers({
 	//transform_txt : function(txt, cat, myanswer) {
 	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
 		//method defined in preview.js
+		qlog.info('txt:'+txt+'/cat:'+cat+'/context:'+context+'/fib:'+fib+'/tex:'+tex+'/tex_mode:'+tex_mode+'/qoll_idx:'+qoll_idx);
 		var txt_1 = transform_fib(txt, cat, context, fib);
 
 		//method defined in preview.js

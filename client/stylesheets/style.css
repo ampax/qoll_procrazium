@@ -804,11 +804,13 @@ text-overflow: ellipsis;
 
 input.fib { 
     height: 25px; 
-    width: 75px; 
-    background-color: transparent;  
+    width: auto !important; 
+    display: inline !important;
+    overflow: visible !important;
+    background-color: transparent !important;  
     border-style: solid;  
-    border-width: 0px 0px 1px 0px;  
-    border-color: #999999; /**darkred; **/
+    border-width: 0px 0px 1px 0px !important;  
+    border-color: #999999 !important; /**darkred; **/
     outline:0; 
 }
 

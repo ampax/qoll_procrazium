@@ -138,12 +138,19 @@ Template.preview.onCreated(function(){
 
 transform_fib = function(txt, cat, context, fib) {
   // qlog.info('Printing fill in the blanks - ' + fib, filename);
-    if(cat != QollConstants.QOLL_TYPE.BLANK || !fib || !txt)
+
+  qlog.info('txt:'+txt+'/cat:'+cat+'/context:'+context+'/fib**:'+fib+'***', filename);
+    
+    if(!fib || !txt) //cat != QollConstants.QOLL_TYPE.BLANK || 
       return txt;
+
+    qlog.info('matching *' + txt + '*with*'+QollRegEx.fib_transf, filename);
 
     var disabled = '';
     if(context === QollConstants.CONTEXT.READ)
       disabled = 'DISABLED';
+
+    qlog.info('matching *' + txt + '*with*'+QollRegEx.fib_transf, filename);
 
     if(txt.match(QollRegEx.fib_transf))
       qlog.info('hell this is printed', filename);

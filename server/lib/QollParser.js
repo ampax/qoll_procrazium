@@ -299,7 +299,10 @@ QollParser = {
 			qoll_data.complexity = QollConstants.QOLL.DIFFICULTY.EASY;
 			qoll_data.isMultiple = false;
 
-			if(types && types.length === 2) {
+			if(qoll_data.fib && qoll_data.fib.length > 0) {
+				qollType = QollConstants.QOLL_TYPE.BLANK;
+				qlog.info('Setting type to blank ...' + qollType, filename);
+			} else if(types && types.length === 2) {
 				var foundTrue = false, foundFalse = false;
 				types.map(function(t){
 					if(_.contains(['1', 'true', 'True', 'TRUE'], t.type))
