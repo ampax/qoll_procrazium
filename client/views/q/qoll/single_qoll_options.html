@@ -1,25 +1,52 @@
 <template name="single_qoll_options">
   {{#with item=qollType parent=qoll}}
-	      <div class="col-md-12 col-xs-12 list-group-item {{is_chk_selected_bg item.index  parent.q }}">
+  <div class="row list-group-item">
+    <div class="row">
+	      <div class="col-md-12 col-xs-12 {{is_chk_selected_bg item.index  parent.q }}">
         <div class="col-md-10 col-xs-10 indent-littlebit" id="{{parent.q._id}}_{{item.index}}">
           {{#if is_not_blank_type qoll.q.cat}}
           
           <span class="badge pull-left {{get_qoll_resp_class ../qoll.q.context}} {{qoll_abbr_class item.index ../qoll.q.context}} {{is_chk_selected item.index  parent.q }} 
           {{check_selected parent._id item.index}}  glossy" id="{{parent.q._id}}_{{item.index}}">
           
-            {{qoll_type_abbr item.index}}
+            {{#if is_correct_answer ../qoll.q.qollTypesX item.index ../qoll.q.context ../qoll.q.viewContext}}
+            <span class="fa-stack fa-2x">
+              <i class="fa fa-check fa-2x green_4">
+                <span class="fa fa-stack-1x" style="color:white; opacity: 0.85;">
+                  {{qoll_type_abbr item.index}}
+                </span>
+              </i>
+            </span>
+          {{else}}
+          <span class="fa-stack fa-2x">
+              
+                <span class="fa fa-stack-1x" style="color:white; opacity: 0.85;">
+                  {{qoll_type_abbr item.index}}
+                </span>
+              
+            </span>
+          {{/if}}
           </span>
           
           {{/if}}
             &nbsp;<span>{{{transform_txt item.value ../qoll.q.cat ../qoll.q.context ../qoll.q.fib ../qoll.q.tex ../qoll.q.texMode ../qoll.q.idx}}}</span>
 
         </div>
-        <div class="col-md-2 col-xs-2">
-            {{#if is_correct_answer qoll.q.qollTypesX item.index qoll.q.context}}
-              <i class="glyphicon glyphicon-check green"></i>
+        <!-- div class="col-md-2 col-xs-2">
+            {{#if is_correct_answer ../qoll.q.qollTypesX item.index ../qoll.q.context}}
+              <i class="fa fa-check fa-2x green"></i>
             {{/if}}
             <span class="badge pull-right fulltoggle">{{value_at qoll.stats item.index}}</span>
-        </div>
+        </div -->
       </div>
+    </div>
+    {{#if has_feedback ../qoll.q.qollTypesX item.index ../qoll.q.context ../qoll.q.viewContext}}
+    <div class="row">
+      <div class="col-md-12 col-xs-12" style="margin-left: 10px;background-color: {{get_feedback_bg ../qoll.q.qollTypesX item.index ../qoll.q.context ../qoll.q.viewContext}};padding: 10px;border-top: #CACAEF;border-top-width: 1px;border-top-style: solid;">
+            <b>Feedback: </b>{{{feedback_at_idx ../qoll.q.qollTypesX item.index ../qoll.q.cat ../qoll.q.context ../qoll.q.fib ../qoll.q.tex ../qoll.q.texMode ../qoll.q.idx}}}
+        </div>
+    </div>
+    {{/if}}
+  </div>
   {{/with}}
 </template>

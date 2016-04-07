@@ -76,7 +76,7 @@ Template.single_qoll.helpers({
 	},
 	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
 		// txt_0 = txt.replace(/(?:\r\n|\r|\n)/g, '<br />');
-		txt_0 = txt.replace(/\\n/g, '<br />');
+		var txt_0 = txt.replace(/\n|\r\n|\r/g, '<br />');
 		
 		//method defined in preview.js
 		var txt_1 = transform_fib(txt_0, cat, context, fib);

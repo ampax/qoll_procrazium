@@ -62,16 +62,51 @@ Template.single_qoll_options.helpers({
 			//return 'option-selected';
 			return 'qoll-background-selected';
 	},
-	is_correct_answer : function(qollTypesX, idx, context) {
-		if(context === QollConstants.CONTEXT.WRITE) return false;
+	is_correct_answer : function(qollTypesX, idx, context, viewContext) {
+		if(context === QollConstants.CONTEXT.WRITE || viewContext!='createUsr') return false;
 
 		if (qollTypesX == undefined)
 			return false;
-		if (qollTypesX[idx].isCorrect) {
+		if (qollTypesX[idx] && qollTypesX[idx].isCorrect) {
 			return true;
 		}
 		
 		return false;
+	},
+	get_feedback_bg : function(qollTypesX, idx, context, viewContext) {
+		if(context === QollConstants.CONTEXT.WRITE || viewContext!='createUsr') {
+			return '#E4D7D7';
+		}
+
+		if (qollTypesX == undefined)
+			return '#E4D7D7';
+		if (qollTypesX[idx] && qollTypesX[idx].isCorrect) {
+			return '#D7E4DA';
+		}
+		
+		return '#E4D7D7';
+	},
+							//
+	has_feedback : function(qollTypesX, idx, context, viewContext) {
+		if(context === QollConstants.CONTEXT.WRITE || viewContext!='createUsr') return false;
+
+		if (qollTypesX == undefined) {
+			return false;
+		}
+		if (qollTypesX[idx] && qollTypesX[idx].feedback) {
+			return true;
+		}
+		
+		return false;
+	},
+	feedback_at_idx : function(qollTypesX, idx, cat, context, fib, tex, tex_mode, qoll_idx) {
+		var txt_0 = qollTypesX[idx].feedback.replace(/\n|\r\n|\r/g, '<br />');
+    
+
+	    var txt_1 = transform_fib(txt_0, cat, context, fib);
+
+	    var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
+	    return txt_2;
 	},
 	is_not_blank_type : function(cat) {
 		//qlog.info('category ------------- ' + cat, filename);
@@ -88,9 +123,9 @@ Template.single_qoll_options.helpers({
 	},
 	//transform_txt : function(txt, cat, myanswer) {
 	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
-		//method defined in preview.js
-		qlog.info('txt:'+txt+'/cat:'+cat+'/context:'+context+'/fib:'+fib+'/tex:'+tex+'/tex_mode:'+tex_mode+'/qoll_idx:'+qoll_idx);
-		var txt_1 = transform_fib(txt, cat, context, fib);
+		var txt_0 = txt.replace(/\n|\r\n|\r/g, '<br />');
+
+		var txt_1 = transform_fib(txt_0, cat, context, fib);
 
 		//method defined in preview.js
 	    var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);

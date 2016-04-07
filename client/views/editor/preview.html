@@ -47,13 +47,42 @@
 	          </span>
 	        {{/if}}
 	        {{#each this.typesX}}
+	        <div class="row">
 				<div class='col-md-12 col-xs-12 list-group-item'>
-					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy-preview'>{{qoll_type_abbr this.index}}</span>
-					{{{transform_txt this.type ../cat QollConstants.CONTEXT.READ ../fib ../tex ../texMode ../idx}}}
-					{{#if is_correct_answer this this.index QollConstants.CONTEXT.READ}}
+					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy-preview' style="margin-left: 1em; opacity: 0.8;">
+
+					{{#if is_correct_answer this this.index}}
+		            <span class="fa-stack fa-2x">
+		              <i class="fa fa-check fa-2x green_4">
+		                <span class="fa fa-stack-1x" style="color:white; opacity: 0.85;">
+		                  {{qoll_type_abbr this.index}}
+		                </span>
+		              </i>
+		            </span>
+		          {{else}}
+		          <span class="fa-stack fa-2x">
+		              
+		                <span class="fa fa-stack-1x" style="color:white; opacity: 0.85;">
+		                  {{qoll_type_abbr this.index}}
+		                </span>
+		              
+		            </span>
+		          {{/if}}
+		          </span>
+
+					<span>{{{transform_txt this.type ../cat QollConstants.CONTEXT.READ ../fib ../tex ../texMode ../idx}}}</span>
+					<!-- {{#if is_correct_answer this this.index QollConstants.CONTEXT.READ}}
 		              <i class="glyphicon glyphicon-check green"></i>
-		            {{/if}}
+		            {{/if}} -->
 				</div>
+			</div>
+			{{#if has_feedback this this.index}}
+		    <div class="row">
+		      <div class="col-md-12 col-xs-12" style="margin-left: 10px;background-color: {{get_feedback_bg this this.index}};padding: 10px;border-top: #CACAEF;border-top-width: 1px;border-top-style: solid;">
+		            <b>Feedback: </b>{{{feedback_at_idx this ../cat QollConstants.CONTEXT.READ ../fib ../tex ../texMode ../idx}}}
+		        </div>
+		    </div>
+		    {{/if}}
 			{{/each}}
 
 			{{#if this.explanation}}

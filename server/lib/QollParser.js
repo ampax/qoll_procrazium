@@ -79,6 +79,7 @@ QollParser = {
             //qlog.info('Markdown converted qoll is - ' + q, filename);
 
             var qs = q.split(QollRegEx.gen_opt);//q.split(/\n-/);
+            // qlog.info('Printing qs -----> ' + qs, filename);
             var qoll = qs[0];
 			var qollType = QollConstants.QOLL_TYPE.MULTI; //multi is by default
 			var qoll_data = {};
@@ -94,7 +95,7 @@ QollParser = {
 	        
 
 	        //fetch the qoll level attributes here. split the qoll string on * and then apply
-            var qoll_parts = qoll.split(/\n\s*\*/);
+            var qoll_parts = qoll.split(/\n\*\s*/);
             //qlog.info('<==============***Printing qoll***===============>'+qoll + '/' + qoll_parts.length, filename);
             var cntr =0;
             var foundTitle=0;
@@ -160,10 +161,9 @@ QollParser = {
 
                     qoll_data[QollConstants.EDU.TEXT] = part;
                 } else if(part.match(QollRegEx.answer)) {
-                    // qlog.info('This is answer -> ' + part, filename);
-                    part = part.replace(/(\r\n|\n|\r)/gm,"");;
-                    qoll_data[QollConstants.EDU.ANSWER] = part.replace(QollRegEx.answer, '');
-                    // qlog.info('This is answer -> *' + qoll_data[QollConstants.EDU.ANSWER] +'*', filename);
+                	var p = part.match(QollRegEx.answer);
+                    qoll_data[QollConstants.EDU.ANSWER] = p[0].replace(QollRegEx.answer_r, '');
+                    //qlog.info('This is answer -> *' + qoll_data[QollConstants.EDU.ANSWER] +'*', filename);
                 } else if(part.match(QollRegEx.hint)) {
                     // qlog.info('This is hint -> ' + part, filename);
                     qoll_data[QollConstants.EDU.HINT] = part.replace(QollRegEx.hint, '');
@@ -204,11 +204,36 @@ QollParser = {
 			}
 
 			var ix =0; ix =0;
-			while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
-                type = q11[2];
+			var lines = q.split(/\n-{1}\s*|\n\([A-za-z0-9\d]{1,2}\)\s*|\n[A-Za-z\d]{1,2}[\.]{1}\s*/);
+			lines.splice(0,1);
+			/**lines.forEach(function(l){
+				qlog.info('LINES===> '+l);
+			});
+			console.log(lines);**/
+			var line_counter = 0;
+			//while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
+			lines.forEach(function(l){
+				// type = q11[2];
+				type = l;
+
+				var x = {index:ix};
+
+				var fdb = undefined;
+				if(fdb = type.match(QollRegEx.opt_fb)) {
+					//feedback is provided, capture that and process type seperately
+					// do not pass qoll_data[QollConstants.EDU.TEX]} since this TEX has already been captured
+					var fdb_r = fdb[0].replace(QollRegEx.opt_fb_r, '');
+					qlog.info('Printing feedback ---> ' + fdb_r, filename);
+					x.feedback = (QollParser.parseTex({'txt' : fdb_r, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]})).txt;
+					// qlog.info('Printing feedback ---> ' + JSON.stringify(x), filename);
+
+					//now take out the feedback from the type
+					type = type.replace(QollRegEx.opt_fb, '');
+				}
+
+				qlog.info('Printing type ---> ' + type, filename);
                 type = type.replace(/&nbsp;/g, ' ');
             //qs.slice(1).map(function(type){
-                var x = {index:ix};
                 x.isCorrect = 0;
                 ix =ix+1;
                 type = type.trim();
@@ -235,63 +260,57 @@ QollParser = {
                 }
                 //* End: Find and replace Fill-In-The-Blanks *//
 
-                if(type.indexOf('(a)') == 0) {
-				    type = type.replace('(a)', '');
-				    type = DownTown.downtown(type, DownTownOptions.downtown_default());
-				    x.isCorrect = 1;
-				    qoll_data.answer_matched = 1;
-				    
-				} else {
-				    type = DownTown.downtown(type, DownTownOptions.downtown_default());
-				    if(qoll_data[QollConstants.EDU.ANSWER] && qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans)) {
-				        var index = -1;
-				        if(qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans_alpha)) {
+                //qlog.info('Finding if the (a) is part of =====' + qoll_data[QollConstants.EDU.ANSWER] + '====', filename);
+                type = DownTown.downtown(type, DownTownOptions.downtown_default());
+			    if(qoll_data[QollConstants.EDU.ANSWER] && qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans)) {
+			        var index = -1;
+			        //qlog.info('Finding if the (a) is part of ++++' + qoll_data[QollConstants.EDU.ANSWER] + '++++', filename);
+			        if(qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans_alpha)) {
 
-				        	//iterate over the alphabetical correct answers and see if the index matches x.index
-				        	var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
-				        	arrayOfAns.forEach(function(ansm){
-				        		//qlog.info('---------------->*' + ansm+'*', filename);
-				        		index = ansm.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
-				        		if(index === x.index) {
-				        			x.isCorrect = 1;
-				        			qoll_data.answer_matched = 1;
-				        		}
-				        	});
+			        	//iterate over the alphabetical correct answers and see if the index matches x.index
+			        	var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
+			        	arrayOfAns.forEach(function(ansm){
+			        		//qlog.info('---------------->*' + ansm+'*', filename);
+			        		index = ansm.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
+			        		if(index === x.index) {
+			        			x.isCorrect = 1;
+			        			qoll_data.answer_matched = 1;
+			        		}
+			        	});
 
-				            // index = qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
-				            // qlog.info('Printing from the correct loooooooooooop answer 1111 ....' + index + '/'+qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0), filename);
-				        } else {
-				            // index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
-				            var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
-				            qlog.info(arrayOfAns.join('/'), filename);
-				        	arrayOfAns.forEach(function(ansm){
-				        		index = parseInt(ansm);
-				        		//qlog.info('---------------->**' + ansm+'**'+index+'**', filename);
-				        		if(index === x.index) {
-				        			x.isCorrect = 1;
-				        			qoll_data.answer_matched = 1;
-				        		}
-				        	});
-				        }
-				        
-				        //qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
+			            // index = qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+			            // qlog.info('Printing from the correct loooooooooooop answer 1111 ....' + index + '/'+qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0), filename);
+			        } else {
+			            // index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
+			            var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
+			            qlog.info(arrayOfAns.join('/'), filename);
+			        	arrayOfAns.forEach(function(ansm){
+			        		index = parseInt(ansm);
+			        		//qlog.info('---------------->**' + ansm+'**'+index+'**', filename);
+			        		if(index === x.index) {
+			        			x.isCorrect = 1;
+			        			qoll_data.answer_matched = 1;
+			        		}
+			        	});
+			        }
+			        
+			        //qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
 
-				        /** if(index === ix) {
-				            x.isCorrect = 1;
-				            qoll_data.answer_matched = 1;
-				        } **/
-				    }
-				    else if(type === qoll_data[QollConstants.EDU.ANSWER]) {
-				        x.isCorrect = 1;
-				        qoll_data.answer_matched = 1;
-				    }
-				}
+			        /** if(index === ix) {
+			            x.isCorrect = 1;
+			            qoll_data.answer_matched = 1;
+			        } **/
+			    }
+			    else if(type === qoll_data[QollConstants.EDU.ANSWER]) {
+			        x.isCorrect = 1;
+			        qoll_data.answer_matched = 1;
+			    }
 
                 x.type = type;
 
                 types.push(type);
                 typesX.push(x);
-            };//);
+            });//);
 
 			qoll_data.types = types;
 			qoll_data.typesX = typesX;

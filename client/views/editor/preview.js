@@ -26,7 +26,7 @@ Template.preview.helpers({
 
     var idx = !prevColl ? prevColl.length : 1;
     if(data && prevColl.length === 0) { // that means this is some preview data loaded init call has been made
-      qlog.info('======================================================================================>');
+      //qlog.info('======================================================================================>');
       // parse all the qolls and insert these in the local collection
       tqolls = ReactiveMethod.call('parseQollPreview', data, tex_pref);
       // console.log(tqolls);
@@ -37,7 +37,7 @@ Template.preview.helpers({
       });
 
     } else if(prevColl.length > 0 && focus_qoll != undefined) {
-      qlog.info('+_+_+_+_+_+=>' + p_count + '/' +focus_qoll, filename);
+      //qlog.info('+_+_+_+_+_+=>' + p_count + '/' +focus_qoll, filename);
       var oldd = previewCollection.find({'idx' : p_count}).fetch()[0]; //.fetch()[0]
       var noww = ReactiveMethod.call('parseQollPreview', "# "+focus_qoll, tex_pref);
 
@@ -62,11 +62,11 @@ Template.preview.helpers({
     return alphabetical[idx];
   },
   transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
-    var txt_1 = transform_fib(txt, cat, context, fib);
+    var txt_0 = txt.replace(/\n|\r\n|\r/g, '<br />');
+
+    var txt_1 = transform_fib(txt_0, cat, context, fib);
 
     var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
-
-    // txt_2 = txt_2 + "\\({a1x^3+z=0}\\)";
 
     return txt_2;
   },
@@ -116,8 +116,7 @@ Template.preview.helpers({
       return 'white_bg_5';
     } else return 'green_bg_1';
   },
-  is_correct_answer : function(qollTypesX, idx, context) {
-    if(context === QollConstants.CONTEXT.WRITE) return false;
+  is_correct_answer : function(qollTypesX, idx) {
 
     if (qollTypesX == undefined)
       return false;
@@ -127,6 +126,37 @@ Template.preview.helpers({
     }
     
     return false;
+  },
+  get_feedback_bg : function(qollTypesX, idx) {
+    if (qollTypesX == undefined)
+      return '#E4D7D7';
+    if (qollTypesX && qollTypesX.isCorrect) {
+      return '#D7E4DA';
+    }
+    
+    return '#E4D7D7';
+  },
+  has_feedback : function(qollTypesX, idx) {
+    console.log(qollTypesX);
+    //qlog.info('==========================================XXXXX', filename);
+    if (qollTypesX == undefined) {
+      return false;
+    }
+    if (qollTypesX && qollTypesX.feedback) {
+      return true;
+    }
+    
+    return false;
+  },
+  feedback_at_idx : function(qollTypesX, cat, context, fib, tex, tex_mode, qoll_idx) {
+    //var txt_0 = qollTypesX.feedback.replace(/\\n/gm, '<br />');
+    var txt_0 = qollTypesX.feedback.replace(/\n|\r\n|\r/g, '<br />');
+    
+
+    var txt_1 = transform_fib(txt_0, cat, context, fib);
+
+    var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
+    return txt_2;
   },
 });
 
@@ -139,18 +169,18 @@ Template.preview.onCreated(function(){
 transform_fib = function(txt, cat, context, fib) {
   // qlog.info('Printing fill in the blanks - ' + fib, filename);
 
-  qlog.info('txt:'+txt+'/cat:'+cat+'/context:'+context+'/fib**:'+fib+'***', filename);
+  //qlog.info('txt:'+txt+'/cat:'+cat+'/context:'+context+'/fib**:'+fib+'***', filename);
     
     if(!fib || !txt) //cat != QollConstants.QOLL_TYPE.BLANK || 
       return txt;
 
-    qlog.info('matching *' + txt + '*with*'+QollRegEx.fib_transf, filename);
+    //qlog.info('matching *' + txt + '*with*'+QollRegEx.fib_transf, filename);
 
     var disabled = '';
     if(context === QollConstants.CONTEXT.READ)
       disabled = 'DISABLED';
 
-    qlog.info('matching *' + txt + '*with*'+QollRegEx.fib_transf, filename);
+    //qlog.info('matching *' + txt + '*with*'+QollRegEx.fib_transf, filename);
 
     if(txt.match(QollRegEx.fib_transf))
       qlog.info('hell this is printed', filename);
@@ -183,6 +213,7 @@ transform_fib = function(txt, cat, context, fib) {
 
 transform_tex = function(txt, tex, tex_mode, qoll_idx) {
   // qlog.info('Printing tex - ' + tex, filename);
+  qlog.info('==========> qoll_idx is - '+ qoll_idx, filename);
 
     if(!tex || !txt) return txt;
 
@@ -214,6 +245,7 @@ transform_tex = function(txt, tex, tex_mode, qoll_idx) {
             } else {
               // html = "\\({"+"a1x^3+z=0"+"}\\)";
               html = "<span id='"+qoll_idx+"."+idx+"'>\\({"+tex_val+"}\\)</span>";
+              // html = "\\({"+tex_val+"}\\)";
             }
 
             txt = txt.replace(matches[0], html);
