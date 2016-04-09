@@ -19,6 +19,9 @@ Meteor.startup(function(){
 	Qoll._ensureIndex({ "submittedBy": 1, "action": 1});
 	Qoll._ensureIndex({ "visibility": 1, "action": 1});
 	Qoll._ensureIndex({ "accessToGroups": 1});
+
+	// Let us ensure indexes of Qollstionnaire coz this will be another bigggg collection
+	Qollstionnaire._ensureIndex({ "submittedTo": 1, "status": 1});
 });
 
 Meteor.startup(function(){
