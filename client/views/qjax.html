@@ -4,7 +4,7 @@
 		    QJax = function () {
 
 		    	// alert('Loading the mathjax expressions now ....');
-		    if(MathJax != undefined) {
+		    if(typeof MathJax === 'object') {
 		      MathJax.Hub.Config({
 		        showProcessingMessages: false,
 		        messageStyle: "none",
@@ -54,7 +54,7 @@
 	    <script> 
 	    	//aceEditor
 	    	document.addEventListener('DOMNodeInserted', function () {
-			   if(MathJax != undefined) {
+			   if(typeof MathJax === 'object') {
 			   	QJax();
 			   }
 			});

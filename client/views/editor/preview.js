@@ -217,8 +217,8 @@ transform_tex = function(txt, tex, tex_mode, qoll_idx) {
 
     if(!tex || !txt) return txt;
 
-    if(txt.match(QollRegEx.tex_transf))
-      qlog.info('hell-tex this is printed: ' + txt, filename);
+    //if(txt.match(QollRegEx.tex_transf))
+    qlog.info('hell-tex this is printed: ' + txt, filename);
 
     while (matches = QollRegEx.tex_transf.exec(txt)) {
       //qlog.info('matches - ' + matches, filename);

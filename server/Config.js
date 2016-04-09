@@ -2,6 +2,25 @@ var filename='server/Config.js';
 
 var MeteorInitialize = new Meteor.Collection("MeteorInitialize");
 
+
+// ensure the indexes
+//Query ===================> 
+// {"$or":[
+// {"share_circle":{"$all":["ChemWiki"]}},
+// {"submittedBy":"gXq7Hk5JHz5gu79QM","action":{"$ne":"archive"}},
+// {"visibility":"public","action":{"$ne":"archive"}},
+// "visibility":"private","action":{"$ne":"archive"},
+// "accessToGroups":{"$in":["BizleeCollaborationGroup"]}}
+//]}
+
+Meteor.startup(function(){
+	// Let us ensure indexes of Qoll schema coz this will be the biggest collection
+	Qoll._ensureIndex({ "share_circle": 1});
+	Qoll._ensureIndex({ "submittedBy": 1, "action": 1});
+	Qoll._ensureIndex({ "visibility": 1, "action": 1});
+	Qoll._ensureIndex({ "accessToGroups": 1});
+});
+
 Meteor.startup(function(){
 	qlog.info('Site url: '+URLUtil.SITE_URL, filename);
 	

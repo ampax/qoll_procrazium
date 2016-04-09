@@ -35,8 +35,8 @@ Template.all_qolls.helpers({
 		return is_fb_user;
 	},
 	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
-		qlog.info('+-+-+-+-+-+-+--====> '+txt +'/'+ cat +'/'+ context +'/'+ fib +'/'+ tex +'/'+ tex_mode +'/'+ qoll_idx, filename);
-		//method defined in preview.js
+		// qlog.info('+-+-+-+-+-+-+--====> '+txt +'/'+ cat +'/'+ context +'/'+ fib +'/'+ tex +'/'+ tex_mode +'/'+ qoll_idx, filename);
+		// method defined in preview.js
 		var txt_1 = transform_fib(txt, cat, context, fib);
 
 		//method defined in preview.js
