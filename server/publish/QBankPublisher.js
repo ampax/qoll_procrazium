@@ -1707,11 +1707,22 @@ var getQuestionnaireResponses = function(item) {
 	});
 
 	// submittedTo will always not have the group subscription, create a union of the two here
-	var submittedTo = item.submittedTo? item.submittedTo : new Array();
+	var submittedToEmails = item.submittedTo? item.submittedTo : new Array();
+
+	// convert submittedTo to user-ids
+	var submittedTo = new Array(); 
+	submittedToEmails.forEach(function(sto){
+		var uto = Meteor.users.find({'emails.address' : sto}).fetch();
+		if(uto.length > 0) {
+			submittedTo.push(uto[0]._id);
+		}
+	});
+
 	var submittedToGroup= item.submittedToGroup;
 	submittedToGroup.map(function(stg_id){
 		var handle_gp = QollGroups.findOne({_id : stg_id});
 
+		// userids in the group
 		var userIds = handle_gp.userIds;
 
 		qlog.info('======>>>>>>>'+JSON.stringify(userIds) + '/' + stg_id, filename)
@@ -1720,6 +1731,8 @@ var getQuestionnaireResponses = function(item) {
 			submittedTo = _.union(submittedTo, _.keys(userIds));
 
 	});
+
+	qlog.info('======>>>>>>>submittedTo >> '+submittedTo, filename)
 
 	submittedTo.map(function(subTo){
 		//var u1 = Meteor.users.find({'emails.address' : subTo}).fetch();
@@ -1740,7 +1753,7 @@ var getQuestionnaireResponses = function(item) {
 			resp = QollstionnaireResponses.findOne({ qollstionnaireid : item._id, email : subTo });
 		}
 
-		//qlog.info('Print resp ---------------->>>>>> ' + item._id + '/' + subTo + '/' + JSON.stringify(resp), filename);
+		qlog.info('Print resp xxxxxxxxxxx ---------------->>>>>> ' + item._id + '/' + subTo + '/' + JSON.stringify(resp), filename);
 
 		var counter_x = 1;
 		item.qollids.map(function(qid){
