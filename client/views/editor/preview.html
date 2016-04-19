@@ -46,7 +46,49 @@
 	            Submit
 	          </span>
 	        {{/if}}
-	        {{#each this.typesX}}
+
+	        {{#if is_reading_comprehension_type this }}
+	        	<span style="color: #5959AB;font-weight: 100; font-size: 1.3em; font-style: oblique;">Answer the following questions based on above</span>
+	        {{/if}}
+
+	        {{#each this.tt}}
+	        	{{#if is_reading_comprehension_type .. }}
+	        	<br /><br /><span style="color: #16162D;font-weight: 800; font-size: larger;">({{get_print_idx @index}}) {{this.question}}</span>
+	        	{{/if}}
+
+	        	{{#each this.typesX}}
+	        		<div class="row">
+						<div class='col-md-12 col-xs-12 list-group-item'>
+							<span class='badge pull-left qoll-response-val class_{{this.index}} glossy-preview' style="margin-left: 1em; opacity: 0.8;">
+
+							{{#if is_correct_answer this this.index}}
+				            <span class="fa-stack fa-2x">
+				              <i class="fa fa-check fa-2x green_4">
+				                <span class="fa fa-stack-1x" style="color:white; opacity: 0.85;">
+				                  {{qoll_type_abbr this.index}}
+				                </span>
+				              </i>
+				            </span>
+				          {{else}}
+				          <span class="fa-stack fa-2x">
+				              
+				                <span class="fa fa-stack-1x" style="color:white; opacity: 0.85;">
+				                  {{qoll_type_abbr this.index}}
+				                </span>
+				              
+				            </span>
+				          {{/if}}
+				          </span>
+
+							<span>{{{transform_txt this.type ../../cat QollConstants.CONTEXT.READ ../../fib ../../tex ../../texMode @index}}}</span>
+						</div>
+					</div>
+	        	{{/each}}
+
+	        {{/each}}
+
+
+	        <!--{{#each this.typesX}}
 	        <div class="row">
 				<div class='col-md-12 col-xs-12 list-group-item'>
 					<span class='badge pull-left qoll-response-val class_{{this.index}} glossy-preview' style="margin-left: 1em; opacity: 0.8;">
@@ -71,9 +113,6 @@
 		          </span>
 
 					<span>{{{transform_txt this.type ../cat QollConstants.CONTEXT.READ ../fib ../tex ../texMode ../idx}}}</span>
-					<!-- {{#if is_correct_answer this this.index QollConstants.CONTEXT.READ}}
-		              <i class="glyphicon glyphicon-check green"></i>
-		            {{/if}} -->
 				</div>
 			</div>
 			{{#if has_feedback this this.index}}
@@ -83,7 +122,7 @@
 		        </div>
 		    </div>
 		    {{/if}}
-			{{/each}}
+			{{/each}} -->
 
 			{{#if this.explanation}}
 			<div class="row">

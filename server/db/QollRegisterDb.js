@@ -159,11 +159,21 @@ Meteor.methods({
 	AddQollstionnaireResponseRemote : function(response) {
 		var userId = response.userId ? response.userId : Meteor.userId();
 		if(!userId) return; // register nothing for non existent user
-		Meteor.call('AddQollstionnaireResponse', response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, undefined, userId, answered_or_unanswered);
+		Meteor.call('AddQollstionnaireResponse', response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, undefined, userId, answered_or_unanswered, undefined);
 		// AddQollstionnaireResponse(response.qollstionnaireId, response.qollId, response.answerVal, response.answerIndex, userId);
 	},
-	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal, userId, answered_or_unanswered) {
-		qlog.info(qollTypeVal + '<<<===============>>>' + qollTypeIx, filename);
+	AddQollstionnaireResponse : function(qsnrid, qollId, qollTypeVal, qollTypeIx, qollPortal, userId, answered_or_unanswered, rc_index) {
+		qlog.info(qollTypeVal + '<<<===============>>>' + qollTypeIx + '<<<=======>>>'+rc_index+'<<<===', filename);
+
+		if(rc_index != undefined) {
+			qlog.info('This is a reading comprehension question for index - ' + rc_index);
+
+			// rest of the login in this function will now apply to the rc_index level of the answer
+		} else {
+			rc_index = 0;
+		}
+
+		//return;
 
 		if(qollPortal === undefined) qollPortal = QollConstants.QOLL_PORTAL.QOLL;
 		if(!userId) userId = Meteor.userId();
@@ -189,8 +199,16 @@ Meteor.methods({
 		if(hint_penalty) hint_penalty = Math.abs(hint_penalty);
 		else hint_penalty = 0;
 
+		// collect the answers for rc if it is a new type of qoll, else let us get it in the old way
 		var correct_ans = new Array();
-		qoll.qollTypesX.forEach(function(qt){
+		var tpsX = undefined;
+		if(qoll.tt) {
+			tpsX = qoll.tt[rc_index].typesX;
+		} else {
+			tpsX = qoll.qollTypesX;
+		}
+
+		tpsX.forEach(function(qt){
 			if(qt.isCorrect)
 				correct_ans.push(true);
 			else correct_ans.push(null);
@@ -209,15 +227,36 @@ Meteor.methods({
 			qsnr.qollids.forEach(function(qid){
 				var qll = Qoll.findOne({ _id : qid });
 				var tmp = new Array();
-				qll.qollTypes.forEach(function(qt){
-					tmp.push(null);
-				});
+				var iscorrect = new Array();
+
+				// let us check if the question is of RC type and handle that separately else do the usual
+				if(qoll.tt) {
+					qoll.tt.forEach(function(tt){
+						var xtmp = new Array();
+
+						tt.typesX.forEach(function(tx){
+							xtmp.push(null);
+						});
+
+						tmp.push(xtmp);
+						iscorrect.push(null);
+					});
+				} else {
+					var xtmp = new Array();
+
+					qll.qollTypes.forEach(function(qt){
+						xtmp.push(null);
+					});
+
+					tmp.push(xtmp);
+					iscorrect.push(null);
+				}
 
 				var rsp = {};
 				rsp.submittedOn = dt_now;
 				rsp.response = tmp;
 				rsp.type = type;
-				rsp.iscorrect = undefined;
+				rsp.iscorrect = iscorrect;
 				rsp.usedHint = false;
 
 				responses[qid] = rsp;
@@ -232,15 +271,24 @@ Meteor.methods({
 				"qollstionnaireSubmittedOn" : undefined,
 			};
 
-			if(resp_record.responses[qollId].response[qollTypeIx] == null)
-				resp_record.responses[qollId].response[qollTypeIx] = true;
-			else resp_record.responses[qollId].response[qollTypeIx] = null;
+			qlog.info(JSON.stringify(resp_record), filename);
+
+			qlog.info('iscorrect===> '+resp_record.responses[qollId].iscorrect + ' === ' + typeof resp_record.responses[qollId].iscorrect, filename);
+
+			if(resp_record.responses[qollId].response[rc_index][qollTypeIx] == null)
+				resp_record.responses[qollId].response[rc_index][qollTypeIx] = true;
+			else resp_record.responses[qollId].response[rc_index][qollTypeIx] = null;
 
 			resp_record.responses[qollId].submittedOn = dt_now;
 
-			resp_record.responses[qollId].iscorrect = _.isEqual(correct_ans, resp_record.responses[qollId].response);
-
-			if(resp_record.responses[qollId].iscorrect) resp_record.responses[qollId].weight_earned = weight;
+			// fix iscorrect for reading comprehension questions
+			resp_record.responses[qollId].iscorrect[rc_index] = _.isEqual(correct_ans, resp_record.responses[qollId].response[rc_index]);
+			
+			var is_all_correct = true;
+			resp_record.responses[qollId].iscorrect.forEach(function(ic){
+				is_all_correct = is_all_correct && ic === true;
+			});
+			if( is_all_correct ) resp_record.responses[qollId].weight_earned = weight;
 			else resp_record.responses[qollId].weight_earned = 0;
 
 			resp_record.total_weight_earned = resp_record.responses[qollId].weight_earned;
@@ -249,15 +297,19 @@ Meteor.methods({
 
 		} else {
 
-			if(resp_record.responses[qollId].response[qollTypeIx] == null)
-				resp_record.responses[qollId].response[qollTypeIx] = true;
-			else resp_record.responses[qollId].response[qollTypeIx] = null;
+			if(resp_record.responses[qollId].response[rc_index][qollTypeIx] == null)
+				resp_record.responses[qollId].response[rc_index][qollTypeIx] = true;
+			else resp_record.responses[qollId].response[rc_index][qollTypeIx] = null;
 
 			resp_record.responses[qollId].submittedOn = dt_now;
 
-			resp_record.responses[qollId].iscorrect = _.isEqual(correct_ans, resp_record.responses[qollId].response);
+			resp_record.responses[qollId].iscorrect[rc_index] = _.isEqual(correct_ans, resp_record.responses[qollId].response[rc_index]);
 
-			if(resp_record.responses[qollId].iscorrect) {
+			var is_all_correct = true;
+			resp_record.responses[qollId].iscorrect.forEach(function(ic){
+				is_all_correct = is_all_correct && ic === true;
+			});
+			if( is_all_correct ) {
 				if(resp_record.responses[qollId].usedHint) {
 					resp_record.responses[qollId].weight_earned = (1 - hint_penalty/100 ) * weight;
 					resp_record.responses[qollId].hint_penalty = ( hint_penalty/100 ) * weight;

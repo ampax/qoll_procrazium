@@ -1,5 +1,6 @@
 <template name="single_qoll_options">
-  {{#with item=qollType parent=qoll}}
+  {{#with item=qollType parent=qoll qoll=qoll rc_index=rc_index}}
+  <!-- {{log}} -->
   <div class="row list-group-item">
     <div class="row">
 	      <div class="col-md-12 col-xs-12 {{is_chk_selected_bg item.index  parent.q }}">
@@ -9,7 +10,7 @@
           <span class="badge pull-left {{get_qoll_resp_class ../qoll.q.context}} {{qoll_abbr_class item.index ../qoll.q.context}} {{is_chk_selected item.index  parent.q }} 
           {{check_selected parent._id item.index}}  glossy" id="{{parent.q._id}}_{{item.index}}">
           
-            {{#if is_correct_answer ../qoll.q.qollTypesX item.index ../qoll.q.context ../qoll.q.viewContext}}
+            {{#if is_correct_answer ../qoll.q item.index ../qoll.q.context ../qoll.q.viewContext}}
             <span class="fa-stack fa-2x">
               <i class="fa fa-check fa-2x green_4">
                 <span class="fa fa-stack-1x" style="color:white; opacity: 0.85;">
@@ -29,6 +30,7 @@
           </span>
           
           {{/if}}
+          {{log}}
             &nbsp;<span>{{{transform_txt item.value ../qoll.q.cat ../qoll.q.context ../qoll.q.fib ../qoll.q.tex ../qoll.q.texMode ../qoll.q.idx}}}</span>
 
         </div>

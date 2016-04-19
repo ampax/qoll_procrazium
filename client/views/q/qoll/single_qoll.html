@@ -87,14 +87,37 @@
     <!-- End of Qoll Section here -->
     
     <!-- Starting of qoll-types for the Qoll -->
-    <div class="row">
-      <div class="col-md-12 col-xs-12">
-      {{#each q.qollTypes}}
-     		{{> single_qoll_options qollType=this qoll=.. }}
-      {{/each}}
-
+    <!-- Check if this reading comprehension type and then accordingly generate the options -->
+    {{#if is_reading_comprehension_type q}}
+      <div class="row list-group-item">
+        <div class="col-md-12 col-xs-12">
+            <span style="color: #5959AB;font-weight: 100; font-size: 1.3em; font-style: oblique;">Answer the following questions based on above</span>
+            {{#each q.tt}}
+              <div class="row">
+                <div class="col-md-12 col-xs-12">
+                  <br /><span style="color: #16162D;font-weight: 800; font-size: larger;">({{get_print_idx @index}}) {{this.question}}</span>
+                  {{#let rc_ndex=@index}}
+                    {{#each this.types}}
+                      {{#with index = @index value = this}}
+                        {{> single_qoll_options qollType=this qoll=../../.. rc_index=rc_ndex }}
+                      {{/with}}
+                    {{/each}}
+                  {{/let}}
+                </div>
+              </div>
+            {{/each}}
+        </div>
       </div>
-    </div>
+    {{else}}
+      <div class="row">
+        <div class="col-md-12 col-xs-12">
+        {{#each q.qollTypes}}
+          {{> single_qoll_options qollType=this qoll=.. }}
+        {{/each}}
+
+        </div>
+      </div>
+    {{/if}}
 
     {{#if q.explanation}}
       <br>

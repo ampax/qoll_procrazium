@@ -8,7 +8,7 @@ Template.single_qoll_options.helpers({
 	},
 	qoll_abbr_class : function(idx, context) {
 		//qlog.info('GOT IX ' + idx, filename);
-		console.log(context);
+		// console.log(context);
 		if(context === QollConstants.CONTEXT.WRITE){
 			return "class_" + idx;
 		} else {
@@ -31,47 +31,87 @@ Template.single_qoll_options.helpers({
 	},
 	is_chk_selected : function(idx,qoll) {
 		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
-		if(qoll.myresponses && qoll.myresponses.length>idx){
-			if(qoll.myresponses[idx]){
-				return 'border-selected';
-			}else{
-				return '';
+
+		var rc_idx = this.rc_index;
+		if(!rc_idx) {
+			if(qoll.tt && qoll.tt.length === 1) {
+				rc_idx = 0;
 			}
 		}
+
+		var ret_chk = '';
+		if(rc_idx != undefined && qoll.myresponses && qoll.myresponses[rc_idx]) {
+			if(qoll.myresponses[rc_idx][idx] === true) {
+				ret_chk = 'border-selected';
+			}
+		} else if(qoll.myresponses && qoll.myresponses.length>idx) {
+			if(qoll.myresponses[idx] === true) {
+				ret_chk = 'border-selected';
+			}
+		}
+
+
 		var qollTypeReg = this.qollTypeReg
-		if (qollTypeReg == undefined)
-			return '';
-		if (qollTypeReg[idx] === 1)
-			return 'border-selected';
+		if (qollTypeReg && qollTypeReg[idx] === 1)
+			ret_chk = 'border-selected';
+
+		return ret_chk;
 	},
 	//
 	is_chk_selected_bg : function(idx,qoll) {
 		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
-		if(qoll.myresponses && qoll.myresponses.length>idx){
-			if(qoll.myresponses[idx]){
-				//return 'option-selected';
-				return 'qoll-background-selected';
-			}else{
-				return '';
+		//qlog.info('+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++++++>>> '+JSON.stringify({}), filename);
+		//console.log(qoll);
+		//qlog.info(this.rc_index + '***/***' + idx, filename );
+
+		var rc_idx = this.rc_index;
+		if(!rc_idx) {
+			if(qoll.tt && qoll.tt.length === 1) {
+				rc_idx = 0;
 			}
 		}
+
+		var ret_bg = '';
+		if(rc_idx != undefined && qoll.myresponses && qoll.myresponses[rc_idx]) {
+			//qlog.info('111', filename);
+			if(qoll.myresponses[rc_idx][idx] === true) {
+				//qlog.info('222', filename);
+				ret_bg = 'qoll-background-selected';
+			}
+		} else if(qoll.myresponses && qoll.myresponses.length>idx) {
+			//qlog.info('333', filename);
+			if(qoll.myresponses[idx] === true) {
+				//qlog.info('444', filename);
+				ret_bg = 'qoll-background-selected';
+			}
+		}
+
+
 		var qollTypeReg = this.qollTypeReg
-		if (qollTypeReg == undefined)
-			return '';
-		if (qollTypeReg[idx] === 1)
-			//return 'option-selected';
-			return 'qoll-background-selected';
+		if (qollTypeReg && qollTypeReg[idx] === 1) 
+			ret_bg = 'qoll-background-selected';
+
+		return ret_bg;
 	},
-	is_correct_answer : function(qollTypesX, idx, context, viewContext) {
+	is_correct_answer : function(qoll, idx, context, viewContext) {
 		if(context === QollConstants.CONTEXT.WRITE || viewContext!='createUsr') return false;
 
-		if (qollTypesX == undefined)
-			return false;
-		if (qollTypesX[idx] && qollTypesX[idx].isCorrect) {
-			return true;
+		//console.log(qoll);
+		//qlog.info('item index - ' + idx, filename);
+		//qlog.info('rc_index ----> ' + this.rc_index, filename);
+
+		var rc_idx = this.rc_index;
+		if(!rc_idx) {
+			if(qoll.tt && qoll.tt.length === 1) {
+				rc_idx = 0;
+			}
 		}
-		
-		return false;
+
+		if(qoll.tt) {
+			return qoll.tt[rc_idx].typesX[idx].isCorrect;
+		}
+
+		return qoll.qollTypesX && qoll.qollTypesX[idx] && qoll.qollTypesX[idx].isCorrect;
 	},
 	get_feedback_bg : function(qollTypesX, idx, context, viewContext) {
 		if(context === QollConstants.CONTEXT.WRITE || viewContext!='createUsr') {
@@ -123,6 +163,7 @@ Template.single_qoll_options.helpers({
 	},
 	//transform_txt : function(txt, cat, myanswer) {
 	transform_txt : function(txt, cat, context, fib, tex, tex_mode, qoll_idx) {
+
 		var txt_0 = txt.replace(/\n|\r\n|\r/g, '<br />');
 
 		var txt_1 = transform_fib(txt_0, cat, context, fib);
@@ -193,6 +234,9 @@ Template.single_qoll_options.helpers({
 			return 'white_bg_5';
 		} else return 'green_bg_1';
 	},
+  	log: function () {
+	    console.log(this);
+	}
 });
 
 

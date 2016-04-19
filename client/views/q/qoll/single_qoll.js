@@ -143,6 +143,19 @@ Template.single_qoll.helpers({
 	    var imgs1 = QollImages.find({'_id': {$in: img_ids}});
 	    return imgs1;
   	},
+  	is_reading_comprehension_type: function(qoll) {
+  		if(qoll && qoll.tt && qoll.tt.length > 1) { // more than one set of choices are specified
+  			return true;
+  		}
+
+  		return false;
+  	},
+  	get_print_idx: function(idx) {
+  		return idx + 1;
+  	},
+  	log: function () {
+	    console.log(this);
+	}
 });
 
 Template.single_qoll.onCreated(function(){

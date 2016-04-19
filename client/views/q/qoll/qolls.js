@@ -256,8 +256,21 @@ Template.qolls_inner.events({
 		var qoll =this.parent.q;
 		var answered_or_unanswered;
 		//If not a multiple choice question, remove the border-selected
-		qlog.info('Printing ooooif this is multiple - ' + qoll + '/' + qoll.isMultiple);
-		//return;
+		//console.log(qoll);
+		//console.log(chk);
+		//qlog.info('Printing ooooif this is multiple - ' + JSON.stringify(qoll) + '/' + qoll.isMultiple);
+
+		var qollId = this.parent.q._id;
+		var qollstionnaireId = this.parent.q._qollstionnaireid;
+		var answerIndex = this.item.index;
+		var answerVal = this.item.value;
+		var rc_index = this.rc_index;
+
+		qlog.info('The rc index is -----> '+this.rc_index, filename);
+
+		qlog.info(qollstionnaireId + ' ### ' + qollId + ' ### ' + answerVal + ' ### ' + answerIndex + ' ### ' + answered_or_unanswered, filename);
+
+		
 		if (!qoll.isMultiple) {
 			$(chk).parent().parent().parent().find('.border-selected').removeClass('border-selected');
 			$(chk).addClass('border-selected');
@@ -274,16 +287,10 @@ Template.qolls_inner.events({
 			}
 		}
 
-		var qollId = this.parent.q._id;
-		var qollstionnaireId = this.parent.q._qollstionnaireid;
-		var answerIndex = this.item.index;
-		var answerVal = this.item.value;
-
-		// qlog.info(qollstionnaireId + ' ### ' + qollId + ' ### ' + answerVal + ' ### ' + answerIndex + ' ### ' + answered_or_unanswered, filename);
 		
 		if (qollstionnaireId) {
 												//	qsnrid, 		qollId, qollTypeVal, qollTypeIx, qollPortal, 					userId, 	answered_or_unanswered
-			Meteor.call('AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, QollConstants.QOLL_PORTAL.QOLL, undefined, answered_or_unanswered, function(err, qollRegId) {
+			Meteor.call('AddQollstionnaireResponse', qollstionnaireId, qollId, answerVal, answerIndex, QollConstants.QOLL_PORTAL.QOLL, undefined, answered_or_unanswered, rc_index, function(err, qollRegId) {
 				if (err) {
 					qlog.error('Failed registering the qoll: ' + qollId + ' : ' + err, filename);
 				} else {

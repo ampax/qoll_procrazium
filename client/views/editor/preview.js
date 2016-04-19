@@ -158,6 +158,19 @@ Template.preview.helpers({
     var txt_2 = transform_tex(txt_1, tex, tex_mode, qoll_idx);
     return txt_2;
   },
+  is_reading_comprehension_type: function(qoll) {
+    console.log('============================');
+    console.log(qoll);
+    console.log('============================');
+
+    return qoll.tt && qoll.tt.length > 1;
+  },
+  get_print_idx: function(idx) {
+    return idx + 1;
+  },
+  log: function () {
+      console.log(this);
+  },
 });
 
 Template.preview.onCreated(function(){

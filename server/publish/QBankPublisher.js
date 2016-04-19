@@ -36,6 +36,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
  						_id 			: item._id,
 						qollRawId 		: item.qollRawId,
 						qollTypesX 		: item.qollTypesX,
+						tt 				: item.tt,
 						cat 			: item.cat,
 						fib 			: item.fib,
 						tex 			: item.tex,
@@ -72,6 +73,7 @@ Meteor.publish('QBANK_SUMMARY_PUBLISHER', function(findoptions) {
  						_id 			: item._id,
 						qollRawId 		: item.qollRawId,
 						qollTypesX 		: item.qollTypesX,
+						tt 				: item.tt,
 						cat 			: item.cat,
 						fib 			: item.fib,
 						tex 			: item.tex,
@@ -1648,6 +1650,7 @@ var extractQollDetails = function(q) {
 		qollText 		: q.qollText,
 		qollTypes 		: translateToIndexedArray(q.qollTypes),
 		qollTypesX 		: q.qollTypesX,
+		tt 				: q.tt,
 
 		cat 			: q.cat,
 		answer 			: q.answer,
@@ -1783,7 +1786,7 @@ var getQuestionnaireResponses = function(item) {
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
 								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat,
 								fib : qoll_text_hash[qid].fib, tex : qoll_text_hash[qid].tex, weight_earned : rtmp.weight_earned,
-								hint_penalty : rtmp.hint_penalty
+								hint_penalty : rtmp.hint_penalty, 'full_response' : {}
 							});
 
 				if(!resp_flag) {
@@ -1796,7 +1799,7 @@ var getQuestionnaireResponses = function(item) {
 								'response' : 'NA', 'unit_selected' : undefined, label : 'Q' + counter_x++, responses : [],
 								name : name, email : subTo, qollText : qoll_text_hash[qid].qollText,
 								title : qoll_text_hash[qid].title, qoll_id : qid, cat : qoll_text_hash[qid].qollCat,
-								fib : qoll_text_hash[qid].fib, tex : qoll_text_hash[qid].tex
+								fib : qoll_text_hash[qid].fib, tex : qoll_text_hash[qid].tex, 'full_response' : {}
 								});
 			}
 		});

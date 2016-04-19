@@ -159,6 +159,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						qollText 		: item.qollText,
 						qollTypes 		: translateToIndexedArray(item.qollTypes),
 						qollTypesX 		: item.qollTypesX,
+						tt 				: item.tt,
 
 						idx 			: idx,
 						cat 			: item.cat,
@@ -213,6 +214,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						qollText 			: item.qollText,
 						qollTypes 			: translateToIndexedArray(item.qollTypes),
 						qollTypesX 			: item.qollTypesX,
+						tt 					: item.tt,
 
 						idx 				: idx,
 						cat 				: item.cat,
@@ -283,6 +285,8 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 					var q = {
 						qollTitle 			: item.title,
 						qollText 			: item.qollText,
+
+						tt 					: item.tt,
 						qollTypes 			: translateToIndexedArray(item.qollTypes),
 
 						idx 				: idx,
@@ -379,6 +383,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						var q = {
 							qollTitle 		: item.title,
 							qollText 		: item.qollText,
+							tt 				: item.tt,
 							qollTypes 		: translateToIndexedArray(item.qollTypes),
 
 							idx 			: idx,
@@ -454,6 +459,7 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 			var q = {
 				qollTitle 		: item.title,
 				qollText 		: item.qollText,
+				tt 				: item.tt,
 				qollTypes 		: translateToIndexedArray(item.qollTypes),
 
 				idx 			: idx,
@@ -545,6 +551,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				var q = {
 					qollTitle 		: item.title,
 					qollText 		: item.qollText,
+					tt 				: item.tt,
 					qollTypes 		: translateToIndexedArray(item.qollTypes),
 
 					idx 			: idx,
@@ -591,6 +598,7 @@ Meteor.publish('OPEN_QOLL_PUBLISHER', function() {
 				var q = {
 					qollTitle 		: item.title,
 					qollText 		: item.qollText,
+					tt 				: item.tt,
 					qollTypes 		: translateToIndexedArray(item.qollTypes),
 
 					idx 			: idx,
@@ -919,6 +927,7 @@ var fetchConciseQollInfo = function(item) {
 	var q = {
 				qollTitle : item.title,
 				qollText : item.qollText,
+				tt 				: item.tt,
 				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
 				submittedBy : item.submittedBy,
@@ -939,6 +948,7 @@ var fetchMyConciseQollInfo = function(item) {
 	var q = {
 				qollTitle : item.title,
 				qollText : item.qollText,
+				tt 				: item.tt,
 				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
 				submittedBy : item.submittedBy,
@@ -960,6 +970,7 @@ var fetchMyRecConciseQollInfo = function(item) {
 	var q = {
 				qollTitle : item.title,
 				qollText : item.qollText,
+				tt 			: item.tt,
 				qollTypes : translateToIndexedArray(item.qollTypes),
 				submittedOn : item.submittedOn,
 				submittedBy : item.submittedBy,
@@ -1004,6 +1015,8 @@ var extractQollDetails = function(q) {
 		qollText 		: q.qollText,
 		qollTypes 		: translateToIndexedArray(q.qollTypes),
 		qollTypesX 		: q.qollTypesX,
+
+		tt 				: q.tt,
 
 		cat 			: q.cat,
 		answer 			: q.answer,

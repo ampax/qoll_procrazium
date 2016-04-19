@@ -47,6 +47,7 @@ Meteor.methods({
 			'isMultiple' : qollData.isMultiple,
 			'qollTypes' : qollData.types,
 			'qollTypesX' : qollData.typesX,
+			'tt' 		: qollData.tt,
 			'visibility' : qollData.visibility,
 			'complexity' : qollData.complexity,
 			'accessToGroups' : accessGroups,

@@ -265,7 +265,7 @@ Accounts.onLogin(function(attempt) {
     user.profile.init = {};
 
     Settings.insert({'userId' : user._id, 
-    'editor_mode': QollConstants.EDITOR_MODE.TEMPLATE, 
+    'editor_mode': QollConstants.EDITOR_MODE.TXT, 
     'access_mode' : QollConstants.QOLL.VISIBILITY.PUB})
   }
 

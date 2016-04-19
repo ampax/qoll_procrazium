@@ -83,8 +83,6 @@ QollParser = {
             var qoll = qs[0];
 			var qollType = QollConstants.QOLL_TYPE.MULTI; //multi is by default
 			var qoll_data = {};
-            var types = new Array();
-            var typesX = new Array();
             qoll_data[QollConstants.EDU.FIB] = [];
             qoll_data[QollConstants.EDU.TEX] = [];
             qoll_data.texMode = texMode;
@@ -203,117 +201,160 @@ QollParser = {
 				qoll_data[QollConstants.EDU.IMGS] = _.union(qoll_data[QollConstants.EDU.IMGS], selImgIds);
 			}
 
-			var ix =0; ix =0;
-			var lines = q.split(/\n-{1}\s*|\n\([A-za-z0-9\d]{1,2}\)\s*|\n[A-Za-z\d]{1,2}[\.]{1}\s*/);
-			lines.splice(0,1);
-			/**lines.forEach(function(l){
-				qlog.info('LINES===> '+l);
+
+			// replace the rest of the qoll content and lets process only the options now
+			var tmp_q_rplc = q.split(/\n-{1}\s*|\n\([A-za-z0-9\d]{1,2}\)\s*|\n[A-Za-z\d]{1,2}[\.]{1}\s*?/);
+			qlog.info('=========>0 ' + tmp_q_rplc[0], filename);
+			q = q.replace(tmp_q_rplc[0], '');
+
+			// parsing of multiple options start here
+			var rc_parts = q.split(/\n--/);
+			rc_parts.forEach(function(rcp){
+				qlog.info('Printing the rcp now ---> ' + rcp, filename);
 			});
-			console.log(lines);**/
-			var line_counter = 0;
-			//while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
-			lines.forEach(function(l){
-				// type = q11[2];
-				type = l;
 
-				var x = {index:ix};
+			// iterate over the rc_parts now and parse the options for simple or reading-comprehensions
+			var tt = new Array();
+			rc_parts.forEach(function(rc_part){
+				var ix =0;
+				var types = new Array();
+            	var typesX = new Array();
 
-				var fdb = undefined;
-				if(fdb = type.match(QollRegEx.opt_fb)) {
-					//feedback is provided, capture that and process type seperately
-					// do not pass qoll_data[QollConstants.EDU.TEX]} since this TEX has already been captured
-					var fdb_r = fdb[0].replace(QollRegEx.opt_fb_r, '');
-					qlog.info('Printing feedback ---> ' + fdb_r, filename);
-					x.feedback = (QollParser.parseTex({'txt' : fdb_r, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]})).txt;
-					// qlog.info('Printing feedback ---> ' + JSON.stringify(x), filename);
+				var lines = rc_part.split(/\n-{1}\s*|\n\([A-za-z0-9\d]{1,2}\)\s*|\n[A-Za-z\d]{1,2}[\.]{1}\s*/);
+				var this_subpart_qoll_arr = lines.splice(0,1);
+				var this_subpart_qoll = this_subpart_qoll_arr && this_subpart_qoll_arr.length > 0? this_subpart_qoll_arr[0]:'';
+				this_subpart_qoll = (QollParser.parseTex({'txt' : this_subpart_qoll, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]})).txt;
+				qlog.info('QUESTIONS==========> ' + this_subpart_qoll, filename);
 
-					//now take out the feedback from the type
-					type = type.replace(QollRegEx.opt_fb, '');
+				// if this is reading comprehension type, the answers will be defined at this level
+				// in that case, disregard the answers in qoll_data[QollConstants.EDU.ANSWER]
+				// and instead set the answers at RC questoins level
+				var answer_sub;
+				if(QollRegEx.answer_sub.test(this_subpart_qoll)) {
+					var answer_sub_parts = this_subpart_qoll.split(QollRegEx.answer_sub);
+					answer_sub = answer_sub_parts[1]; // .split(/\s{1,}/)
+					this_subpart_qoll = answer_sub_parts[0];
+
+					qlog.info('Contains answer for this multiple types .. lets get it out of here - ' + answer_sub, filename);
+					qlog.info('Question - ' + this_subpart_qoll, filename);
 				}
 
-				qlog.info('Printing type ---> ' + type, filename);
-                type = type.replace(/&nbsp;/g, ' ');
-            //qs.slice(1).map(function(type){
-                x.isCorrect = 0;
-                ix =ix+1;
-                type = type.trim();
+				lines.forEach(function(l){
+					qlog.info('LINES===> '+l, filename);
+				});
+				console.log(lines);
+				if(lines.length === 0) return; // nothing to process if there are no options, return from this function
+				var line_counter = 0;
+				//while ((q11 = QollRegEx.gen_opt.exec(q)) != null) {
+				lines.forEach(function(l){
+					// type = q11[2];
+					type = l;
 
-                //* Start: Find and replace TEX expressions *//
-                var tmp = QollParser.parseTex({'txt' : type, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]});
-                type = tmp.txt;
-                //* End: Find and replace TEX expressions *//
+					var x = {index:ix};
 
-                //* Start: Find and replace Fill-In-The-Blanks *//
-                if(type.match(QollRegEx.fib)) {
-                    var matches;
-                    var fib_replace = [];
+					var fdb = undefined;
+					if(fdb = type.match(QollRegEx.opt_fb)) {
+						//feedback is provided, capture that and process type seperately
+						// do not pass qoll_data[QollConstants.EDU.TEX]} since this TEX has already been captured
+						var fdb_r = fdb[0].replace(QollRegEx.opt_fb_r, '');
+						qlog.info('Printing feedback ---> ' + fdb_r, filename);
+						x.feedback = (QollParser.parseTex({'txt' : fdb_r, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]})).txt;
+						// qlog.info('Printing feedback ---> ' + JSON.stringify(x), filename);
 
-                    while ((matches = QollRegEx.fib.exec(type)) != null) {
-						qoll_data[QollConstants.EDU.FIB].push(matches[1]);
-						fib_replace.push(matches[0]);
+						//now take out the feedback from the type
+						type = type.replace(QollRegEx.opt_fb, '');
 					}
 
-					fib_replace.map(function(fr, idx){
-						type = type.replace(fr, '{'+cntr+'}');
-						cntr++
-					});
-                }
-                //* End: Find and replace Fill-In-The-Blanks *//
+					qlog.info('Printing type ---> ' + type, filename);
+	                type = type.replace(/&nbsp;/g, ' ');
+	            //qs.slice(1).map(function(type){
+	                x.isCorrect = 0;
+	                ix =ix+1;
+	                type = type.trim();
 
-                //qlog.info('Finding if the (a) is part of =====' + qoll_data[QollConstants.EDU.ANSWER] + '====', filename);
-                type = DownTown.downtown(type, DownTownOptions.downtown_default());
-			    if(qoll_data[QollConstants.EDU.ANSWER] && qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans)) {
-			        var index = -1;
-			        //qlog.info('Finding if the (a) is part of ++++' + qoll_data[QollConstants.EDU.ANSWER] + '++++', filename);
-			        if(qoll_data[QollConstants.EDU.ANSWER].match(QollRegEx.abb_ans_alpha)) {
+	                //* Start: Find and replace TEX expressions *//
+	                var tmp = QollParser.parseTex({'txt' : type, 'tex_arr' : qoll_data[QollConstants.EDU.TEX]});
+	                type = tmp.txt;
+	                //* End: Find and replace TEX expressions *//
 
-			        	//iterate over the alphabetical correct answers and see if the index matches x.index
-			        	var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
-			        	arrayOfAns.forEach(function(ansm){
-			        		//qlog.info('---------------->*' + ansm+'*', filename);
-			        		index = ansm.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
-			        		if(index === x.index) {
-			        			x.isCorrect = 1;
-			        			qoll_data.answer_matched = 1;
-			        		}
-			        	});
+	                //* Start: Find and replace Fill-In-The-Blanks *//
+	                if(type.match(QollRegEx.fib)) {
+	                    var matches;
+	                    var fib_replace = [];
 
-			            // index = qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
-			            // qlog.info('Printing from the correct loooooooooooop answer 1111 ....' + index + '/'+qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0), filename);
-			        } else {
-			            // index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
-			            var arrayOfAns = qoll_data[QollConstants.EDU.ANSWER].split(QollRegEx.abb_ans_spl);
-			            qlog.info(arrayOfAns.join('/'), filename);
-			        	arrayOfAns.forEach(function(ansm){
-			        		index = parseInt(ansm);
-			        		//qlog.info('---------------->**' + ansm+'**'+index+'**', filename);
-			        		if(index === x.index) {
-			        			x.isCorrect = 1;
-			        			qoll_data.answer_matched = 1;
-			        		}
-			        	});
-			        }
-			        
-			        //qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
+	                    while ((matches = QollRegEx.fib.exec(type)) != null) {
+							qoll_data[QollConstants.EDU.FIB].push(matches[1]);
+							fib_replace.push(matches[0]);
+						}
 
-			        /** if(index === ix) {
-			            x.isCorrect = 1;
-			            qoll_data.answer_matched = 1;
-			        } **/
-			    }
-			    else if(type === qoll_data[QollConstants.EDU.ANSWER]) {
-			        x.isCorrect = 1;
-			        qoll_data.answer_matched = 1;
-			    }
+						fib_replace.map(function(fr, idx){
+							type = type.replace(fr, '{'+cntr+'}');
+							cntr++
+						});
+	                }
+	                //* End: Find and replace Fill-In-The-Blanks *//
 
-                x.type = type;
+	                //qlog.info('Finding if the (a) is part of =====' + qoll_data[QollConstants.EDU.ANSWER] + '====', filename);
+	                // we dont need the following line now
+	                // type = DownTown.downtown(type, DownTownOptions.downtown_default());
+	                var answer_to_analyze = answer_sub? answer_sub : qoll_data[QollConstants.EDU.ANSWER];
+				    if(answer_to_analyze && answer_to_analyze.match(QollRegEx.abb_ans)) {
+				        var index = -1;
+				        //qlog.info('Finding if the (a) is part of ++++' + qoll_data[QollConstants.EDU.ANSWER] + '++++', filename);
+				        if(answer_to_analyze.match(QollRegEx.abb_ans_alpha)) {
 
-                types.push(type);
-                typesX.push(x);
-            });//);
+				        	//iterate over the alphabetical correct answers and see if the index matches x.index
+				        	var arrayOfAns = answer_to_analyze.split(QollRegEx.abb_ans_spl);
+				        	arrayOfAns.forEach(function(ansm){
+				        		//qlog.info('---------------->*' + ansm+'*', filename);
+				        		index = ansm.toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0);
+				        		if(index === x.index) {
+				        			x.isCorrect = 1;
+				        			qoll_data.answer_matched = 1;
+				        		}
+				        	});
 
-			qoll_data.types = types;
-			qoll_data.typesX = typesX;
+				            // index = qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0) - 'A'.charCodeAt(0) + 1;
+				            // qlog.info('Printing from the correct loooooooooooop answer 1111 ....' + index + '/'+qoll_data[QollConstants.EDU.ANSWER].toUpperCase().charCodeAt(0), filename);
+				        } else {
+				            // index = parseInt(qoll_data[QollConstants.EDU.ANSWER]);
+				            var arrayOfAns = answer_to_analyze.split(QollRegEx.abb_ans_spl);
+				            qlog.info(arrayOfAns.join('/'), filename);
+				        	arrayOfAns.forEach(function(ansm){
+				        		index = parseInt(ansm);
+				        		//qlog.info('---------------->**' + ansm+'**'+index+'**', filename);
+				        		if(index === x.index) {
+				        			x.isCorrect = 1;
+				        			qoll_data.answer_matched = 1;
+				        		}
+				        	});
+				        }
+				        
+				        //qlog.info('Printing from the correct loooooooooooop answer ....' + index + '/' + qoll_data[QollConstants.EDU.ANSWER], filename);
+
+				        /** if(index === ix) {
+				            x.isCorrect = 1;
+				            qoll_data.answer_matched = 1;
+				        } **/
+				    }
+				    else if(type === answer_to_analyze) {
+				        x.isCorrect = 1;
+				        qoll_data.answer_matched = 1;
+				    }
+
+	                x.type = type;
+
+	                types.push(type);
+	                typesX.push(x);
+	            });
+				tt.push({question : this_subpart_qoll, types : types, typesX : typesX});
+			});
+
+			
+
+			qoll_data.types = tt.length > 0? tt[0].types : new Array();
+			qoll_data.typesX = tt.length > 0? tt[0].typesX : new Array();
+			qoll_data.tt = tt;
 			qoll_data.visibility = visibility;
 			qoll_data.complexity = QollConstants.QOLL.DIFFICULTY.EASY;
 			qoll_data.isMultiple = false;
@@ -321,9 +362,9 @@ QollParser = {
 			if(qoll_data.fib && qoll_data.fib.length > 0) {
 				qollType = QollConstants.QOLL_TYPE.BLANK;
 				qlog.info('Setting type to blank ...' + qollType, filename);
-			} else if(types && types.length === 2) {
+			} else if(qoll_data.types && qoll_data.types.length === 2) {
 				var foundTrue = false, foundFalse = false;
-				types.map(function(t){
+				qoll_data.types.map(function(t){
 					if(_.contains(['1', 'true', 'True', 'TRUE'], t.type))
 						foundTrue = true;
 
@@ -336,11 +377,11 @@ QollParser = {
 
 				qoll_data.isMultiple = true;
 			}
-            else if(types && types.length === 1) qollType = QollConstants.QOLL.TYPE.SINGLE;
-            else if(types && types.length > 1) {
+            else if(qoll_data.types && qoll_data.types.length === 1) qollType = QollConstants.QOLL.TYPE.SINGLE;
+            else if(qoll_data.types && qoll_data.types.length > 1) {
             	qollType = QollConstants.QOLL.TYPE.MULTIPLE; //isMultiple = true;
             	qoll_data.isMultiple = true;
-            } else if(types && types.length === 0) qollType = QollConstants.QOLL_TYPE.NO_CHOICE;
+            } else if(qoll_data.types && qoll_data.types.length === 0) qollType = QollConstants.QOLL_TYPE.NO_CHOICE;
 
             if(qoll_data[QollConstants.EDU.CAT] === undefined)
             	qoll_data[QollConstants.EDU.CAT] = qollType;
