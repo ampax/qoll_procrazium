@@ -3,7 +3,7 @@
   <!-- {{log}} -->
   <div class="row list-group-item">
     <div class="row">
-	      <div class="col-md-12 col-xs-12 {{is_chk_selected_bg item.index  parent.q }}">
+	      <div class="col-md-12 col-xs-12 {{is_chk_selected_bg item.index  parent.q qoll.q.context }}">
         <div class="col-md-10 col-xs-10 indent-littlebit" id="{{parent.q._id}}_{{item.index}}">
           {{#if is_not_blank_type qoll.q.cat}}
           
@@ -34,12 +34,9 @@
             &nbsp;<span>{{{transform_txt item.value ../qoll.q.cat ../qoll.q.context ../qoll.q.fib ../qoll.q.tex ../qoll.q.texMode ../qoll.q.idx}}}</span>
 
         </div>
-        <!-- div class="col-md-2 col-xs-2">
-            {{#if is_correct_answer ../qoll.q.qollTypesX item.index ../qoll.q.context}}
-              <i class="fa fa-check fa-2x green"></i>
-            {{/if}}
-            <span class="badge pull-right fulltoggle">{{value_at qoll.stats item.index}}</span>
-        </div -->
+        <div class="col-md-2 col-xs-2">
+            <span class="">{{answer_comment item.index  parent.q qoll.q.context }}</span>
+        </div>
       </div>
     </div>
     {{#if has_feedback ../qoll.q.qollTypesX item.index ../qoll.q.context ../qoll.q.viewContext}}

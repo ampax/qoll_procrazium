@@ -650,6 +650,9 @@ text-overflow: ellipsis;
     background-color: #8799A9 !important;
 }
 
+.qoll-background-selected-wrong {
+    background-color: #E89B9B !important;
+}
 .option-selected {
     background-color: rgb(209, 208, 215) !important;
 }

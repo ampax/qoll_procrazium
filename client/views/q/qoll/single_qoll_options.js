@@ -31,6 +31,8 @@ Template.single_qoll_options.helpers({
 	},
 	is_chk_selected : function(idx,qoll) {
 		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
+		console.log(qoll);
+		//qlog.info('************' + rc_idx + '***/***' + idx + '************', filename);
 
 		var rc_idx = this.rc_index;
 		if(!rc_idx) {
@@ -42,23 +44,26 @@ Template.single_qoll_options.helpers({
 		var ret_chk = '';
 		if(rc_idx != undefined && qoll.myresponses && qoll.myresponses[rc_idx]) {
 			if(qoll.myresponses[rc_idx][idx] === true) {
+				//qlog.info('111', filename);
 				ret_chk = 'border-selected';
 			}
 		} else if(qoll.myresponses && qoll.myresponses.length>idx) {
 			if(qoll.myresponses[idx] === true) {
+				//qlog.info('222', filename);
 				ret_chk = 'border-selected';
 			}
 		}
 
 
 		var qollTypeReg = this.qollTypeReg
-		if (qollTypeReg && qollTypeReg[idx] === 1)
+		if (qollTypeReg && qollTypeReg[idx] === 1) {
+			//qlog.info('333', filename);
 			ret_chk = 'border-selected';
+		}
 
 		return ret_chk;
 	},
-	//
-	is_chk_selected_bg : function(idx,qoll) {
+	answer_comment : function(idx,qoll, context) {
 		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
 		//qlog.info('+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++++++>>> '+JSON.stringify({}), filename);
 		//console.log(qoll);
@@ -71,32 +76,120 @@ Template.single_qoll_options.helpers({
 			}
 		}
 
-		var ret_bg = '';
+		// if the questionnaire is submitted and ret_bg has value assigned, lets check if the answer is correct
+		// if it is correct, then let the color show up as it is
+		// else change the color to something like red
+		// answer is undefined by default
+		var is_correct_answer = undefined;
+		if(context === QollConstants.CONTEXT.READ) {
+			if(qoll.tt) {
+				is_correct_answer = qoll.tt[rc_idx].typesX[idx].isCorrect;
+			} else {
+				is_correct_answer = qoll.qollTypesX && qoll.qollTypesX[idx] && qoll.qollTypesX[idx].isCorrect;
+			}
+		}
+
+		var ret_comment = '';
+		var you_answered = undefined;
 		if(rc_idx != undefined && qoll.myresponses && qoll.myresponses[rc_idx]) {
 			//qlog.info('111', filename);
 			if(qoll.myresponses[rc_idx][idx] === true) {
-				//qlog.info('222', filename);
-				ret_bg = 'qoll-background-selected';
+				// ret_bg = 'qoll-background-selected';
+				you_answered = true;
 			}
 		} else if(qoll.myresponses && qoll.myresponses.length>idx) {
 			//qlog.info('333', filename);
 			if(qoll.myresponses[idx] === true) {
-				//qlog.info('444', filename);
-				ret_bg = 'qoll-background-selected';
+				// ret_bg = 'qoll-background-selected';
+				you_answered = true;
 			}
 		}
 
 
 		var qollTypeReg = this.qollTypeReg
-		if (qollTypeReg && qollTypeReg[idx] === 1) 
+		if (qollTypeReg && qollTypeReg[idx] === 1) {
+			// ret_bg = 'qoll-background-selected';
+			you_answered = true;
+		}
+
+		if(is_correct_answer && you_answered) {
+			ret_comment = 'You selected correct choice';
+		} else if(!is_correct_answer && you_answered) {
+			ret_comment = 'Wrong choice selected';
+		} else if(is_correct_answer && !you_answered) {
+			ret_comment = 'You missed correct choice';
+		}
+
+		return ret_comment;
+	},
+	//
+	is_chk_selected_bg : function(idx,qoll, context) {
+		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
+		//qlog.info('+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++++++>>> '+JSON.stringify({}), filename);
+		//console.log(qoll);
+		//qlog.info(this.rc_index + '***/***' + idx, filename );
+
+		var rc_idx = this.rc_index;
+		if(!rc_idx) {
+			if(qoll.tt && qoll.tt.length === 1) {
+				rc_idx = 0;
+			}
+		}
+
+		// if the questionnaire is submitted and ret_bg has value assigned, lets check if the answer is correct
+		// if it is correct, then let the color show up as it is
+		// else change the color to something like red
+		// answer is undefined by default
+		var is_correct_answer = undefined;
+		if(context === QollConstants.CONTEXT.READ) {
+			if(qoll.tt) {
+				is_correct_answer = qoll.tt[rc_idx].typesX[idx].isCorrect;
+			} else {
+				is_correct_answer = qoll.qollTypesX && qoll.qollTypesX[idx] && qoll.qollTypesX[idx].isCorrect;
+			}
+
+			// if(!is_correct_answer) ret_bg = 'qoll-background-selected-wrong';
+		}
+
+		var ret_bg = '';
+		var you_answered = undefined;
+		if(rc_idx != undefined && qoll.myresponses && qoll.myresponses[rc_idx]) {
+			//qlog.info('111', filename);
+			if(qoll.myresponses[rc_idx][idx] === true) {
+				// ret_bg = 'qoll-background-selected';
+				you_answered = true;
+			}
+		} else if(qoll.myresponses && qoll.myresponses.length>idx) {
+			//qlog.info('333', filename);
+			if(qoll.myresponses[idx] === true) {
+				// ret_bg = 'qoll-background-selected';
+				you_answered = true;
+			}
+		}
+
+
+		var qollTypeReg = this.qollTypeReg
+		if (qollTypeReg && qollTypeReg[idx] === 1) {
+			// ret_bg = 'qoll-background-selected';
+			you_answered = true;
+		}
+
+		//qlog.info('*******-----' + is_correct_answer + '----**/**---' + you_answered + '----********', filename);
+
+		if(is_correct_answer && you_answered) {
+			//qlog.info('555', filename);
 			ret_bg = 'qoll-background-selected';
+		} else if(!is_correct_answer && you_answered || is_correct_answer && !you_answered) {
+			//qlog.info('666', filename);
+			ret_bg = 'qoll-background-selected-wrong';
+		}
 
 		return ret_bg;
 	},
 	is_correct_answer : function(qoll, idx, context, viewContext) {
 		if(context === QollConstants.CONTEXT.WRITE || viewContext!='createUsr') return false;
 
-		//console.log(qoll);
+		console.log(qoll);
 		//qlog.info('item index - ' + idx, filename);
 		//qlog.info('rc_index ----> ' + this.rc_index, filename);
 
@@ -119,7 +212,7 @@ Template.single_qoll_options.helpers({
 		}
 
 		if (qollTypesX == undefined)
-			return '#E4D7D7';
+			return '#E89B9B';
 		if (qollTypesX[idx] && qollTypesX[idx].isCorrect) {
 			return '#D7E4DA';
 		}
