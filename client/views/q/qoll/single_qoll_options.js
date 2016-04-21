@@ -176,8 +176,7 @@ Template.single_qoll_options.helpers({
 		}
 
 		//qlog.info('*******-----' + is_correct_answer + '----**/**---' + you_answered + '----********', filename);
-
-		if(is_correct_answer && you_answered) {
+		if(is_correct_answer && you_answered || context === QollConstants.CONTEXT.WRITE && you_answered) {
 			//qlog.info('555', filename);
 			ret_bg = 'qoll-background-selected';
 		} else if(!is_correct_answer && you_answered || is_correct_answer && !you_answered) {
