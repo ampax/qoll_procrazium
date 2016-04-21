@@ -64,6 +64,7 @@ Template.single_qoll_options.helpers({
 		return ret_chk;
 	},
 	answer_comment : function(idx,qoll, context) {
+		if(context === QollConstants.CONTEXT.WRITE) return '';
 		//qlog.info('is chk selected: ' + JSON.stringify(this.parent.qollTypeReg), filename);
 		//qlog.info('+_+_+_+_+_+_+_+_+_+_+_+_+_+_+_++++++>>> '+JSON.stringify({}), filename);
 		//console.log(qoll);
