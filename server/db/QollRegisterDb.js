@@ -230,11 +230,13 @@ Meteor.methods({
 				var iscorrect = new Array();
 
 				// let us check if the question is of RC type and handle that separately else do the usual
-				if(qoll.tt) {
-					qoll.tt.forEach(function(tt){
+				if(qll.tt) {
+					// qlog.info('=============================================================>' + JSON.stringify(qoll.tt), filename);
+					qll.tt.forEach(function(ttx){
 						var xtmp = new Array();
 
-						tt.typesX.forEach(function(tx){
+						ttx.typesX.forEach(function(tx){
+							// qlog.info('==================================================================>' + JSON.stringify(tx), filename);
 							xtmp.push(null);
 						});
 
