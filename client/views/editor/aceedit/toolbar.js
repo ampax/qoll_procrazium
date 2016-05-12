@@ -165,7 +165,10 @@ Template.toolbar.events({
         console.log(Session.get("selected_image_ids"));
 
         var target = jQuery("img#"+this._id);
-        target.toggleClass('qoll-thumbs-toggle');
+
+        $('img.qoll-thumbs').removeClass('qoll-thumbs-toggle');
+
+        target.addClass('qoll-thumbs-toggle');
 
         var sel_imgs_tmp = _.without(sel_imgs, this._id);
 

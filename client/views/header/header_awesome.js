@@ -41,6 +41,24 @@ Template.header_awesome.helpers({
 
         return _.indexOf(['procrazium@gmail.com', 'cozenlabs@gmail.com'], email) != -1;
     },
+    checkEditorMode : function(mode) {
+        settings = Settings.find({'userId' : Meteor.userId()}).fetch()[0];
+        // qlog.info('printing settings - ' + JSON.stringify(settings) + ', userId - ' + Meteor.userId(), filename);
+        var flag = settings ? settings.editor_mode && settings.editor_mode === mode : false;
+        qlog.info(mode + ' - ' + flag);
+        return settings ? settings.editor_mode && settings.editor_mode === mode : false;
+    },
+    checkQollTemplate : function(this_template) {
+        settings = Settings.findOne({'userId' : Meteor.userId()});
+
+        if(!Session.get('qoll_template'))
+            if(!settings) Session.set('qoll_template', 'wiki');
+            else Session.set('qoll_template', settings.qoll_template? settings.qoll_template : 'wiki');
+        qlog.info('printing settings - ' + JSON.stringify(settings) + ', userId - ' + Meteor.userId(), filename);
+        var flag = settings ? settings.qoll_template && settings.qoll_template === this_template : false;
+        
+        return flag===true? 'checked':'';
+    },
 });
 
 Template.header_awesome.events({
@@ -78,6 +96,31 @@ Template.header_awesome.events({
         if(name === 'all_qolls_folder') QollSearch.search(text);
         else QuestionnaireSearch.search(text);
         }, 1000);
+
+      },
+      'click input[name=qoll_template]' : function(e) {
+        e.preventDefault();
+        var qoll_template = $('input:radio[name=qoll_template]:checked').val();
+        qlog.info('Selecting template ' + qoll_template, filename);
+
+        var settings = Settings.findOne({ 'userId' : Meteor.userId() });
+        qlog.info('printing settings - ' + JSON.stringify(settings) + ', userId - ' + Meteor.userId(), filename);
+
+        if (settings) {
+
+            Settings.update({ _id : settings._id }, { $set : { 'qoll_template' : qoll_template } }, function(error) {
+                if (error) {
+                    //throwError(error.reason);
+                    qlog.error('Error happened while saving qoll_template-preferences ' + qoll_template + ', error - ' + error.reason, filename);
+                } else {
+                    qlog.info('Saved qoll_template = ' + qoll_template + ' to preferences', filename);
+                }
+            });
+        } else {
+            Settings.insert({ 'userId' : Meteor.userId(), 'qoll_template' : qoll_template });
+        }
+
+        Session.set('qoll_template', qoll_template);
 
       },
     'keyup #search-box1': _.throttle(function(e) {

@@ -45,17 +45,22 @@ var test_qolls =
 
 Template.aceEditor.rendered = function() {
   var editor = ace.edit("aceEditor");
-  editor.setTheme("ace/theme/dawn"); 
+  // editor.setTheme("ace/theme/dawn"); 
+  editor.setTheme("ace/theme/monokai"); 
   //dawn,dreamweaver,eclipse,github,idle_fingers,kr_theme,solarized_light
   editor.setHighlightActiveLine(true);
   editor.getSession().setMode("ace/mode/text");
   editor.getSession().setUseWrapMode(true);
 
-  editor.getSession().on('change', editorPreviewRefresh);
+  // editor.getSession().on('change', editorPreviewRefresh);
+  editor.on("changeSelection", editorPreviewRefresh); 
 
   editor.setOptions({
       enableBasicAutocompletion: true
   });
+
+  // editor.renderer.setShowGutter(false)
+
   editor.focus();
 
   if(URLUtil.isDev()) {
@@ -75,7 +80,7 @@ Template.aceEditor.events({
 });
 
 
-var editorPreviewRefresh = function() {
+editorPreviewRefresh = function() {
     Meteor.setTimeout(function(){
       // qlog.info('Printing this after 5 seconds ... will I?', filename);
 

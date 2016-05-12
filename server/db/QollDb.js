@@ -2,6 +2,23 @@ var filename = 'server/db/QollDb.js';
 
 /** Database insert method for qolls  **/
 Meteor.methods({
+	insertQollAnnotations: function(qoll_id, annot_hash) {
+		var qoll = Qoll.findOne({_id : qoll_id});
+
+		var annotations = qoll.annotations ? qoll.annotations : {active : [], history: []};
+
+		var active_current = annotations.active;
+
+		if(active_current.length === 5) annotations.history.push(active_current.splice(4, 1)[0]);
+
+		var active = [{annotation : annot_hash.annotation, 
+						annotation_class : annot_hash.annotation_class,
+						annotated_on : new Date()}].concat(active_current);
+
+		annotations.active = active;
+
+		Qoll.update({ _id : qoll_id }, { $set : { annotations : annotations } });
+	},
 	getRawQoll: function(qollrawid){
 		qlog.info('Finding raw-qoll for the qollrawid: ' + qollrawid, filename);
 		var rawqo= QollRaw.findOne({_id:qollrawid});
@@ -28,7 +45,7 @@ Meteor.methods({
 	*						types, typesX, visibility, complexity, isMultiple ) 
 	**/
 	//qollText, qollTypes, qollTypesX, isMultiple, attributes, qollStarAttributes, qollAttributes, 
-	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, topics, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation, texMode, share_circle) {
+	addQoll : function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, tags, topics, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, explanation, texMode, share_circle, topic_id) {
 		var collection_forqoll = Qoll; 
 
 		var qoll_to_insert = {
@@ -65,6 +82,7 @@ Meteor.methods({
 			'imageIds'	 : qollData[QollConstants.EDU.IMGS],
 			'explanation' : qollData.explanation,
 			'share_circle' : share_circle,
+			'topic_id' : topic_id,
 		};
 
 		var qollId;
@@ -83,6 +101,15 @@ Meteor.methods({
 					qlog.info('SUCCESS inplace edit qoll with id $$$$$$$$$$$$$$$$ >>>>>>>>>>>>>>>>>>>> ' + obj._id, filename);
 				}
 			});
+		}
+
+		// let us update the topic-qoll-count
+		var topic_data = QollTopics.findOne({_id : topic_id});
+		if(topic_data) {
+			var num_qolls = topic_data.num_qolls? topic_data.num_qolls : 0;
+			num_qolls = num_qolls +1;
+
+			QollTopics.update({ _id : topic_id }, { $set : { num_qolls : num_qolls } });
 		}
 
 		return qollId;
@@ -198,6 +225,32 @@ Meteor.methods({
 
 			Qolls.QollDb.update({_id : qoll._id}, {sharedWith : sharedWith});
 		});
+	},
+
+	addQollMasterTopicWise : function(qollText, tags, topic_id, action, visibility, texMode, share_circle, qollIdtoUpdate) {
+		//Store the tags
+		var selImgIds = undefined; // needs to be removed and code needs to be fixed
+
+		if(tags != undefined)
+			var err_msg = QollTagsDb.storeTags(tags);
+
+		var topic_data = QollTopics.findOne({_id : topic_id});
+
+		var share_circle_rec = QollShareCircle.findOne({share_circle : share_circle});
+		var share_circle_id = share_circle_rec._id;
+
+		var topic = topic_data ? topic_data.topic : 'Unassigned';
+
+		var masterId = Qolls.QollMasterDb.insert({'qollText' : qollText, 'tags' : tags, 'topics' : topic, 'visibility' : visibility, 'qollFormat' : QollConstants.QOLL.FORMAT.TXT, 'imageIds' : undefined, 'texMode' : texMode});
+
+		var parsedQoll = QollParser.parseQollMasterCore(qollText, masterId, tags, [topic], action, visibility, QollConstants.QOLL.FORMAT.TXT, selImgIds, texMode, qollIdtoUpdate);
+		
+		qlog.info('Parsed the qoll =====>\n' + parsedQoll, filename);
+
+		var qollIds = persistParsedQollTopicWise(parsedQoll, topic_id, share_circle_id);
+		
+		qlog.info('=======================>\n'+JSON.stringify(parsedQoll), filename);
+		return {msg : 'Successfully created ' + qollIds.length + ' qolls.', qollids : qollIds};
 	},
 
 	addQollMaster : function(qollText, emailsandgroups, tags, topics, action, visibility, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
@@ -424,4 +477,35 @@ var persistParsedQoll = function(parsedQoll) {
 	});
 
 	return qollIds;
-}
+};
+
+
+var persistParsedQollTopicWise = function(parsedQoll, topic_id, share_circle) {
+	var qollIds = new Array();
+
+	var user = undefined;
+	var ufound = Meteor.users.find({ "_id" : this.userId }).fetch();
+	if (ufound.length > 0) {
+		user = ufound[0];
+	}
+
+	qlog.info('=================================> topic_id - ' + topic_id, filename);
+
+	parsedQoll.qollCombo.forEach(function(combo){
+		combo.master.topic_id = topic_id; // Qolls are created per topic under a share_circle
+
+		var qollRawId = Qolls.QollRawDb.insert(combo.master);
+		combo.qoll.qollRawId = qollRawId;
+		
+		var qid = Meteor.call('addQoll', combo.qoll.action, combo.qoll.qollData, combo.qoll.qollRawId, combo.qoll.qollMasterId, combo.qoll.emails, combo.qoll.isparent, 
+		combo.qoll.parentid, combo.qoll.tags, combo.qoll.topics, combo.qoll.qollFormat, combo.qoll.qollIdtoUpdate, combo.qoll.accessGroups, combo.qoll.qollData[QollConstants.EDU.IMGS],
+		combo.qoll.explanation, combo.qoll.texMode, share_circle, topic_id);
+		qollIds.push(qid);
+
+		if(combo.qoll.qollData[QollConstants.EDU.IMGS] && combo.qoll.qollData[QollConstants.EDU.IMGS].length > 0) {
+			qlog.info('Creating qoll with images - ' + combo.qoll.qollData[QollConstants.EDU.IMGS], filename);
+		}
+	});
+
+	return qollIds;
+};

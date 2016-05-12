@@ -1,0 +1,119 @@
+<template name="chemwikiUpdateQoll">
+  {{> header_awesome}}
+
+  <br />
+
+  {{#autoForm schema=customMarkMenuOptSchema id="chemwikiUpdateForm" type="normal" doc=mydoc}}
+	<div class="container">
+
+		<!-- Topic will appear because the qolls are created in the context of the topic -->
+		<div class="row">
+	        <div class="col-md-12"></div>
+	        <div class="col-md-12">
+	            <ul class="list-group">
+
+	            	{{#each topics}}<!--will be only one on this page-->
+	                <li class="list-group-item">
+	                	<div class="row">
+	                		<div class="col-md-2 make-clickable">
+			                	{{#each banner_img_for_id this.topic_banner}}
+				                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="margin-top: 4px; margin-bottom: 4px;" data-gallery id="sel{{this._id}}"/>
+				                {{/each}}
+			                </div>
+			                <div class="col-md-8">
+			                	<div class="row">
+			                		<div class="col-md-12">
+			                			<span class="qoll-comment-display-2" style="font-size: x-large;">{{this.source}}</span>
+			                			<span style="font-size: 2em;">&#8594;</span>
+			                			<span class="qoll-comment-display-13" style="font-size: x-large;">{{this.topic}}</span>
+			                		</div>
+			                	</div>
+			                	<div class="row">
+			                		<div class="col-md-12 col-xs-12">
+									  			{{> afQuickField type="xautocomplete" xmultiple=true resetOnSuccess=true
+											          formid="recipientForm" name="tags"
+											          renderKey="name" fieldref="tag" call="fetch_tags" 
+											          renderfunction="renderTags"}}
+								      	<!--div class="row">
+									  		<div class="col-md-12 col-xs-12" style="font-size: xx-small;font-style: oblique; color: rgb(56, 50, 50);">
+									  			Search or add a new tag for the Qolls (<span class="red">Qolls will always be shared with the company</span>).
+									  		</div>
+								      	</div-->
+			                		</div>
+			                	</div>
+			                </div>
+			                <div class="col-md-2">
+			                	<div class="row make-clickable"><div class="col-md-12" style="margin-top: 4em;">
+	                				<!-- span class="qoll-comment-display-3 pull-right"> Edit &#8658;</span -->
+	                				<span class="qoll-comment-display-3 pull-right" style="padding-right:1em; font-size: initial;">
+	                				{{#if this._id}}
+	                					<a href="/edu_dashboard_qoll/{{this._id}}" class='black-link'>
+	                						&#8656;Back
+	                					</a>
+	                				{{else}}
+	                					<a href="/edu_dashboard" class='black-link'>
+	                						&#8656;Back
+	                					</a>
+	                				{{/if}}
+	                				</span>
+	                			</div></div>
+			                </div>
+			            </div>
+	                </li>
+	                {{/each}}
+
+	            </ul>
+	        </div>
+	    </div>
+
+		<div class="row">
+			<div class="col-md-12 col-sm-12 col-xs-12">
+
+			<div class="editor-toolbar">
+
+				<span class="toolbar-buttons"><a class="toolbar-buttons-link addqoll-fib red_1" href="#" title="Add new Qoll" data-intro="Each qoll begins with #Qoll. Click to start writing your first qoll!" data-step="2" > Q(fib)+ </a></span>
+
+				<span class="toolbar-buttons"><a class="toolbar-buttons-link addqoll-multi red_1" href="#" title="Add new Qoll" data-intro="Each qoll begins with #Qoll. Click to start writing your first qoll!" data-step="2" > Q(multi)+ </a></span>
+
+				<span class="toolbar-buttons"><a class="toolbar-buttons-link addopti" href="#" title="Add an answer" data-intro="Each Choice line begins with a - ." data-step="3"> AddChoice </a></span>
+				&nbsp;&nbsp;
+				<span class="toolbar-checkqoll"><a class="toolbar-buttons-link checkqoll" href="#" title="Label correct answer" data-intro="if your question has a correct answer use this button to indicate the correct answer, only one correct answer per qoll for now." data-step="6"> LabelCorrect </a></span>
+				&nbsp;
+				
+				<span class="toolbar-qembedimg"><a class="toolbar-buttons-link addltxi" href="#" title="Embed TeX" > TeX </a></span>
+				&nbsp;
+
+				<button type="submit" class="btn btn-primary toolbar-buttons-right" style="margin-top: -4px;">Update</button>
+
+			</div>
+
+			</div>
+		</div>
+
+		{{#each qolls}}
+			{{> chemwikiUpdateAceEditor qoll=this}}
+		{{/each}}
+
+	</div>
+
+  {{/autoForm}}
+</template>
+
+
+<template name="chemwikiUpdateAceEditor">
+	<div class="row row_ace">
+			<div class="col-md-6 col-xs-12">
+				<div id='aceEditor'>{{qoll.rawQoll.qollText}}</div>
+			</div>
+
+			{{> preview}}
+
+			<!-- div class="col-md-6 col-xs-12">
+				<div id="aceEditor_Preview">
+					<div style="  font-style: oblique; font-size: x-large;">
+						Generating preview ...
+					</div>
+				</div>
+			</div -->
+		</div>
+</template>

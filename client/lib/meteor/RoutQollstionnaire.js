@@ -351,6 +351,12 @@ Router.map(function() {
         controller : QollController,
     });
 
+	this.route('chemwikiQollView', {
+        template : 'chemwiki_view_qoll',
+        path : '/chemwiki_qoll_board/:_id',
+        controller : QollController,
+    });
+
 	this.route('view_my_groups', {
 		template : 'my_groups',
 		path : '/view_my_groups',

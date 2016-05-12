@@ -60,6 +60,36 @@ QollParser = {
 	//Parse the data from markdown editor
 	/** Helper method for storing qolls for master-qoll-id **/
 	parseQollMaster : function(qollMaster, qollMasterId, emailsandgroups, tags, topics, action, visibility, qollFormat, qollIdtoUpdate, accessGroups, selImgIds, texMode) {
+		/**
+		* Qoll Data will have the following attributes in the end
+		* qoll_data = ( QollConstants.EDU.FIB, QollConstants.EDU.CAT, QollConstants.EDU.TITLE, QollConstants.EDU.TEXT,
+		*						QollConstants.EDU.ANSWER, QollConstants.EDU.HINT, QollConstants.EDU.UNIT_NAME, QollConstants.EDU.UNITS,
+		*						types, typesX, visibility, complexity, isMultiple ) 
+		**/
+		//function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, 
+								// tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds)
+		// *********** move this call to the QollsDb, put this as part of the 
+		var parsedQollCombo = QollParser.parseQollMasterCore(qollMaster, qollMasterId, tags, topics, action, visibility, qollFormat, selImgIds, texMode);
+
+
+		parsedQollCombo.qollCombo.forEach(function(master_qoll_combo){
+			master_qoll_combo.qoll.emails = emailsandgroups;
+			master_qoll_combo.qoll.qollIdtoUpdate = qollIdtoUpdate;
+			master_qoll_combo.qoll.accessGroups = accessGroups;
+		});
+
+		/** var qls = {action : action, qollData : qoll_data, 
+					qollRawId : undefined, qollMasterId : qollMasterId, 
+					emails : emailsandgroups, isparent : undefined, 
+					parentid : undefined, tags : tags, topics : topics,
+					qollFormat : qollFormat, qollIdtoUpdate : qollIdtoUpdate, 
+					accessGroups : accessGroups, selImgIds : selImgIds, texMode : texMode};
+
+		parsedQoll.qollCombo.push({master : qoll_master, qoll : qls}); **/
+
+		return parsedQollCombo;
+	},
+	parseQollMasterCore : function(qollMaster, qollMasterId, tags, topics, action, visibility, qollFormat, selImgIds, texMode, qollIdtoUpdate) {
         var parsedQoll = {};
         parsedQoll.qollCombo = new Array();
 
@@ -397,12 +427,11 @@ QollParser = {
 			//function(action, qollData, qollRawId, qollMasterId, emails, isparent, parentid, 
 									// tags, qollFormat, qollIdtoUpdate, accessGroups, selImgIds)
 			// *********** move this call to the QollsDb, put this as part of the 
+
 			var qls = {action : action, qollData : qoll_data, 
 						qollRawId : undefined, qollMasterId : qollMasterId, 
-						emails : emailsandgroups, isparent : undefined, 
-						parentid : undefined, tags : tags, topics : topics,
-						qollFormat : qollFormat, qollIdtoUpdate : qollIdtoUpdate, 
-						accessGroups : accessGroups, selImgIds : selImgIds, texMode : texMode};
+						isparent : undefined, parentid : undefined, tags : tags, topics : topics,
+						qollFormat : qollFormat, selImgIds : selImgIds, texMode : texMode, qollIdtoUpdate: qollIdtoUpdate};
 
 			parsedQoll.qollCombo.push({master : qoll_master, qoll : qls});
 

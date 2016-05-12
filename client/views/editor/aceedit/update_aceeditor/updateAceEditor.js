@@ -83,11 +83,12 @@ Template.updateAceEditor.rendered = function() {
   editor.setOptions({
       enableBasicAutocompletion: true
   });
-  editor.focus();
 
   var qoll = RawQollForId.findOne();
 
   if(qoll) editor.setValue(qoll.rawQoll.qollText);
+
+  editor.focus();
 
   if(URLUtil.isDev()) {
     // editor.setValue(test_qolls);

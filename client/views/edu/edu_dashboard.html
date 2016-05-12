@@ -1,12 +1,11 @@
 <template name="edu_dashboard">
 	{{> header_awesome}}
-	<div id="wrapper">
 		<!-- Sidebar -->
-		{{> edu_side_nav}}
+		<!-- {{> edu_side_nav}} -->
 
 		<!-- Page content here -->
+		<br />
 		{{> edu_dashboard_prof}}
-	</div>
 </template>
 
 
@@ -35,25 +34,191 @@
 </template>
 
 <template name="edu_dashboard_prof">
-	<!-- Page content -->
-	<div id="page-content-wrapper">
-		<div class="content-header">
-            <h1>
-            	<!-- Toggle on small screen -->
-                <a id="menu-toggle" href="#" class="btn btn-default"><i class="glyphicon glyphicon-list"></i></a>
-                some prof content to come here(placeholder)
-            </h1>
-        </div>
-		
-		<hr class='divider'>
-		<!-- Keep all page content within the page-content inset div! -->
-		<div class="page-content inset">
-			<div class="row">
-            	<div class="col-md-12 col-xs-12">
-            		<!-- Print the contents here -->
-            		prof page contents here
-				</div>
-			</div>
-		</div>
+	<div class="container">
+	    <div class="row">
+	        <div class="col-md-12"></div>
+	        <div class="col-md-12">
+	            <ul class="list-group">
+
+	            	{{#each topics}}
+	                <li class="list-group-item">
+	                	<div class="row">
+	                		<div class="col-md-2">
+	                			<a href="{{ pathFor 'edu_dashboard_forid'}}" class='black-link'>
+			                		{{#each banner_img_for_id this.topic_banner}}
+					                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="margin-top: 4px; margin-bottom: 4px;" data-gallery id="sel{{this._id}}"/>
+					                {{/each}}
+					            </a>
+			                </div>
+			            	<div class="col-md-10">
+			                	<div class="row">
+			                		<div class="col-md-8">
+			                			<span class="qoll-comment-display-2" style="font-size: x-large;">{{this.source}}</span><br/>
+			                			<a href="{{ pathFor 'edu_dashboard_forid'}}" class='black-link'>
+			                				<span class="qoll-comment-display-13" style="font-size: x-large;">{{this.topic}}</span>
+			                			</a>
+			                			<span class="qoll-comment-display-13" style="">
+			                				{{#if has_previous_page_parent_id this}}
+			                					<a href="{{ pathFor 'edu_dashboard_forid' _id=this.previous_page_parent_id}}" class='black-link'>
+			                						&#8656;{{this.parent.topic}}
+			                					</a>
+			                				{{else}}
+			                					{{#if this.parent.topic}}
+			                					<a href="{{ pathFor 'edu_dashboard'}}" class='black-link'>
+			                						&#8656;{{this.parent.topic}}
+			                					</a>
+			                					{{/if}}
+			                				{{/if}}
+			                				Essential(7), Ideas(5), Chemistry(1)
+			                			</span><br/>
+			                			<span class="qoll-comment-display-13" style="font-size: larger;">
+			                				Author: {{ createdByName }}
+			                			</span>
+			                			<span class="qoll-comment-display-3" style="font-size: larger;">
+			                				Created On: {{ topic_created_on createdOn }}
+			                			</span><br/>
+			                		</div>
+			                		<div class="col-md-4">
+			                			<div class="row" style="padding-top: 1em;"><div class="col-md-12">
+			                				<span class="label label-default label-pill pull-right" style="font-size: larger;">
+			                					<a href="{{ pathFor 'edu_dashboard_qoll'}}" style="color: white;">
+				                					Qolls- {{this.num_qolls}}
+				                				</a>
+			                				</span>
+			                			</div></div>
+			                			<div class="row" style="padding-top: 1em;"><div class="col-md-12">
+			                				<span class="label label-default label-pill pull-right" style="font-size: larger;"> 
+			                					<a href="{{ pathFor 'edu_dashboard_set'}}" style="color: white;">
+			                						Sets- {{this.num_questionnaires}}
+			                					</a>
+			                				</span>
+			                			</div></div>
+			                			<div class="row make-clickable" style="padding-top: 1em;"><div class="col-md-12">
+			                				<span class="qoll-comment-display-3 pull-right" style=" font-size: large;"> Edit &#8658;</span>
+			                				<span class="qoll-comment-display-3 pull-right" style="padding-right:1em; font-size: large;">
+			                					{{#if has_previous_page_parent_id this}}
+			                					<a href="{{ pathFor 'edu_dashboard_forid' _id=this.previous_page_parent_id}}" class='black-link'>
+			                						&#8656;Back
+			                					</a>
+			                				{{else}}
+			                					{{#if this.parent.topic}}
+			                					<a href="{{ pathFor 'edu_dashboard'}}" class='black-link'>
+			                						&#8656;Back
+			                					</a>
+			                					{{/if}}
+			                				{{/if}}
+			                				</span>
+			                			</div></div>
+			                			
+			                		</div>
+			                	</div>
+			                	
+			                </div>
+			            </div>
+	                </li>
+	                {{/each}}
+
+
+	                <li class="list-group-item create_newtopic_1" style="background-color: rgb(223, 225, 228);">
+	                	<div class="row">
+	                		<div class="col-md-10 create_newtopic">
+	                			<img style="max-width:100px; margin-top: 7px; border-width: 1em; border-color: #03A9F4;; border-style: inset;" src="/img/ghost_avatar.png"/>
+	                			Create New
+	                		</div>
+	                		<div class="col-md-2">
+	                			<span class="qoll-comment-display-3 pull-right" style="padding-right:1em; font-size: initial; padding-top: 2.5em;">
+		        					{{#if has_previous_page_parent_id this}}
+		        					<a href="{{ pathFor 'edu_dashboard_forid' _id=this.previous_page_parent_id}}" class='black-link'>
+		        						&#8656;Back
+		        					</a>
+		        				{{else}}
+		        					{{#if this.parent.topic}}
+		        					<a href="{{ pathFor 'edu_dashboard'}}" class='black-link'>
+		        						&#8656;Back
+		        					</a>
+		        					{{/if}}
+		        				{{/if}}
+		        				</span>
+	                		</div>
+	                	</div>
+	                	
+	                </li>
+
+	                <li class="list-group-item newtopic"><!--i class="glyphicon glyphicon-remove pull-right"></i-->
+                    <div class="row">
+                        <div class="col-md-2" style="font-size: xx-large;">
+                        	<span data-toggle="modal" data-target=".bs-example-modal-lg" class="make-clickable">
+                        		{{#if no_img_selected}}
+                            		<img style="max-width:100px; margin-top: 7px; border-width: 1em; border-color: #03A9F4;; border-style: inset;" src="/img/ghost_avatar.png"/>&#x2295;
+                            	{{else}}
+                            		{{#each sel_imgs}}
+					                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="margin-top: 4px; margin-bottom: 4px;" data-gallery id="sel{{this._id}}"/>
+					                {{/each}}
+                            	{{/if}}
+                        	</span>
+                        </div>
+
+<!-- 
+<span class="glyphicon glyphicon-star"  data-toggle="modal" data-target=".bs-example-modal-lg" aria-hidden="true"><a class="toolbar-buttons-link" href="#" title="Add some images to the Qoll" data-intro="View the preview section to see how the images will appear" data-step="6">Attach</a></span>  
+-->
+
+
+                        
+                        <div class="col-md-3" style="margin-top: 3.2em;">
+                        	Source: <input type="text" id="topic_source" style="width: 10em;"/></div>
+                        <div class="col-md-5" style="margin-top: 3.2em;">
+                        	Title: <input type="text" id="topic_title" style="width: 25em;"/></div>
+                        <div class="col-md-2" style="margin-top: 3.2em;">
+                            <button type="button" class="btn btn-primary create-new-topic">Create</button>
+                            <button type="button" class="btn btn-danger cancel_create_newtopic">Cancel</button>
+                        </div>
+                    </div>
+    
+                </li>
+	            </ul>
+	        </div>
+	    </div>
 	</div>
+
+
+
+
+
+
+
+
+
+
+	<!-- image selector -->
+	<div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content qoll-img-modal">
+          <div class="modal-header">
+            <!-- button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button-->
+            <h4 class="modal-title" id="gridSystemModalLabel">Select an image</h4>
+            <input type="file" name="img-upload" label="Attach images"  multiple="multiple" 
+              accept="image/jpg, image/jpeg, image/gif, image/bmp, image/png" class="myFileInput">
+          </div>
+          <div class='img-container'>
+            {{#each imgs}}
+              <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" data-gallery id="{{this._id}}"/>
+            {{/each}}
+          </div>
+          <div class="modal-footer">
+            <div class='row'>
+              <div class="col-md-8 col-xs-8">
+                
+                {{#each sel_imgs}}
+                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 25%;" data-gallery id="sel{{this._id}}"/>
+                {{/each}}
+                
+              </div>
+              <div class="col-md-4 col-xs-4">
+                <button type="button" class="btn btn-default insert-imgs" data-dismiss="modal">Done</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 </template>

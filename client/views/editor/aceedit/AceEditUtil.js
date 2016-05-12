@@ -9,7 +9,7 @@ AceEditUtil = {
 		var content = editor.getValue();
 		var g_count = 0;// !content ? content.match(/# /g).length : 0; // then read how many qolls do we have in the editor
 
-		if(!content) return;
+		if(!content || content == null) return;
 
 		content.match(/# /g).map(function(ct){
 			g_count = g_count+1;

@@ -41,6 +41,41 @@ QollTopicsDb.storeTopics = function(topics) {
 	return err_msgs;
 }
 
+QollTopicsDb.storeTopics = function(source, topic, owner, circle, parent_id, num_qolls, num_questionnaires, sel_img) {
+	var err_msgs = [];
+	
+	var handle = QollTopics.findOne({'source': source, 'topic': topic, 'circle' : circle});
+
+	if(handle) {
+		err_msgs.push(topic);
+	} else { //FUTURE: We will check the credentials of the person creating the tags from front end for this
+		QollTopics.insert({'source' : source, 'topic': topic, 
+										'owner' : owner, 'circle' : circle, 'parent_topic_id' : parent_id, 
+										'num_qolls' : num_qolls, 'num_questionnaires' : num_questionnaires, 
+										'topic_banner' : sel_img,
+										'createdBy': Meteor.userId(), 'createdOn': new Date()});
+
+
+		if(parent_id) {
+			// let us update the parent-id and set the children so that we can later preserve the order
+			handle = QollTopics.findOne({'source': source, 'topic': topic, 'circle' : circle});
+			var parent = QollTopics.findOne({parent_topic_id : parent_id});
+
+			if(!parent.children) parent.children = new Array();
+
+			parent.children.push(handle._id);
+
+			QollTopics.update({_id : parent._id}, {$set : parent});
+		}
+	}
+
+	if(err_msgs.length > 0) {
+		err_msgs.push(' already exist');
+	}
+
+	return err_msgs;
+}
+
 QollTopicsFavsDb = {};
 
 QollTopicsFavsDb.storeFavorites = function(topics, count, activity, type) {
@@ -117,4 +152,12 @@ QollTopicsFavsDb.storeFavorites = function(topics, count, activity, type) {
 		d[type] = {'topic_tree' : hier_favs, 'topic_count' : count};
 		QollTopicsFavs.insert({'subscriber': subscriber, type : {'topic_tree' : hier_favs, 'topic_count' : count}});
 	}
-}
+};
+
+
+Meteor.methods({
+	storeTopics : function(source, topic, owner, circle, parent_id, num_qolls, num_questionnaires, sel_img) {
+		var circle = QollShareCircle.findOne({'share_circle' : circle});
+		return QollTopicsDb.storeTopics(source, topic, owner, circle._id, parent_id, num_qolls, num_questionnaires, sel_img);
+	},
+});

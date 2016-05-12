@@ -1,0 +1,23 @@
+<template name="chemwiki_view_qoll">
+
+    {{> header_awesome  page_label="QOLL DETAIL"}}
+
+    <div class="container-fluid container">
+
+        <div class="row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <span class="qoll-comment-display-3 pull-right" style="padding-left: 1em; padding-top: 2em; font-size: large;">
+                    <a href="{{ pathFor 'edu_dashboard_qoll' _id= get_parent_id}}" class='black-link'>
+                            &#8656;Back
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        {{> qolls_inner qollList = this.qollList  btns= qoll_btns }}
+    </div>
+
+</template>
+
+
+

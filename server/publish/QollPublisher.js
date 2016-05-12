@@ -189,6 +189,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						imageIds		: item.imageIds,
 						explanation		: item.explanation,
 
+						topic_id 		: item.topic_id,
+						share_circle 	: item.share_circle,
+
 						_id : item._id,
 						qollRawId : item.qollRawId
 					};
@@ -243,6 +246,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						isMultiple			: item.isMultiple,
 						imageIds			: item.imageIds,
 						explanation		: item.explanation,
+
+						topic_id 		: item.topic_id,
+						share_circle 	: item.share_circle,
 
 						_id : item._id,
 						qollRawId : item.qollRawId
@@ -313,6 +319,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 						isMultiple			: item.isMultiple,
 						imageIds			: item.imageIds,
 						explanation			: item.explanation,
+
+						topic_id 		: item.topic_id,
+						share_circle 	: item.share_circle,
 
 						_id : item._id
 					};
@@ -411,6 +420,9 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 							imageIds		: item.imageIds,
 							explanation		: item.explanation,
 
+							topic_id 		: item.topic_id,
+							share_circle 	: item.share_circle,
+
 							_id 			: item._id
 						};
 						if (item.is_parent)
@@ -485,6 +497,10 @@ Meteor.publish('All_QOLL_PUBLISHER', function(findoptions) {
 				isMultiple		: item.isMultiple,
 				imageIds		: item.imageIds,
 				explanation		: item.explanation,
+
+				topic_id 		: item.topic_id,
+				share_circle 	: item.share_circle,
+
 				_id 			: item._id
 			};
 			if (item.is_parent)
@@ -903,6 +919,56 @@ Meteor.publish('All_MY_ACTIVE_QOLLS', function(findoptions) {
 
 });
 
+Meteor.publish('QOLLS_FOR_TOPIC_ID', function(findoptions) {
+	var self = this;
+	var uuid = Meteor.uuid();
+	var initializing = true;
+	var topic_qolls = undefined;
+
+	if (this.userId || findoptions.userId /* userId coming from ionic app */) {//first publish specialized qolls to this user
+		var tuid = this.userId ? this.userId : findoptions.userId;
+		var ufound = Meteor.users.find({
+			"_id" : tuid
+		}).fetch();
+
+		qlog.info('Printing the user for this request ===========> ' + JSON.stringify(ufound), filename);
+
+		if (ufound.length > 0) {
+			var user = ufound[0];
+			topic_qolls = Qoll.find(
+				{'topic_id' : findoptions._id,'action' : {$ne : QollConstants.QOLL_ACTION_ARCHIVE}}, 
+				//{'qollTitle' : 1, 'qollText' : 1, 'qollRawId' : 1, 'submittedOn' : 1, 'qollTypesX' : 1, 'attributes' : 1}, 
+				{sort : {'submittedOn' : -1}, reactive : true}
+			).observe({
+				added : function(item, idx){
+					var item1 = extractQollDetails(item);
+					item1.context = findoptions.context;
+
+					self.added('qolls-for-topic', item._id, item1);
+				},
+				changed : function(item, idx){
+					var item1 = extractQollDetails(item);
+					item1.context = findoptions.context;
+					
+					self.changed('qolls-for-topic', item._id, item1);
+				},
+				removed : function(item){
+					self.removed('qolls-for-topic', item._id);
+				}
+			});
+		}
+	}
+	qlog.info('Done initializing the publisher: QOLLS_FOR_TOPIC_ID, uuid: ' + uuid, filename);
+	initializing = false;
+	self.ready();
+	//self.flush();
+
+	self.onStop(function() {
+		if(topic_qolls != undefined) topic_qolls.stop();
+	});
+
+})
+
 Meteor.publish('qolls_for_ids', function(findoptions) {
   qlog.info('Publishing qolls for ids - ' + findoptions.qollids, filename);
   return Qolls.QollDb.getAll( { _id : { $in : [findoptions.qollids] }} );
@@ -1021,8 +1087,8 @@ var extractQollDetails = function(q) {
 		cat 			: q.cat,
 		answer 			: q.answer,
 		fib 			: q.fib,
-		tex 			: item.tex,
-		texMode			: item.texMode? item.texMode : QollConstants.TEX_MODE.MATHJAX,
+		tex 			: q.tex,
+		texMode			: q.texMode? q.texMode : QollConstants.TEX_MODE.MATHJAX,
 		hint 			: q.hint,
 		unit_name 		: q.unit_name,
 		unit 			: q.unit,
@@ -1042,5 +1108,8 @@ var extractQollDetails = function(q) {
 		_id 			: q._id,
 		qollRawId 		: q.qollRawId,
 		explanation		: q.explanation,
+		topic_id 		: q.topic_id,
+		share_circle 	: q.share_circle,
+		annotations 	: q.annotations,
 	};
 };

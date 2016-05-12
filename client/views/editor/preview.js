@@ -56,7 +56,7 @@ Template.preview.helpers({
       //console.log('============================================================================');
     }
 
-    return previewCollection.find({}, {$sort : {idx : 1}});
+    return previewCollection.find({ 'idx' : p_count }, {$sort : {idx : 1}});
   },
   qoll_type_abbr : function(idx) {
     return alphabetical[idx];

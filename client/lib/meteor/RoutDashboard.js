@@ -52,20 +52,41 @@ QuickerQollsController = RouteController.extend({
     	Meteor.subscribe('currentUser')];
 	},
 	allqollsfun : function() {
-		//return AllQolls.find();
-		//return Battleground.find();
 	},
 	data : function() {
-		/** var hasMore = this.allqollsfun().count() === this.limit();
-		var nextPath = this.route.path({
-			qollsLimit : this.limit() + this.increment
-		});
-		return {
-			qollList : this.allqollsfun(),
-			nextPath : hasMore ? nextPath : null
-		}; **/
-
 		return { qollList : QuickerQolls};
+	}
+});
+
+TopicsShareCircleController = RouteController.extend({
+	findOptions : function() {
+		return { sort : { submittedOn : -1 }, circle : 'ChemWiki', parent_id: this.params._id };
+	},
+	waitOn : function() {
+		[Meteor.subscribe('QOLL_TOPICS_FOR_CIRCLE_PUBLISHER', this.findOptions()),
+		Meteor.subscribe('categories'),
+    	Meteor.subscribe('Settings'),
+    	Meteor.subscribe('currentUser')];
+	},
+	data : function() {
+		return {topics: TopicsForShareCircle.find()};
+	}
+});
+
+TopicsForIdController = RouteController.extend({
+	findOptions : function() {
+		return { sort : { submittedOn : -1 }, circle : 'ChemWiki', 
+					_id: this.params._id, context : QollConstants.CONTEXT.READ };
+	},
+	waitOn : function() {
+		[Meteor.subscribe('QOLL_TOPICS_FOR_ID_PUBLISHER', this.findOptions()),
+		Meteor.subscribe('QOLLS_FOR_TOPIC_ID', this.findOptions()),
+		Meteor.subscribe('categories'),
+    	Meteor.subscribe('Settings'),
+    	Meteor.subscribe('currentUser')];
+	},
+	data : function() {
+		return {topics: TopicsForId.find(), qolls: QollsForTopicId.find({})};
 	}
 });
 
@@ -82,7 +103,25 @@ Router.map(function() {
 	this.route('edu_dashboard', {
 		template : 'edu_dashboard',
 		path : '/edu_dashboard',
-		controller : QollsController,
+		controller : TopicsShareCircleController,
+	});
+
+	this.route('edu_dashboard_forid', {
+		template : 'edu_dashboard',
+		path : '/edu_dashboard/:_id',
+		controller : TopicsShareCircleController,
+	});
+
+	this.route('edu_dashboard_qoll', {
+		template : 'edu_dashboard_qoll',
+		path : '/edu_dashboard_qoll/:_id',
+		controller : TopicsForIdController,
+	});
+
+	this.route('edu_dashboard_set', {
+		template : 'edu_dashboard_set',
+		path : '/edu_dashboard_set/:_id',
+		controller : TopicsShareCircleController,
 	});
 
 });

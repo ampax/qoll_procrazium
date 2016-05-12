@@ -1,0 +1,172 @@
+<template name="edu_dashboard_qoll">
+	{{> header_awesome}}
+		<!-- Sidebar -->
+		<!-- {{> edu_side_nav}} -->
+
+		<!-- Page content here -->
+		<br />
+		{{> edu_dashboard_qoll_menu}}
+</template>
+
+
+<template name="edu_dashboard_qoll_menu">
+	<div class="container">
+	    <div class="row">
+	        <div class="col-md-12"></div>
+	        <div class="col-md-12">
+	            <ul class="list-group">
+
+	            	{{#each topics}}<!--will be only one on this page-->
+	                <li class="list-group-item">
+	                	<div class="row">
+	                		<div class="col-md-2 make-clickable">
+			                	{{#each banner_img_for_id this.topic_banner}}
+				                  <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="margin-top: 4px; margin-bottom: 4px;" data-gallery id="sel{{this._id}}"/>
+				                {{/each}}
+			                </div>
+			                <div class="col-md-10">
+			                	<div class="row">
+			                		<div class="col-md-8 make-clickable">
+			                			<span class="qoll-comment-display-2" style="font-size: x-large;">{{this.source}}</span><br/>
+			                			<span class="qoll-comment-display-13" style="font-size: x-large;">{{this.topic}}</span>
+			                			<span class="qoll-comment-display-13" style="">Essential(7), Ideas(5), Chemistry(1), And All(1)</span><br/>
+			                			<span class="qoll-comment-display-13" style="font-size: larger;">
+			                				Author: {{ createdByName }}
+			                			</span>
+			                			<span class="qoll-comment-display-3" style="font-size: larger;">
+			                				Created On: {{ topic_created_on createdOn }}
+			                			</span><br/>
+			                		</div>
+			                		<div class="col-md-4">
+			                			<div class="row" style="padding-top: 1em;"><div class="col-md-12">
+			                				<span class="pull-right make-clickable" style="font-size: larger; margin-right: 3.5em;">	
+			                					<a href="/chemwiki_editor/{{this._id}}" class="round-button round-margin">Q+</a>
+			                				</span>
+			                			</div></div>
+			                			<div class="row make-clickable" style="padding-top: 1em;"><div class="col-md-12">
+			                				<span class="qoll-comment-display-3 pull-right" style="font-size: large;"> Edit &#8658;</span>
+			                				<span class="qoll-comment-display-3 pull-right" style="padding-right:1em; font-size: large;">
+			                				{{#if this.parent_topic_id}}
+			                					<a href="/edu_dashboard/{{this.parent_topic_id}}" class='black-link'>
+			                						&#8656;Back
+			                					</a>
+			                				{{else}}
+			                					<a href="/edu_dashboard" class='black-link'>
+			                						&#8656;Back
+			                					</a>
+			                				{{/if}}
+			                				</span>
+			                			</div></div>
+			                			
+			                		</div>
+			                	</div>
+			                	
+			                </div>
+			            </div>
+	                </li>
+	                {{/each}}
+
+	            </ul>
+	        </div>
+	    </div>
+
+	    {{#each qolls}}
+			<div class="row">
+			<!-- Start of Qoll Section -->
+			<div class="col-md-12 col-xs-12 list-group-item" id='qdiv_{{_id}}'>
+
+				<div class="row">
+				<div class="col-md-1 col-sm-1 col-xs-1">
+					<input type="checkbox" class="qoll_selection" id="{{_id}}"/>
+				</div>
+				<div class="col-md-8 col-sm-7 col-xs-7 make-clickable">
+					<a href="{{ pathFor 'chemwikiQollView' }}" class='black-link'>
+						{{#each imgs imageIds}}
+				          <img src="{{this.url store='thumbs_1'}}" class="qoll-thumbs" style="zoom: 20%;" data-gallery id="{{this._id}}"/>
+				        {{/each}}
+				        
+				        <span class='title-qoll'>
+							{{{transform_txt qollTitle cat QollConstants.CONTEXT.WRITE fib tex texMode idx}}}</span> 
+							{{{transform_txt qollText cat QollConstants.CONTEXT.WRITE fib tex texMode idx}}} 
+							<br />
+							<span class="qoll-comment-display-2">By: {{{byUser}}} </span> 
+							<span class="qoll-comment-display-13">Source: {{{fromSource}}} </span> 
+							<span class="qoll-comment-display-3">Created On: {{ submitted_on submittedOn }}</span>
+					</a>
+					<!-- Adding workflow tags -->
+					<div class="dropdown" style="display: inline-block;">
+					  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="padding: 0px 4px !important; background-color: #F8ECF9; border-color: #D8D6D6;">
+					    <span class="caret"></span>
+					  </button>
+					  <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+					    <li>
+					    	<input type="text" name="firstname" style="margin-left: 5px; width: 10.4em;" maxlength="15">
+					    	<!-- input type="text" value="000" name="border-color" class="pick-a-color form-control" -->
+					    </li>
+					    <li><span style="margin-left: 5px;" >
+					    	<button type="button" class="btn btn-primary btn-xs btn-circle qoll_annot_color_1 {{qoll_annot_color_sel 'qoll_annot_color_1'}}" style="margin-top: 5px;"></button>
+					    	<button type="button" class="btn btn-primary btn-xs btn-circle qoll_annot_color_2 {{qoll_annot_color_sel 'qoll_annot_color_2'}}" style="margin-top: 5px;margin-left: 5px;"></button>
+					    	<button type="button" class="btn btn-primary btn-xs btn-circle qoll_annot_color_3 {{qoll_annot_color_sel 'qoll_annot_color_3'}}" style="margin-top: 5px;margin-left: 5px;"></button>
+					    	<button type="button" class="btn btn-primary btn-xs btn-circle qoll_annot_color_4 {{qoll_annot_color_sel 'qoll_annot_color_4'}}" style="margin-top: 5px;margin-left: 5px;"></button>
+					    </span></li>
+					    <li role="separator" class="divider"></li>
+					    <li style="font-style: oblique; color: darkblue; text-decoration: underline;">Standard -</li>
+					    <li><button type="button" class="btn btn-primary btn-xs annot-button-1" id="rr">Requires review</button></li>
+					    <li><button type="button" class="btn btn-primary btn-xs annot-button-2" id="inc">Incorrect</button></li>
+					    <li><button type="button" class="btn btn-primary btn-xs annot-button-3" id="nda">Needs dev attn</button></li>
+					    <li><button type="button" class="btn btn-primary btn-xs annot-button-4" id="nkofq">New kind of Qoll</button></li>
+					    <li role="separator" class="divider"></li>
+					    <li style="font-style: oblique; color: darkblue; text-decoration: underline;">History -</li>
+					    {{#each annotations.history}}
+					    	<li><button type="button" class="btn btn-primary btn-xs {{fn_annot_class this}}">{{this.annotation}}</button></li>
+					    {{/each}}
+					  </ul>
+					</div>
+
+
+					<br />
+					{{#each annotations.active}}
+						<button type="button" class="btn btn-primary btn-xs {{fn_annot_class this}}">{{this.annotation}}</button>
+					{{/each}}
+
+
+
+				</div>
+				<div class="col-md-1 col-sm-1 col-xs-1 desk-only">
+					{{cat}}
+				</div>
+				<div class="col-md-1 col-sm-1 col-xs-1">
+					{{#if is_fb_user}}
+					<!-- i class="fa fa-lg fa-facebook fa-border btn-primary"></i -->
+					<span class="fa-stack fa-lg facebook ios-enabled">
+					  <i class="fa fa-square-o fa-stack-2x blue_1"></i>
+					  <i class="fa fa-facebook fa-stack-1x blue_7"></i>
+					</span>
+					{{/if}}
+
+					<!-- span class="fa-stack fa-lg sendemail">
+						<i class="fa fa-square-o fa-stack-2x"></i>
+						<i class="fa fa-envelope-o fa-stack-1x"></i>
+					</span -->
+
+				</div>
+				<div class="col-md-1 col-sm-2 col-xs-3">
+					{{#if isOwner}}
+					<span class="pull-left archive-qoll-btn glossy-action r-marge"><i class="glyphicon glyphicon-trash red ios-enabled"></i></span>
+					<!--span class="pull-right edit-qoll-btn glossy"><i class="glyphicon glyphicon-edit ios-enabled"></i></span-->
+					<span class="pull-left glossy-action">
+						<a href="{{ pathFor 'update_cw_qoll' }}">
+							<i class="glyphicon glyphicon-edit ios-enabled"></i>
+						</a>
+					</span>
+					<!-- span class="pull-right glossy"><a href="{{ pathFor 'quickedit_qoll' }}" class="btn btn-default"><i class="glyphicon glyphicon-edit ios-enabled"></i></a></span -->
+					{{/if}}
+				</div>
+				</div>
+			</div><!-- list-group-item list-group-item-success -->
+			<!-- End of Qoll Section here -->
+			</div><!-- /row-->
+		{{/each}}
+	</div>
+
+</template>

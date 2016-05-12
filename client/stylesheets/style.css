@@ -12,7 +12,7 @@ body {
 
 /* ============================== START: Bootstrap style override/define ================================ */
 .btn {
-  padding: 0px 12px !important;
+  /** padding: 0px 12px !important; **/
 }
 
 .row {
@@ -540,7 +540,7 @@ span.qoll-toolbar-plain {
 
 
 .list-group-item {
-    overflow: hidden !important;
+    /** overflow: hidden !important; **/
     padding: 5px 5px !important;
     color: #000305;
     background-color: #FFF1FF; /**rgba(191, 162, 219, 0.17); #FFE0F0;**/
@@ -1105,5 +1105,42 @@ span.explanation {
   margin-left: 7em;
   margin-top: 0.5em;
   height: 2.4em;
+}
+
+
+.annot-button-1 {
+    margin-left: 1em;
+    height: 1.5em;
+    font-size: .7em;
+    width: 14em;
+    background-color: #ffff00;
+    color: black;
+}
+
+.annot-button-2 {
+    margin-left: 1em;
+    height: 1.5em;
+    font-size: .7em;
+    width: 14em;
+    background-color: red;
+    color: #F9F4F4;
+}
+
+.annot-button-3 {
+    margin-left: 1em;
+    height: 1.5em;
+    font-size: .7em;
+    width: 14em;
+    background-color: #33cccc;
+    color: black;
+}
+
+.annot-button-4 {
+    margin-left: 1em;
+    height: 1.5em;
+    font-size: .7em;
+    width: 14em;
+    background-color: #89FB83;
+    color: black;
 }
 

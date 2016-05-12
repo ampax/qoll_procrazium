@@ -16,9 +16,11 @@ var MeteorInitialize = new Meteor.Collection("MeteorInitialize");
 Meteor.startup(function(){
 	// Let us ensure indexes of Qoll schema coz this will be the biggest collection
 	Qoll._ensureIndex({ "share_circle": 1});
+	Qoll._ensureIndex({ "topic_id": 1});
 	Qoll._ensureIndex({ "submittedBy": 1, "action": 1});
 	Qoll._ensureIndex({ "visibility": 1, "action": 1});
 	Qoll._ensureIndex({ "accessToGroups": 1});
+	
 
 	// Let us ensure indexes of Qollstionnaire coz this will be another bigggg collection
 	Qollstionnaire._ensureIndex({ "submittedTo": 1, "status": 1});

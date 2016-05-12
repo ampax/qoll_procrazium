@@ -10,6 +10,42 @@ EditorXXXController = RouteController.extend({
 	}
 });
 
+ChemWikiQollEditorController = RouteController.extend({
+	findOptions : function() {
+		return { sort : { submittedOn : -1 }, circle : 'ChemWiki', _id: this.params._id };
+	},
+	waitOn : function() {
+		[Meteor.subscribe('categories'),
+    	Meteor.subscribe('Settings'),
+    	Meteor.subscribe('currentUser'),
+		Meteor.subscribe('QOLL_IMAGES'),
+		Meteor.subscribe('QOLL_TOPICS_FOR_ID_PUBLISHER', this.findOptions())];
+	},
+	data : function() {
+		return {topics: TopicsForId.find()};
+	}
+});
+
+ChemWikiQollUpdateEditorController = RouteController.extend({
+	findOptions : function() {
+		return { sort : { submittedOn : -1 }, circle : 'ChemWiki', _id: this.params._id };
+	},
+	waitOn : function() {
+		[Meteor.subscribe('categories'),
+    	Meteor.subscribe('Settings'),
+    	Meteor.subscribe('currentUser'),
+		Meteor.subscribe('QOLL_IMAGES'),
+		Meteor.subscribe('QOLL_TOPICS_FOR_ID_PUBLISHER', {circle : 'ChemWiki', _id: this.params.topic_id}),
+		Meteor.subscribe('RAW_QOLL_FOR_ID_PUBLISHER', {_id : this.params._id})];
+	},
+	onAfterAction: function(){
+	},
+	data : function() {
+		return {topics: TopicsForId.find(), 'all_images' : QollImagesPub.find(), 
+					qolls: RawQollForId.find({}), qoll: RawQollForId.findOne()};
+	}
+});
+
 Router.map(function(){
 	this.route('editor', {
 		template: 'editor',
@@ -107,6 +143,18 @@ Router.map(function(){
 		}
 	});
 
+	this.route('chemwiki_editor', {
+		template : 'chemwiki_editor',
+		path : '/chemwiki_editor/:_id',
+		controller : ChemWikiQollEditorController,
+	});
+
+	this.route('update_cw_qoll', {
+		template: 'chemwikiUpdateQoll',
+		path : '/update_cw_qoll/:_id/:topic_id',
+		controller : ChemWikiQollUpdateEditorController,
+	});
+
 	this.route('quickedit_qoll', {
 		template: 'quickedit_qoll',
 		path : '/qoll_edit/:_id',
@@ -155,3 +203,8 @@ Router.map(function(){
 		}
 	});
 });
+
+
+
+
+
